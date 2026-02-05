@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { motion, AnimatePresence, useScroll, useTransform, useMotionValue, useInView, animate } from 'framer-motion';
 import { 
   Menu, X, ChevronRight, Zap, ArrowRight, 
   ExternalLink, Sparkles, MoveRight, Heart, ChevronLeft, Calendar, Award, Play, Star,
@@ -29,6 +29,67 @@ const HERO_IMAGES = [
 ];
 
 const COLORS = ['#9c1c22', '#e2a744', '#ffffff', '#df8c3d'];
+
+/**
+ * Robust Logo Component with a high-fidelity CSS Fallback
+ * Mimics the seal design: Gold outer ring, bicolor inner ring, copper core, and crimson heart.
+ */
+const Logo = ({ className, style, alt }: { className?: string; style?: React.CSSProperties; alt?: string }) => {
+  const [error, setError] = useState(false);
+
+  if (error) {
+    return (
+      <div 
+        className={`relative rounded-full aspect-square overflow-hidden border-[1px] border-[#e2a744] bg-white shadow-xl flex items-center justify-center group/logo ${className}`}
+        style={style}
+      >
+        {/* Outer Gold Ring */}
+        <div className="absolute inset-0 border-[3px] md:border-[6px] border-[#e2a744] rounded-full z-30 pointer-events-none" />
+        
+        {/* White Inner Border */}
+        <div className="absolute inset-[3px] md:inset-[6px] border-[1px] md:border-[2px] border-white rounded-full z-30 pointer-events-none" />
+
+        {/* Bicolor Split Background */}
+        <div className="absolute inset-0 flex flex-col z-0">
+          <div className="h-1/2 w-full bg-[#f2e9e4]" />
+          <div className="h-1/2 w-full bg-[#332d2b]" />
+        </div>
+
+        {/* Typography Top (Simulated) */}
+        <div className="absolute top-[12%] left-0 right-0 text-center z-20 flex flex-col items-center">
+          <span className="font-cinzel font-black text-[#332d2b] leading-none uppercase tracking-[0.1em]" style={{ fontSize: '12%' }}>FOUNDATION</span>
+          <span className="font-cinzel font-black text-[#332d2b] leading-none uppercase tracking-[0.2em]" style={{ fontSize: '9%' }}>OF LUV</span>
+        </div>
+
+        {/* Side Stars */}
+        <Star fill="#e2a744" stroke="none" className="absolute left-[5%] top-1/2 -translate-y-1/2 w-[12%] h-[12%] z-30" />
+        <Star fill="#e2a744" stroke="none" className="absolute right-[5%] top-1/2 -translate-y-1/2 w-[12%] h-[12%] z-30" />
+
+        {/* Central Copper/Orange Circle */}
+        <div className="absolute inset-[25%] bg-[#df8c3d] rounded-full border-[1.5px] md:border-[3px] border-[#332d2b] flex items-center justify-center z-10 shadow-inner overflow-hidden">
+          {/* Heart Emblem */}
+          <Heart fill="#9c1c22" stroke="none" className="w-[70%] h-[70%] drop-shadow-lg transform -translate-y-[5%]" />
+        </div>
+
+        {/* Typography Bottom (Simulated) */}
+        <div className="absolute bottom-[10%] left-0 right-0 text-center z-20 px-2">
+          <span className="font-cinzel font-bold text-white/90 leading-tight uppercase tracking-widest whitespace-nowrap block" style={{ fontSize: '7%' }}>LOVE IN ACTION</span>
+          <span className="font-cinzel font-bold text-white/90 leading-tight uppercase tracking-widest whitespace-nowrap block" style={{ fontSize: '7%' }}>CHANGE IN MOTION</span>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <img 
+      src="logo.svg" 
+      alt={alt || "Foundation of Luv"} 
+      className={className} 
+      style={style}
+      onError={() => setError(true)} 
+    />
+  );
+};
 
 const FireworkBurst = ({ x, y, color }: { x: number; y: number; color: string }) => {
   const particles = Array.from({ length: 12 });
@@ -86,10 +147,26 @@ const Fireworks = () => {
   );
 };
 
+const AnimatedNumber = ({ value }: { value: string }) => {
+  const numericValue = parseFloat(value);
+  const decimals = value.includes('.') ? value.split('.')[1].length : 0;
+  const count = useMotionValue(0);
+  const rounded = useTransform(count, (latest) => latest.toFixed(decimals));
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-100px" });
+
+  useEffect(() => {
+    if (isInView) {
+      animate(count, numericValue, { duration: 2.5, ease: [0.32, 1, 0.2, 1] });
+    }
+  }, [isInView, numericValue]);
+
+  return <motion.span ref={ref}>{rounded}</motion.span>;
+};
+
 const App: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeRoadmap, setActiveRoadmap] = useState(0);
-  const [logoError, setLogoError] = useState(false);
   const [currentSlide, setCurrentSlide] = useState(0);
   const { scrollYProgress } = useScroll();
   
@@ -123,12 +200,7 @@ const App: React.FC = () => {
               transition={{ duration: 0.5 }}
               className="flex items-center"
             >
-              <img 
-                src={logoUrl} 
-                alt="Foundation of Luv Seal" 
-                className="w-14 h-14 md:w-24 md:h-24 object-contain hover:scale-105 transition-transform duration-500 cursor-pointer drop-shadow-md"
-                onError={() => setLogoError(true)}
-              />
+              <Logo className="w-14 h-14 md:w-24 md:h-24 transition-transform duration-500 cursor-pointer" />
               <div className="ml-4 hidden sm:block">
                 <span className="block font-cinzel font-black text-xs md:text-sm tracking-widest text-[#9c1c22]">FOUNDATION</span>
                 <span className="block font-serif italic text-xs md:text-sm text-[#332d2b]/60">OF LUV</span>
@@ -275,7 +347,7 @@ const App: React.FC = () => {
                 transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
                 className="absolute -top-6 -right-6 md:-top-16 md:-right-16 w-20 h-20 md:w-56 md:h-56 z-40 drop-shadow-2xl"
               >
-                <img src={logoUrl} alt="FOL Seal" className="w-full h-full object-contain filter drop-shadow-xl" />
+                <Logo className="w-full h-full filter drop-shadow-xl" />
               </motion.div>
             </div>
           </motion.div>
@@ -321,7 +393,7 @@ const App: React.FC = () => {
         </div>
       </header>
 
-      {/* Trust, Partners & Clients Sliding Bar */}
+      {/* Partners & Clients Sliding Bar */}
       <section className="py-12 md:py-24 bg-white border-y border-[#332d2b]/5 overflow-hidden">
         <div className="w-full">
           <p className="text-center font-cinzel font-black text-[9px] md:text-[12px] text-[#332d2b]/40 tracking-[0.5em] uppercase mb-12 md:mb-20">Partners and Clients</p>
@@ -355,7 +427,8 @@ const App: React.FC = () => {
                 className="text-center"
               >
                 <div className="text-5xl md:text-8xl font-serif font-black text-[#9c1c22] mb-4">
-                  {stat.value}<span className="text-[#e2a744]">{stat.suffix}</span>
+                  <AnimatedNumber value={stat.value} />
+                  <span className="text-[#e2a744]">{stat.suffix}</span>
                 </div>
                 <h4 className="font-cinzel font-black text-[10px] md:text-[12px] tracking-[0.3em] uppercase mb-4 text-[#332d2b]">{stat.label}</h4>
                 <p className="font-serif italic text-lg md:text-xl text-[#332d2b]/50">{stat.description}</p>
@@ -443,7 +516,7 @@ const App: React.FC = () => {
       {/* LUVWATTS Movement Section */}
       <section id="luvwatts" className="py-20 md:py-40 bg-[#9c1c22] text-white relative overflow-hidden">
         <div className="absolute inset-0 opacity-10 pointer-events-none">
-          <img src={logoUrl} alt="" className="w-full h-full object-cover scale-150 rotate-12" />
+          <Logo className="w-full h-full opacity-10 scale-150 rotate-12" />
         </div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="grid lg:grid-cols-2 gap-20 items-center">
@@ -458,7 +531,7 @@ const App: React.FC = () => {
                 <img src="https://images.unsplash.com/photo-1523381210434-271e8be1f52b?auto=format&fit=crop&q=80&w=1000" alt="LUVWATTS Movement" className="w-full h-full object-cover" />
               </div>
               <div className="absolute -bottom-10 -left-10 w-40 h-40 md:w-64 md:h-64 glass p-6 rounded-[2rem] border border-white/20 hidden md:block">
-                 <img src={logoUrl} alt="Seal" className="w-full h-full object-contain animate-spin-slow" style={{ animationDuration: '20s' }} />
+                 <Logo className="w-full h-full animate-spin-slow" style={{ animationDuration: '20s' }} />
               </div>
             </div>
           </div>
@@ -525,53 +598,6 @@ const App: React.FC = () => {
           <div className="grid lg:grid-cols-4 gap-12 md:gap-24 mb-16 md:mb-32 items-start text-center md:text-left">
             <div className="lg:col-span-2">
               <div className="mb-8 md:mb-14 flex justify-center md:justify-start">
-                <img src={logoUrl} alt="FOL" className="w-24 h-24 md:w-48 md:h-48 brightness-110 drop-shadow-2xl object-contain" />
+                <Logo className="w-24 h-24 md:w-48 md:h-48 brightness-110 drop-shadow-2xl" />
               </div>
-              <p className="text-lg md:text-3xl text-[#fdfaf6]/40 max-w-lg mb-8 md:mb-14 font-serif italic leading-relaxed">"Restoring human dignity and transforming global communities through strategic action."</p>
-              <div className="flex justify-center md:justify-start gap-4 md:gap-6">
-                <motion.a 
-                  whileHover={{ scale: 1.1, backgroundColor: '#9c1c22' }} 
-                  href="https://www.instagram.com/foundationofluv" 
-                  target="_blank" 
-                  rel="noopener noreferrer" 
-                  className="w-12 h-12 md:w-14 md:h-14 rounded-xl md:rounded-2xl bg-white/5 flex items-center justify-center border border-white/10 group transition-all"
-                >
-                  <Instagram size={18} className="md:size-[22px] group-hover:text-white transition-colors" />
-                </motion.a>
-                <motion.a 
-                  whileHover={{ scale: 1.1, backgroundColor: '#9c1c22' }} 
-                  href="#" 
-                  className="w-12 h-12 md:w-14 md:h-14 rounded-xl md:rounded-2xl bg-white/5 flex items-center justify-center border border-white/10 group transition-all"
-                >
-                  <Linkedin size={18} className="md:size-[22px] group-hover:text-white transition-colors" />
-                </motion.a>
-                <motion.a 
-                  whileHover={{ scale: 1.1, backgroundColor: '#9c1c22' }} 
-                  href="#" 
-                  className="w-12 h-12 md:w-14 md:h-14 rounded-xl md:rounded-2xl bg-white/5 flex items-center justify-center border border-white/10 group transition-all"
-                >
-                  <Youtube size={18} className="md:size-[22px] group-hover:text-white transition-colors" />
-                </motion.a>
-              </div>
-            </div>
-            <div>
-              <h5 className="text-[#e2a744] font-cinzel font-black uppercase tracking-[0.3em] text-[10px] mb-8">Architecture</h5>
-              <ul className="space-y-4 md:space-y-6 text-lg md:text-xl font-serif italic text-[#fdfaf6]/60">
-                {NAVIGATION.map(n => <li key={n.name}><a href={n.href} className="hover:text-white transition-colors">{n.name}</a></li>)}
-              </ul>
-            </div>
-            <div>
-              <h5 className="text-[#e2a744] font-cinzel font-black uppercase tracking-[0.3em] text-[10px] mb-8">Contact</h5>
-              <p className="text-lg md:text-xl font-serif italic text-[#fdfaf6]/60">hello@foundationofluv.org</p>
-            </div>
-          </div>
-          <div className="pt-10 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6 text-[#fdfaf6]/20 text-[9px] font-cinzel font-black tracking-[0.3em] uppercase text-center">
-            <p>© 2025 FOUNDATION OF LUV. ALL RIGHTS RESERVED.</p>
-          </div>
-        </div>
-      </footer>
-    </div>
-  );
-};
-
-export default App;
+              <p className="text-lg md:text-3xl text-[#fdfaf6]/40 max-w-lg mb-8 md:mb-14 font-serif italic leading-relaxed">"Restoring human dignity and transforming global communities through strategic action."
