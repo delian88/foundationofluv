@@ -1,51 +1,77 @@
-
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Heart, Menu, X, ChevronRight, Users, Globe, Zap, ArrowRight, ExternalLink } from 'lucide-react';
+import React, { useState } from 'react';
+import { motion, AnimatePresence, useScroll } from 'framer-motion';
 import { 
-  NAVIGATION, SERVICE_AREAS, PROGRAMS, STRATEGIC_PHASES, 
-  PARTNERS, STATS, COLORS 
+  Menu, X, ChevronRight, Zap, ArrowRight, 
+  ExternalLink, Sparkles, MoveRight
+} from 'lucide-react';
+import { 
+  NAVIGATION, SERVICE_AREAS, STRATEGIC_PHASES, STATS 
 } from './constants';
 
 const App: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeRoadmap, setActiveRoadmap] = useState(0);
+  const { scrollYProgress } = useScroll();
+
+  // Root-level relative path for consistent loading
+  const logoUrl = "logo.svg";
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen selection:bg-[#df8c3d]/30 selection:text-[#801010]">
+      {/* Scroll Progress Bar */}
+      <motion.div 
+        className="fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#801010] via-[#df8c3d] to-[#f6c453] z-[100] origin-left"
+        style={{ scaleX: scrollYProgress }}
+      />
+
       {/* Navigation */}
-      <nav className="fixed w-full z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
+      <nav className="fixed w-full z-50 glass border-b border-[#d8d8d8]/30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-20">
-            <div className="flex items-center gap-2">
-              <div className="w-10 h-10 bg-indigo-600 rounded-lg flex items-center justify-center">
-                <Heart className="text-white w-6 h-6" />
-              </div>
-              <div>
-                <span className="text-xl font-bold tracking-tight text-indigo-950 block leading-none">FOUNDATION OF LUV</span>
-                <span className="text-[10px] uppercase tracking-[0.2em] font-medium text-indigo-500">Love In Action</span>
-              </div>
-            </div>
+          <div className="flex justify-between items-center h-20 md:h-24">
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5 }}
+              className="flex items-center"
+            >
+              <img 
+                src={logoUrl} 
+                alt="Foundation of Luv Seal" 
+                className="w-14 h-14 md:w-16 md:h-16 object-contain hover:scale-110 transition-transform duration-500 cursor-pointer drop-shadow-md"
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  if (!target.src.includes('http')) {
+                    target.src = '/logo.svg';
+                  }
+                }}
+              />
+              {/* Only the seal is used in the navbar for a cleaner, high-end look */}
+            </motion.div>
 
             {/* Desktop Nav */}
-            <div className="hidden md:flex items-center gap-8">
+            <div className="hidden md:flex items-center gap-10">
               {NAVIGATION.map((item) => (
                 <a
                   key={item.name}
                   href={item.href}
-                  className="text-sm font-semibold text-gray-600 hover:text-indigo-600 transition-colors"
+                  className="text-[10px] font-black uppercase tracking-[0.2em] text-[#433d3b] hover:text-[#df8c3d] transition-all relative group"
                 >
                   {item.name}
+                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#df8c3d] transition-all group-hover:w-full" />
                 </a>
               ))}
-              <button className="bg-indigo-600 text-white px-6 py-2.5 rounded-full text-sm font-bold hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-200">
-                Donate Now
-              </button>
+              <motion.button 
+                whileHover={{ scale: 1.05, backgroundColor: '#a01515' }}
+                whileTap={{ scale: 0.95 }}
+                className="bg-[#801010] text-white px-8 py-3 rounded-full text-[10px] font-black tracking-[0.2em] uppercase hover:shadow-2xl hover:shadow-[#801010]/20 transition-all"
+              >
+                DONATE
+              </motion.button>
             </div>
 
             {/* Mobile Toggle */}
-            <button className="md:hidden p-2 text-gray-600" onClick={() => setIsMenuOpen(!isMenuOpen)}>
-              {isMenuOpen ? <X /> : <Menu />}
+            <button className="md:hidden p-2 text-[#433d3b]" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+              {isMenuOpen ? <X size={28} /> : <Menu size={28} />}
             </button>
           </div>
         </div>
@@ -57,21 +83,21 @@ const App: React.FC = () => {
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
-              className="md:hidden bg-white border-b border-gray-100 overflow-hidden"
+              className="md:hidden glass border-b border-[#d8d8d8] overflow-hidden shadow-2xl"
             >
-              <div className="px-4 py-6 space-y-4">
+              <div className="px-6 py-10 space-y-6">
                 {NAVIGATION.map((item) => (
                   <a
                     key={item.name}
                     href={item.href}
-                    className="block text-lg font-semibold text-gray-700 hover:text-indigo-600"
+                    className="block text-xl font-black tracking-tight text-[#433d3b] hover:text-[#801010]"
                     onClick={() => setIsMenuOpen(false)}
                   >
                     {item.name}
                   </a>
                 ))}
-                <button className="w-full bg-indigo-600 text-white py-4 rounded-xl font-bold">
-                  Donate Now
+                <button className="w-full bg-[#801010] text-white py-5 rounded-2xl font-black text-xl shadow-xl shadow-[#801010]/20">
+                  DONATE NOW
                 </button>
               </div>
             </motion.div>
@@ -80,240 +106,145 @@ const App: React.FC = () => {
       </nav>
 
       {/* Hero Section */}
-      <header className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
-        <div className="absolute top-0 left-0 w-full h-full -z-10 pointer-events-none">
-          <div className="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] bg-indigo-100 rounded-full blur-[100px] opacity-50" />
-          <div className="absolute bottom-[-10%] left-[-10%] w-[400px] h-[400px] bg-pink-100 rounded-full blur-[100px] opacity-50" />
+      <header className="relative pt-44 pb-24 lg:pt-56 lg:pb-32 overflow-hidden bg-[#fcfcfc]">
+        {/* Animated Background Blobs */}
+        <div className="absolute top-0 left-0 w-full h-full -z-10 pointer-events-none overflow-hidden">
+          <motion.div 
+            animate={{ 
+              scale: [1, 1.2, 1],
+              rotate: [0, 45, 0],
+              x: [0, 50, 0]
+            }}
+            transition={{ duration: 25, repeat: Infinity }}
+            className="absolute top-[-20%] right-[-10%] w-[800px] h-[800px] bg-[#df8c3d]/5 rounded-full blur-[120px]" 
+          />
+          <motion.div 
+            animate={{ 
+              scale: [1, 1.1, 1],
+              y: [0, -50, 0]
+            }}
+            transition={{ duration: 20, repeat: Infinity }}
+            className="absolute bottom-[-10%] left-[-10%] w-[600px] h-[600px] bg-[#801010]/5 rounded-full blur-[100px]" 
+          />
         </div>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-4xl mx-auto">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-indigo-50 text-indigo-600 text-sm font-bold mb-6"
-            >
-              <Zap className="w-4 h-4" />
-              <span>THE LUVWATTS MOVEMENT</span>
-            </motion.div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
+            className="mb-12 inline-block"
+          >
+            <div className="relative group p-8">
+              <img 
+                src={logoUrl} 
+                alt="Foundation of Luv Seal" 
+                className="w-64 h-64 md:w-80 md:h-80 mx-auto drop-shadow-[0_25px_60px_rgba(223,140,61,0.35)] group-hover:drop-shadow-[0_25px_60px_rgba(223,140,61,0.55)] transition-all duration-700" 
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  if (!target.src.includes('http')) {
+                    target.src = 'logo.svg';
+                  }
+                }}
+              />
+              <motion.div 
+                animate={{ rotate: 360 }}
+                transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
+                className="absolute inset-0 border-[2px] border-dashed border-[#df8c3d]/30 rounded-full scale-[1.15] -z-10"
+              />
+              <motion.div 
+                animate={{ rotate: -360 }}
+                transition={{ duration: 90, repeat: Infinity, ease: "linear" }}
+                className="absolute inset-0 border-[1px] border-dotted border-[#801010]/20 rounded-full scale-[1.25] -z-10"
+              />
+            </div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.3 }}
+            className="max-w-4xl mx-auto mt-8"
+          >
+            <div className="inline-flex items-center gap-3 px-6 py-2 rounded-full bg-[#df8c3d]/10 text-[#df8c3d] text-[10px] font-black tracking-[0.4em] mb-10 border border-[#df8c3d]/20 uppercase">
+              <Sparkles size={14} />
+              The LUVWATTS Movement
+            </div>
             
-            <motion.h1
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.1 }}
-              className="text-5xl md:text-7xl font-serif text-indigo-950 mb-8 leading-tight"
-            >
+            <h1 className="text-6xl md:text-8xl font-serif text-[#433d3b] mb-12 leading-[0.95] tracking-tight">
               Love in Action, <br />
-              <span className="italic text-indigo-600">Change in Motion.</span>
-            </motion.h1>
+              <span className="italic text-[#801010]">Change in Motion.</span>
+            </h1>
 
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="text-xl text-gray-600 mb-10 leading-relaxed max-w-2xl mx-auto"
-            >
-              Empowering the vulnerable and bridging societal divides through humanitarian service, advocacy, and holistic community support.
-            </motion.p>
+            <p className="text-lg md:text-xl text-slate-500 mb-14 leading-relaxed max-w-2xl mx-auto font-medium">
+              A professional global force dedicated to human dignity, community restoration, and sustainable empowerment through strategic action.
+            </p>
 
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              className="flex flex-col sm:flex-row gap-4 justify-center"
-            >
-              <button className="px-8 py-4 bg-indigo-600 text-white rounded-full font-bold text-lg hover:bg-indigo-700 transition-all flex items-center justify-center gap-2 shadow-xl shadow-indigo-200">
-                Join the Movement <ArrowRight className="w-5 h-5" />
-              </button>
-              <button className="px-8 py-4 bg-white text-gray-700 border border-gray-200 rounded-full font-bold text-lg hover:bg-gray-50 transition-all flex items-center justify-center gap-2">
+            <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
+              <motion.button 
+                whileHover={{ scale: 1.05, x: 5 }}
+                className="group px-12 py-5 bg-[#df8c3d] text-white rounded-full font-black text-lg hover:bg-[#c67a32] transition-all flex items-center gap-4 shadow-[0_20px_40px_-15px_rgba(223,140,61,0.5)]"
+              >
+                Join the Movement <MoveRight className="group-hover:translate-x-2 transition-transform" />
+              </motion.button>
+              <button className="px-12 py-5 bg-white text-[#433d3b] border border-[#d8d8d8] rounded-full font-black text-lg hover:bg-[#f8fafc] transition-all">
                 Our Mission
               </button>
-            </motion.div>
-          </div>
+            </div>
+          </motion.div>
         </div>
       </header>
 
-      {/* Partners Marquee */}
-      <section className="bg-white py-12 border-y border-gray-100 overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 mb-8">
-          <h2 className="text-center text-sm font-bold uppercase tracking-widest text-gray-400">Collaborating with Global Leaders</h2>
-        </div>
-        <div className="flex whitespace-nowrap animate-marquee">
-          {[...PARTNERS, ...PARTNERS].map((partner, i) => (
-            <div key={i} className="flex items-center mx-12 text-2xl font-black text-gray-300 hover:text-indigo-200 transition-colors cursor-default select-none uppercase tracking-tighter">
-              {partner}
-            </div>
-          ))}
-        </div>
-        {/* Using dangerouslySetInnerHTML to prevent parser issues with curly braces in style tag */}
-        <style dangerouslySetInnerHTML={{ __html: `
-          @keyframes marquee {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
-          }
-          .animate-marquee {
-            animation: marquee 30s linear infinite;
-          }
-        ` }} />
-      </section>
-
-      {/* About Section */}
-      <section id="about" className="py-24 bg-white relative">
+      {/* Stats Section */}
+      <section className="py-24 bg-white border-y border-[#d8d8d8]/30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <motion.div
-              initial={{ opacity: 0, x: -50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              className="relative"
-            >
-              <div className="rounded-3xl overflow-hidden shadow-2xl">
-                <img src="https://picsum.photos/seed/fol-about/800/1000" alt="Foundation of Love in Action" className="w-full h-full object-cover aspect-[4/5]" />
-              </div>
-              <div className="absolute -bottom-10 -right-10 bg-indigo-600 text-white p-12 rounded-3xl hidden md:block shadow-2xl">
-                <p className="text-4xl font-serif italic mb-2">"Love transcends barriers."</p>
-                <div className="w-12 h-1 bg-white/30 rounded-full" />
-              </div>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, x: 50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-            >
-              <h3 className="text-indigo-600 font-bold uppercase tracking-wider mb-4">Our Background</h3>
-              <h2 className="text-4xl md:text-5xl font-serif text-indigo-950 mb-8">Rooted in Humanitarian Service.</h2>
-              <p className="text-lg text-gray-600 mb-6 leading-relaxed">
-                The Foundation of Love (FOL) was created with a simple yet profound belief: that love, dignity, and compassion can transform individuals and communities. Rooted in humanitarian service, advocacy, and holistic support, FOL was established to bridge societal divides and empower the vulnerable.
-              </p>
-              <p className="text-lg text-gray-600 mb-10 leading-relaxed">
-                Since inception, the foundation has touched lives across diverse demographics through outreach, capacity-building, mentorship, and community-centered initiatives. At FOL, we believe love is an energy that transcends barriers.
-              </p>
-
-              <div className="grid sm:grid-cols-2 gap-8">
-                <div className="p-6 bg-indigo-50 rounded-2xl border border-indigo-100">
-                  <h4 className="text-xl font-bold text-indigo-950 mb-3">Our Vision</h4>
-                  <p className="text-gray-600 text-sm leading-relaxed">A world rooted in love, dignity, and shared humanity—where every person lives with purpose and hope.</p>
-                </div>
-                <div className="p-6 bg-pink-50 rounded-2xl border border-pink-100">
-                  <h4 className="text-xl font-bold text-indigo-950 mb-3">Our Mission</h4>
-                  <p className="text-gray-600 text-sm leading-relaxed">To transform lives by spreading compassion, empowering communities, and fostering enduring hope.</p>
-                </div>
-              </div>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* Services Section */}
-      <section id="services" className="py-24 bg-slate-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center mb-16">
-          <h3 className="text-indigo-600 font-bold uppercase tracking-wider mb-4">Service Areas</h3>
-          <h2 className="text-4xl md:text-5xl font-serif text-indigo-950 mb-6">What We Do.</h2>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">Providing a legacy of equity, wellness, and empowerment through diverse service channels.</p>
-        </div>
-
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {SERVICE_AREAS.map((service, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.1 }}
-              className="bg-white p-8 rounded-3xl border border-gray-100 hover:shadow-xl transition-all group"
-            >
-              <div className="w-14 h-14 bg-indigo-50 text-indigo-600 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-indigo-600 group-hover:text-white transition-colors">
-                {service.icon}
-              </div>
-              <h4 className="text-xl font-bold text-indigo-950 mb-4">{service.title}</h4>
-              <p className="text-gray-600 leading-relaxed">{service.description}</p>
-            </motion.div>
-          ))}
-        </div>
-      </section>
-
-      {/* LUVWATTS Identity */}
-      <section id="luvwatts" className="py-24 bg-indigo-950 text-white overflow-hidden relative">
-        <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-indigo-800 rounded-full blur-[200px] -z-0 translate-x-1/2 -translate-y-1/2 opacity-20" />
-        
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-            >
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-indigo-500/20 text-indigo-300 text-sm font-bold mb-8 backdrop-blur-md border border-indigo-400/20">
-                <Zap className="w-4 h-4" />
-                <span>SIGNATURE IDENTITY</span>
-              </div>
-              <h2 className="text-6xl md:text-8xl font-black italic tracking-tighter mb-8 text-transparent bg-clip-text bg-gradient-to-br from-white to-indigo-400">
-                LUVWATTS
-              </h2>
-              <p className="text-xl text-indigo-100 leading-relaxed mb-8">
-                LUVWATTS represents the radiant energy of love when people come together. It embodies the heartbeat of the Foundation of Love—our movement, our community, and our voice. 
-              </p>
-              <div className="space-y-6">
-                {[
-                  "Love as Energy: The unifying force for transformation.",
-                  "A Fashion-Forward Advocacy Initiative for global impact.",
-                  "Driving fundraising and uniting supporters worldwide."
-                ].map((text, i) => (
-                  <div key={i} className="flex items-center gap-4">
-                    <div className="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center border border-white/20">
-                      <ChevronRight className="w-6 h-6 text-indigo-300" />
-                    </div>
-                    <span className="text-lg font-medium">{text}</span>
-                  </div>
-                ))}
-              </div>
-              <button className="mt-12 px-10 py-5 bg-white text-indigo-900 rounded-full font-black text-xl hover:bg-indigo-50 transition-all shadow-2xl shadow-white/10">
-                SHOP THE COLLECTION
-              </button>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, x: 100 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              className="relative"
-            >
-              <img 
-                src="https://picsum.photos/seed/luvwatts-fashion/800/1000" 
-                alt="LUVWATTS Fashion" 
-                className="rounded-3xl shadow-2xl border border-white/10 relative z-20"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-indigo-950 via-transparent to-transparent z-30 opacity-60" />
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* Impact Statistics */}
-      <section id="impact" className="py-24 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h3 className="text-indigo-600 font-bold uppercase tracking-wider mb-4">Our Impact</h3>
-            <h2 className="text-4xl md:text-5xl font-serif text-indigo-950">Projected Outcomes.</h2>
-          </div>
-
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-12 text-center">
             {STATS.map((stat, i) => (
               <motion.div
                 key={i}
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1 }}
-                className="text-center p-8 rounded-3xl bg-slate-50 border border-slate-100"
               >
-                <div className="text-5xl font-black text-indigo-600 mb-2 font-serif">
-                  {stat.value}{stat.suffix}
+                <div className="text-5xl md:text-7xl font-serif text-[#801010] mb-3">{stat.value}{stat.suffix}</div>
+                <div className="text-[10px] uppercase tracking-[0.3em] font-black text-[#433d3b] mb-2">{stat.label}</div>
+                <div className="text-xs text-slate-400 font-bold uppercase tracking-wider">{stat.description}</div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Global Services Grid */}
+      <section id="services" className="py-32 bg-[#f9fafb]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col lg:flex-row justify-between items-end mb-24 gap-8">
+            <div className="max-w-2xl text-center lg:text-left">
+              <span className="text-[#801010] font-black tracking-[0.4em] text-[10px] uppercase mb-6 block">Foundation Pillars</span>
+              <h2 className="text-5xl md:text-7xl font-serif text-[#433d3b]">Strategic Channels.</h2>
+            </div>
+            <p className="text-lg text-slate-500 max-w-md font-medium text-center lg:text-left leading-relaxed">
+              Targeted humanitarian services engineered to restore stability and ignite long-term community transformation.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12">
+            {SERVICE_AREAS.map((service, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+                whileHover={{ y: -10 }}
+                className="bg-white p-12 rounded-[2.5rem] border border-slate-200 hover:border-[#df8c3d]/30 hover:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.05)] transition-all duration-500 group"
+              >
+                <div className="w-16 h-16 bg-[#fcfcfc] text-[#df8c3d] rounded-2xl flex items-center justify-center mb-10 group-hover:bg-[#df8c3d] group-hover:text-white transition-all duration-500 shadow-sm border border-slate-100">
+                  {service.icon}
                 </div>
-                <div className="text-lg font-bold text-indigo-950 mb-2 uppercase tracking-tight">{stat.label}</div>
-                <div className="text-sm text-gray-500 leading-tight">{stat.description}</div>
+                <h4 className="text-2xl font-black text-[#433d3b] mb-4 tracking-tight">{service.title}</h4>
+                <p className="text-slate-500 leading-relaxed font-medium">{service.description}</p>
               </motion.div>
             ))}
           </div>
@@ -321,160 +252,175 @@ const App: React.FC = () => {
       </section>
 
       {/* Strategic Roadmap */}
-      <section id="roadmap" className="py-24 bg-indigo-50 relative overflow-hidden">
+      <section id="roadmap" className="py-32 bg-[#433d3b] text-white overflow-hidden relative">
+        <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-[#df8c3d]/5 rounded-full blur-[150px] pointer-events-none" />
+        
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="text-center mb-16">
-            <h3 className="text-indigo-600 font-bold uppercase tracking-wider mb-4">Strategic Goals</h3>
-            <h2 className="text-4xl md:text-5xl font-serif text-indigo-950">Future Engagement Pathways.</h2>
+          <div className="text-center mb-24">
+            <span className="text-[#df8c3d] font-black tracking-[0.4em] text-[10px] uppercase mb-6 block">Global Trajectory</span>
+            <h2 className="text-5xl md:text-8xl font-serif">Roadmap to Restoration.</h2>
           </div>
 
-          <div className="flex flex-wrap justify-center gap-4 mb-16">
-            {STRATEGIC_PHASES.map((phase, i) => (
-              <button
-                key={i}
-                onClick={() => setActiveRoadmap(i)}
-                className={`px-6 py-3 rounded-full font-bold transition-all border ${
-                  activeRoadmap === i 
-                    ? 'bg-indigo-600 text-white border-indigo-600 shadow-xl' 
-                    : 'bg-white text-gray-600 border-gray-200 hover:border-indigo-300'
-                }`}
-              >
-                {phase.title}
-              </button>
-            ))}
-          </div>
+          <div className="grid lg:grid-cols-12 gap-12 md:gap-16 items-start">
+            <div className="lg:col-span-4 flex flex-col gap-4">
+              {STRATEGIC_PHASES.map((phase, i) => (
+                <button
+                  key={i}
+                  onClick={() => setActiveRoadmap(i)}
+                  className={`text-left p-8 rounded-3xl transition-all border-2 flex items-center justify-between group ${
+                    activeRoadmap === i 
+                      ? 'bg-white text-[#433d3b] border-white shadow-[0_20px_50px_rgba(255,255,255,0.1)]' 
+                      : 'bg-transparent text-white/50 border-white/5 hover:border-white/20'
+                  }`}
+                >
+                  <div>
+                    <div className={`text-[10px] font-black uppercase tracking-widest mb-1 ${activeRoadmap === i ? 'text-[#801010]' : 'text-[#df8c3d]'}`}>
+                      {phase.years}
+                    </div>
+                    <div className="text-xl font-bold">{phase.title}</div>
+                  </div>
+                  <ChevronRight className={`transition-transform duration-500 ${activeRoadmap === i ? 'rotate-90 text-[#801010]' : 'group-hover:translate-x-1'}`} />
+                </button>
+              ))}
+            </div>
 
-          <AnimatePresence mode="wait">
             <motion.div
               key={activeRoadmap}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.4 }}
-              className="bg-white rounded-[40px] p-8 md:p-16 shadow-2xl shadow-indigo-200/50 border border-white"
+              initial={{ opacity: 0, x: 30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+              className="lg:col-span-8 bg-white/[0.03] backdrop-blur-xl rounded-[3rem] md:rounded-[4rem] p-10 md:p-16 border border-white/10"
             >
-              <div className="grid lg:grid-cols-2 gap-12">
+              <div className="grid md:grid-cols-2 gap-12 md:gap-16">
                 <div>
-                  <div className="text-indigo-600 font-bold text-xl mb-2">{STRATEGIC_PHASES[activeRoadmap].years}</div>
-                  <h3 className="text-4xl font-serif text-indigo-950 mb-8">{STRATEGIC_PHASES[activeRoadmap].title}</h3>
-                  <div className="space-y-4">
-                    <h4 className="text-xs uppercase tracking-[0.2em] font-black text-gray-400">Core Objectives</h4>
+                  <h4 className="text-[#df8c3d] text-[10px] font-black uppercase tracking-[0.3em] mb-10">Strategic Roots</h4>
+                  <div className="space-y-8">
                     {STRATEGIC_PHASES[activeRoadmap].goals.map((goal, idx) => (
-                      <div key={idx} className="flex gap-4 items-start">
-                        <div className="w-6 h-6 bg-indigo-50 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                          <div className="w-1.5 h-1.5 bg-indigo-600 rounded-full" />
+                      <div key={idx} className="flex gap-5 group/item">
+                        <div className="w-6 h-6 rounded-full bg-[#df8c3d]/20 flex items-center justify-center flex-shrink-0 mt-1 border border-[#df8c3d]/40 group-hover/item:scale-110 transition-transform">
+                          <div className="w-1.5 h-1.5 bg-[#df8c3d] rounded-full" />
                         </div>
-                        <p className="text-gray-600">{goal}</p>
+                        <p className="text-lg text-white/80 font-medium leading-relaxed">{goal}</p>
                       </div>
                     ))}
                   </div>
                 </div>
-                <div className="bg-indigo-50 rounded-3xl p-8 md:p-12">
-                  <h4 className="text-xs uppercase tracking-[0.2em] font-black text-indigo-400 mb-8">Expected Outputs</h4>
-                  <div className="space-y-8">
+                <div className="bg-white text-[#433d3b] rounded-[2.5rem] md:rounded-[3rem] p-10 md:p-12 shadow-2xl relative overflow-hidden">
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-[#df8c3d]/5 rounded-full -mr-16 -mt-16 blur-2xl" />
+                  <h4 className="text-[#801010] text-[10px] font-black uppercase tracking-[0.3em] mb-10">Impact Outputs</h4>
+                  <div className="space-y-10">
                     {STRATEGIC_PHASES[activeRoadmap].outputs.map((output, idx) => (
                       <div key={idx} className="flex gap-6 items-center">
-                        <div className="text-5xl font-serif italic text-indigo-200">{idx + 1}</div>
-                        <p className="text-xl font-bold text-indigo-900 leading-tight">{output}</p>
+                        <div className="text-5xl md:text-6xl font-serif italic text-[#df8c3d]/20 leading-none">{idx + 1}</div>
+                        <p className="text-xl font-black leading-tight tracking-tight">{output}</p>
                       </div>
                     ))}
                   </div>
                 </div>
               </div>
             </motion.div>
-          </AnimatePresence>
+          </div>
         </div>
       </section>
 
-      {/* Programs Quick Look */}
-      <section id="programs" className="py-24 bg-white">
+      {/* LUVWATTS Section */}
+      <section id="luvwatts" className="py-32 bg-white relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h3 className="text-indigo-600 font-bold uppercase tracking-wider mb-4">Programs & Projects</h3>
-            <h2 className="text-4xl md:text-5xl font-serif text-indigo-950">Empowerment in Practice.</h2>
-          </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {PROGRAMS.map((program, i) => (
-              <motion.div
-                key={i}
-                whileHover={{ y: -5 }}
-                className="p-8 rounded-3xl border border-gray-100 hover:border-indigo-100 hover:bg-indigo-50/50 transition-all flex flex-col h-full"
+          <div className="grid lg:grid-cols-2 gap-20 md:gap-32 items-center">
+            <motion.div
+              initial={{ opacity: 0, x: -50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="relative order-2 lg:order-1"
+            >
+              <div className="relative z-10 rounded-[3rem] md:rounded-[5rem] overflow-hidden shadow-[0_50px_100px_-20px_rgba(0,0,0,0.15)] border-[12px] border-white">
+                <img 
+                  src="https://images.unsplash.com/photo-1523381210434-271e8be1f52b?auto=format&fit=crop&q=80&w=1000" 
+                  alt="LUVWATTS Collective" 
+                  className="w-full aspect-[4/5] object-cover grayscale hover:grayscale-0 transition-all duration-1000 scale-105 hover:scale-100" 
+                />
+              </div>
+              <div className="absolute -bottom-16 -left-16 w-80 h-80 bg-[#df8c3d]/10 rounded-full -z-0 blur-3xl" />
+            </motion.div>
+
+            <div className="order-1 lg:order-2">
+              <span className="text-[#801010] font-black tracking-[0.4em] text-[10px] uppercase mb-8 block">Cultural Identity</span>
+              <h2 className="text-7xl md:text-9xl font-black italic tracking-tighter mb-10 text-[#433d3b]">
+                LUV<br/><span className="text-[#df8c3d]">WATTS</span>
+              </h2>
+              <p className="text-xl md:text-2xl text-slate-500 mb-12 font-medium leading-relaxed">
+                LUVWATTS is more than an identity; it's the kinetic energy of human compassion amplified globally. A movement dedicated to lighting up lives through active love.
+              </p>
+              <div className="space-y-6 mb-16">
+                {["Energy through Compassion", "Solidarity without Borders", "Radical Empowerment"].map((item, i) => (
+                  <div key={i} className="flex items-center gap-6 group">
+                    <div className="w-14 h-14 rounded-2xl bg-[#f8fafc] flex items-center justify-center border border-slate-100 group-hover:bg-[#df8c3d] group-hover:text-white transition-all duration-300">
+                      <Zap size={24} />
+                    </div>
+                    <span className="text-xl font-bold text-[#433d3b] tracking-tight">{item}</span>
+                  </div>
+                ))}
+              </div>
+              <motion.button 
+                whileHover={{ scale: 1.05 }}
+                className="px-12 py-6 bg-[#433d3b] text-white rounded-full font-black text-xl hover:bg-[#1a1a1a] transition-all flex items-center gap-4 group shadow-2xl"
               >
-                <div className="w-10 h-10 bg-indigo-100 text-indigo-600 rounded-xl flex items-center justify-center mb-6">
-                  <Heart className="w-5 h-5" />
-                </div>
-                <h4 className="text-xl font-bold text-indigo-950 mb-3">{program.name}</h4>
-                <p className="text-gray-600 text-sm leading-relaxed mb-6 flex-grow">{program.description}</p>
-                <a href="#" className="inline-flex items-center gap-2 text-indigo-600 font-bold text-sm hover:gap-3 transition-all">
-                  Learn More <ChevronRight className="w-4 h-4" />
-                </a>
-              </motion.div>
-            ))}
+                EXPLORE THE MOVEMENT <ArrowRight className="group-hover:translate-x-2 transition-transform" />
+              </motion.button>
+            </div>
           </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="bg-indigo-950 text-white pt-24 pb-12 border-t border-indigo-900">
+      <footer className="bg-[#433d3b] text-white pt-32 pb-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
-            <div className="col-span-1 lg:col-span-1">
-              <div className="flex items-center gap-2 mb-8">
-                <div className="w-10 h-10 bg-indigo-600 rounded-lg flex items-center justify-center">
-                  <Heart className="text-white w-6 h-6" />
-                </div>
-                <span className="text-xl font-bold tracking-tight">FOUNDATION OF LUV</span>
-              </div>
-              <p className="text-indigo-200 leading-relaxed mb-8">
-                “Love in Action, Change in Motion” — Building sustainable models of service delivery through global partnerships.
+          <div className="grid lg:grid-cols-4 gap-20 mb-24 items-start">
+            <div className="lg:col-span-2 text-center md:text-left">
+              <img 
+                src={logoUrl} 
+                alt="FOL Logo" 
+                className="w-32 h-32 mb-12 brightness-110 mx-auto md:mx-0 drop-shadow-lg" 
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  if (!target.src.includes('http')) {
+                    target.src = '/logo.svg';
+                  }
+                }}
+              />
+              <p className="text-xl md:text-2xl text-white/50 max-w-lg mb-12 font-medium leading-relaxed">
+                Restoring human dignity and transforming global communities through strategic, love-led humanitarian action.
               </p>
-              <div className="flex gap-4">
-                {['Twitter', 'Instagram', 'LinkedIn', 'YouTube'].map(social => (
-                  <div key={social} className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/10 transition-colors cursor-pointer border border-white/10">
-                    <span className="sr-only">{social}</span>
-                    <ExternalLink className="w-4 h-4" />
-                  </div>
+              <div className="flex justify-center md:justify-start gap-4">
+                {['Instagram', 'LinkedIn', 'YouTube'].map(social => (
+                  <button key={social} className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center hover:bg-[#df8c3d] transition-all border border-white/10 group">
+                    <ExternalLink size={18} className="group-hover:scale-110 transition-transform" />
+                  </button>
                 ))}
               </div>
             </div>
 
-            <div>
-              <h5 className="text-lg font-bold mb-8">Our Focus</h5>
-              <ul className="space-y-4 text-indigo-300">
-                <li><a href="#" className="hover:text-white transition-colors">Wraparound Services</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Youth Mentorship</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Housing & Shelter</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Financial Literacy</a></li>
+            <div className="text-center md:text-left">
+              <h5 className="text-[#df8c3d] font-black uppercase tracking-[0.3em] text-[10px] mb-12">Core Navigation</h5>
+              <ul className="space-y-6 text-lg font-bold text-white/60">
+                {NAVIGATION.map(n => (
+                  <li key={n.name}><a href={n.href} className="hover:text-white transition-colors">{n.name}</a></li>
+                ))}
               </ul>
             </div>
 
-            <div>
-              <h5 className="text-lg font-bold mb-8">Resources</h5>
-              <ul className="space-y-4 text-indigo-300">
-                <li><a href="#" className="hover:text-white transition-colors">LUVWATTS Store</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Global Tours</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Partner Hub</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Reports & Data</a></li>
-              </ul>
-            </div>
-
-            <div>
-              <h5 className="text-lg font-bold mb-8">Stay Connected</h5>
-              <p className="text-indigo-300 mb-6">Join our newsletter to receive updates on our global advocacy programs.</p>
-              <div className="flex gap-2">
-                <input 
-                  type="email" 
-                  placeholder="Your email" 
-                  className="bg-white/5 border border-white/10 rounded-full px-4 py-2 flex-grow focus:outline-none focus:border-indigo-500 transition-colors"
-                />
-                <button className="bg-indigo-600 px-6 py-2 rounded-full font-bold hover:bg-indigo-700 transition-colors">Join</button>
+            <div className="text-center md:text-left">
+              <h5 className="text-[#df8c3d] font-black uppercase tracking-[0.3em] text-[10px] mb-12">HQ Connectivity</h5>
+              <div className="text-lg font-bold text-white/60 space-y-4">
+                <p className="hover:text-[#df8c3d] transition-colors cursor-pointer text-white">hello@foundationofluv.org</p>
+                <p>Global Restoration Hub<br/>Advocacy HQ • International</p>
               </div>
             </div>
           </div>
 
-          <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4 text-indigo-400 text-sm">
-            <p>© 2025 Foundation of Luv (FOL). All rights reserved.</p>
-            <div className="flex gap-8">
+          <div className="pt-16 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-8 text-white/20 text-[10px] font-black tracking-[0.5em] uppercase">
+            <p>© 2025 FOUNDATION OF LUV (FOL). ALL RIGHTS RESERVED.</p>
+            <div className="flex gap-12">
               <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
               <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
             </div>

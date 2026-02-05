@@ -1,0 +1,76 @@
+<svg width="500" height="500" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <defs>
+    <!-- Path for Top Text: Clockwise arc -->
+    <path id="topTextArc" d="M 65, 250 A 185,185 0 0,1 435,250" />
+    <!-- Path for Bottom Text: Arc designed to keep text upright at the base -->
+    <path id="bottomTextArc" d="M 425, 250 A 175,175 0 0,1 75,250" />
+    
+    <clipPath id="globeClip">
+      <circle cx="250" cy="185" r="75" />
+    </clipPath>
+  </defs>
+
+  <!-- 1. Outer Borders -->
+  <circle cx="250" cy="250" r="248" fill="#f6c453" />
+  <circle cx="250" cy="250" r="242" fill="#ffffff" />
+  
+  <!-- 2. Main Bicolor Ring -->
+  <!-- Dark grey bottom half -->
+  <circle cx="250" cy="250" r="236" fill="#413c3b" />
+  <!-- Light grey top half overlay -->
+  <path d="M 14,250 A 236,236 0 0,1 486,250 L 250,250 Z" fill="#d1d3d4" />
+  
+  <!-- 3. Inner Ring Separator -->
+  <circle cx="250" cy="250" r="172" stroke="#413c3b" stroke-width="8" fill="none" />
+
+  <!-- 4. Inner Orange Core -->
+  <circle cx="250" cy="250" r="168" fill="#e08a3d" />
+  
+  <!-- 5. The Globe -->
+  <circle cx="250" cy="185" r="75" fill="#0d2440" />
+  <g clip-path="url(#globeClip)">
+    <!-- Simplified Continental Shapes -->
+    <path d="M210,165 Q225,145 245,165 T275,175 T300,160 T315,185 T285,215 T240,210 T205,190 Z" fill="#e08a3d" />
+    <path d="M255,130 Q275,140 270,160 T295,170 T310,150 Z" fill="#e08a3d" />
+  </g>
+
+  <!-- 6. Laurel Wreath -->
+  <g fill="#f6c453">
+    <!-- Left Wreath -->
+    <path d="M190,220 Q185,250 200,300 Q215,330 245,355 L250,350 Q220,320 210,280 T205,220 Z" opacity="0.9"/>
+    <!-- Leaf clusters -->
+    <ellipse cx="188" cy="230" rx="6" ry="10" transform="rotate(-30 188 230)" />
+    <ellipse cx="192" cy="260" rx="6" ry="10" transform="rotate(-25 192 260)" />
+    <ellipse cx="202" cy="290" rx="6" ry="10" transform="rotate(-20 202 290)" />
+    <ellipse cx="218" cy="320" rx="6" ry="10" transform="rotate(-15 218 320)" />
+    
+    <!-- Right Wreath -->
+    <path d="M310,220 Q315,250 300,300 Q285,330 255,355 L250,350 Q280,320 290,280 T295,220 Z" opacity="0.9"/>
+    <ellipse cx="312" cy="230" rx="6" ry="10" transform="rotate(30 312 230)" />
+    <ellipse cx="308" cy="260" rx="6" ry="10" transform="rotate(25 308 260)" />
+    <ellipse cx="298" cy="290" rx="6" ry="10" transform="rotate(20 298 290)" />
+    <ellipse cx="282" cy="320" rx="6" ry="10" transform="rotate(15 282 320)" />
+  </g>
+
+  <!-- 7. The Central Heart -->
+  <path d="M250,235 C210,185 140,210 140,295 C140,370 250,455 250,455 C250,455 360,370 360,295 C360,210 290,185 250,235 Z" fill="#821111" />
+
+  <!-- 8. Junction Stars -->
+  <g fill="#f6c453">
+    <!-- Left Star -->
+    <path d="M85,250 l10,-15 15,3 -11,13 5,18 -19,-11 -19,11 5,-18 -11,-13 15,-3 z" />
+    <!-- Right Star -->
+    <path d="M415,250 l10,-15 15,3 -11,13 5,18 -19,-11 -19,11 5,-18 -11,-13 15,-3 z" />
+  </g>
+
+  <!-- 9. Typography -->
+  <!-- Top Text: FOUNDATION OF LUV -->
+  <text font-family="'Times New Roman', Times, serif" font-weight="900" font-size="44" fill="#000000" letter-spacing="1">
+    <textPath xlink:href="#topTextArc" startOffset="50%" text-anchor="middle">FOUNDATION OF LUV</textPath>
+  </text>
+  
+  <!-- Bottom Text: LOVE IN ACTION CHANGE IN MOTION -->
+  <text font-family="'Times New Roman', Times, serif" font-weight="700" font-size="28" fill="#ffffff" letter-spacing="1">
+    <textPath xlink:href="#bottomTextArc" startOffset="50%" text-anchor="middle">LOVE IN ACTION CHANGE IN MOTION</textPath>
+  </text>
+</svg>
