@@ -58,7 +58,6 @@ const Fireworks = () => {
 
   const spawnBurst = useCallback(() => {
     const id = Date.now();
-    // Randomly spawn around the edges of where the frame would be
     const x = 20 + Math.random() * 60; 
     const y = 30 + Math.random() * 40;
     const color = COLORS[Math.floor(Math.random() * COLORS.length)];
@@ -94,9 +93,6 @@ const App: React.FC = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const { scrollYProgress } = useScroll();
   
-  const yHero = useTransform(scrollYProgress, [0, 0.2], [0, -100]);
-  const opacityHero = useTransform(scrollYProgress, [0, 0.15], [1, 0]);
-
   const logoUrl = "logo.svg";
 
   useEffect(() => {
@@ -198,7 +194,6 @@ const App: React.FC = () => {
 
       {/* Hero Section */}
       <header className="relative w-full pt-32 pb-16 md:pt-64 md:pb-32 lg:pt-80 lg:pb-48 overflow-hidden bg-[#fdfaf6]">
-        {/* Fireworks Effect Layer */}
         <Fireworks />
 
         <div className="absolute top-0 left-0 w-full h-full -z-10 pointer-events-none overflow-hidden">
@@ -326,14 +321,22 @@ const App: React.FC = () => {
         </div>
       </header>
 
-      {/* Trust & Partners Bar */}
-      <section className="py-10 md:py-16 bg-white border-y border-[#332d2b]/5 overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4">
-          <p className="text-center font-cinzel font-black text-[9px] md:text-[11px] text-[#332d2b]/30 tracking-[0.4em] uppercase mb-10 md:mb-14">Strategic Alliance Network</p>
-          <div className="flex flex-wrap justify-center items-center gap-8 md:gap-24 opacity-40 grayscale hover:grayscale-0 transition-all duration-700">
-             {PARTNERS.map(partner => (
-               <span key={partner} className="font-cinzel font-bold text-lg md:text-2xl tracking-tighter text-[#332d2b]">{partner}</span>
-             ))}
+      {/* Trust, Partners & Clients Sliding Bar */}
+      <section className="py-12 md:py-24 bg-white border-y border-[#332d2b]/5 overflow-hidden">
+        <div className="w-full">
+          <p className="text-center font-cinzel font-black text-[9px] md:text-[12px] text-[#332d2b]/40 tracking-[0.5em] uppercase mb-12 md:mb-20">Partners and Clients</p>
+          <div className="relative flex overflow-hidden">
+            <motion.div 
+              className="flex items-center whitespace-nowrap gap-12 md:gap-32"
+              animate={{ x: ["0%", "-50%"] }}
+              transition={{ repeat: Infinity, duration: 30, ease: "linear" }}
+            >
+              {[...PARTNERS, ...PARTNERS].map((partner, i) => (
+                <span key={i} className="font-cinzel font-bold text-2xl md:text-4xl tracking-tighter text-[#332d2b] opacity-40 hover:opacity-100 grayscale hover:grayscale-0 transition-all duration-500 cursor-default">
+                  {partner}
+                </span>
+              ))}
+            </motion.div>
           </div>
         </div>
       </section>
