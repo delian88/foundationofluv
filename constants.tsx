@@ -20,6 +20,7 @@ export const NAVIGATION = [
   { name: 'Global Services', href: '#services' },
   { name: 'Roadmap', href: '#roadmap' },
   { name: 'LUVWATTS', href: '#luvwatts' },
+  { name: 'Gallery', href: '#gallery' },
   { name: 'Programs', href: '#programs' },
 ];
 
@@ -109,7 +110,6 @@ export const STATS = [
   { label: "Food Security", value: "50", suffix: "k+", description: "Meals served per quarter" },
 ];
 
-// Added HERO_IMAGES used in App.tsx to fix the "Cannot find name 'HERO_IMAGES'" errors
 export const HERO_IMAGES = [
   {
     url: "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&q=80&w=2000",
@@ -127,4 +127,13 @@ export const HERO_IMAGES = [
     url: "https://images.unsplash.com/photo-1509099836639-18ba1795216d?auto=format&fit=crop&q=80&w=2000",
     caption: "Building Communities Together"
   }
+];
+
+export const GALLERY_IMAGES = [
+  { url: "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&q=80&w=800", title: "Outreach Program" },
+  { url: "https://images.unsplash.com/photo-1532629345422-7515f3d16bb6?auto=format&fit=crop&q=80&w=800", title: "Global Mission" },
+  { url: "https://images.unsplash.com/photo-1542810634-71277d95dcbb?auto=format&fit=crop&q=80&w=800", title: "Community Education" },
+  { url: "https://images.unsplash.com/photo-1524061614234-84496375567e?auto=format&fit=crop&q=80&w=800", title: "Housing Support" },
+  { url: "https://images.unsplash.com/photo-1518391846015-55a9cc003b25?auto=format&fit=crop&q=80&w=800", title: "Youth Mentorship" },
+  { url: "https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?auto=format&fit=crop&q=80&w=800", title: "Humanitarian Aid" },
 ];

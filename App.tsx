@@ -2,10 +2,10 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform, useMotionValue, useInView, animate } from 'framer-motion';
 import { 
   Menu, X, ChevronRight, ArrowRight, Sparkles, MoveRight, ChevronLeft, Calendar, Award, 
-  Instagram, Linkedin, Youtube, Globe, Brain, Users, Home, Utensils, GraduationCap
+  Instagram, Linkedin, Youtube, Globe, Brain, Users, Home, Utensils, GraduationCap, Image as LucideImage
 } from 'lucide-react';
 import { 
-  NAVIGATION, SERVICE_AREAS, STRATEGIC_PHASES, STATS, PARTNERS, COLORS, HERO_IMAGES 
+  NAVIGATION, SERVICE_AREAS, STRATEGIC_PHASES, STATS, PARTNERS, COLORS, HERO_IMAGES, GALLERY_IMAGES
 } from './constants';
 
 const Logo = ({ className, style, alt }: { className?: string; style?: React.CSSProperties; alt?: string }) => {
@@ -74,7 +74,7 @@ const FireworkBurst = ({ x, y, color }: { x: number; y: number; color: string })
             opacity: 0, 
             scale: [0, 1, 0.5] 
           }}
-          transition={{ duration: 1.5, ease: "easeOut" }}
+          transition={{ duration: 2, ease: "easeOut" }}
           className="absolute w-2 h-2 rounded-full"
           style={{ backgroundColor: color }}
         />
@@ -86,20 +86,23 @@ const FireworkBurst = ({ x, y, color }: { x: number; y: number; color: string })
 const Fireworks = () => {
   const [bursts, setBursts] = useState<{ id: number; x: number; y: number; color: string }[]>([]);
   const spawnBurst = useCallback(() => {
-    const id = Date.now();
-    const x = 20 + Math.random() * 60; 
-    const y = 30 + Math.random() * 40;
+    const id = Date.now() + Math.random();
+    const x = 10 + Math.random() * 80; 
+    const y = 10 + Math.random() * 80;
     const colorValues = Object.values(COLORS);
     const color = colorValues[Math.floor(Math.random() * colorValues.length)] as string;
     setBursts(prev => [...prev, { id, x, y, color }]);
     setTimeout(() => setBursts(prev => prev.filter(b => b.id !== id)), 2000);
   }, []);
+  
   useEffect(() => {
-    const interval = setInterval(() => { if (Math.random() > 0.4) spawnBurst(); }, 1200);
+    // Increased frequency for a "constant" effect
+    const interval = setInterval(() => { spawnBurst(); }, 500);
     return () => clearInterval(interval);
   }, [spawnBurst]);
+  
   return (
-    <div className="absolute inset-0 pointer-events-none z-0">
+    <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
       <AnimatePresence>
         {bursts.map(burst => <FireworkBurst key={burst.id} {...burst} />)}
       </AnimatePresence>
@@ -148,6 +151,8 @@ const App: React.FC = () => {
               <a 
                 key={item.name} 
                 href={item.href} 
+                target="_blank"
+                rel="noopener noreferrer"
                 className="text-[10px] font-cinzel font-bold uppercase tracking-[0.3em] text-[#332d2b] hover:text-[#9c1c22] transition-all relative group"
               >
                 {item.name}
@@ -181,6 +186,8 @@ const App: React.FC = () => {
                   <a 
                     key={item.name} 
                     href={item.href} 
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="block text-xl font-cinzel font-bold tracking-widest text-[#332d2b]" 
                     onClick={() => setIsMenuOpen(false)}
                   >
@@ -313,17 +320,31 @@ const App: React.FC = () => {
             <span className="inline-flex items-center gap-3 px-5 py-2 rounded-full bg-[#9c1c22]/5 text-[#9c1c22] text-[10px] font-cinzel font-black tracking-[0.3em] mb-8 border border-[#9c1c22]/10 uppercase">
               <Award size={14} /> THE FOUNDATION LEGACY
             </span>
-            <h2 className="text-4xl md:text-7xl font-serif font-black text-[#332d2b] leading-tight mb-12">About <br /><span className="italic font-normal text-shine-crimson">Foundation of Luv.</span></h2>
+            <h2 className="text-4xl md:text-7xl font-serif font-black text-[#332d2b] leading-tight mb-12">ABOUT US (FOL)</h2>
             <div className="space-y-8">
-              <p className="text-xl md:text-3xl text-[#332d2b]/80 font-serif italic leading-relaxed">
-                "Foundation of Love (FOL) was created in 2016 with a belief that love, dignity, and compassion can transform individuals and communities."
+              <p className="text-xl md:text-2xl text-[#332d2b]/80 font-serif leading-relaxed">
+                Foundation of Love (FOL) was created in 2016 with a simple yet profound belief: that love, dignity, and compassion can transform individuals and communities. Rooted in humanitarian service, advocacy, and holistic support, FOL was established to bridge societal divides, empower the vulnerable, and create lasting pathways to opportunity. Since inception, the foundation has touched lives across diverse demographics through outreach, capacity-building, mentorship, and community-centered initiatives.
               </p>
               <div className="h-0.5 w-24 bg-gradient-to-r from-[#e2a744] to-transparent" />
-              <p className="text-lg md:text-xl text-[#332d2b]/70 font-medium leading-relaxed font-serif">
-                Rooted in humanitarian service, advocacy, and holistic support, FOL was established to bridge societal divides and empower the vulnerable.
-              </p>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Video Section - Always present as requested */}
+      <section className="py-20 md:py-40 bg-white relative overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mb-12 md:mb-24">
+            <span className="text-[#9c1c22] font-cinzel font-black tracking-[0.3em] md:tracking-[0.5em] text-[10px] md:text-[11px] uppercase mb-6 block">Kinetic Resonance</span>
+            <h2 className="text-4xl md:text-8xl font-serif font-black text-[#332d2b] leading-tight mb-8">Love <span className="italic font-normal text-[#e2a744]">Witnessed.</span></h2>
+            <div className="h-1 w-20 md:w-32 bg-[#9c1c22] mx-auto rounded-full" />
+          </motion.div>
+
+          <motion.div initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} className="relative group max-w-5xl mx-auto">
+            <div className="relative aspect-video rounded-[1.5rem] md:rounded-[4rem] overflow-hidden border-[6px] md:border-[20px] border-white shadow-2xl bg-slate-900">
+              <iframe className="w-full h-full" src="https://www.youtube.com/embed/XxfFvLERt7o?autoplay=0&rel=0&modestbranding=1" title="Foundation of Luv" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen></iframe>
+            </div>
+          </motion.div>
         </div>
       </section>
 
@@ -341,6 +362,37 @@ const App: React.FC = () => {
                 </div>
                 <h4 className="text-xl md:text-3xl font-serif font-black text-[#332d2b] mb-4">{service.title}</h4>
                 <p className="text-[#332d2b]/60 text-lg leading-relaxed font-serif italic">{service.description}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Gallery Section */}
+      <section id="gallery" className="py-20 md:py-40 bg-white">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="text-center mb-24">
+            <span className="text-[#9c1c22] font-cinzel font-black tracking-[0.5em] text-[11px] uppercase mb-6 block">Visual Stories</span>
+            <h2 className="text-4xl md:text-7xl font-serif font-black text-[#332d2b] leading-tight">Our <span className="italic font-normal text-[#e2a744]">Gallery.</span></h2>
+            <div className="h-1 w-24 bg-[#e2a744] mx-auto mt-8 rounded-full" />
+          </div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {GALLERY_IMAGES.map((img, i) => (
+              <motion.div 
+                key={i} 
+                initial={{ opacity: 0, scale: 0.9 }} 
+                whileInView={{ opacity: 1, scale: 1 }} 
+                viewport={{ once: true }}
+                whileHover={{ y: -10 }}
+                className="group relative aspect-square overflow-hidden rounded-[2rem] shadow-xl"
+              >
+                <img src={img.url} alt={img.title} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-end p-8">
+                  <div>
+                    <LucideImage className="text-[#e2a744] mb-3" />
+                    <h4 className="text-white font-cinzel font-bold text-xl uppercase tracking-widest">{img.title}</h4>
+                  </div>
+                </div>
               </motion.div>
             ))}
           </div>
@@ -408,15 +460,15 @@ const App: React.FC = () => {
                 "Restoring human dignity and transforming global communities through strategic action."
               </p>
               <div className="flex justify-center md:justify-start gap-6">
-                <a href="#" className="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center border border-white/10 hover:bg-[#9c1c22] transition-all"><Instagram size={22} /></a>
-                <a href="#" className="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center border border-white/10 hover:bg-[#9c1c22] transition-all"><Linkedin size={22} /></a>
-                <a href="#" className="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center border border-white/10 hover:bg-[#9c1c22] transition-all"><Youtube size={22} /></a>
+                <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center border border-white/10 hover:bg-[#9c1c22] transition-all"><Instagram size={22} /></a>
+                <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center border border-white/10 hover:bg-[#9c1c22] transition-all"><Linkedin size={22} /></a>
+                <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" className="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center border border-white/10 hover:bg-[#9c1c22] transition-all"><Youtube size={22} /></a>
               </div>
             </div>
             <div>
               <h5 className="text-[#e2a744] font-cinzel font-black uppercase tracking-[0.3em] text-[10px] mb-8">Architecture</h5>
               <ul className="space-y-6 text-xl font-serif italic text-[#fdfaf6]/60">
-                {NAVIGATION.map(n => <li key={n.name}><a href={n.href} className="hover:text-white transition-colors">{n.name}</a></li>)}
+                {NAVIGATION.map(n => <li key={n.name}><a href={n.href} target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">{n.name}</a></li>)}
               </ul>
             </div>
             <div>
