@@ -16,7 +16,7 @@ export const COLORS = {
 };
 
 export const NAVIGATION = [
-  { name: 'Mission', href: '#about' },
+  { name: 'About Us', href: '#about' },
   { name: 'Global Services', href: '#services' },
   { name: 'Roadmap', href: '#roadmap' },
   { name: 'LUVWATTS', href: '#luvwatts' },

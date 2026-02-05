@@ -1,21 +1,50 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence, useScroll } from 'framer-motion';
 import { 
   Menu, X, ChevronRight, Zap, ArrowRight, 
-  ExternalLink, Sparkles, MoveRight, Heart
+  ExternalLink, Sparkles, MoveRight, Heart, ChevronLeft, Calendar, Award
 } from 'lucide-react';
 import { 
   NAVIGATION, SERVICE_AREAS, STRATEGIC_PHASES, STATS 
 } from './constants';
 
+const HERO_IMAGES = [
+  {
+    url: "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&q=80&w=1200",
+    caption: "Community Restoration"
+  },
+  {
+    url: "https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&q=80&w=1200",
+    caption: "Education & Empowerment"
+  },
+  {
+    url: "https://images.unsplash.com/photo-1526948128573-703ee1aeb6fa?auto=format&fit=crop&q=80&w=1200",
+    caption: "Global Solidarity"
+  },
+  {
+    url: "https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&q=80&w=1200",
+    caption: "Humanity in Motion"
+  }
+];
+
 const App: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeRoadmap, setActiveRoadmap] = useState(0);
   const [logoError, setLogoError] = useState(false);
+  const [currentSlide, setCurrentSlide] = useState(0);
   const { scrollYProgress } = useScroll();
 
-  // Root-relative path for reliable asset resolution
   const logoUrl = "logo.svg";
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % HERO_IMAGES.length);
+    }, 6000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % HERO_IMAGES.length);
+  const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + HERO_IMAGES.length) % HERO_IMAGES.length);
 
   return (
     <div className="min-h-screen selection:bg-[#9c1c22]/20 selection:text-[#9c1c22]">
@@ -128,7 +157,6 @@ const App: React.FC = () => {
             transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
             className="absolute bottom-[-20%] left-[-15%] w-[500px] h-[500px] md:w-[800px] md:h-[800px] bg-[#e2a744]/8 rounded-full blur-[100px] md:blur-[140px]" 
           />
-          <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'radial-gradient(#332d2b 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
         </div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center flex flex-col items-center">
@@ -136,99 +164,161 @@ const App: React.FC = () => {
             initial={{ opacity: 0, y: 50, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
-            className="mb-12 md:mb-20 relative"
+            className="mb-12 md:mb-20 relative w-full flex justify-center"
           >
-            {/* Focal Point Glow */}
             <div className="absolute inset-0 bg-gradient-to-tr from-[#9c1c22]/10 via-white to-[#e2a744]/10 rounded-full blur-[80px] md:blur-[100px] -z-10 scale-[1.5] md:scale-[1.8] opacity-60" />
             
-            <div className="relative group p-4 md:p-12">
-              {logoError ? (
-                <div className="w-64 h-64 md:w-[500px] md:h-[500px] mx-auto flex items-center justify-center bg-[#9c1c22] text-white rounded-full font-cinzel font-black text-6xl md:text-[12rem] tracking-tighter shadow-2xl transition-transform group-hover:scale-105 duration-700">
-                  FOL
+            <div className="relative group p-4 md:p-12 w-full max-w-[800px]">
+              <div className="relative aspect-video md:aspect-[21/9] rounded-[2rem] md:rounded-[4rem] overflow-hidden border-[8px] md:border-[16px] border-white shadow-[0_50px_100px_-20px_rgba(156,28,34,0.3)] group/slider">
+                <div className="absolute inset-0 border-[2px] md:border-[4px] border-[#e2a744]/40 rounded-[1.5rem] md:rounded-[3.2rem] z-20 pointer-events-none" />
+                
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={currentSlide}
+                    initial={{ opacity: 0, scale: 1.1 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.95 }}
+                    transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+                    className="absolute inset-0"
+                  >
+                    <img src={HERO_IMAGES[currentSlide].url} alt={HERO_IMAGES[currentSlide].caption} className="w-full h-full object-cover brightness-[0.85]" />
+                    <div className="absolute bottom-0 left-0 right-0 p-6 md:p-10 bg-gradient-to-t from-black/60 to-transparent text-left">
+                      <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
+                        <span className="text-[#e2a744] font-cinzel font-black tracking-widest text-[10px] uppercase">Featured Movement</span>
+                        <h3 className="text-white text-xl md:text-3xl font-serif italic mt-1">{HERO_IMAGES[currentSlide].caption}</h3>
+                      </motion.div>
+                    </div>
+                  </motion.div>
+                </AnimatePresence>
+
+                <div className="absolute inset-0 flex items-center justify-between px-4 md:px-8 z-30 opacity-0 group-hover/slider:opacity-100 transition-opacity duration-500">
+                  <button onClick={prevSlide} className="w-12 h-12 rounded-full bg-white/10 backdrop-blur-md text-white flex items-center justify-center hover:bg-white hover:text-[#9c1c22] transition-all"><ChevronLeft size={24} /></button>
+                  <button onClick={nextSlide} className="w-12 h-12 rounded-full bg-white/10 backdrop-blur-md text-white flex items-center justify-center hover:bg-white hover:text-[#9c1c22] transition-all"><ChevronRight size={24} /></button>
                 </div>
-              ) : (
-                <img 
-                  src={logoUrl} 
-                  alt="Foundation of Luv Seal" 
-                  className="w-64 h-64 md:w-[520px] md:h-[520px] mx-auto drop-shadow-xl md:drop-shadow-[0_45px_90px_rgba(156,28,34,0.3)] transition-all duration-1000 cursor-default group-hover:scale-[1.02]" 
-                  onError={() => setLogoError(true)}
-                />
-              )}
-              
-              <motion.div 
-                animate={{ rotate: 360 }}
-                transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
-                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[115%] h-[115%] border-[1px] border-dashed border-[#9c1c22]/20 rounded-full -z-10"
-              />
-              <motion.div 
-                animate={{ rotate: -360 }}
-                transition={{ duration: 100, repeat: Infinity, ease: "linear" }}
-                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[130%] h-[130%] border-[0.5px] border-[#332d2b]/10 rounded-full -z-10"
-              />
+
+                <div className="absolute bottom-6 md:bottom-10 right-6 md:right-10 flex gap-3 z-30">
+                  {HERO_IMAGES.map((_, i) => (
+                    <button key={i} onClick={() => setCurrentSlide(i)} className={`h-1.5 transition-all duration-500 rounded-full ${currentSlide === i ? 'w-8 bg-[#e2a744]' : 'w-4 bg-white/30 hover:bg-white/50'}`} />
+                  ))}
+                </div>
+              </div>
+
+              <motion.div animate={{ y: [0, -10, 0] }} transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }} className="absolute -top-6 -right-6 md:-top-10 md:-right-10 w-24 h-24 md:w-40 md:h-40 z-40">
+                {logoError ? (
+                  <div className="w-full h-full bg-[#9c1c22] text-white rounded-full flex items-center justify-center font-cinzel font-black text-2xl md:text-4xl shadow-2xl ring-4 md:ring-8 ring-[#e2a744]">FOL</div>
+                ) : (
+                  <img src={logoUrl} alt="FOL Seal" className="w-full h-full drop-shadow-2xl hover:scale-110 transition-transform duration-500" onError={() => setLogoError(true)} />
+                )}
+              </motion.div>
             </div>
           </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1.2, delay: 0.6 }}
-            className="max-w-5xl mx-auto"
-          >
-            <div className="inline-flex items-center gap-4 px-6 md:px-8 py-2 md:py-3 rounded-full glass-card text-[#9c1c22] text-[9px] md:text-[11px] font-cinzel font-black tracking-[0.3em] md:tracking-[0.5em] mb-8 md:mb-14 border border-[#9c1c22]/10 uppercase">
-              <Sparkles size={14} className="animate-pulse" />
-              The LUVWATTS Legacy
-            </div>
-            
+          <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1.2, delay: 0.6 }} className="max-w-5xl mx-auto">
             <h1 className="hero-text text-5xl md:text-[7.5rem] font-serif font-black leading-tight md:leading-[0.9] tracking-tight mb-10 md:mb-14">
               <span className="text-shine-crimson block pb-2 md:pb-4">Love in Action,</span>
               <span className="italic font-normal text-shine block">Change in Motion.</span>
             </h1>
-
-            <p className="mobile-p text-lg md:text-3xl text-[#332d2b]/70 mb-12 md:mb-20 leading-relaxed max-w-3xl mx-auto font-serif italic font-medium">
-              "Restoring the pulse of humanity through strategic compassion, dignified restoration, and the kinetic energy of global solidarity."
-            </p>
-
             <div className="flex flex-col md:flex-row gap-6 md:gap-10 justify-center items-center">
-              <motion.button 
-                whileHover={{ scale: 1.05, y: -5 }}
-                whileTap={{ scale: 0.98 }}
-                className="group relative w-full md:w-auto px-12 md:px-16 py-5 md:py-7 bg-[#9c1c22] text-white rounded-full font-cinzel font-bold text-lg md:text-xl overflow-hidden shadow-xl md:shadow-[0_30px_60px_-15px_rgba(156,28,34,0.4)]"
-              >
-                <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/10 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out" />
-                <span className="relative flex items-center justify-center gap-5">
-                  Join the Movement <MoveRight className="group-hover:translate-x-3 transition-transform duration-500" />
-                </span>
+              <motion.button whileHover={{ scale: 1.05, y: -5 }} className="group relative w-full md:w-auto px-12 md:px-16 py-5 md:py-7 bg-[#9c1c22] text-white rounded-full font-cinzel font-bold text-lg md:text-xl overflow-hidden shadow-xl md:shadow-[0_30px_60px_-15px_rgba(156,28,34,0.4)]">
+                Join the Movement <MoveRight className="inline-block ml-3 group-hover:translate-x-3 transition-transform" />
               </motion.button>
-              
-              <motion.button 
-                whileHover={{ scale: 1.05, y: -5 }}
-                whileTap={{ scale: 0.98 }}
-                className="w-full md:w-auto px-12 md:px-16 py-5 md:py-7 glass-card text-[#332d2b] rounded-full font-cinzel font-bold text-lg md:text-xl hover:bg-white transition-all shadow-md flex items-center justify-center gap-4 border border-[#9c1c22]/10"
-              >
-                Our Sacred Mission <ArrowRight size={20} className="text-[#9c1c22]" />
-              </motion.button>
+              <a href="#about" className="w-full md:w-auto">
+                <motion.button whileHover={{ scale: 1.05, y: -5 }} className="w-full px-12 md:px-16 py-5 md:py-7 glass-card text-[#332d2b] rounded-full font-cinzel font-bold text-lg md:text-xl hover:bg-white transition-all shadow-md flex items-center justify-center gap-4 border border-[#9c1c22]/10">
+                  Our Sacred Story <ArrowRight size={20} className="text-[#9c1c22]" />
+                </motion.button>
+              </a>
             </div>
           </motion.div>
         </div>
       </header>
 
+      {/* About Us Section */}
+      <section id="about" className="py-24 md:py-40 bg-[#f9f5f0] relative overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid lg:grid-cols-12 gap-16 md:gap-24 items-center">
+            
+            <motion.div 
+              initial={{ opacity: 0, x: -50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="lg:col-span-5 relative"
+            >
+              <div className="relative z-10 p-4 bg-white rounded-[3rem] shadow-2xl overflow-hidden group">
+                <div className="absolute inset-0 bg-[#9c1c22]/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+                <img 
+                  src="https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&q=80&w=1000" 
+                  alt="Foundation of Luv History" 
+                  className="w-full aspect-[3/4] object-cover rounded-[2.5rem] grayscale group-hover:grayscale-0 transition-all duration-[2s]" 
+                />
+                
+                {/* Est Badge */}
+                <div className="absolute top-10 left-10 w-24 h-24 bg-white/90 backdrop-blur-md rounded-full shadow-2xl flex flex-col items-center justify-center border-2 border-[#e2a744] z-20 group-hover:scale-110 transition-transform">
+                  <Calendar size={20} className="text-[#9c1c22] mb-1" />
+                  <span className="text-[10px] font-cinzel font-black tracking-widest text-[#332d2b]">EST.</span>
+                  <span className="text-lg font-serif font-black text-[#9c1c22]">2016</span>
+                </div>
+              </div>
+
+              {/* Decorative Elements */}
+              <div className="absolute -top-10 -left-10 w-40 h-40 bg-[#9c1c22]/5 rounded-full blur-3xl -z-10" />
+              <div className="absolute -bottom-10 -right-10 w-60 h-60 bg-[#e2a744]/10 rounded-full blur-3xl -z-10" />
+            </motion.div>
+
+            <motion.div 
+              initial={{ opacity: 0, x: 50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="lg:col-span-7"
+            >
+              <div className="inline-flex items-center gap-4 px-6 py-2 rounded-full bg-[#9c1c22]/5 text-[#9c1c22] text-[10px] font-cinzel font-black tracking-[0.4em] mb-10 border border-[#9c1c22]/10 uppercase">
+                <Award size={14} />
+                THE FOUNDATION LEGACY
+              </div>
+              
+              <h2 className="text-5xl md:text-7xl font-serif font-black text-[#332d2b] leading-[1.1] mb-12">
+                About <br/><span className="italic font-normal text-shine-crimson">Foundation of Luv.</span>
+              </h2>
+
+              <div className="space-y-8">
+                <p className="text-2xl md:text-3xl text-[#332d2b]/80 font-serif italic leading-relaxed">
+                  "Foundation of Love (FOL) was created in 2016 with a simple yet profound belief: that love, dignity, and compassion can transform individuals and communities."
+                </p>
+                
+                <div className="h-0.5 w-24 bg-gradient-to-r from-[#e2a744] to-transparent" />
+
+                <p className="text-xl text-[#332d2b]/70 font-medium leading-relaxed font-serif">
+                  Rooted in humanitarian service, advocacy, and holistic support, FOL was established to bridge societal divides, empower the vulnerable, and create lasting pathways to opportunity. 
+                </p>
+
+                <p className="text-xl text-[#332d2b]/70 font-medium leading-relaxed font-serif">
+                  Since inception, the foundation has touched lives across diverse demographics through outreach, capacity-building, mentorship, and community-centered initiatives. We believe in kinetic change—love in motion.
+                </p>
+              </div>
+
+              <div className="mt-16 flex flex-wrap gap-12">
+                <div>
+                  <div className="text-4xl font-serif font-black text-[#9c1c22]">8+ Years</div>
+                  <div className="text-[10px] font-cinzel font-black tracking-widest text-[#332d2b]/40 uppercase mt-2">of Active Service</div>
+                </div>
+                <div>
+                  <div className="text-4xl font-serif font-black text-[#9c1c22]">Global</div>
+                  <div className="text-[10px] font-cinzel font-black tracking-widest text-[#332d2b]/40 uppercase mt-2">Strategic Outreach</div>
+                </div>
+              </div>
+            </motion.div>
+
+          </div>
+        </div>
+      </section>
+
       {/* Stats Section */}
       <section className="py-20 md:py-24 bg-white border-y border-[#332d2b]/10 relative overflow-hidden">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full opacity-[0.02]" style={{ backgroundImage: 'radial-gradient(circle, #9c1c22 1px, transparent 1px)', backgroundSize: '24px 24px' }} />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-10 md:gap-12 text-center">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-10 md:gap-12">
             {STATS.map((stat, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.15 }}
-                className="group"
-              >
-                <div className="text-4xl md:text-8xl font-serif font-black text-[#9c1c22] mb-2 md:mb-4 group-hover:scale-110 transition-transform duration-500">
-                  {stat.value}{stat.suffix}
-                </div>
+              <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.15 }} className="group">
+                <div className="text-4xl md:text-8xl font-serif font-black text-[#9c1c22] mb-2 md:mb-4 group-hover:scale-110 transition-transform duration-500">{stat.value}{stat.suffix}</div>
                 <div className="text-[10px] md:text-[12px] font-cinzel font-black tracking-[0.2em] md:tracking-[0.4em] text-[#332d2b] mb-2 uppercase">{stat.label}</div>
                 <div className="text-xs md:text-sm text-[#332d2b]/40 font-medium uppercase tracking-[0.1em]">{stat.description}</div>
               </motion.div>
@@ -252,21 +342,9 @@ const App: React.FC = () => {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10">
             {SERVICE_AREAS.map((service, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
-                whileHover={{ y: -15 }}
-                className="bg-white p-8 md:p-14 rounded-[2rem] md:rounded-[3rem] border border-[#332d2b]/10 hover:border-[#9c1c22]/20 hover:shadow-2xl transition-all duration-700 group relative overflow-hidden"
-              >
-                <div className="absolute top-0 right-0 p-8 opacity-[0.03] group-hover:opacity-[0.08] transition-opacity">
-                  <Heart className="w-20 h-20 md:w-24 md:h-24 text-[#9c1c22]" />
-                </div>
-                <div className="w-16 h-16 md:w-20 md:h-20 bg-[#fdfaf6] text-[#9c1c22] rounded-2xl md:rounded-3xl flex items-center justify-center mb-8 md:mb-12 group-hover:bg-[#9c1c22] group-hover:text-white transition-all duration-500 shadow-sm border border-[#332d2b]/5 group-hover:rotate-[10deg]">
-                  {service.icon}
-                </div>
+              <motion.div key={i} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }} whileHover={{ y: -15 }} className="bg-white p-8 md:p-14 rounded-[2rem] md:rounded-[3rem] border border-[#332d2b]/10 hover:border-[#9c1c22]/20 hover:shadow-2xl transition-all duration-700 group relative overflow-hidden">
+                <div className="absolute top-0 right-0 p-8 opacity-[0.03] group-hover:opacity-[0.08] transition-opacity"><Heart className="w-20 h-20 md:w-24 md:h-24 text-[#9c1c22]" /></div>
+                <div className="w-16 h-16 md:w-20 md:h-20 bg-[#fdfaf6] text-[#9c1c22] rounded-2xl md:rounded-3xl flex items-center justify-center mb-8 md:mb-12 group-hover:bg-[#9c1c22] group-hover:text-white transition-all duration-500 shadow-sm border border-[#332d2b]/5 group-hover:rotate-[10deg]">{service.icon}</div>
                 <h4 className="text-2xl md:text-3xl font-serif font-black text-[#332d2b] mb-4 md:mb-6 tracking-tight">{service.title}</h4>
                 <p className="text-[#332d2b]/60 text-base md:text-lg leading-relaxed font-medium font-serif italic">{service.description}</p>
               </motion.div>
@@ -278,32 +356,19 @@ const App: React.FC = () => {
       {/* Strategic Roadmap */}
       <section id="roadmap" className="py-24 md:py-40 bg-[#332d2b] text-[#fdfaf6] overflow-hidden relative">
         <div className="absolute top-0 right-0 w-[600px] h-[600px] md:w-[1000px] md:h-[1000px] bg-[#9c1c22]/10 rounded-full blur-[120px] md:blur-[180px] pointer-events-none" />
-        
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="text-center mb-16 md:mb-32">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+          <div className="mb-16 md:mb-32">
             <span className="text-[#9c1c22] font-cinzel font-black tracking-[0.3em] md:tracking-[0.5em] text-[10px] md:text-[11px] uppercase mb-6 md:mb-8 block">Projected Trajectory</span>
             <h2 className="text-4xl md:text-[6.5rem] font-serif font-black leading-tight">Visionary <br/><span className="italic font-normal text-[#9c1c22]">Benchmarks.</span></h2>
           </div>
 
-          <div className="grid lg:grid-cols-12 gap-8 md:gap-16 items-start">
+          <div className="grid lg:grid-cols-12 gap-8 md:gap-16 items-start text-left">
             <div className="lg:col-span-4 flex flex-col gap-4 md:gap-6">
               {STRATEGIC_PHASES.map((phase, i) => (
-                <button
-                  key={i}
-                  onClick={() => setActiveRoadmap(i)}
-                  className={`text-left p-6 md:p-10 rounded-2xl md:rounded-[2.5rem] transition-all border-2 flex items-center justify-between group relative overflow-hidden ${
-                    activeRoadmap === i 
-                      ? 'bg-[#fdfaf6] text-[#332d2b] border-[#fdfaf6] shadow-2xl' 
-                      : 'bg-transparent text-[#fdfaf6]/50 border-[#fdfaf6]/5 hover:border-[#fdfaf6]/20'
-                  }`}
-                >
-                  {activeRoadmap === i && (
-                    <motion.div layoutId="roadmapActive" className="absolute inset-0 bg-[#fdfaf6]" />
-                  )}
+                <button key={i} onClick={() => setActiveRoadmap(i)} className={`text-left p-6 md:p-10 rounded-2xl md:rounded-[2.5rem] transition-all border-2 flex items-center justify-between group relative overflow-hidden ${activeRoadmap === i ? 'bg-[#fdfaf6] text-[#332d2b] border-[#fdfaf6] shadow-2xl' : 'bg-transparent text-[#fdfaf6]/50 border-[#fdfaf6]/5 hover:border-[#fdfaf6]/20'}`}>
+                  {activeRoadmap === i && <motion.div layoutId="roadmapActive" className="absolute inset-0 bg-[#fdfaf6]" />}
                   <div className="relative z-10">
-                    <div className={`text-[9px] md:text-[11px] font-cinzel font-black uppercase tracking-widest mb-1 md:mb-2 ${activeRoadmap === i ? 'text-[#9c1c22]' : 'text-[#e2a744]'}`}>
-                      {phase.years}
-                    </div>
+                    <div className={`text-[9px] md:text-[11px] font-cinzel font-black uppercase tracking-widest mb-1 md:mb-2 ${activeRoadmap === i ? 'text-[#9c1c22]' : 'text-[#e2a744]'}`}>{phase.years}</div>
                     <div className="text-xl md:text-2xl font-serif font-black tracking-tight">{phase.title}</div>
                   </div>
                   <ChevronRight className={`relative z-10 transition-transform duration-500 ${activeRoadmap === i ? 'rotate-90 text-[#9c1c22]' : 'group-hover:translate-x-2'}`} />
@@ -311,22 +376,14 @@ const App: React.FC = () => {
               ))}
             </div>
 
-            <motion.div
-              key={activeRoadmap}
-              initial={{ opacity: 0, x: 50, scale: 0.95 }}
-              animate={{ opacity: 1, x: 0, scale: 1 }}
-              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-              className="lg:col-span-8 bg-[#fdfaf6]/[0.05] backdrop-blur-3xl rounded-[2.5rem] md:rounded-[4rem] p-8 md:p-20 border border-[#fdfaf6]/10 shadow-2xl"
-            >
+            <motion.div key={activeRoadmap} initial={{ opacity: 0, x: 50, scale: 0.95 }} animate={{ opacity: 1, x: 0, scale: 1 }} transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }} className="lg:col-span-8 bg-[#fdfaf6]/[0.05] backdrop-blur-3xl rounded-[2.5rem] md:rounded-[4rem] p-8 md:p-20 border border-[#fdfaf6]/10 shadow-2xl">
               <div className="grid md:grid-cols-2 gap-12 md:gap-20">
                 <div>
                   <h4 className="text-[#e2a744] font-cinzel font-black uppercase tracking-[0.3em] text-[10px] mb-8 md:mb-12">Core Objectives</h4>
                   <div className="space-y-6 md:space-y-10">
                     {STRATEGIC_PHASES[activeRoadmap].goals.map((goal, idx) => (
                       <div key={idx} className="flex gap-4 md:gap-7 group/item">
-                        <div className="w-6 h-6 md:w-8 md:h-8 rounded-full bg-[#9c1c22]/20 flex items-center justify-center flex-shrink-0 mt-1 border border-[#9c1c22]/40 group-hover/item:scale-110 transition-transform">
-                          <div className="w-1.5 h-1.5 md:w-2 md:h-2 bg-[#9c1c22] rounded-full" />
-                        </div>
+                        <div className="w-6 h-6 md:w-8 md:h-8 rounded-full bg-[#9c1c22]/20 flex items-center justify-center flex-shrink-0 mt-1 border border-[#9c1c22]/40 group-hover/item:scale-110 transition-transform"><div className="w-1.5 h-1.5 md:w-2 md:h-2 bg-[#9c1c22] rounded-full" /></div>
                         <p className="text-lg md:text-xl text-[#fdfaf6]/80 font-serif italic leading-relaxed">{goal}</p>
                       </div>
                     ))}
@@ -354,44 +411,26 @@ const App: React.FC = () => {
       <section id="luvwatts" className="py-24 md:py-40 bg-[#fdfaf6] relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-16 md:gap-40 items-center">
-            <motion.div
-              initial={{ opacity: 0, x: -60 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              className="relative order-2 lg:order-1"
-            >
+            <motion.div initial={{ opacity: 0, x: -60 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="relative order-2 lg:order-1">
               <div className="relative z-10 rounded-[3rem] md:rounded-[6rem] overflow-hidden shadow-2xl border-[10px] md:border-[16px] border-white">
-                <img 
-                  src="https://images.unsplash.com/photo-1523381210434-271e8be1f52b?auto=format&fit=crop&q=80&w=1000" 
-                  alt="LUVWATTS Collective" 
-                  className="w-full aspect-[4/5] object-cover grayscale brightness-90 hover:grayscale-0 hover:brightness-100 transition-all duration-[1.5s] scale-[1.1] hover:scale-100" 
-                />
+                <img src="https://images.unsplash.com/photo-1523381210434-271e8be1f52b?auto=format&fit=crop&q=80&w=1000" alt="LUVWATTS Collective" className="w-full aspect-[4/5] object-cover grayscale brightness-90 hover:grayscale-0 hover:brightness-100 transition-all duration-[1.5s] scale-[1.1] hover:scale-100" />
               </div>
               <div className="absolute -bottom-12 -left-12 md:-bottom-24 -left-24 w-[300px] h-[300px] md:w-[500px] md:h-[500px] bg-[#9c1c22]/10 rounded-full -z-0 blur-[80px] md:blur-[120px]" />
             </motion.div>
 
             <div className="order-1 lg:order-2">
               <span className="text-[#9c1c22] font-cinzel font-black tracking-[0.3em] md:tracking-[0.5em] text-[10px] md:text-[11px] uppercase mb-8 md:mb-10 block">Radical Identity</span>
-              <h2 className="text-6xl md:text-[9.5rem] font-serif font-black italic tracking-tighter mb-10 md:mb-12 text-[#332d2b] leading-[0.85] md:leading-[0.8]">
-                LUV<br/><span className="text-shine-crimson font-cinzel font-black not-italic tracking-[0.05em] md:tracking-[0.1em]">WATTS</span>
-              </h2>
-              <p className="text-xl md:text-3xl text-[#332d2b]/60 mb-12 md:mb-16 font-serif italic leading-relaxed">
-                "LUVWATTS represents the kinetic voltage of love. It is the invisible energy that powers transformation across the globe."
-              </p>
+              <h2 className="text-6xl md:text-[9.5rem] font-serif font-black italic tracking-tighter mb-10 md:mb-12 text-[#332d2b] leading-[0.85] md:leading-[0.8]">LUV<br/><span className="text-shine-crimson font-cinzel font-black not-italic tracking-[0.05em] md:tracking-[0.1em]">WATTS</span></h2>
+              <p className="text-xl md:text-3xl text-[#332d2b]/60 mb-12 md:mb-16 font-serif italic leading-relaxed">"LUVWATTS represents the kinetic voltage of love. It is the invisible energy that powers transformation across the globe."</p>
               <div className="space-y-6 md:space-y-10 mb-12 md:mb-20">
                 {["Voltage through Compassion", "Resonance without Borders", "High-Energy Restoration"].map((item, i) => (
                   <div key={i} className="flex items-center gap-6 md:gap-8 group">
-                    <div className="w-12 h-12 md:w-16 md:h-16 rounded-2xl md:rounded-3xl bg-white flex items-center justify-center border border-[#332d2b]/5 group-hover:bg-[#9c1c22] group-hover:text-white transition-all duration-500 group-hover:rotate-[15deg]">
-                      <Zap size={22} className="md:size-[28px]" />
-                    </div>
+                    <div className="w-12 h-12 md:w-16 md:h-16 rounded-2xl md:rounded-3xl bg-white flex items-center justify-center border border-[#332d2b]/5 group-hover:bg-[#9c1c22] group-hover:text-white transition-all duration-500 group-hover:rotate-[15deg]"><Zap size={22} className="md:size-[28px]" /></div>
                     <span className="text-xl md:text-2xl font-serif font-black text-[#332d2b] tracking-tight">{item}</span>
                   </div>
                 ))}
               </div>
-              <motion.button 
-                whileHover={{ scale: 1.05, y: -5 }}
-                className="w-full md:w-auto px-10 md:px-16 py-6 md:py-8 bg-[#332d2b] text-white rounded-full font-cinzel font-black text-lg md:text-xl hover:bg-[#1a1817] transition-all flex items-center justify-center gap-6 group shadow-2xl relative overflow-hidden"
-              >
+              <motion.button whileHover={{ scale: 1.05, y: -5 }} className="w-full md:w-auto px-10 md:px-16 py-6 md:py-8 bg-[#332d2b] text-white rounded-full font-cinzel font-black text-lg md:text-xl hover:bg-[#1a1817] transition-all flex items-center justify-center gap-6 group shadow-2xl relative overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/5 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
                 CONNECT WITH THE MOVEMENT <ArrowRight className="group-hover:translate-x-3 transition-transform duration-500" />
               </motion.button>
@@ -408,28 +447,15 @@ const App: React.FC = () => {
             <div className="lg:col-span-2 text-center md:text-left">
               <div className="mb-10 md:mb-14 flex justify-center md:justify-start">
                 {logoError ? (
-                  <div className="w-32 h-32 md:w-48 md:h-48 flex items-center justify-center bg-[#9c1c22] text-white rounded-full font-cinzel font-black text-4xl md:text-5xl tracking-tighter shadow-2xl brightness-125 ring-8 ring-white/5">
-                    FOL
-                  </div>
+                  <div className="w-32 h-32 md:w-48 md:h-48 flex items-center justify-center bg-[#9c1c22] text-white rounded-full font-cinzel font-black text-4xl md:text-5xl tracking-tighter shadow-2xl brightness-125 ring-8 ring-white/5">FOL</div>
                 ) : (
-                  <img 
-                    src={logoUrl} 
-                    alt="Foundation of Luv Seal" 
-                    className="w-32 h-32 md:w-48 md:h-48 brightness-125 drop-shadow-2xl object-contain hover:scale-105 transition-transform duration-500" 
-                    onError={() => setLogoError(true)}
-                  />
+                  <img src={logoUrl} alt="Foundation of Luv Seal" className="w-32 h-32 md:w-48 md:h-48 brightness-125 drop-shadow-2xl object-contain hover:scale-105 transition-transform duration-500" onError={() => setLogoError(true)} />
                 )}
               </div>
-              <p className="text-xl md:text-3xl text-[#fdfaf6]/40 max-w-lg mb-10 md:mb-14 font-serif italic leading-relaxed">
-                "Restoring human dignity and transforming global communities through strategic, love-led humanitarian action."
-              </p>
+              <p className="text-xl md:text-3xl text-[#fdfaf6]/40 max-w-lg mb-10 md:mb-14 font-serif italic leading-relaxed">"Restoring human dignity and transforming global communities through strategic, love-led humanitarian action."</p>
               <div className="flex justify-center md:justify-start gap-4 md:gap-6">
                 {['Instagram', 'LinkedIn', 'YouTube'].map(social => (
-                  <motion.button 
-                    whileHover={{ scale: 1.1, backgroundColor: '#9c1c22' }}
-                    key={social} 
-                    className="w-12 h-12 md:w-14 md:h-14 rounded-xl md:rounded-2xl bg-white/5 flex items-center justify-center border border-white/10 group transition-all"
-                  >
+                  <motion.button whileHover={{ scale: 1.1, backgroundColor: '#9c1c22' }} key={social} className="w-12 h-12 md:w-14 md:h-14 rounded-xl md:rounded-2xl bg-white/5 flex items-center justify-center border border-white/10 group transition-all">
                     <ExternalLink size={18} className="md:size-[22px] group-hover:text-white transition-colors" />
                   </motion.button>
                 ))}
@@ -440,12 +466,7 @@ const App: React.FC = () => {
               <h5 className="text-[#e2a744] font-cinzel font-black uppercase tracking-[0.3em] md:tracking-[0.5em] text-[10px] md:text-[11px] mb-10 md:mb-14">The Architecture</h5>
               <ul className="space-y-6 md:space-y-8 text-lg md:text-xl font-serif italic text-[#fdfaf6]/60">
                 {NAVIGATION.map(n => (
-                  <li key={n.name}>
-                    <a href={n.href} className="hover:text-white transition-colors flex items-center justify-center md:justify-start gap-3 group">
-                      <span className="w-0 h-[1px] bg-[#9c1c22] group-hover:w-6 transition-all duration-300 hidden md:block" />
-                      {n.name}
-                    </a>
-                  </li>
+                  <li key={n.name}><a href={n.href} className="hover:text-white transition-colors flex items-center justify-center md:justify-start gap-3 group"><span className="w-0 h-[1px] bg-[#9c1c22] group-hover:w-6 transition-all duration-300 hidden md:block" />{n.name}</a></li>
                 ))}
               </ul>
             </div>
