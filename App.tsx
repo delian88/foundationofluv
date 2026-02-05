@@ -11,9 +11,10 @@ import {
 const App: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeRoadmap, setActiveRoadmap] = useState(0);
+  const [logoError, setLogoError] = useState(false);
   const { scrollYProgress } = useScroll();
 
-  // Root-level relative path for consistent loading
+  // Root-relative path for reliable asset resolution
   const logoUrl = "logo.svg";
 
   return (
@@ -27,25 +28,25 @@ const App: React.FC = () => {
       {/* Navigation */}
       <nav className="fixed w-full z-50 glass border-b border-[#d8d8d8]/30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-20 md:h-24">
+          <div className="flex justify-between items-center h-28 md:h-32">
             <motion.div 
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5 }}
               className="flex items-center"
             >
-              <img 
-                src={logoUrl} 
-                alt="Foundation of Luv Seal" 
-                className="w-14 h-14 md:w-16 md:h-16 object-contain hover:scale-110 transition-transform duration-500 cursor-pointer drop-shadow-md"
-                onError={(e) => {
-                  const target = e.target as HTMLImageElement;
-                  if (!target.src.includes('http')) {
-                    target.src = '/logo.svg';
-                  }
-                }}
-              />
-              {/* Only the seal is used in the navbar for a cleaner, high-end look */}
+              {logoError ? (
+                <div className="w-24 h-24 flex items-center justify-center bg-[#801010] text-white rounded-full font-black text-2xl tracking-tighter shadow-lg ring-4 ring-[#df8c3d]/20 transition-transform hover:scale-105 cursor-pointer">
+                  FOL
+                </div>
+              ) : (
+                <img 
+                  src={logoUrl} 
+                  alt="Foundation of Luv Seal" 
+                  className="w-24 h-24 object-contain hover:scale-105 transition-transform duration-500 cursor-pointer drop-shadow-md"
+                  onError={() => setLogoError(true)}
+                />
+              )}
             </motion.div>
 
             {/* Desktop Nav */}
@@ -106,7 +107,7 @@ const App: React.FC = () => {
       </nav>
 
       {/* Hero Section */}
-      <header className="relative pt-44 pb-24 lg:pt-56 lg:pb-32 overflow-hidden bg-[#fcfcfc]">
+      <header className="relative pt-56 pb-24 lg:pt-64 lg:pb-32 overflow-hidden bg-[#fcfcfc]">
         {/* Animated Background Blobs */}
         <div className="absolute top-0 left-0 w-full h-full -z-10 pointer-events-none overflow-hidden">
           <motion.div 
@@ -128,66 +129,72 @@ const App: React.FC = () => {
           />
         </div>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center flex flex-col items-center">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
-            className="mb-12 inline-block"
+            initial={{ opacity: 0, y: 30, scale: 0.9 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
+            className="mb-16 relative"
           >
-            <div className="relative group p-8">
-              <img 
-                src={logoUrl} 
-                alt="Foundation of Luv Seal" 
-                className="w-64 h-64 md:w-80 md:h-80 mx-auto drop-shadow-[0_25px_60px_rgba(223,140,61,0.35)] group-hover:drop-shadow-[0_25px_60px_rgba(223,140,61,0.55)] transition-all duration-700" 
-                onError={(e) => {
-                  const target = e.target as HTMLImageElement;
-                  if (!target.src.includes('http')) {
-                    target.src = 'logo.svg';
-                  }
-                }}
-              />
+            {/* Ambient Glow */}
+            <div className="absolute inset-0 bg-gradient-to-tr from-[#df8c3d]/20 to-[#f6c453]/10 rounded-full blur-3xl -z-10 scale-150" />
+            
+            <div className="relative group p-4 md:p-8">
+              {logoError ? (
+                <div className="w-72 h-72 md:w-[480px] md:h-[480px] mx-auto flex items-center justify-center bg-[#801010] text-white rounded-full font-black text-8xl md:text-[10rem] tracking-tighter shadow-2xl ring-[16px] ring-[#df8c3d]/10 transition-transform cursor-default">
+                  FOL
+                </div>
+              ) : (
+                <img 
+                  src={logoUrl} 
+                  alt="Foundation of Luv Seal" 
+                  className="w-72 h-72 md:w-[480px] md:h-[480px] mx-auto drop-shadow-[0_35px_80px_rgba(223,140,61,0.4)] group-hover:drop-shadow-[0_45px_100px_rgba(223,140,61,0.6)] transition-all duration-1000 cursor-default" 
+                  onError={() => setLogoError(true)}
+                />
+              )}
+              
+              {/* Outer Decorative Rings */}
               <motion.div 
                 animate={{ rotate: 360 }}
-                transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
-                className="absolute inset-0 border-[2px] border-dashed border-[#df8c3d]/30 rounded-full scale-[1.15] -z-10"
+                transition={{ duration: 80, repeat: Infinity, ease: "linear" }}
+                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[112%] h-[112%] border-[2px] border-dashed border-[#df8c3d]/25 rounded-full -z-10"
               />
               <motion.div 
                 animate={{ rotate: -360 }}
-                transition={{ duration: 90, repeat: Infinity, ease: "linear" }}
-                className="absolute inset-0 border-[1px] border-dotted border-[#801010]/20 rounded-full scale-[1.25] -z-10"
+                transition={{ duration: 120, repeat: Infinity, ease: "linear" }}
+                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[128%] h-[128%] border-[1px] border-dotted border-[#801010]/20 rounded-full -z-10"
               />
             </div>
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
-            className="max-w-4xl mx-auto mt-8"
+            transition={{ duration: 1, delay: 0.5 }}
+            className="max-w-4xl mx-auto"
           >
-            <div className="inline-flex items-center gap-3 px-6 py-2 rounded-full bg-[#df8c3d]/10 text-[#df8c3d] text-[10px] font-black tracking-[0.4em] mb-10 border border-[#df8c3d]/20 uppercase">
+            <div className="inline-flex items-center gap-3 px-6 py-2 rounded-full bg-[#df8c3d]/10 text-[#df8c3d] text-[10px] font-black tracking-[0.4em] mb-12 border border-[#df8c3d]/20 uppercase">
               <Sparkles size={14} />
               The LUVWATTS Movement
             </div>
             
-            <h1 className="text-6xl md:text-8xl font-serif text-[#433d3b] mb-12 leading-[0.95] tracking-tight">
+            <h1 className="text-6xl md:text-8xl font-serif text-[#433d3b] mb-12 leading-[1] tracking-tight">
               Love in Action, <br />
               <span className="italic text-[#801010]">Change in Motion.</span>
             </h1>
 
-            <p className="text-lg md:text-xl text-slate-500 mb-14 leading-relaxed max-w-2xl mx-auto font-medium">
+            <p className="text-lg md:text-2xl text-slate-500 mb-16 leading-relaxed max-w-2xl mx-auto font-medium">
               A professional global force dedicated to human dignity, community restoration, and sustainable empowerment through strategic action.
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
+            <div className="flex flex-col sm:flex-row gap-8 justify-center items-center">
               <motion.button 
                 whileHover={{ scale: 1.05, x: 5 }}
-                className="group px-12 py-5 bg-[#df8c3d] text-white rounded-full font-black text-lg hover:bg-[#c67a32] transition-all flex items-center gap-4 shadow-[0_20px_40px_-15px_rgba(223,140,61,0.5)]"
+                className="group px-14 py-6 bg-[#df8c3d] text-white rounded-full font-black text-xl hover:bg-[#c67a32] transition-all flex items-center gap-4 shadow-[0_20px_45px_-15px_rgba(223,140,61,0.5)]"
               >
                 Join the Movement <MoveRight className="group-hover:translate-x-2 transition-transform" />
               </motion.button>
-              <button className="px-12 py-5 bg-white text-[#433d3b] border border-[#d8d8d8] rounded-full font-black text-lg hover:bg-[#f8fafc] transition-all">
+              <button className="px-14 py-6 bg-white text-[#433d3b] border border-slate-200 rounded-full font-black text-xl hover:bg-slate-50 transition-all shadow-sm">
                 Our Mission
               </button>
             </div>
@@ -196,7 +203,7 @@ const App: React.FC = () => {
       </header>
 
       {/* Stats Section */}
-      <section className="py-24 bg-white border-y border-[#d8d8d8]/30">
+      <section className="py-24 bg-white border-y border-[#d8d8d8]/30 relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-12 text-center">
             {STATS.map((stat, i) => (
@@ -377,17 +384,20 @@ const App: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-4 gap-20 mb-24 items-start">
             <div className="lg:col-span-2 text-center md:text-left">
-              <img 
-                src={logoUrl} 
-                alt="FOL Logo" 
-                className="w-32 h-32 mb-12 brightness-110 mx-auto md:mx-0 drop-shadow-lg" 
-                onError={(e) => {
-                  const target = e.target as HTMLImageElement;
-                  if (!target.src.includes('http')) {
-                    target.src = '/logo.svg';
-                  }
-                }}
-              />
+              <div className="mb-12 flex justify-center md:justify-start">
+                {logoError ? (
+                  <div className="w-40 h-40 flex items-center justify-center bg-[#801010] text-white rounded-full font-black text-4xl tracking-tighter shadow-xl brightness-110">
+                    FOL
+                  </div>
+                ) : (
+                  <img 
+                    src={logoUrl} 
+                    alt="Foundation of Luv Seal" 
+                    className="w-40 h-40 brightness-110 drop-shadow-lg object-contain" 
+                    onError={() => setLogoError(true)}
+                  />
+                )}
+              </div>
               <p className="text-xl md:text-2xl text-white/50 max-w-lg mb-12 font-medium leading-relaxed">
                 Restoring human dignity and transforming global communities through strategic, love-led humanitarian action.
               </p>
