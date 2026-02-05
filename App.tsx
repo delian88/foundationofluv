@@ -3,7 +3,7 @@ import { motion, AnimatePresence, useScroll, useTransform, useMotionValue, useIn
 import { 
   Menu, X, ChevronRight, ArrowRight, Sparkles, MoveRight, ChevronLeft, Calendar, Award, 
   Instagram, Linkedin, Youtube, Globe, Brain, Users, Home, Utensils, GraduationCap, Image as LucideImage,
-  ArrowLeft
+  ArrowLeft, Heart
 } from 'lucide-react';
 import { 
   NAVIGATION, SERVICE_AREAS, STRATEGIC_PHASES, STATS, PARTNERS, COLORS, HERO_IMAGES, GALLERY_IMAGES
@@ -77,7 +77,7 @@ const FireworkBurst = ({ x, y, color }: { x: number; y: number; color: string })
             opacity: 0, 
             scale: [0, 1, 0.5] 
           }}
-          transition={{ duration: 2, ease: "easeOut" }}
+          transition={{ duration: 2.5, ease: "easeOut" }}
           className="absolute w-2 h-2 rounded-full"
           style={{ backgroundColor: color }}
         />
@@ -86,25 +86,26 @@ const FireworkBurst = ({ x, y, color }: { x: number; y: number; color: string })
   );
 };
 
-const Fireworks = () => {
+const FireworksBackground = () => {
   const [bursts, setBursts] = useState<{ id: number; x: number; y: number; color: string }[]>([]);
+  
   const spawnBurst = useCallback(() => {
     const id = Date.now() + Math.random();
-    const x = 5 + Math.random() * 90; 
-    const y = 5 + Math.random() * 90;
+    const x = Math.random() * 100; 
+    const y = Math.random() * 100;
     const colorValues = Object.values(COLORS);
     const color = colorValues[Math.floor(Math.random() * colorValues.length)] as string;
     setBursts(prev => [...prev, { id, x, y, color }]);
-    setTimeout(() => setBursts(prev => prev.filter(b => b.id !== id)), 2000);
+    setTimeout(() => setBursts(prev => prev.filter(b => b.id !== id)), 2500);
   }, []);
   
   useEffect(() => {
-    const interval = setInterval(() => { spawnBurst(); }, 800);
+    const interval = setInterval(() => { spawnBurst(); }, 1200);
     return () => clearInterval(interval);
   }, [spawnBurst]);
   
   return (
-    <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+    <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden bg-transparent">
       <AnimatePresence>
         {bursts.map(burst => <FireworkBurst key={burst.id} {...burst} />)}
       </AnimatePresence>
@@ -266,6 +267,49 @@ const ServicesView = () => (
   </section>
 );
 
+const LuvwattsView = () => (
+  <section className="py-20 md:py-40 bg-[#332d2b] text-white min-h-screen pt-40">
+    <div className="max-w-7xl mx-auto px-4 text-center">
+      <div className="mb-24">
+        <Sparkles size={48} className="text-[#e2a744] mx-auto mb-8" />
+        <h2 className="text-5xl md:text-8xl font-serif font-black mb-8">LUVWATTS <span className="italic font-normal text-[#9c1c22]">Movement.</span></h2>
+        <p className="text-xl md:text-3xl text-white/70 max-w-3xl mx-auto font-serif italic">The energetic frequency of restored human dignity.</p>
+      </div>
+      <div className="grid md:grid-cols-2 gap-12">
+        <div className="p-12 bg-white/5 rounded-[3rem] border border-white/10">
+          <Heart size={40} className="text-[#9c1c22] mb-6" />
+          <h3 className="text-3xl font-serif font-bold mb-4">Mission Kinetic</h3>
+          <p className="text-lg text-white/60">Driving restorative change through the power of love and active humanitarian outreach.</p>
+        </div>
+        <div className="p-12 bg-white/5 rounded-[3rem] border border-white/10">
+          <Globe size={40} className="text-[#e2a744] mb-6" />
+          <h3 className="text-3xl font-serif font-bold mb-4">Global Frequency</h3>
+          <p className="text-lg text-white/60">Bridging divides across continents to ensure every human life is valued equally.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+);
+
+const ProgramsView = () => (
+  <section className="py-20 md:py-40 bg-[#fdfaf6] min-h-screen pt-40">
+    <div className="max-w-7xl mx-auto px-4">
+      <div className="mb-24 text-center">
+        <h2 className="text-5xl md:text-7xl font-serif font-black text-[#332d2b] mb-8">Active <span className="italic font-normal text-[#9c1c22]">Programs.</span></h2>
+        <div className="h-1 w-24 bg-[#9c1c22] mx-auto rounded-full" />
+      </div>
+      <div className="grid md:grid-cols-2 gap-10">
+        {STATS.map((stat, i) => (
+          <div key={i} className="p-10 bg-white rounded-[2rem] border border-[#332d2b]/10 shadow-lg">
+            <h4 className="text-2xl font-cinzel font-black text-[#9c1c22] mb-4 uppercase tracking-widest">{stat.label}</h4>
+            <p className="text-lg text-[#332d2b]/70 font-serif italic">{stat.description}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+);
+
 // --- Main App ---
 
 const App: React.FC = () => {
@@ -293,11 +337,13 @@ const App: React.FC = () => {
     switch (currentPage) {
       case 'gallery': return <GalleryView />;
       case 'roadmap': return <RoadmapView activeRoadmap={activeRoadmap} setActiveRoadmap={setActiveRoadmap} />;
-      case 'about': return <AboutView />;
-      case 'services': return <ServicesView />;
+      case 'aboutus': return <AboutView />;
+      case 'globalservices': return <ServicesView />;
+      case 'luvwatts': return <LuvwattsView />;
+      case 'programs': return <ProgramsView />;
       default: return (
         <>
-          <header className="relative w-full pt-32 pb-16 md:pt-64 md:pb-32 lg:pt-80 lg:pb-48 overflow-hidden bg-[#fdfaf6]">
+          <header className="relative w-full pt-32 pb-16 md:pt-64 md:pb-32 lg:pt-80 lg:pb-48 overflow-hidden bg-transparent">
             <div className="max-w-7xl mx-auto px-4 text-center flex flex-col items-center relative z-10">
               <motion.div initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} className="relative group p-0 md:p-12 w-full max-w-[900px]">
                 <div className="relative aspect-video md:aspect-[21/9] rounded-[2rem] md:rounded-[5rem] overflow-hidden border-[8px] md:border-[32px] border-white shadow-2xl">
@@ -322,13 +368,13 @@ const App: React.FC = () => {
                 <p className="mobile-p text-lg md:text-4xl text-[#332d2b]/70 mt-8 max-w-4xl mx-auto font-serif italic">"We are the kinetic pulse of restoration, engineering pathways where human dignity is an unshakeable reality."</p>
                 <div className="flex flex-col md:flex-row gap-6 justify-center mt-12">
                   <button className="px-12 py-6 bg-[#9c1c22] text-white rounded-full font-cinzel font-black text-xl shadow-xl flex items-center gap-3">Join the Movement <MoveRight /></button>
-                  <button onClick={() => navigateTo('about')} className="px-12 py-6 glass-card rounded-full font-cinzel font-bold text-xl border border-[#9c1c22]/15 flex items-center justify-center gap-3">Explore Our Story <ArrowRight /></button>
+                  <button onClick={() => navigateTo('aboutus')} className="px-12 py-6 glass-card rounded-full font-cinzel font-bold text-xl border border-[#9c1c22]/15 flex items-center justify-center gap-3">Explore Our Story <ArrowRight /></button>
                 </div>
               </div>
             </div>
           </header>
 
-          <section className="py-12 md:py-24 bg-white border-y border-[#332d2b]/5 overflow-hidden">
+          <section className="py-12 md:py-24 bg-white border-y border-[#332d2b]/5 overflow-hidden relative z-10">
             <p className="text-center font-cinzel font-black text-[12px] text-[#332d2b]/40 tracking-[0.5em] uppercase mb-12">Partners and Clients</p>
             <motion.div className="flex whitespace-nowrap gap-12 md:gap-32" animate={{ x: ["0%", "-50%"] }} transition={{ repeat: Infinity, duration: 30, ease: "linear" }}>
               {[...PARTNERS, ...PARTNERS].map((partner, i) => (
@@ -337,7 +383,7 @@ const App: React.FC = () => {
             </motion.div>
           </section>
 
-          <section className="py-20 md:py-40 bg-[#fdfaf6]">
+          <section className="py-20 md:py-40 bg-[#fdfaf6] relative z-10">
             <div className="max-w-7xl mx-auto px-4 grid md:grid-cols-2 lg:grid-cols-4 gap-16">
               {STATS.map((stat, i) => (
                 <motion.div key={i} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center">
@@ -349,7 +395,7 @@ const App: React.FC = () => {
             </div>
           </section>
 
-          <section className="py-20 md:py-40 bg-[#f9f5f0]">
+          <section id="about-home" className="py-20 md:py-40 bg-[#f9f5f0] relative z-10">
             <div className="max-w-7xl mx-auto px-4 grid lg:grid-cols-12 gap-24 items-center">
               <motion.div className="lg:col-span-5 relative" initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
                 <div className="bg-white p-4 rounded-[3rem] shadow-2xl overflow-hidden group relative">
@@ -377,7 +423,7 @@ const App: React.FC = () => {
           </section>
 
           {/* YouTube Video Section */}
-          <section className="py-20 md:py-40 bg-white relative overflow-hidden">
+          <section className="py-20 md:py-40 bg-white relative overflow-hidden z-10">
             <div className="max-w-7xl mx-auto px-4 text-center">
               <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mb-12 md:mb-24">
                 <span className="text-[#9c1c22] font-cinzel font-black tracking-[0.5em] text-[10px] uppercase mb-6 block">Kinetic Resonance</span>
@@ -398,8 +444,8 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen w-full overflow-x-hidden selection:bg-[#9c1c22]/20 selection:text-[#9c1c22]">
-      <Fireworks />
+    <div className="min-h-screen w-full overflow-x-hidden selection:bg-[#9c1c22]/20 selection:text-[#9c1c22] bg-[#fdfaf6] relative">
+      <FireworksBackground />
       <motion.div className="fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#9c1c22] to-[#e2a744] z-[100] origin-left" style={{ scaleX: scrollYProgress }} />
       
       <nav className="fixed w-full z-50 glass border-b border-[#332d2b]/10">
@@ -461,7 +507,7 @@ const App: React.FC = () => {
         </AnimatePresence>
       </main>
 
-      <footer className="bg-[#332d2b] text-[#fdfaf6] pt-20 md:pt-48 pb-20 relative overflow-hidden z-10">
+      <footer className="bg-[#332d2b] text-[#fdfaf6] pt-20 md:pt-48 pb-20 relative overflow-hidden z-20">
         <div className="max-w-7xl mx-auto px-4 relative z-10">
           <div className="grid lg:grid-cols-4 gap-24 mb-32 items-start text-center md:text-left">
             <div className="lg:col-span-2">
