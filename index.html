@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
   <title>Foundation of Luv | Love in Action, Change in Motion</title>
   <meta name="description" content="Foundation of Luv (FOL) is a humanitarian organization dedicated to transformation through love, dignity, and empowerment.">
   
@@ -19,14 +19,17 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,700;0,900;1,700;1,900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Cinzel:wght@400;700;900&display=swap" rel="stylesheet">
   <style>
     :root {
-      --fol-orange: #df8c3d;
-      --fol-red: #801010;
-      --fol-gold: #f6c453;
-      --fol-dark: #433d3b;
-      --fol-light: #d8d8d8;
+      --fol-crimson: #9c1c22;
+      --fol-beige: #fdfaf6;
+      --fol-cream: #f9f5f0;
+      --fol-gold: #e2a744;
+      --fol-dark: #332d2b;
+      --fol-light-beige: #f2e9e4;
     }
     body {
       font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: var(--fol-beige);
+      color: var(--fol-dark);
     }
     .font-serif {
       font-family: 'Cormorant Garamond', serif;
@@ -36,19 +39,19 @@
     }
     
     .text-shine {
-      background: linear-gradient(110deg, #433d3b 45%, #ffffff 50%, #433d3b 55%);
+      background: linear-gradient(110deg, var(--fol-dark) 45%, #ffffff 50%, var(--fol-dark) 55%);
       background-size: 250% 100%;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      animation: shine 4s infinite linear;
+      animation: shine 5s infinite linear;
     }
 
-    .text-shine-red {
-      background: linear-gradient(110deg, #801010 45%, #ff9e9e 50%, #801010 55%);
+    .text-shine-crimson {
+      background: linear-gradient(110deg, var(--fol-crimson) 45%, #ffd4d4 50%, var(--fol-crimson) 55%);
       background-size: 250% 100%;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      animation: shine 4s infinite linear;
+      animation: shine 5s infinite linear;
       animation-delay: 0.5s;
     }
 
@@ -58,29 +61,35 @@
     }
 
     .glass-card {
-      background: rgba(255, 255, 255, 0.4);
+      background: rgba(255, 253, 250, 0.4);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.5);
+      border: 1px solid rgba(156, 28, 34, 0.1);
     }
 
     ::-webkit-scrollbar {
-      width: 6px;
+      width: 8px;
     }
     ::-webkit-scrollbar-track {
-      background: #f8fafc;
+      background: var(--fol-cream);
     }
     ::-webkit-scrollbar-thumb {
-      background: var(--fol-orange);
+      background: var(--fol-crimson);
       border-radius: 10px;
     }
     html {
       scroll-behavior: smooth;
     }
     .glass {
-      background: rgba(255, 255, 255, 0.85);
+      background: rgba(253, 250, 246, 0.9);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
+    }
+    
+    /* Responsive Adjustments */
+    @media (max-width: 640px) {
+      .hero-text { font-size: 3.5rem !important; line-height: 1 !important; }
+      .mobile-p { font-size: 1.125rem !important; }
     }
   </style>
 <script type="importmap">
@@ -97,7 +106,7 @@
 }
 </script>
 </head>
-<body class="bg-[#fcfcfc] text-slate-900 overflow-x-hidden">
+<body class="overflow-x-hidden">
   <div id="root"></div>
   <script type="module" src="/index.tsx"></script>
 </body>

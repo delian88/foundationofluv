@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { 
   Heart, Shield, Users, Globe, BookOpen, Home, Utensils, Zap, 
@@ -7,13 +6,13 @@ import {
 } from 'lucide-react';
 
 export const COLORS = {
-  orange: '#df8c3d',
-  red: '#801010',
-  gold: '#f6c453',
-  dark: '#433d3b',
-  light: '#d8d8d8',
+  crimson: '#9c1c22',
+  beige: '#fdfaf6',
+  cream: '#f9f5f0',
+  gold: '#e2a744',
+  dark: '#332d2b',
   white: '#ffffff',
-  accent: '#E28C3D'
+  accent: '#df8c3d'
 };
 
 export const NAVIGATION = [
