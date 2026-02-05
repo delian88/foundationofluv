@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence, useScroll } from 'framer-motion';
+import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 import { 
   Menu, X, ChevronRight, Zap, ArrowRight, 
-  ExternalLink, Sparkles, MoveRight, Heart, ChevronLeft, Calendar, Award, Play, Star
+  ExternalLink, Sparkles, MoveRight, Heart, ChevronLeft, Calendar, Award, Play, Star,
+  Instagram, Linkedin, Youtube, Globe, Brain, Users, Home, Utensils, GraduationCap, Shield, Quote
 } from 'lucide-react';
 import { 
-  NAVIGATION, SERVICE_AREAS, STRATEGIC_PHASES, STATS 
+  NAVIGATION, SERVICE_AREAS, STRATEGIC_PHASES, STATS, PARTNERS, PROGRAMS 
 } from './constants';
 
 const HERO_IMAGES = [
@@ -33,13 +34,16 @@ const App: React.FC = () => {
   const [logoError, setLogoError] = useState(false);
   const [currentSlide, setCurrentSlide] = useState(0);
   const { scrollYProgress } = useScroll();
+  
+  const yHero = useTransform(scrollYProgress, [0, 0.2], [0, -100]);
+  const opacityHero = useTransform(scrollYProgress, [0, 0.15], [1, 0]);
 
   const logoUrl = "logo.svg";
 
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % HERO_IMAGES.length);
-    }, 6000);
+    }, 8000);
     return () => clearInterval(timer);
   }, []);
 
@@ -64,18 +68,16 @@ const App: React.FC = () => {
               transition={{ duration: 0.5 }}
               className="flex items-center"
             >
-              {logoError ? (
-                <div className="w-12 h-12 md:w-20 md:h-20 flex items-center justify-center bg-[#9c1c22] text-white rounded-full font-cinzel font-black text-lg md:text-2xl tracking-tighter shadow-lg ring-2 ring-[#e2a744]/20 transition-transform hover:scale-105 cursor-pointer">
-                  FOL
-                </div>
-              ) : (
-                <img 
-                  src={logoUrl} 
-                  alt="Foundation of Luv Seal" 
-                  className="w-14 h-14 md:w-24 md:h-24 object-contain hover:scale-105 transition-transform duration-500 cursor-pointer drop-shadow-md"
-                  onError={() => setLogoError(true)}
-                />
-              )}
+              <img 
+                src={logoUrl} 
+                alt="Foundation of Luv Seal" 
+                className="w-14 h-14 md:w-24 md:h-24 object-contain hover:scale-105 transition-transform duration-500 cursor-pointer drop-shadow-md"
+                onError={() => setLogoError(true)}
+              />
+              <div className="ml-4 hidden sm:block">
+                <span className="block font-cinzel font-black text-xs md:text-sm tracking-widest text-[#9c1c22]">FOUNDATION</span>
+                <span className="block font-serif italic text-xs md:text-sm text-[#332d2b]/60">OF LUV</span>
+              </div>
             </motion.div>
 
             {/* Desktop Nav */}
@@ -137,7 +139,6 @@ const App: React.FC = () => {
 
       {/* Hero Section */}
       <header className="relative w-full pt-32 pb-16 md:pt-64 md:pb-32 lg:pt-80 lg:pb-48 overflow-hidden bg-[#fdfaf6]">
-        {/* Animated Background Elements */}
         <div className="absolute top-0 left-0 w-full h-full -z-10 pointer-events-none overflow-hidden">
           <motion.div 
             animate={{ scale: [1, 1.4, 1], rotate: [0, 90, 0], x: [0, 100, 0] }}
@@ -217,11 +218,7 @@ const App: React.FC = () => {
                 transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
                 className="absolute -top-6 -right-6 md:-top-16 md:-right-16 w-20 h-20 md:w-56 md:h-56 z-40 drop-shadow-2xl"
               >
-                {logoError ? (
-                  <div className="w-full h-full bg-[#9c1c22] text-white rounded-full flex items-center justify-center font-cinzel font-black text-xl md:text-5xl shadow-2xl ring-4 md:ring-12 ring-[#e2a744]">FOL</div>
-                ) : (
-                  <img src={logoUrl} alt="FOL Seal" className="w-full h-full object-contain filter drop-shadow-xl" onError={() => setLogoError(true)} />
-                )}
+                <img src={logoUrl} alt="FOL Seal" className="w-full h-full object-contain filter drop-shadow-xl" />
               </motion.div>
             </div>
           </motion.div>
@@ -266,6 +263,42 @@ const App: React.FC = () => {
           </motion.div>
         </div>
       </header>
+
+      {/* Trust & Partners Bar */}
+      <section className="py-10 md:py-16 bg-white border-y border-[#332d2b]/5 overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4">
+          <p className="text-center font-cinzel font-black text-[9px] md:text-[11px] text-[#332d2b]/30 tracking-[0.4em] uppercase mb-10 md:mb-14">Strategic Alliance Network</p>
+          <div className="flex flex-wrap justify-center items-center gap-8 md:gap-24 opacity-40 grayscale hover:grayscale-0 transition-all duration-700">
+             {PARTNERS.map(partner => (
+               <span key={partner} className="font-cinzel font-bold text-lg md:text-2xl tracking-tighter text-[#332d2b]">{partner}</span>
+             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Stats Section */}
+      <section className="py-20 md:py-40 bg-[#fdfaf6] relative overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12 md:gap-16">
+            {STATS.map((stat, i) => (
+              <motion.div 
+                key={i}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+                className="text-center"
+              >
+                <div className="text-5xl md:text-8xl font-serif font-black text-[#9c1c22] mb-4">
+                  {stat.value}<span className="text-[#e2a744]">{stat.suffix}</span>
+                </div>
+                <h4 className="font-cinzel font-black text-[10px] md:text-[12px] tracking-[0.3em] uppercase mb-4 text-[#332d2b]">{stat.label}</h4>
+                <p className="font-serif italic text-lg md:text-xl text-[#332d2b]/50">{stat.description}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
 
       {/* About Us Section */}
       <section id="about" className="py-20 md:py-40 bg-[#f9f5f0] relative overflow-hidden">
@@ -326,11 +359,44 @@ const App: React.FC = () => {
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-10">
             {SERVICE_AREAS.map((service, i) => (
               <motion.div key={i} whileHover={{ y: -10 }} className="bg-white p-8 md:p-14 rounded-[2rem] border border-[#332d2b]/10 hover:border-[#9c1c22]/20 hover:shadow-2xl transition-all duration-700">
-                <div className="w-14 h-14 md:w-20 md:h-20 bg-[#fdfaf6] text-[#9c1c22] rounded-2xl flex items-center justify-center mb-8 border border-[#332d2b]/5">{service.icon}</div>
+                <div className="w-14 h-14 md:w-20 md:h-20 bg-[#fdfaf6] text-[#9c1c22] rounded-2xl flex items-center justify-center mb-8 border border-[#332d2b]/5">
+                   {/* Map service.title to specific icon for better visuals */}
+                   {service.title === "Global Advocacy" && <Globe size={32} />}
+                   {service.title === "Mental Wellness" && <Brain size={32} />}
+                   {service.title === "Family Solidarity" && <Users size={32} />}
+                   {service.title === "Safe Havens" && <Home size={32} />}
+                   {service.title === "Nutrition Equity" && <Utensils size={32} />}
+                   {service.title === "Workforce Readiness" && <GraduationCap size={32} />}
+                </div>
                 <h4 className="text-xl md:text-3xl font-serif font-black text-[#332d2b] mb-4">{service.title}</h4>
                 <p className="text-[#332d2b]/60 text-base md:text-lg leading-relaxed font-serif italic">{service.description}</p>
               </motion.div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* LUVWATTS Movement Section */}
+      <section id="luvwatts" className="py-20 md:py-40 bg-[#9c1c22] text-white relative overflow-hidden">
+        <div className="absolute inset-0 opacity-10 pointer-events-none">
+          <img src={logoUrl} alt="" className="w-full h-full object-cover scale-150 rotate-12" />
+        </div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="grid lg:grid-cols-2 gap-20 items-center">
+            <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
+              <span className="font-cinzel font-black tracking-[0.5em] text-[10px] md:text-[12px] uppercase mb-8 block text-[#e2a744]">Movement Chapter</span>
+              <h2 className="text-5xl md:text-9xl font-serif font-black leading-tight mb-12">LUV<br/><span className="italic font-normal">WATTS.</span></h2>
+              <p className="text-2xl md:text-4xl font-serif italic mb-16 leading-relaxed opacity-90">"The kinetic energy of human compassion, amplified through high-impact fashion and global tours."</p>
+              <button className="px-12 py-6 bg-white text-[#9c1c22] rounded-full font-cinzel font-black text-xl hover:bg-[#e2a744] hover:text-white transition-all shadow-2xl">JOIN THE ENERGY</button>
+            </motion.div>
+            <div className="relative">
+              <div className="aspect-[4/5] rounded-[3rem] overflow-hidden border-8 border-white/20 shadow-2xl">
+                <img src="https://images.unsplash.com/photo-1523381210434-271e8be1f52b?auto=format&fit=crop&q=80&w=1000" alt="LUVWATTS Movement" className="w-full h-full object-cover" />
+              </div>
+              <div className="absolute -bottom-10 -left-10 w-40 h-40 md:w-64 md:h-64 glass p-6 rounded-[2rem] border border-white/20 hidden md:block">
+                 <img src={logoUrl} alt="Seal" className="w-full h-full object-contain animate-spin-slow" style={{ animationDuration: '20s' }} />
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -395,16 +461,32 @@ const App: React.FC = () => {
           <div className="grid lg:grid-cols-4 gap-12 md:gap-24 mb-16 md:mb-32 items-start text-center md:text-left">
             <div className="lg:col-span-2">
               <div className="mb-8 md:mb-14 flex justify-center md:justify-start">
-                {logoError ? (
-                  <div className="w-24 h-24 md:w-48 md:h-48 flex items-center justify-center bg-[#9c1c22] text-white rounded-full font-cinzel font-black text-2xl md:text-5xl shadow-2xl ring-8 ring-white/5">FOL</div>
-                ) : (
-                  <img src={logoUrl} alt="FOL" className="w-24 h-24 md:w-48 md:h-48 brightness-110 drop-shadow-2xl object-contain" onError={() => setLogoError(true)} />
-                )}
+                <img src={logoUrl} alt="FOL" className="w-24 h-24 md:w-48 md:h-48 brightness-110 drop-shadow-2xl object-contain" />
               </div>
               <p className="text-lg md:text-3xl text-[#fdfaf6]/40 max-w-lg mb-8 md:mb-14 font-serif italic leading-relaxed">"Restoring human dignity and transforming global communities through strategic action."</p>
-              <div className="flex justify-center md:justify-start gap-4">
-                <motion.a whileHover={{ scale: 1.1 }} href="https://www.instagram.com/p/DQyGzApDb9r/" target="_blank" rel="noopener noreferrer" className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center border border-white/10 group">
-                  <ExternalLink size={20} className="group-hover:text-[#e2a744] transition-colors" />
+              <div className="flex justify-center md:justify-start gap-4 md:gap-6">
+                <motion.a 
+                  whileHover={{ scale: 1.1, backgroundColor: '#9c1c22' }} 
+                  href="https://www.instagram.com/foundationofluv" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="w-12 h-12 md:w-14 md:h-14 rounded-xl md:rounded-2xl bg-white/5 flex items-center justify-center border border-white/10 group transition-all"
+                >
+                  <Instagram size={18} className="md:size-[22px] group-hover:text-white transition-colors" />
+                </motion.a>
+                <motion.a 
+                  whileHover={{ scale: 1.1, backgroundColor: '#9c1c22' }} 
+                  href="#" 
+                  className="w-12 h-12 md:w-14 md:h-14 rounded-xl md:rounded-2xl bg-white/5 flex items-center justify-center border border-white/10 group transition-all"
+                >
+                  <Linkedin size={18} className="md:size-[22px] group-hover:text-white transition-colors" />
+                </motion.a>
+                <motion.a 
+                  whileHover={{ scale: 1.1, backgroundColor: '#9c1c22' }} 
+                  href="#" 
+                  className="w-12 h-12 md:w-14 md:h-14 rounded-xl md:rounded-2xl bg-white/5 flex items-center justify-center border border-white/10 group transition-all"
+                >
+                  <Youtube size={18} className="md:size-[22px] group-hover:text-white transition-colors" />
                 </motion.a>
               </div>
             </div>
