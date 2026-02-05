@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence, useScroll } from 'framer-motion';
 import { 
   Menu, X, ChevronRight, Zap, ArrowRight, 
-  ExternalLink, Sparkles, MoveRight, Heart, ChevronLeft, Calendar, Award
+  ExternalLink, Sparkles, MoveRight, Heart, ChevronLeft, Calendar, Award, Play
 } from 'lucide-react';
 import { 
   NAVIGATION, SERVICE_AREAS, STRATEGIC_PHASES, STATS 
@@ -137,23 +137,14 @@ const App: React.FC = () => {
 
       {/* Hero Section */}
       <header className="relative pt-40 pb-20 md:pt-64 md:pb-32 lg:pt-80 lg:pb-48 overflow-hidden bg-[#fdfaf6]">
-        {/* Animated Background Elements */}
         <div className="absolute top-0 left-0 w-full h-full -z-10 pointer-events-none overflow-hidden">
           <motion.div 
-            animate={{ 
-              scale: [1, 1.3, 1],
-              rotate: [0, 90, 0],
-              x: [0, 100, 0]
-            }}
+            animate={{ scale: [1, 1.3, 1], rotate: [0, 90, 0], x: [0, 100, 0] }}
             transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
             className="absolute top-[-30%] right-[-15%] w-[600px] h-[600px] md:w-[1000px] md:h-[1000px] bg-[#9c1c22]/5 rounded-full blur-[120px] md:blur-[160px]" 
           />
           <motion.div 
-            animate={{ 
-              scale: [1, 1.2, 1],
-              y: [0, -100, 0],
-              rotate: [0, -45, 0]
-            }}
+            animate={{ scale: [1, 1.2, 1], y: [0, -100, 0], rotate: [0, -45, 0] }}
             transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
             className="absolute bottom-[-20%] left-[-15%] w-[500px] h-[500px] md:w-[800px] md:h-[800px] bg-[#e2a744]/8 rounded-full blur-[100px] md:blur-[140px]" 
           />
@@ -236,77 +227,81 @@ const App: React.FC = () => {
       <section id="about" className="py-24 md:py-40 bg-[#f9f5f0] relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-12 gap-16 md:gap-24 items-center">
-            
-            <motion.div 
-              initial={{ opacity: 0, x: -50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              className="lg:col-span-5 relative"
-            >
+            <motion.div initial={{ opacity: 0, x: -50 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="lg:col-span-5 relative">
               <div className="relative z-10 p-4 bg-white rounded-[3rem] shadow-2xl overflow-hidden group">
                 <div className="absolute inset-0 bg-[#9c1c22]/5 opacity-0 group-hover:opacity-100 transition-opacity" />
-                <img 
-                  src="https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&q=80&w=1000" 
-                  alt="Foundation of Luv History" 
-                  className="w-full aspect-[3/4] object-cover rounded-[2.5rem] grayscale group-hover:grayscale-0 transition-all duration-[2s]" 
-                />
-                
-                {/* Est Badge */}
+                <img src="https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&q=80&w=1000" alt="Foundation of Luv History" className="w-full aspect-[3/4] object-cover rounded-[2.5rem] grayscale group-hover:grayscale-0 transition-all duration-[2s]" />
                 <div className="absolute top-10 left-10 w-24 h-24 bg-white/90 backdrop-blur-md rounded-full shadow-2xl flex flex-col items-center justify-center border-2 border-[#e2a744] z-20 group-hover:scale-110 transition-transform">
                   <Calendar size={20} className="text-[#9c1c22] mb-1" />
                   <span className="text-[10px] font-cinzel font-black tracking-widest text-[#332d2b]">EST.</span>
                   <span className="text-lg font-serif font-black text-[#9c1c22]">2016</span>
                 </div>
               </div>
-
-              {/* Decorative Elements */}
-              <div className="absolute -top-10 -left-10 w-40 h-40 bg-[#9c1c22]/5 rounded-full blur-3xl -z-10" />
-              <div className="absolute -bottom-10 -right-10 w-60 h-60 bg-[#e2a744]/10 rounded-full blur-3xl -z-10" />
             </motion.div>
 
-            <motion.div 
-              initial={{ opacity: 0, x: 50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              className="lg:col-span-7"
-            >
+            <motion.div initial={{ opacity: 0, x: 50 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="lg:col-span-7">
               <div className="inline-flex items-center gap-4 px-6 py-2 rounded-full bg-[#9c1c22]/5 text-[#9c1c22] text-[10px] font-cinzel font-black tracking-[0.4em] mb-10 border border-[#9c1c22]/10 uppercase">
-                <Award size={14} />
-                THE FOUNDATION LEGACY
+                <Award size={14} /> THE FOUNDATION LEGACY
               </div>
-              
-              <h2 className="text-5xl md:text-7xl font-serif font-black text-[#332d2b] leading-[1.1] mb-12">
-                About <br/><span className="italic font-normal text-shine-crimson">Foundation of Luv.</span>
-              </h2>
-
+              <h2 className="text-5xl md:text-7xl font-serif font-black text-[#332d2b] leading-[1.1] mb-12">About <br/><span className="italic font-normal text-shine-crimson">Foundation of Luv.</span></h2>
               <div className="space-y-8">
-                <p className="text-2xl md:text-3xl text-[#332d2b]/80 font-serif italic leading-relaxed">
-                  "Foundation of Love (FOL) was created in 2016 with a simple yet profound belief: that love, dignity, and compassion can transform individuals and communities."
-                </p>
-                
+                <p className="text-2xl md:text-3xl text-[#332d2b]/80 font-serif italic leading-relaxed">"Foundation of Love (FOL) was created in 2016 with a simple yet profound belief: that love, dignity, and compassion can transform individuals and communities."</p>
                 <div className="h-0.5 w-24 bg-gradient-to-r from-[#e2a744] to-transparent" />
-
-                <p className="text-xl text-[#332d2b]/70 font-medium leading-relaxed font-serif">
-                  Rooted in humanitarian service, advocacy, and holistic support, FOL was established to bridge societal divides, empower the vulnerable, and create lasting pathways to opportunity. 
-                </p>
-
-                <p className="text-xl text-[#332d2b]/70 font-medium leading-relaxed font-serif">
-                  Since inception, the foundation has touched lives across diverse demographics through outreach, capacity-building, mentorship, and community-centered initiatives. We believe in kinetic change—love in motion.
-                </p>
-              </div>
-
-              <div className="mt-16 flex flex-wrap gap-12">
-                <div>
-                  <div className="text-4xl font-serif font-black text-[#9c1c22]">8+ Years</div>
-                  <div className="text-[10px] font-cinzel font-black tracking-widest text-[#332d2b]/40 uppercase mt-2">of Active Service</div>
-                </div>
-                <div>
-                  <div className="text-4xl font-serif font-black text-[#9c1c22]">Global</div>
-                  <div className="text-[10px] font-cinzel font-black tracking-widest text-[#332d2b]/40 uppercase mt-2">Strategic Outreach</div>
-                </div>
+                <p className="text-xl text-[#332d2b]/70 font-medium leading-relaxed font-serif">Rooted in humanitarian service, advocacy, and holistic support, FOL was established to bridge societal divides, empower the vulnerable, and create lasting pathways to opportunity. </p>
+                <p className="text-xl text-[#332d2b]/70 font-medium leading-relaxed font-serif">Since inception, the foundation has touched lives across diverse demographics through outreach, capacity-building, mentorship, and community-centered initiatives.</p>
               </div>
             </motion.div>
+          </div>
+        </div>
+      </section>
 
+      {/* Video Section */}
+      <section className="py-24 md:py-40 bg-white relative overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="mb-16 md:mb-24"
+          >
+            <span className="text-[#9c1c22] font-cinzel font-black tracking-[0.5em] text-[11px] uppercase mb-8 block">Kinetic Resonance</span>
+            <h2 className="text-5xl md:text-8xl font-serif font-black text-[#332d2b] leading-tight mb-8">
+              Love <span className="italic font-normal text-[#e2a744]">Witnessed.</span>
+            </h2>
+            <div className="h-1 w-32 bg-[#9c1c22] mx-auto rounded-full" />
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1 }}
+            className="relative group max-w-5xl mx-auto"
+          >
+            {/* Cinematic Frame */}
+            <div className="relative aspect-video rounded-[2.5rem] md:rounded-[4rem] overflow-hidden border-[12px] md:border-[20px] border-white shadow-[0_60px_120px_-20px_rgba(156,28,34,0.3)] bg-slate-900">
+              <iframe 
+                className="w-full h-full"
+                src="https://www.youtube.com/embed/XxfFvLERt7o?autoplay=0&rel=0&modestbranding=1" 
+                title="Foundation of Luv - Kinetic Action" 
+                frameBorder="0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                allowFullScreen
+              ></iframe>
+              
+              {/* Overlay Decor */}
+              <div className="absolute inset-0 pointer-events-none border-[2px] border-[#e2a744]/30 rounded-[1.8rem] md:rounded-[3.2rem] z-10" />
+            </div>
+
+            {/* Decorative Orbits */}
+            <div className="absolute -top-20 -left-20 w-64 h-64 bg-[#e2a744]/10 rounded-full blur-[100px] -z-10" />
+            <div className="absolute -bottom-20 -right-20 w-80 h-80 bg-[#9c1c22]/10 rounded-full blur-[120px] -z-10" />
+          </motion.div>
+
+          <div className="mt-16 md:mt-24">
+            <p className="text-2xl md:text-4xl text-[#332d2b]/60 font-serif italic max-w-4xl mx-auto leading-relaxed">
+              "Experience the kinetic energy of global solidarity—where compassion meets strategy to redefine humanity."
+            </p>
           </div>
         </div>
       </section>
@@ -335,9 +330,7 @@ const App: React.FC = () => {
               <span className="text-[#9c1c22] font-cinzel font-black tracking-[0.3em] md:tracking-[0.5em] text-[10px] md:text-[11px] uppercase mb-6 md:mb-8 block">Foundational Pillars</span>
               <h2 className="text-4xl md:text-[5.5rem] font-serif font-black text-[#332d2b] leading-tight">Strategic Impact <br/><span className="italic font-normal text-[#9c1c22]">Channels.</span></h2>
             </div>
-            <p className="text-lg md:text-xl text-[#332d2b]/60 max-w-md font-serif italic leading-relaxed">
-              "We don't just provide services; we engineer environments where dignity thrives and potential is awakened."
-            </p>
+            <p className="text-lg md:text-xl text-[#332d2b]/60 max-w-md font-serif italic leading-relaxed">"We don't just provide services; we engineer environments where dignity thrives and potential is awakened."</p>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10">
@@ -454,7 +447,16 @@ const App: React.FC = () => {
               </div>
               <p className="text-xl md:text-3xl text-[#fdfaf6]/40 max-w-lg mb-10 md:mb-14 font-serif italic leading-relaxed">"Restoring human dignity and transforming global communities through strategic, love-led humanitarian action."</p>
               <div className="flex justify-center md:justify-start gap-4 md:gap-6">
-                {['Instagram', 'LinkedIn', 'YouTube'].map(social => (
+                <motion.a 
+                  whileHover={{ scale: 1.1, backgroundColor: '#9c1c22' }}
+                  href="https://www.instagram.com/p/DQyGzApDb9r/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-12 h-12 md:w-14 md:h-14 rounded-xl md:rounded-2xl bg-white/5 flex items-center justify-center border border-white/10 group transition-all"
+                >
+                  <ExternalLink size={18} className="md:size-[22px] group-hover:text-white transition-colors" />
+                </motion.a>
+                {['LinkedIn', 'YouTube'].map(social => (
                   <motion.button whileHover={{ scale: 1.1, backgroundColor: '#9c1c22' }} key={social} className="w-12 h-12 md:w-14 md:h-14 rounded-xl md:rounded-2xl bg-white/5 flex items-center justify-center border border-white/10 group transition-all">
                     <ExternalLink size={18} className="md:size-[22px] group-hover:text-white transition-colors" />
                   </motion.button>
