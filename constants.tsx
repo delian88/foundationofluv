@@ -2,7 +2,7 @@ import React from 'react';
 import { 
   Heart, Shield, Users, Globe, BookOpen, Home, Utensils, Zap, 
   GraduationCap, Briefcase, Landmark, Handshake, HeartPulse, Brain,
-  Sparkles, Star, Award, Leaf
+  Sparkles, Star, Award, Leaf, Eye, Target, Scale, ShieldCheck, TrendingUp
 } from 'lucide-react';
 
 export const COLORS = {
@@ -16,12 +16,34 @@ export const COLORS = {
 };
 
 export const NAVIGATION = [
-  { name: 'About Us', href: '#about' },
-  { name: 'Global Services', href: '#services' },
-  { name: 'Roadmap', href: '#roadmap' },
-  { name: 'LUVWATTS', href: '#luvwatts' },
-  { name: 'Gallery', href: '#gallery' },
-  { name: 'Programs', href: '#programs' },
+  { name: 'About Us', id: 'aboutus' },
+  { name: 'Global Services', id: 'globalservices' },
+  { name: 'Roadmap', id: 'roadmap' },
+  { name: 'LUVWATTS', id: 'luvwatts' },
+  { name: 'Gallery', id: 'gallery' },
+  { name: 'Programs', id: 'programs' },
+];
+
+export const MISSION_VISION = {
+  mission: {
+    title: "Mission",
+    content: "To uplift individuals and communities through compassion-driven programs that strengthen mental health, families, education, economic opportunity, and ethical innovation.",
+    icon: <Target className="w-8 h-8" />
+  },
+  vision: {
+    title: "Vision",
+    content: "A world where every person has access to support systems that honor their humanity, protect their dignity, and empower their future.",
+    icon: <Eye className="w-8 h-8" />
+  }
+};
+
+export const CORE_VALUES = [
+  { title: "Love in Action", description: "Compassion translated into systems, not sentiment" },
+  { title: "Human-Centered Impact", description: "People before profit, always" },
+  { title: "Equity & Inclusion", description: "Culturally grounded, community-led solutions" },
+  { title: "Integrity & Stewardship", description: "Ethical governance, transparency, accountability" },
+  { title: "Collaboration", description: "Partnerships over silos" },
+  { title: "Innovation for Good", description: "Technology as a tool, not a threat" }
 ];
 
 export const SERVICE_AREAS = [
@@ -92,13 +114,6 @@ export const STRATEGIC_PHASES = [
   }
 ];
 
-export const PROGRAMS = [
-  { name: "First Steps Initiative", description: "Focused parenting and child-raising workshops for new families." },
-  { name: "Pathways Project", description: "Bridge to tech certifications and global workforce readiness." },
-  { name: "Hope Shelters", description: "Dignified housing solutions for those in transition." },
-  { name: "Luv Table", description: "Community-driven food security and nutrition education." },
-];
-
 export const PARTNERS = [
   "Microsoft", "Amazon", "OpenAI", "Google", "United Nations", "World Health Org", "UNICEF", "Harvard University"
 ];
@@ -136,4 +151,58 @@ export const GALLERY_IMAGES = [
   { url: "https://images.unsplash.com/photo-1524061614234-84496375567e?auto=format&fit=crop&q=80&w=800", title: "Housing Support" },
   { url: "https://images.unsplash.com/photo-1518391846015-55a9cc003b25?auto=format&fit=crop&q=80&w=800", title: "Youth Mentorship" },
   { url: "https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?auto=format&fit=crop&q=80&w=800", title: "Humanitarian Aid" },
+  { url: "https://images.unsplash.com/photo-1509099836639-18ba1795216d?auto=format&fit=crop&q=80&w=800", title: "Family Support" },
+  { url: "https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&q=80&w=800", title: "Social Impact" },
+  { url: "https://images.unsplash.com/photo-1544652478-6653e09f18a2?auto=format&fit=crop&q=80&w=800", title: "Tech Empowerment" },
 ];
+
+export const DONOR_PAGE = {
+  header: "Invest in Humanity",
+  tagline: "Your support drives systems of love and structures of change.",
+  different: {
+    title: "What Makes Us Different",
+    content: "Foundation of Luv bridges advocacy, media, community programs, and ethical technology under one accountable nonprofit structure. We don’t just raise awareness — we build systems that last."
+  },
+  pillars: [
+    { title: "Mental Health & Emotional Wellness", description: "Expanding access to culturally relevant support and education." },
+    { title: "Family & Community Stability", description: "Strengthening families as the foundation of resilient communities." },
+    { title: "Education & Advocacy", description: "Turning powerful storytelling into real-world action and resources." },
+    { title: "Economic Empowerment", description: "Creating pathways to opportunity and self-sufficiency." },
+    { title: "Ethical AI & Public Good Innovation", description: "Governing initiatives like World AI Force to ensure technology serves humanity." }
+  ],
+  approach: [
+    "Community-informed program design",
+    "Ethical governance and transparency",
+    "Strategic partnerships with proven experts",
+    "Media and technology used responsibly for public benefit",
+    "Measurable outcomes and clear reporting"
+  ],
+  stewardship: {
+    title: "Stewardship & Accountability",
+    points: [
+      "Independent board governance",
+      "Strict conflict-of-interest policies",
+      "Transparent financial management",
+      "Clear separation from for-profit vendors"
+    ],
+    closing: "Donor trust is not assumed — it is earned."
+  },
+  supportMatters: {
+    title: "Why Your Support Matters",
+    points: [
+      "Scalable mental health and family programs",
+      "Community education and advocacy initiatives",
+      "Ethical oversight of emerging technologies",
+      "Long-term solutions instead of short-term relief"
+    ]
+  },
+  promise: {
+    title: "Our Promise",
+    points: [
+      "Every dollar is stewarded with integrity.",
+      "Every program is built for real impact.",
+      "Every initiative centers humanity first."
+    ],
+    closing: "Foundation of Luv. Because love deserves structure."
+  }
+};
