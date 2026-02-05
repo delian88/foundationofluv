@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 import { 
   Menu, X, ChevronRight, Zap, ArrowRight, 
@@ -27,6 +27,65 @@ const HERO_IMAGES = [
     caption: "Humanity in Motion"
   }
 ];
+
+const COLORS = ['#9c1c22', '#e2a744', '#ffffff', '#df8c3d'];
+
+const FireworkBurst = ({ x, y, color }: { x: number; y: number; color: string }) => {
+  const particles = Array.from({ length: 12 });
+  return (
+    <div className="absolute" style={{ left: `${x}%`, top: `${y}%` }}>
+      {particles.map((_, i) => (
+        <motion.div
+          key={i}
+          initial={{ x: 0, y: 0, opacity: 1, scale: 0 }}
+          animate={{
+            x: Math.cos((i * 30) * (Math.PI / 180)) * 150,
+            y: Math.sin((i * 30) * (Math.PI / 180)) * 150,
+            opacity: 0,
+            scale: [0, 1, 0.5],
+          }}
+          transition={{ duration: 1.5, ease: "easeOut" }}
+          className="absolute w-2 h-2 rounded-full"
+          style={{ backgroundColor: color }}
+        />
+      ))}
+    </div>
+  );
+};
+
+const Fireworks = () => {
+  const [bursts, setBursts] = useState<{ id: number; x: number; y: number; color: string }[]>([]);
+
+  const spawnBurst = useCallback(() => {
+    const id = Date.now();
+    // Randomly spawn around the edges of where the frame would be
+    const x = 20 + Math.random() * 60; 
+    const y = 30 + Math.random() * 40;
+    const color = COLORS[Math.floor(Math.random() * COLORS.length)];
+    
+    setBursts(prev => [...prev, { id, x, y, color }]);
+    setTimeout(() => {
+      setBursts(prev => prev.filter(b => b.id !== id));
+    }, 2000);
+  }, []);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (Math.random() > 0.4) spawnBurst();
+    }, 1200);
+    return () => clearInterval(interval);
+  }, [spawnBurst]);
+
+  return (
+    <div className="absolute inset-0 pointer-events-none z-0">
+      <AnimatePresence>
+        {bursts.map(burst => (
+          <FireworkBurst key={burst.id} {...burst} />
+        ))}
+      </AnimatePresence>
+    </div>
+  );
+};
 
 const App: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -139,6 +198,9 @@ const App: React.FC = () => {
 
       {/* Hero Section */}
       <header className="relative w-full pt-32 pb-16 md:pt-64 md:pb-32 lg:pt-80 lg:pb-48 overflow-hidden bg-[#fdfaf6]">
+        {/* Fireworks Effect Layer */}
+        <Fireworks />
+
         <div className="absolute top-0 left-0 w-full h-full -z-10 pointer-events-none overflow-hidden">
           <motion.div 
             animate={{ scale: [1, 1.4, 1], rotate: [0, 90, 0], x: [0, 100, 0] }}
@@ -161,7 +223,7 @@ const App: React.FC = () => {
           >
             <div className="absolute inset-0 bg-gradient-to-tr from-[#9c1c22]/10 via-white to-[#e2a744]/10 rounded-full blur-[60px] md:blur-[140px] -z-10 scale-[1.2] md:scale-[1.8] opacity-60" />
             
-            <div className="relative group p-0 md:p-12 w-full max-w-[900px]">
+            <div className="relative group p-0 md:p-12 w-full max-w-[900px] z-10">
               <div className="relative aspect-video md:aspect-[21/9] rounded-[2rem] md:rounded-[5rem] overflow-hidden border-[8px] md:border-[32px] border-white shadow-[0_40px_80px_-20px_rgba(156,28,34,0.3)] md:shadow-[0_80px_160px_-30px_rgba(156,28,34,0.4)] group/slider ring-1 ring-[#332d2b]/5">
                 <div className="absolute inset-[2px] md:inset-[8px] border-[1px] md:border-[2px] border-[#e2a744]/30 rounded-[1.8rem] md:rounded-[4.4rem] z-20 pointer-events-none" />
                 <div className="absolute inset-[0.5px] md:inset-[3px] border-[0.5px] md:border-[1px] border-white/40 rounded-[1.9rem] md:rounded-[4.8rem] z-20 pointer-events-none" />
@@ -360,7 +422,6 @@ const App: React.FC = () => {
             {SERVICE_AREAS.map((service, i) => (
               <motion.div key={i} whileHover={{ y: -10 }} className="bg-white p-8 md:p-14 rounded-[2rem] border border-[#332d2b]/10 hover:border-[#9c1c22]/20 hover:shadow-2xl transition-all duration-700">
                 <div className="w-14 h-14 md:w-20 md:h-20 bg-[#fdfaf6] text-[#9c1c22] rounded-2xl flex items-center justify-center mb-8 border border-[#332d2b]/5">
-                   {/* Map service.title to specific icon for better visuals */}
                    {service.title === "Global Advocacy" && <Globe size={32} />}
                    {service.title === "Mental Wellness" && <Brain size={32} />}
                    {service.title === "Family Solidarity" && <Users size={32} />}

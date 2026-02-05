@@ -1,9 +1,9 @@
-<svg width="500" height="500" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg width="500" height="500" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <!-- Top Arc for FOUNDATION OF LUV -->
-    <path id="topTextArc" d="M 65, 250 A 185,185 0 0,1 435,250" />
-    <!-- Bottom Arc for Motto -->
-    <path id="bottomTextArc" d="M 425, 250 A 175,175 0 0,1 75,250" />
+    <!-- Top Arc for FOUNDATION OF LUV (Radius slightly larger to fit text) -->
+    <path id="topTextArc" d="M 50, 250 A 200,200 0 0,1 450,250" />
+    <!-- Bottom Arc for Motto (Flipped direction to keep text upright at bottom) -->
+    <path id="bottomTextArc" d="M 75, 250 A 175,175 0 0,0 425,250" />
     
     <clipPath id="globeClip">
       <circle cx="250" cy="185" r="75" />
@@ -15,52 +15,55 @@
   <circle cx="250" cy="250" r="242" fill="#ffffff" />
   
   <!-- Main Bicolor Ring -->
-  <circle cx="250" cy="250" r="236" fill="#332d2b" /> <!-- Warm Dark bottom -->
+  <circle cx="250" cy="250" r="236" fill="#332d2b" /> <!-- Dark bottom -->
   <path d="M 14,250 A 236,236 0 0,1 486,250 L 250,250 Z" fill="#f2e9e4" /> <!-- Beige top -->
   
   <!-- Inner Separator -->
-  <circle cx="250" cy="250" r="172" stroke="#332d2b" stroke-width="8" fill="none" />
+  <circle cx="250" cy="250" r="172" stroke="#332d2b" stroke-width="6" fill="none" />
 
-  <!-- Core Copper Circle -->
+  <!-- Core Copper/Orange Circle -->
   <circle cx="250" cy="250" r="168" fill="#df8c3d" />
   
   <!-- Central Globe -->
   <circle cx="250" cy="185" r="75" fill="#0d2440" />
   <g clip-path="url(#globeClip)">
+    <!-- Simplified Map Shapes -->
     <path d="M210,165 Q225,145 245,165 T275,175 T300,160 T315,185 T285,215 T240,210 T205,190 Z" fill="#df8c3d" />
     <path d="M255,130 Q275,140 270,160 T295,170 T310,150 Z" fill="#df8c3d" />
   </g>
 
   <!-- Golden Wreaths -->
-  <g fill="#e2a744">
-    <path d="M190,220 Q185,250 200,300 Q215,330 245,355 L250,350 Q220,320 210,280 T205,220 Z" opacity="0.9"/>
+  <g fill="#e2a744" opacity="0.9">
+    <!-- Left Wreath -->
+    <path d="M190,220 Q185,250 200,300 Q215,330 245,355 L250,350 Q220,320 210,280 T205,220 Z" />
     <ellipse cx="188" cy="230" rx="6" ry="11" transform="rotate(-30 188 230)" />
     <ellipse cx="192" cy="260" rx="6" ry="11" transform="rotate(-25 192 260)" />
     <ellipse cx="202" cy="290" rx="6" ry="11" transform="rotate(-20 202 290)" />
     <ellipse cx="218" cy="320" rx="6" ry="11" transform="rotate(-15 218 320)" />
     
-    <path d="M310,220 Q315,250 300,300 Q285,330 255,355 L250,350 Q280,320 290,280 T295,220 Z" opacity="0.9"/>
+    <!-- Right Wreath -->
+    <path d="M310,220 Q315,250 300,300 Q285,330 255,355 L250,350 Q280,320 290,280 T295,220 Z" />
     <ellipse cx="312" cy="230" rx="6" ry="11" transform="rotate(30 312 230)" />
     <ellipse cx="308" cy="260" rx="6" ry="11" transform="rotate(25 308 260)" />
     <ellipse cx="298" cy="290" rx="6" ry="11" transform="rotate(20 298 290)" />
     <ellipse cx="282" cy="320" rx="6" ry="11" transform="rotate(15 282 320)" />
   </g>
 
-  <!-- Crimson Heart (The main change) -->
+  <!-- Crimson Heart (Overlapping Globe and Wreaths) -->
   <path d="M250,235 C210,185 140,210 140,295 C140,370 250,455 250,455 C250,455 360,370 360,295 C360,210 290,185 250,235 Z" fill="#9c1c22" />
 
-  <!-- Stars at the Split -->
+  <!-- Side Stars -->
   <g fill="#e2a744">
     <path d="M85,250 l9,-12 15,2 -11,11 4,16 -17,-10 -17,10 4,-16 -11,-11 15,-2 z" />
     <path d="M415,250 l9,-12 15,2 -11,11 4,16 -17,-10 -17,10 4,-16 -11,-11 15,-2 z" />
   </g>
 
-  <!-- Typography -->
-  <text font-family="'Times New Roman', Times, serif" font-weight="900" font-size="44" fill="#332d2b" letter-spacing="0.5">
-    <textPath xlink:href="#topTextArc" startOffset="50%" text-anchor="middle">FOUNDATION OF LUV</textPath>
+  <!-- Typography (Adjusted font sizes for better fit) -->
+  <text font-family="Cinzel, serif" font-weight="900" font-size="34" fill="#332d2b" letter-spacing="4">
+    <textPath href="#topTextArc" startOffset="50%" text-anchor="middle">FOUNDATION OF LUV</textPath>
   </text>
   
-  <text font-family="'Times New Roman', Times, serif" font-weight="700" font-size="28" fill="#ffffff" letter-spacing="0.3">
-    <textPath xlink:href="#bottomTextArc" startOffset="50%" text-anchor="middle">LOVE IN ACTION CHANGE IN MOTION</textPath>
+  <text font-family="Cinzel, serif" font-weight="700" font-size="20" fill="#ffffff" letter-spacing="2">
+    <textPath href="#bottomTextArc" startOffset="50%" text-anchor="middle" side="right">LOVE IN ACTION CHANGE IN MOTION</textPath>
   </text>
 </svg>
