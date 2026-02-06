@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform, useMotionValue, useInView, animate } from 'framer-motion';
 import { 
@@ -593,10 +592,10 @@ const HomeView = ({ onNavigate }: { onNavigate: (id: string) => void }) => {
                       {[
                         { url: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&q=80&w=400", pos: "top-0 left-1/2 -translate-x-1/2" },
                         { url: "https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?auto=format&fit=crop&q=80&w=400", pos: "top-1/4 right-0" },
-                        { url: "https://images.unsplash.com/photo-1605348532760-6753d2c43329?auto=format&fit=crop&q=80&w=400", pos: "bottom-0 right-1/4" },
+                        { url: "https://images.unsplash.com/photo-1595341888016-a392ef81b7de?auto=format&fit=crop&q=80&w=400", pos: "bottom-0 right-1/4" },
                         { url: "https://images.unsplash.com/photo-1560769629-975ec94e6a86?auto=format&fit=crop&q=80&w=400", pos: "bottom-0 left-1/4" },
-                        { url: "https://images.unsplash.com/photo-1560769629-975ec94e6a86?auto=format&fit=crop&q=80&w=400", pos: "top-1/4 left-0" },
-                        { url: "https://images.unsplash.com/photo-1533681904393-9ab6eba7b4d0?auto=format&fit=crop&q=80&w=400", pos: "bottom-1/4 left-0" },
+                        { url: "https://images.unsplash.com/photo-1512374382149-233c42b6a83b?auto=format&fit=crop&q=80&w=400", pos: "top-1/4 left-0" },
+                        { url: "https://images.unsplash.com/photo-1514989940723-e8e51635b782?auto=format&fit=crop&q=80&w=400", pos: "bottom-1/4 left-0" },
                       ].map((img, i) => (
                         <motion.div 
                           key={i}
