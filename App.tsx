@@ -3,11 +3,12 @@ import { motion, AnimatePresence, useScroll, useTransform, useMotionValue, useIn
 import { 
   Menu, X, ChevronRight, ArrowRight, Sparkles, MoveRight, ChevronLeft, Calendar, Award, 
   Instagram, Linkedin, Youtube, Globe, Brain, Users, Home, Utensils, GraduationCap, Image as LucideImage,
-  Target, Eye, ShieldCheck, TrendingUp, AlertCircle, Building2, Workflow, Lightbulb, Heart, Info, Phone, MapPin
+  Target, Eye, ShieldCheck, TrendingUp, AlertCircle, Building2, Workflow, Lightbulb, Heart, Info, Phone, MapPin,
+  CheckCircle2
 } from 'lucide-react';
 import { 
   NAVIGATION, SERVICE_AREAS, STRATEGIC_PHASES, STATS, COLORS, HERO_IMAGES, GALLERY_IMAGES,
-  MISSION_VISION, DETAILED_ABOUT, DONOR_PAGE_CONTENT, LUV_ACT_PROGRAMS
+  MISSION_VISION, DETAILED_ABOUT, DONOR_PAGE_CONTENT, LUV_ACT_PROGRAMS, LEADERSHIP_MESSAGE, LUVWATTS_CONTENT
 } from './constants';
 
 // --- Global UI Components ---
@@ -119,6 +120,222 @@ const AnimatedNumber = ({ value }: { value: string }) => {
 
 // --- Page Content Views ---
 
+const HomeView = ({ onNavigate }: { onNavigate: (id: string) => void }) => {
+  const [currentSlide, setCurrentSlide] = useState(0);
+  useEffect(() => {
+    const timer = setInterval(() => setCurrentSlide((prev) => (prev + 1) % HERO_IMAGES.length), 8000);
+    return () => clearInterval(timer);
+  }, []);
+
+  return (
+    <div className="relative z-10">
+      {/* Hero Section */}
+      <header className="relative w-full pt-32 pb-16 md:pt-64 md:pb-32 lg:pt-72 lg:pb-40 overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 text-center flex flex-col items-center">
+          <motion.div initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} className="relative group p-0 md:p-12 w-full max-w-[950px]">
+            <div className="relative aspect-video rounded-[2rem] md:rounded-[4rem] overflow-hidden border-[8px] md:border-[24px] border-white shadow-2xl">
+              <AnimatePresence mode="wait">
+                <motion.div key={currentSlide} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 1 }} className="absolute inset-0">
+                  <img src={HERO_IMAGES[currentSlide].url} alt={HERO_IMAGES[currentSlide].caption} className="w-full h-full object-cover brightness-75" />
+                  <div className="absolute bottom-0 left-0 right-0 p-8 md:p-14 bg-gradient-to-t from-black/80 to-transparent text-left">
+                    <span className="text-[#eeb053] font-cinzel font-black tracking-[0.4em] text-[10px] uppercase">Movement Chapter</span>
+                    <h3 className="text-white text-lg md:text-5xl font-serif italic font-bold">{HERO_IMAGES[currentSlide].caption}</h3>
+                  </div>
+                </motion.div>
+              </AnimatePresence>
+            </div>
+            <motion.div animate={{ y: [0, -10, 0] }} transition={{ duration: 6, repeat: Infinity }} className="absolute -top-6 -right-6 md:-top-16 md:-right-16 w-24 h-24 md:w-56 md:h-56 z-40"><Logo className="w-full h-full drop-shadow-2xl" /></motion.div>
+          </motion.div>
+          
+          <div className="mt-12">
+            <h1 className="hero-text text-4xl md:text-[8rem] font-serif font-black leading-tight text-shine-crimson">Love in Action,<br /><span className="italic font-normal text-shine text-[#eeb053]">Change in Motion.</span></h1>
+            <p className="mobile-p text-lg md:text-3xl text-[#332d2b]/70 mt-8 max-w-4xl mx-auto font-serif italic text-center">"We are the kinetic pulse of restoration, engineering pathways where human dignity is an unshakeable reality."</p>
+            <div className="flex flex-col md:flex-row gap-6 justify-center mt-12">
+              <button onClick={() => onNavigate('donate')} className="px-12 py-6 bg-[#9c1c22] text-white rounded-full font-cinzel font-black text-xl shadow-xl flex items-center gap-3 hover:bg-[#7a141a] transition-all">Show some Love <MoveRight /></button>
+              <button onClick={() => onNavigate('aboutus')} className="px-12 py-6 glass-card rounded-full font-cinzel font-bold text-xl border border-[#eeb053]/50 flex items-center justify-center gap-3 hover:bg-white/60 transition-all">Explore Our Story <ArrowRight /></button>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      {/* Intro / About Summary */}
+      <section className="py-20 md:py-40 bg-[#f9f5f0] border-y border-[#332d2b]/5">
+        <div className="max-w-7xl mx-auto px-4 grid lg:grid-cols-12 gap-20 items-center">
+          <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="lg:col-span-5">
+            <div className="p-4 bg-white rounded-[4rem] shadow-2xl border-4 border-[#eeb053]">
+              <img src="https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&q=80&w=1000" className="rounded-[3.5rem] grayscale" alt="Foundation Origin" />
+            </div>
+          </motion.div>
+          <div className="lg:col-span-7">
+            <h2 className="text-4xl md:text-7xl font-serif font-black text-[#332d2b] leading-tight mb-8">ABOUT US (FOL)</h2>
+            <p className="text-xl md:text-2xl text-[#332d2b]/80 font-serif leading-relaxed italic border-l-8 border-[#9c1c22] pl-10">
+              Foundation of Love (FOL) was created in 2016 with a simple yet profound belief: that love, dignity, and compassion can transform individuals and communities. Rooted in humanitarian service, advocacy, and holistic support, FOL was established to bridge societal divides, empower the vulnerable, and create lasting pathways to opportunity.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* The 7 Luv Acts Highlights */}
+      <section className="py-24 md:py-40 bg-white">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="text-center mb-24">
+             <span className="text-[#9c1c22] font-cinzel font-black tracking-[0.4em] text-xs uppercase mb-4 block">Our Architecture</span>
+             <h2 className="text-5xl md:text-8xl font-serif font-black text-[#332d2b]">The 7 Luv Acts</h2>
+          </div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {LUV_ACT_PROGRAMS.slice(0, 6).map((act, i) => (
+              <motion.div 
+                key={act.id} 
+                whileHover={{ y: -10 }}
+                className="p-10 rounded-[3rem] border-2 border-transparent hover:border-[#eeb053] transition-all bg-[#fdfaf6] group shadow-sm"
+              >
+                <span className="text-4xl font-cinzel font-black text-[#9c1c22]/20 group-hover:text-[#9c1c22] transition-colors mb-6 block">{act.id}</span>
+                <h3 className="text-2xl font-serif font-black text-[#332d2b] mb-4 uppercase">{act.title}</h3>
+                <p className="text-lg text-[#332d2b]/60 font-serif italic leading-relaxed">{act.description}</p>
+              </motion.div>
+            ))}
+          </div>
+          <div className="mt-16 text-center">
+            <button onClick={() => onNavigate('programs')} className="text-xl font-cinzel font-bold text-[#9c1c22] flex items-center gap-3 mx-auto hover:gap-6 transition-all">View All Restoration Pillars <ArrowRight /></button>
+          </div>
+        </div>
+      </section>
+
+      {/* Leadership Highlight - Replacing previous photo with logo as requested */}
+      <section className="py-20 md:py-40 bg-[#1a1a1a] text-white relative overflow-hidden">
+        <div className="absolute inset-0 opacity-10 pointer-events-none">
+          <Logo className="w-full h-full scale-150 rotate-12" />
+        </div>
+        <div className="max-w-7xl mx-auto px-4 grid lg:grid-cols-2 gap-20 items-center relative z-10">
+          <div className="order-2 lg:order-1">
+            <h2 className="text-[#eeb053] font-cinzel font-black tracking-widest text-sm uppercase mb-8">{LEADERSHIP_MESSAGE.title}</h2>
+            <div className="relative">
+               <span className="text-[12rem] font-serif font-black absolute -top-24 -left-12 opacity-10 text-[#eeb053]">"</span>
+               <p className="text-3xl md:text-5xl font-serif italic leading-tight mb-12">
+                 {LEADERSHIP_MESSAGE.content}
+               </p>
+            </div>
+            <div className="flex items-center gap-6">
+              <div className="h-1 w-20 bg-[#9c1c22]"></div>
+              <div>
+                <p className="text-2xl font-cinzel font-black text-[#eeb053] uppercase">{LEADERSHIP_MESSAGE.author}</p>
+                <p className="text-lg font-serif italic opacity-50">{LEADERSHIP_MESSAGE.tagline}</p>
+              </div>
+            </div>
+          </div>
+          <div className="order-1 lg:order-2">
+            <div className="relative p-6">
+              {/* IMAGE REPLACED: Using the Foundation Logo as requested by the user */}
+              <div className="aspect-square rounded-[4rem] overflow-hidden shadow-[0_0_80px_rgba(238,176,83,0.3)] border-4 border-[#eeb053] bg-white flex items-center justify-center p-8 md:p-16">
+                 <Logo className="w-full h-full" />
+              </div>
+              <motion.div 
+                animate={{ rotate: 360 }} 
+                transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                className="absolute -bottom-10 -right-10 w-40 h-40 hidden md:block"
+              >
+                <svg viewBox="0 0 200 200" className="w-full h-full">
+                  <path id="circlePath" d="M 100, 100 m -75, 0 a 75,75 0 1,0 150,0 a 75,75 0 1,0 -150,0" fill="transparent" />
+                  <text fill="#eeb053" className="font-cinzel font-bold text-[10px] tracking-[0.2em] uppercase">
+                    <textPath href="#circlePath">Restoring Human Dignity • Leading with Love • </textPath>
+                  </text>
+                </svg>
+              </motion.div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Mission & Vision Section */}
+      <section className="py-20 md:py-40 bg-white">
+        <div className="max-w-7xl mx-auto px-4 grid md:grid-cols-2 gap-12">
+          <div className="bg-[#fdfaf6] p-14 rounded-[4rem] border-2 border-[#9c1c22]/10">
+            <div className="text-[#9c1c22] mb-8"><Target size={48} /></div>
+            <h3 className="text-4xl font-serif font-black mb-6">Mission</h3>
+            <p className="text-2xl text-[#332d2b]/70 font-serif leading-relaxed italic">{MISSION_VISION.mission.content}</p>
+          </div>
+          <div className="bg-[#fdfaf6] p-14 rounded-[4rem] border-2 border-[#eeb053]/20">
+            <div className="text-[#eeb053] mb-8"><Eye size={48} /></div>
+            <h3 className="text-4xl font-serif font-black mb-6">Vision</h3>
+            <p className="text-2xl text-[#332d2b]/70 font-serif leading-relaxed italic">{MISSION_VISION.vision.content}</p>
+          </div>
+        </div>
+      </section>
+
+      {/* LUVWATTS Movement Section */}
+      <section className="py-24 md:py-40 bg-[#f9f5f0] border-y border-[#332d2b]/5">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="grid lg:grid-cols-2 gap-20 items-center">
+            <div>
+              <span className="text-[#9c1c22] font-cinzel font-black tracking-widest text-xs uppercase mb-6 block">The Kinetic Pulse</span>
+              <h2 className="text-5xl md:text-8xl font-serif font-black text-[#332d2b] mb-10 leading-tight">The <span className="text-[#9c1c22]">LUVWATTS</span> Movement</h2>
+              <p className="text-2xl font-serif italic text-[#332d2b]/60 mb-12">
+                {LUVWATTS_CONTENT.description}
+              </p>
+              <div className="grid grid-cols-2 gap-8">
+                {LUVWATTS_CONTENT.pillars.map((pillar, i) => (
+                  <div key={i} className="flex items-center gap-4">
+                    <CheckCircle2 className="text-[#eeb053]" size={24} />
+                    <span className="font-cinzel font-bold text-lg uppercase tracking-wider">{pillar}</span>
+                  </div>
+                ))}
+              </div>
+              <button onClick={() => onNavigate('luvwatts')} className="mt-16 px-12 py-6 bg-[#1a1a1a] text-white rounded-full font-cinzel font-black text-xl hover:bg-[#332d2b] transition-all flex items-center gap-4">Learn More <ArrowRight /></button>
+            </div>
+            <div className="grid grid-cols-2 gap-6">
+              <div className="space-y-6 pt-12">
+                <div className="aspect-[4/5] rounded-[3rem] overflow-hidden shadow-xl border-4 border-white"><img src="https://images.unsplash.com/photo-1532629345422-7515f3d16bb6?auto=format&fit=crop&q=80&w=600" className="w-full h-full object-cover" /></div>
+                <div className="aspect-square rounded-[3rem] overflow-hidden shadow-xl border-4 border-white"><img src="https://images.unsplash.com/photo-1542810634-71277d95dcbb?auto=format&fit=crop&q=80&w=600" className="w-full h-full object-cover" /></div>
+              </div>
+              <div className="space-y-6">
+                <div className="aspect-square rounded-[3rem] overflow-hidden shadow-xl border-4 border-white"><img src="https://images.unsplash.com/photo-1524061614234-84496375567e?auto=format&fit=crop&q=80&w=600" className="w-full h-full object-cover" /></div>
+                <div className="aspect-[4/5] rounded-[3rem] overflow-hidden shadow-xl border-4 border-white"><img src="https://images.unsplash.com/photo-1518391846015-55a9cc003b25?auto=format&fit=crop&q=80&w=600" className="w-full h-full object-cover" /></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Video Section */}
+      <section className="py-20 md:py-40 bg-white">
+        <div className="max-w-7xl mx-auto px-4 text-center">
+          <h2 className="text-4xl md:text-8xl font-serif font-black text-[#332d2b] mb-12">Love Witnessed.</h2>
+          <div className="relative aspect-video rounded-[3rem] md:rounded-[5rem] overflow-hidden border-[16px] md:border-[32px] border-[#eeb053] shadow-2xl bg-black max-w-5xl mx-auto">
+            <iframe className="w-full h-full" src="https://www.youtube.com/embed/XxfFvLERt7o" title="FoL Impact" frameBorder="0" allowFullScreen></iframe>
+          </div>
+        </div>
+      </section>
+
+      {/* Stats Section */}
+      <section className="py-20 md:py-40 bg-white">
+        <div className="max-w-7xl mx-auto px-4 grid md:grid-cols-2 lg:grid-cols-4 gap-12">
+          {STATS.map((stat, i) => (
+            <div key={i} className="text-center">
+              <div className="text-6xl md:text-8xl font-serif font-black text-[#9c1c22] mb-4"><AnimatedNumber value={stat.value} /><span className="text-[#eeb053]">{stat.suffix}</span></div>
+              <h4 className="font-cinzel font-black text-[12px] tracking-[0.3em] uppercase mb-4 text-[#332d2b]">{stat.label}</h4>
+              <p className="font-serif italic text-xl text-[#332d2b]/50">{stat.description}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-24 md:py-40 bg-[#9c1c22] relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-96 h-96 bg-[#eeb053] opacity-10 rounded-full -mr-48 -mt-48 blur-3xl"></div>
+        <div className="absolute bottom-0 left-0 w-96 h-96 bg-white opacity-5 rounded-full -ml-48 -mb-48 blur-3xl"></div>
+        <div className="max-w-5xl mx-auto px-4 text-center relative z-10">
+          <h2 className="text-5xl md:text-8xl font-serif font-black text-white mb-12 italic leading-tight">Be the Motion Behind <br />the Change.</h2>
+          <p className="text-2xl font-serif italic text-white/70 mb-16 max-w-2xl mx-auto">Join a global network of restored humans working to restoration others. Your participation fuels the movement.</p>
+          <div className="flex flex-col md:flex-row gap-6 justify-center">
+             <button onClick={() => onNavigate('donate')} className="px-16 py-8 bg-[#eeb053] text-[#332d2b] rounded-full font-cinzel font-black text-2xl shadow-2xl hover:scale-105 transition-all">Support the Mission</button>
+             <button onClick={() => onNavigate('gallery')} className="px-16 py-8 border-2 border-white/20 text-white rounded-full font-cinzel font-black text-2xl hover:bg-white/10 transition-all">Witness our Impact</button>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+};
+
 const ProgramsPageView = () => {
   const redBlocks = LUV_ACT_PROGRAMS.filter(p => p.id === "01" || p.id === "02" || p.id === "03");
   const yellowBlocksGroup1 = LUV_ACT_PROGRAMS.filter(p => p.id === "04" || p.id === "05" || p.id === "06");
@@ -219,98 +436,6 @@ const ProgramsPageView = () => {
         </div>
       </div>
     </section>
-  );
-};
-
-const HomeView = ({ onNavigate }: { onNavigate: (id: string) => void }) => {
-  const [currentSlide, setCurrentSlide] = useState(0);
-  useEffect(() => {
-    const timer = setInterval(() => setCurrentSlide((prev) => (prev + 1) % HERO_IMAGES.length), 8000);
-    return () => clearInterval(timer);
-  }, []);
-
-  return (
-    <div className="relative z-10">
-      <header className="relative w-full pt-32 pb-16 md:pt-64 md:pb-32 lg:pt-72 lg:pb-40 overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 text-center flex flex-col items-center">
-          <motion.div initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} className="relative group p-0 md:p-12 w-full max-w-[950px]">
-            <div className="relative aspect-video rounded-[2rem] md:rounded-[4rem] overflow-hidden border-[8px] md:border-[24px] border-white shadow-2xl">
-              <AnimatePresence mode="wait">
-                <motion.div key={currentSlide} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 1 }} className="absolute inset-0">
-                  <img src={HERO_IMAGES[currentSlide].url} alt={HERO_IMAGES[currentSlide].caption} className="w-full h-full object-cover brightness-75" />
-                  <div className="absolute bottom-0 left-0 right-0 p-8 md:p-14 bg-gradient-to-t from-black/80 to-transparent text-left">
-                    <span className="text-[#eeb053] font-cinzel font-black tracking-[0.4em] text-[10px] uppercase">Movement Chapter</span>
-                    <h3 className="text-white text-lg md:text-5xl font-serif italic font-bold">{HERO_IMAGES[currentSlide].caption}</h3>
-                  </div>
-                </motion.div>
-              </AnimatePresence>
-            </div>
-            <motion.div animate={{ y: [0, -10, 0] }} transition={{ duration: 6, repeat: Infinity }} className="absolute -top-6 -right-6 md:-top-16 md:-right-16 w-24 h-24 md:w-56 md:h-56 z-40"><Logo className="w-full h-full drop-shadow-2xl" /></motion.div>
-          </motion.div>
-          
-          <div className="mt-12">
-            <h1 className="hero-text text-4xl md:text-[8rem] font-serif font-black leading-tight text-shine-crimson">Love in Action,<br /><span className="italic font-normal text-shine text-[#eeb053]">Change in Motion.</span></h1>
-            <p className="mobile-p text-lg md:text-3xl text-[#332d2b]/70 mt-8 max-w-4xl mx-auto font-serif italic text-center">"We are the kinetic pulse of restoration, engineering pathways where human dignity is an unshakeable reality."</p>
-            <div className="flex flex-col md:flex-row gap-6 justify-center mt-12">
-              <button onClick={() => onNavigate('donate')} className="px-12 py-6 bg-[#9c1c22] text-white rounded-full font-cinzel font-black text-xl shadow-xl flex items-center gap-3 hover:bg-[#7a141a] transition-all">Show some Love <MoveRight /></button>
-              <button onClick={() => onNavigate('aboutus')} className="px-12 py-6 glass-card rounded-full font-cinzel font-bold text-xl border border-[#eeb053]/50 flex items-center justify-center gap-3 hover:bg-white/60 transition-all">Explore Our Story <ArrowRight /></button>
-            </div>
-          </div>
-        </div>
-      </header>
-
-      <section className="py-20 md:py-40 bg-[#f9f5f0] border-y border-[#332d2b]/5">
-        <div className="max-w-7xl mx-auto px-4 grid lg:grid-cols-12 gap-20 items-center">
-          <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="lg:col-span-5">
-            <div className="p-4 bg-white rounded-[4rem] shadow-2xl border-4 border-[#eeb053]">
-              <img src="https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&q=80&w=1000" className="rounded-[3.5rem] grayscale" alt="Foundation Origin" />
-            </div>
-          </motion.div>
-          <div className="lg:col-span-7">
-            <h2 className="text-4xl md:text-7xl font-serif font-black text-[#332d2b] leading-tight mb-8">ABOUT US (FOL)</h2>
-            <p className="text-xl md:text-2xl text-[#332d2b]/80 font-serif leading-relaxed italic border-l-8 border-[#9c1c22] pl-10">
-              Foundation of Love (FOL) was created in 2016 with a simple yet profound belief: that love, dignity, and compassion can transform individuals and communities. Rooted in humanitarian service, advocacy, and holistic support, FOL was established to bridge societal divides, empower the vulnerable, and create lasting pathways to opportunity.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <section className="py-20 md:py-40 bg-white">
-        <div className="max-w-7xl mx-auto px-4 grid md:grid-cols-2 gap-12">
-          <div className="bg-[#fdfaf6] p-14 rounded-[4rem] border-2 border-[#9c1c22]/10">
-            <div className="text-[#9c1c22] mb-8"><Target size={48} /></div>
-            <h3 className="text-4xl font-serif font-black mb-6">Mission</h3>
-            <p className="text-2xl text-[#332d2b]/70 font-serif leading-relaxed italic">{MISSION_VISION.mission.content}</p>
-          </div>
-          <div className="bg-[#fdfaf6] p-14 rounded-[4rem] border-2 border-[#eeb053]/20">
-            <div className="text-[#eeb053] mb-8"><Eye size={48} /></div>
-            <h3 className="text-4xl font-serif font-black mb-6">Vision</h3>
-            <p className="text-2xl text-[#332d2b]/70 font-serif leading-relaxed italic">{MISSION_VISION.vision.content}</p>
-          </div>
-        </div>
-      </section>
-
-      <section className="py-20 md:py-40 bg-[#f9f5f0]">
-        <div className="max-w-7xl mx-auto px-4 text-center">
-          <h2 className="text-4xl md:text-8xl font-serif font-black text-[#332d2b] mb-12">Love Witnessed.</h2>
-          <div className="relative aspect-video rounded-[3rem] md:rounded-[5rem] overflow-hidden border-[16px] md:border-[32px] border-[#eeb053] shadow-2xl bg-black max-w-5xl mx-auto">
-            <iframe className="w-full h-full" src="https://www.youtube.com/embed/XxfFvLERt7o" title="FoL Impact" frameBorder="0" allowFullScreen></iframe>
-          </div>
-        </div>
-      </section>
-
-      <section className="py-20 md:py-40 bg-white">
-        <div className="max-w-7xl mx-auto px-4 grid md:grid-cols-2 lg:grid-cols-4 gap-12">
-          {STATS.map((stat, i) => (
-            <div key={i} className="text-center">
-              <div className="text-6xl md:text-8xl font-serif font-black text-[#9c1c22] mb-4"><AnimatedNumber value={stat.value} /><span className="text-[#eeb053]">{stat.suffix}</span></div>
-              <h4 className="font-cinzel font-black text-[12px] tracking-[0.3em] uppercase mb-4 text-[#332d2b]">{stat.label}</h4>
-              <p className="font-serif italic text-xl text-[#332d2b]/50">{stat.description}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-    </div>
   );
 };
 

@@ -70,6 +70,24 @@ export const LUV_ACT_PROGRAMS = [
   }
 ];
 
+export const LEADERSHIP_MESSAGE = {
+  title: "A Message from Our Leadership",
+  content: "At Foundation of Luv, we don't just see numbers; we see faces. We see families who need a hand up, children who deserve an education, and communities that require restoration. Our '7 Luv Act' isn't just a program—it's a promise to institutionalize compassion in everything we do.",
+  author: "Leadership Council",
+  tagline: "Building a Legacy of restoration."
+};
+
+export const LUVWATTS_CONTENT = {
+  title: "The LUVWATTS Movement",
+  description: "LUVWATTS is more than an acronym; it's the kinetic energy of our foundation. It powers our feeding programs, fuels our education initiatives, and lights the way for those in darkness.",
+  pillars: [
+    "Light (Restoration)",
+    "Unity (Community)",
+    "Velocity (Progress)",
+    "Wisdom (Education)"
+  ]
+};
+
 export const MISSION_VISION = {
   mission: {
     title: "Mission",
