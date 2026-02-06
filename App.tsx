@@ -62,6 +62,21 @@ const Logo = ({ className, style }: { className?: string; style?: React.CSSPrope
   );
 };
 
+const Toast = ({ message, onClose }: { message: string; onClose: () => void }) => (
+  <motion.div
+    initial={{ opacity: 0, y: 50, scale: 0.9 }}
+    animate={{ opacity: 1, y: 0, scale: 1 }}
+    exit={{ opacity: 0, y: 50, scale: 0.9 }}
+    className="fixed bottom-10 right-4 md:right-10 z-[200] flex items-center gap-4 bg-[#9c1c22] text-white px-8 py-4 rounded-2xl shadow-2xl border-2 border-[#eeb053]"
+  >
+    <CheckCircle2 className="text-[#eeb053]" size={24} />
+    <p className="font-cinzel font-bold text-sm tracking-wider uppercase">{message}</p>
+    <button onClick={onClose} className="ml-4 opacity-50 hover:opacity-100 transition-opacity">
+      <X size={20} />
+    </button>
+  </motion.div>
+);
+
 const FireworksBackground = () => {
   const [bursts, setBursts] = useState<{ id: number; x: number; y: number; color: string }[]>([]);
   const spawnBurst = useCallback(() => {
@@ -227,7 +242,12 @@ const NewsletterSection = () => (
 
 // --- Contact Page View ---
 
-const ContactView = () => {
+const ContactView = ({ onSubmitSuccess }: { onSubmitSuccess: () => void }) => {
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    onSubmitSuccess();
+  };
+
   return (
     <section className="pt-48 pb-32 bg-white relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 relative z-10">
@@ -282,15 +302,15 @@ const ContactView = () => {
 
           <motion.div initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} className="bg-white p-10 md:p-16 rounded-[4rem] shadow-3xl border border-black/5">
             <h3 className="text-3xl font-serif font-black uppercase mb-12">Send a Message</h3>
-            <form className="space-y-8" onSubmit={(e) => e.preventDefault()}>
+            <form className="space-y-8" onSubmit={handleSubmit}>
               <div className="grid md:grid-cols-2 gap-8">
                 <div className="space-y-2">
                   <label className="text-[10px] font-cinzel font-black uppercase tracking-widest opacity-40 ml-4">Full Name</label>
-                  <input type="text" placeholder="YOUR NAME" className="w-full bg-[#fdfaf6] border-2 border-transparent focus:border-[#eeb053] px-8 py-5 rounded-full font-serif italic uppercase outline-none transition-all" />
+                  <input required type="text" placeholder="YOUR NAME" className="w-full bg-[#fdfaf6] border-2 border-transparent focus:border-[#eeb053] px-8 py-5 rounded-full font-serif italic uppercase outline-none transition-all" />
                 </div>
                 <div className="space-y-2">
                   <label className="text-[10px] font-cinzel font-black uppercase tracking-widest opacity-40 ml-4">Email Address</label>
-                  <input type="email" placeholder="EMAIL@DOMAIN.COM" className="w-full bg-[#fdfaf6] border-2 border-transparent focus:border-[#eeb053] px-8 py-5 rounded-full font-serif italic uppercase outline-none transition-all" />
+                  <input required type="email" placeholder="EMAIL@DOMAIN.COM" className="w-full bg-[#fdfaf6] border-2 border-transparent focus:border-[#eeb053] px-8 py-5 rounded-full font-serif italic uppercase outline-none transition-all" />
                 </div>
               </div>
               <div className="space-y-2">
@@ -305,10 +325,10 @@ const ContactView = () => {
               </div>
               <div className="space-y-2">
                 <label className="text-[10px] font-cinzel font-black uppercase tracking-widest opacity-40 ml-4">Message Content</label>
-                <textarea rows={5} placeholder="TELL US HOW WE CAN RESTORE TOGETHER..." className="w-full bg-[#fdfaf6] border-2 border-transparent focus:border-[#eeb053] px-8 py-6 rounded-[2rem] font-serif italic uppercase outline-none transition-all resize-none"></textarea>
+                <textarea required rows={5} placeholder="TELL US HOW WE CAN RESTORE TOGETHER..." className="w-full bg-[#fdfaf6] border-2 border-transparent focus:border-[#eeb053] px-8 py-6 rounded-[2rem] font-serif italic uppercase outline-none transition-all resize-none"></textarea>
               </div>
-              <button className="w-full bg-[#9c1c22] text-white py-6 rounded-full font-cinzel font-black uppercase tracking-[0.3em] shadow-xl hover:bg-[#1a1a1a] transition-all flex items-center justify-center gap-4">
-                Deploy Message <Send size={20} />
+              <button type="submit" className="w-full bg-[#9c1c22] text-white py-6 rounded-full font-cinzel font-black uppercase tracking-[0.3em] shadow-xl hover:bg-[#1a1a1a] transition-all flex items-center justify-center gap-4">
+                Send Message <Send size={20} />
               </button>
             </form>
           </motion.div>
@@ -713,7 +733,7 @@ const ProgramsPageView = () => {
     }
   };
 
-  const getIcon = (id: string): React.ComponentType<{ size?: number; className?: string }> => {
+  const getIcon = (id: string): any => {
     switch(id) {
       case "01": return UsersRound;
       case "02": return SchoolIcon;
@@ -841,12 +861,18 @@ const LUVWATTSView = () => (
 const App: React.FC = () => {
   const [currentPage, setCurrentPage] = useState('home');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [showToast, setShowToast] = useState(false);
   const { scrollYProgress } = useScroll();
 
   const handleNavigate = (pageId: string) => {
     setCurrentPage(pageId);
     window.scrollTo({ top: 0, behavior: 'smooth' });
     setIsMenuOpen(false);
+  };
+
+  const handleContactSubmit = () => {
+    setShowToast(true);
+    setTimeout(() => setShowToast(false), 4000);
   };
 
   const renderContent = () => {
@@ -858,7 +884,7 @@ const App: React.FC = () => {
       case 'gallery': return <GalleryPageView />; 
       case 'donate': return <DonorView />;
       case 'programs': return <ProgramsPageView />;
-      case 'contact': return <ContactView />;
+      case 'contact': return <ContactView onSubmitSuccess={handleContactSubmit} />;
       default: return <HomeView onNavigate={handleNavigate} />;
     }
   };
@@ -931,6 +957,12 @@ const App: React.FC = () => {
           <div className="pt-12 border-t border-white/5 text-[#fdfaf6]/20 text-[10px] font-cinzel font-black tracking-[0.4em] uppercase text-center md:text-left">© 2025 FOUNDATION OF LUV. LOVE IN ACTION, CHANGE IN MOTION.</div>
         </div>
       </footer>
+
+      <AnimatePresence>
+        {showToast && (
+          <Toast message="Message Sent Successfully!" onClose={() => setShowToast(false)} />
+        )}
+      </AnimatePresence>
     </div>
   );
 };
