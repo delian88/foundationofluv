@@ -62,6 +62,62 @@ const Logo = ({ className, style }: { className?: string; style?: React.CSSPrope
   );
 };
 
+const LoadingScreen = () => {
+  return (
+    <motion.div
+      initial={{ opacity: 1 }}
+      exit={{ opacity: 0, y: -100 }}
+      transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
+      className="fixed inset-0 z-[300] bg-[#fdfaf6] flex flex-col items-center justify-center overflow-hidden"
+    >
+      <motion.div
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 1.2, ease: "easeOut" }}
+        className="relative"
+      >
+        {/* Soft pulsing glow behind the logo */}
+        <motion.div
+          animate={{ scale: [1, 1.2, 1], opacity: [0.1, 0.3, 0.1] }}
+          transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute inset-0 bg-[#eeb053] blur-[100px] rounded-full"
+        />
+        
+        <motion.div
+          animate={{ y: [0, -10, 0] }}
+          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+          className="relative w-48 h-48 md:w-64 md:h-64"
+        >
+          <Logo className="w-full h-full drop-shadow-3xl" />
+        </motion.div>
+      </motion.div>
+
+      <div className="mt-16 w-64 md:w-80 relative h-0.5 bg-[#332d2b]/10 overflow-hidden rounded-full">
+        <motion.div
+          initial={{ x: "-100%" }}
+          animate={{ x: "0%" }}
+          transition={{ duration: 3, ease: "easeInOut" }}
+          className="absolute inset-0 bg-[#9c1c22]"
+        />
+      </div>
+
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.5, duration: 1 }}
+        className="mt-8 text-center"
+      >
+        <span className="block text-[#9c1c22] font-cinzel font-black tracking-[0.4em] text-[10px] md:text-[12px] uppercase">
+          Initializing Restoration
+        </span>
+        <span className="block mt-2 text-[#332d2b]/40 font-serif italic text-lg md:text-xl uppercase">
+          Love in Action, Change in Motion.
+        </span>
+      </motion.div>
+    </motion.div>
+  );
+};
+
 const Toast = ({ message, onClose }: { message: string; onClose: () => void }) => (
   <motion.div
     initial={{ opacity: 0, y: 50, scale: 0.9 }}
@@ -1074,7 +1130,16 @@ const App: React.FC = () => {
   const [currentPage, setCurrentPage] = useState('home');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showToast, setShowToast] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const { scrollYProgress } = useScroll();
+
+  useEffect(() => {
+    // Elegant loading delay to ensure brand impact
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 3000);
+    return () => clearTimeout(timer);
+  }, []);
 
   const handleNavigate = (pageId: string) => {
     setCurrentPage(pageId);
@@ -1103,80 +1168,94 @@ const App: React.FC = () => {
 
   return (
     <div className="min-h-screen w-full overflow-x-hidden selection:bg-[#9c1c22]/20 selection:text-[#9c1c22] bg-[#fdfaf6] relative">
-      <FireworksBackground />
-      <motion.div className="fixed top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#9c1c22] via-[#eeb053] to-[#ffffff] z-[100] origin-left" style={{ scaleX: scrollYProgress }} />
-      <nav className="fixed w-full z-50 glass border-b-2 border-[#eeb053]/30">
-        <div className="max-w-7xl mx-auto px-4 h-20 md:h-32 flex justify-between items-center">
-          <div onClick={() => handleNavigate('home')} className="cursor-pointer transition-transform hover:scale-105">
-            <Logo className="w-16 h-16 md:w-28 md:h-28" />
-          </div>
-          <div className="hidden md:flex items-center gap-10">
-            {NAVIGATION.map((item) => (
-              <button key={item.id} onClick={() => handleNavigate(item.id)} className="text-[11px] font-cinzel font-bold uppercase tracking-[0.3em] text-[#332d2b] hover:text-[#9c1c22] transition-all relative group">
-                {item.name}<span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#eeb053] transition-all group-hover:w-full" />
-              </button>
-            ))}
-            <motion.button onClick={() => handleNavigate('donate')} whileHover={{ scale: 1.05 }} className="bg-[#9c1c22] text-white px-12 py-4 rounded-full text-[11px] font-cinzel font-black tracking-[0.2em] uppercase shadow-xl border-2 border-[#eeb053]">DONATE</motion.button>
-          </div>
-          <button className="md:hidden p-2 text-[#332d2b]" onClick={() => setIsMenuOpen(!isMenuOpen)} aria-label="Toggle menu">{isMenuOpen ? <X size={28} /> : <Menu size={28} />}</button>
-        </div>
-        <AnimatePresence>
-          {isMenuOpen && (
-            <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="md:hidden glass border-b border-[#332d2b]/10 overflow-hidden shadow-2xl">
-              <div className="px-8 py-12 space-y-8 bg-white">
-                {NAVIGATION.map((item) => (<button key={item.id} onClick={() => handleNavigate(item.id)} className="block w-full text-left text-2xl font-cinzel font-bold tracking-[0.2em] text-[#332d2b] uppercase">{item.name}</button>))}
-                <button onClick={() => handleNavigate('donate')} className="w-full bg-[#9c1c22] text-white py-6 rounded-[2rem] font-cinzel font-black text-2xl border-2 border-[#eeb053] uppercase">SHOW SOME LOVE</button>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </nav>
-      <main className="relative z-10">
-        <AnimatePresence mode="wait">
-          <motion.div 
-            key={currentPage} 
-            initial={{ opacity: 0, x: 20 }} 
-            animate={{ opacity: 1, x: 0 }} 
-            exit={{ opacity: 0, x: -20 }} 
-            transition={{ duration: 0.5, ease: "anticipate" }}
-          >
-            {renderContent()}
-          </motion.div>
-        </AnimatePresence>
-      </main>
-      <footer className="bg-[#1a1a1a] text-[#fdfaf6] pt-20 md:pt-32 pb-20 relative overflow-hidden z-20 border-t-8 border-[#eeb053]">
-        <div className="max-w-7xl mx-auto px-4 relative z-10 text-center md:text-left">
-          <div className="grid lg:grid-cols-4 gap-16 mb-24 items-start">
-            <div className="lg:col-span-2">
-              <div onClick={() => handleNavigate('home')} className="cursor-pointer inline-block mb-10"><Logo className="w-24 h-24 md:w-56 md:h-56 brightness-110 drop-shadow-2xl mx-auto md:mx-0" /></div>
-              <p className="text-2xl text-[#fdfaf6]/60 max-w-lg mb-10 font-serif italic uppercase mx-auto md:mx-0">"Restoring human dignity and transforming global communities through structured compassion."</p>
-              <div className="flex flex-col gap-4 text-xl font-serif text-[#eeb053] mb-10">
-                <div className="flex items-center justify-center md:justify-start gap-4"><Phone size={20} className="text-[#9c1c22]" /> 443-402-5802</div>
-                <div className="flex items-center justify-center md:justify-start gap-4 text-left"><MapPin size={24} className="text-[#9c1c22] shrink-0" /> #9960 Raven Hurst Road, Middle River MD 21221</div>
-              </div>
-            </div>
-            <div>
-              <h5 className="text-[#eeb053] font-cinzel font-black uppercase tracking-[0.4em] text-[12px] mb-10">Sitemap</h5>
-              <ul className="space-y-6 text-xl font-serif italic text-[#fdfaf6]/50 uppercase">
-                {NAVIGATION.map(n => (<li key={n.id}><button onClick={() => handleNavigate(n.id)} className="hover:text-white transition-colors">{n.name}</button></li>))}
-              </ul>
-            </div>
-            <div>
-              <h5 className="text-[#eeb053] font-cinzel font-black uppercase tracking-[0.4em] text-[12px] mb-10">Inquiries</h5>
-              <p className="text-xl font-serif italic text-[#fdfaf6]/50 leading-relaxed italic uppercase">Direct Correspondence:<br />hello@foundationofluv.org</p>
-            </div>
-          </div>
-          <div className="pt-12 border-t border-white/5 text-[#fdfaf6]/20 text-[10px] font-cinzel font-black tracking-[0.4em] uppercase text-center md:text-left">© 2025 FOUNDATION OF LUV. LOVE IN ACTION, CHANGE IN MOTION.</div>
-        </div>
-      </footer>
-
-      <ScrollToTopButton />
-
       <AnimatePresence>
-        {showToast && (
-          <Toast message="Message Sent Successfully!" onClose={() => setShowToast(false)} />
-        )}
+        {isLoading && <LoadingScreen key="loader" />}
       </AnimatePresence>
+
+      {!isLoading && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1 }}
+        >
+          <FireworksBackground />
+          <motion.div className="fixed top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#9c1c22] via-[#eeb053] to-[#ffffff] z-[100] origin-left" style={{ scaleX: scrollYProgress }} />
+          <nav className="fixed w-full z-50 glass border-b-2 border-[#eeb053]/30">
+            <div className="max-w-7xl mx-auto px-4 h-20 md:h-32 flex justify-between items-center">
+              <div onClick={() => handleNavigate('home')} className="cursor-pointer transition-transform hover:scale-105">
+                <Logo className="w-16 h-16 md:w-28 md:h-28" />
+              </div>
+              <div className="hidden md:flex items-center gap-10">
+                {NAVIGATION.map((item) => (
+                  <button key={item.id} onClick={() => handleNavigate(item.id)} className="text-[11px] font-cinzel font-bold uppercase tracking-[0.3em] text-[#332d2b] hover:text-[#9c1c22] transition-all relative group">
+                    {item.name}<span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#eeb053] transition-all group-hover:w-full" />
+                  </button>
+                ))}
+                <motion.button onClick={() => handleNavigate('donate')} whileHover={{ scale: 1.05 }} className="bg-[#9c1c22] text-white px-12 py-4 rounded-full text-[11px] font-cinzel font-black tracking-[0.2em] uppercase shadow-xl border-2 border-[#eeb053]">DONATE</motion.button>
+              </div>
+              <button className="md:hidden p-2 text-[#332d2b]" onClick={() => setIsMenuOpen(!isMenuOpen)} aria-label="Toggle menu">{isMenuOpen ? <X size={28} /> : <Menu size={28} />}</button>
+            </div>
+            <AnimatePresence>
+              {isMenuOpen && (
+                <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="md:hidden glass border-b border-[#332d2b]/10 overflow-hidden shadow-2xl">
+                  <div className="px-8 py-12 space-y-8 bg-white">
+                    {NAVIGATION.map((item) => (<button key={item.id} onClick={() => handleNavigate(item.id)} className="block w-full text-left text-2xl font-cinzel font-bold tracking-[0.2em] text-[#332d2b] uppercase">{item.name}</button>))}
+                    <button onClick={() => handleNavigate('donate')} className="w-full bg-[#9c1c22] text-white py-6 rounded-[2rem] font-cinzel font-black text-2xl border-2 border-[#eeb053] uppercase">SHOW SOME LOVE</button>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </nav>
+          
+          <main className="relative z-10">
+            <AnimatePresence mode="wait">
+              <motion.div 
+                key={currentPage} 
+                initial={{ opacity: 0, x: 20 }} 
+                animate={{ opacity: 1, x: 0 }} 
+                exit={{ opacity: 0, x: -20 }} 
+                transition={{ duration: 0.5, ease: "anticipate" }}
+              >
+                {renderContent()}
+              </motion.div>
+            </AnimatePresence>
+          </main>
+
+          <footer className="bg-[#1a1a1a] text-[#fdfaf6] pt-20 md:pt-32 pb-20 relative overflow-hidden z-20 border-t-8 border-[#eeb053]">
+            <div className="max-w-7xl mx-auto px-4 relative z-10 text-center md:text-left">
+              <div className="grid lg:grid-cols-4 gap-16 mb-24 items-start">
+                <div className="lg:col-span-2">
+                  <div onClick={() => handleNavigate('home')} className="cursor-pointer inline-block mb-10"><Logo className="w-24 h-24 md:w-56 md:h-56 brightness-110 drop-shadow-2xl mx-auto md:mx-0" /></div>
+                  <p className="text-2xl text-[#fdfaf6]/60 max-w-lg mb-10 font-serif italic uppercase mx-auto md:mx-0">"Restoring human dignity and transforming global communities through structured compassion."</p>
+                  <div className="flex flex-col gap-4 text-xl font-serif text-[#eeb053] mb-10">
+                    <div className="flex items-center justify-center md:justify-start gap-4"><Phone size={20} className="text-[#9c1c22]" /> 443-402-5802</div>
+                    <div className="flex items-center justify-center md:justify-start gap-4 text-left"><MapPin size={24} className="text-[#9c1c22] shrink-0" /> #9960 Raven Hurst Road, Middle River MD 21221</div>
+                  </div>
+                </div>
+                <div>
+                  <h5 className="text-[#eeb053] font-cinzel font-black uppercase tracking-[0.4em] text-[12px] mb-10">Sitemap</h5>
+                  <ul className="space-y-6 text-xl font-serif italic text-[#fdfaf6]/50 uppercase">
+                    {NAVIGATION.map(n => (<li key={n.id}><button onClick={() => handleNavigate(n.id)} className="hover:text-white transition-colors">{n.name}</button></li>))}
+                  </ul>
+                </div>
+                <div>
+                  <h5 className="text-[#eeb053] font-cinzel font-black uppercase tracking-[0.4em] text-[12px] mb-10">Inquiries</h5>
+                  <p className="text-xl font-serif italic text-[#fdfaf6]/50 leading-relaxed italic uppercase">Direct Correspondence:<br />hello@foundationofluv.org</p>
+                </div>
+              </div>
+              <div className="pt-12 border-t border-white/5 text-[#fdfaf6]/20 text-[10px] font-cinzel font-black tracking-[0.4em] uppercase text-center md:text-left">© 2025 FOUNDATION OF LUV. LOVE IN ACTION, CHANGE IN MOTION.</div>
+            </div>
+          </footer>
+
+          <ScrollToTopButton />
+
+          <AnimatePresence>
+            {showToast && (
+              <Toast message="Message Sent Successfully!" onClose={() => setShowToast(false)} />
+            )}
+          </AnimatePresence>
+        </motion.div>
+      )}
     </div>
   );
 };
