@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { 
   Heart, Shield, Users, Globe, BookOpen, Home, Utensils, Zap, 
@@ -6,7 +5,8 @@ import {
   Sparkles, Star, Award, Leaf, Eye, Target, Scale, ShieldCheck, TrendingUp,
   AlertCircle, Building2, Lightbulb, Users2, Workflow, Recycle, Activity,
   PenTool, CheckCircle2, MessageSquare, Newspaper, Compass, Anchor,
-  Mic2, Crosshair, UsersRound, Baby, Wallet, Stethoscope, MapPin, Search
+  Mic2, Crosshair, UsersRound, Baby, Wallet, Stethoscope, MapPin, Search,
+  Users2 as DemographyIcon
 } from 'lucide-react';
 
 export const COLORS = {
@@ -185,16 +185,16 @@ export const HERO_IMAGES = [
 ];
 
 export const STATS = [
-  { label: "Housing Units", value: "250", suffix: "+", description: "Secure homes established" },
-  { label: "Global Reach", value: "1.2", suffix: "M", description: "Engaged in 12 months" },
-  { label: "Education", value: "3.5", suffix: "k", description: "Certifications awarded" },
-  { label: "Food Security", value: "50", suffix: "k+", description: "Meals served per quarter" },
+  { label: "Annual Housing", value: "20", suffix: "", description: "Temporary solutions" },
+  { label: "Community Meals", value: "1000", suffix: "+", description: "Served yearly" },
+  { label: "Workforce Readiness", value: "1200", suffix: "", description: "Certifications in 3 years" },
+  { label: "Advocacy Reach", value: "1", suffix: "M+", description: "People engaged annually" },
 ];
 
 export const DETAILED_ABOUT = {
   header: "About the Foundation of Luv (FOL)",
   background: {
-    title: "Background",
+    title: "Our Background",
     content: "The Foundation of Love (FOL) was created with a simple yet profound belief: that love, dignity, and compassion can transform individuals and communities. Rooted in humanitarian service, advocacy, and holistic support, FOL was established to bridge societal divides, empower the vulnerable, and create lasting pathways to opportunity. Since inception, the foundation has touched lives across diverse demographics through outreach, capacity-building, mentorship, and community-centered initiatives.",
     intro: "At FOL, we believe love is an energy that transcends barriers. Through our programs in health, education, housing, mental wellness, and community empowerment, we foster resilience and inspire individuals to reach their fullest potential. The foundation also advances global advocacy through motivational speaking, literature, and international tours that spread hope and awareness."
   },
@@ -237,35 +237,68 @@ export const DETAILED_ABOUT = {
     { title: "LUVWATTS Movement", description: "Signature identity for followers, fashion brand for advocacy, and fundraising channel." },
     { title: "Digital Access", description: "Online programs, global speaking tours, and virtual mentorship." }
   ],
+  demography: {
+    title: "Who We Serve",
+    primary: "Vulnerable families, children, minority women, youth, and underserved communities.",
+    secondary: "Broader society through reduced poverty, improved mental health, and enhanced community cohesion."
+  },
   strategicEngagement: [
     {
       level: "Local Engagement (Years 1–2)",
-      goals: ["Partner with local school districts and workforce boards.", "Align with city homeless coalitions and food banks.", "Establish brick-and-mortar hubs for direct support."],
-      outputs: ["Serve 5,000+ households in food/shelter.", "Launch 2 community hubs.", "Enroll 500 in GED programs."]
+      goals: [
+        "Partner with local school districts and workforce boards for GED/job readiness.",
+        "Align feeding/housing with city homeless coalitions and food banks.",
+        "Work with community health centers for wraparound services.",
+        "Establish brick-and-mortar hubs for direct community support."
+      ],
+      outputs: [
+        "Serve 5,000+ households annually in food and shelter.",
+        "Launch 2 major community hubs.",
+        "Enroll 500+ in GED and certification programs."
+      ]
     },
     {
       level: "State-Level Engagement (Years 1–3)",
-      goals: ["Secure state health department grants for substance abuse.", "Access state housing trust funds for transitional housing.", "Partner with state universities for technical support."],
-      outputs: ["Secure 3 state-level grants annually.", "Certify 2,000 individuals in workforce skills.", "Increase housing capacity by 25%."]
+      goals: [
+        "Align with state health departments on substance abuse & maternal health.",
+        "Access state housing trust funds for transitional programs.",
+        "Partner with state universities for technical support and research.",
+        "Scale job readiness via state workforce development boards."
+      ],
+      outputs: [
+        "Secure 3+ state-level grants annually.",
+        "Certify 2,000 individuals by Year 3.",
+        "Increase regional housing capacity by 25%."
+      ]
     },
     {
       level: "Federal Engagement (Years 2–4)",
-      goals: ["Align with HUD for housing solutions.", "Partner with SAMHSA for mental health services.", "Collaborate with DOE on career pathways and literacy."],
-      outputs: ["Win 5+ federal grant awards.", "Expand programs to 10 states.", "Serve 100,000 people cumulatively."]
+      goals: [
+        "Align with HUD for homelessness solutions.",
+        "Partner with SAMHSA for mental health services.",
+        "Apply for USDA food security grants to expand programs.",
+        "Work with DOE on literacy and career pathways."
+      ],
+      outputs: [
+        "Win 5+ federal grant awards by Year 4.",
+        "Expand programs to 10 states.",
+        "Serve 100,000 people cumulatively."
+      ]
     },
     {
       level: "International Engagement (Years 3–5)",
-      goals: ["Partner with UNICEF, WHO, and World Bank.", "Align with UN Sustainable Development Goals.", "Secure international grants and expand LUVWATTS globally."],
-      outputs: ["International recognition by UN agencies.", "Raise $10M+ in international grants.", "Launch programs in 2–3 countries."]
+      goals: [
+        "Partner with UNICEF, WHO, UN Women, and UNESCO on thematic programs.",
+        "Align with Sustainable Development Goals (SDGs) for global legitimacy.",
+        "Secure grants from USAID and international development agencies.",
+        "Expand LUVWATTS movement globally via fashion and advocacy tours."
+      ],
+      outputs: [
+        "International recognition by 3+ UN agencies.",
+        "Raise $10M+ in international funding by Year 5.",
+        "Launch programs in 2–3 international countries."
+      ]
     }
-  ],
-  statisticalAnalysis: [
-    { area: "Housing", projection: "Targeting 10-20 individuals annually with temporary housing solutions." },
-    { area: "Feeding Programs", projection: "Serving 1,000 meals yearly across communities." },
-    { area: "Education & Job Readiness", projection: "Enabling 1,200 participants to secure GEDs within 3 years." },
-    { area: "Mental Health", projection: "Offering support services to thousands within 5 years." },
-    { area: "Women's Empowerment", projection: "Reaching hundreds of minority women with financial literacy." },
-    { area: "Global Advocacy", projection: "Engaging 1 million+ people annually through campaigns." }
   ],
   closing: {
     quote: "Love is not just a sentiment; it is a system of restoration.",
