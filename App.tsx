@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform, useMotionValue, useInView, animate } from 'framer-motion';
 import { 
@@ -754,7 +753,7 @@ const DetailedAboutView = () => {
               >
                 <div className="lg:w-1/4 flex flex-col items-center text-center">
                    <div className="w-24 h-24 bg-white rounded-full flex items-center justify-center text-[#9c1c22] shadow-md group-hover:scale-110 transition-transform mb-6">
-                      {React.cloneElement(pillar.icon as React.ReactElement, { size: 40 })}
+                      {React.cloneElement(pillar.icon as React.ReactElement<any>, { size: 40 })}
                    </div>
                    <h4 className="text-2xl font-serif font-black uppercase text-[#9c1c22] leading-tight">Pillar {pillar.id}</h4>
                 </div>
