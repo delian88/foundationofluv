@@ -26,6 +26,7 @@ export const NAVIGATION = [
   { name: 'LUVWATTS', id: 'luvwatts' },
   { name: 'Gallery', id: 'gallery' },
   { name: 'Programs', id: 'programs' },
+  { name: 'Contact Us', id: 'contact' },
 ];
 
 export const LUV_ACT_PROGRAMS = [
@@ -177,6 +178,14 @@ export const GALLERY_IMAGES = [
   { url: "https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?auto=format&fit=crop&q=80&w=800", title: "Humanitarian Aid" },
   { url: "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&q=80&w=800", title: "Community Shoe Drive" },
   { url: "https://images.unsplash.com/photo-1516245834210-c4c142787335?auto=format&fit=crop&q=80&w=800", title: "LUVWATTS Movement" }
+];
+
+export const VIDEO_RESOURCES = [
+  { 
+    id: "7-4W_0Uu648", 
+    title: "Foundation of Love Impact", 
+    description: "Witness the stories of transformation and the kinetic pulse of our global outreach efforts."
+  }
 ];
 
 export const HERO_IMAGES = [

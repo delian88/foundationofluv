@@ -6,12 +6,13 @@ import {
   Target, Eye, ShieldCheck, TrendingUp, AlertCircle, Building2, Workflow, Lightbulb, Heart, Info, Phone, MapPin,
   CheckCircle2, Footprints, Zap, Star, Activity, LayoutGrid, Newspaper, MessageSquare, Shield, PenTool,
   Quote, Compass, Anchor, Mic2, UsersRound, Wallet, Stethoscope, Baby, Wallet2, Crosshair,
-  Users2 as DemographyIcon, TrendingUp as GrowthIcon, Briefcase, Home as HomeIcon, HeartPulse, GraduationCap as SchoolIcon, Coins
+  Users2 as DemographyIcon, TrendingUp as GrowthIcon, Briefcase, Home as HomeIcon, HeartPulse, GraduationCap as SchoolIcon, Coins,
+  Play, Mail, Handshake, HeartHandshake, Send
 } from 'lucide-react';
 import { 
   NAVIGATION, STRATEGIC_PHASES, STATS, COLORS, HERO_IMAGES, GALLERY_IMAGES,
   MISSION_VISION, DETAILED_ABOUT, DONOR_PAGE_CONTENT, LUV_ACT_PROGRAMS, LEADERSHIP_MESSAGE, LUVWATTS_CONTENT,
-  GLOBAL_SERVICES_DATA
+  GLOBAL_SERVICES_DATA, VIDEO_RESOURCES
 } from './constants';
 
 // --- Global UI Components ---
@@ -109,7 +110,458 @@ const AnimatedNumber = ({ value }: { value: string }) => {
   return <motion.span ref={ref}>{rounded}</motion.span>;
 };
 
+// --- New Rich Content Components ---
+
+const PartnersMarquee = () => {
+  const partners = ["Microsoft", "Amazon", "OpenAI", "Anthropic", "Google", "Meta", "Harvard", "MIT", "Stanford", "UNICEF", "WHO", "USAID"];
+  return (
+    <div className="py-20 bg-white border-y border-black/5 overflow-hidden">
+      <div className="max-w-7xl mx-auto px-4 mb-10 text-center">
+        <span className="text-[#9c1c22] font-cinzel font-black tracking-[0.4em] text-[10px] uppercase">Institutional Alliances & Strategic Partners</span>
+      </div>
+      <div className="relative flex overflow-x-hidden">
+        <motion.div 
+          animate={{ x: [0, -1000] }}
+          transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+          className="flex whitespace-nowrap gap-20 py-4 items-center"
+        >
+          {[...partners, ...partners].map((p, i) => (
+            <span key={i} className="text-3xl md:text-5xl font-serif font-black uppercase text-[#332d2b]/10 hover:text-[#9c1c22] transition-colors cursor-default select-none tracking-tighter">
+              {p}
+            </span>
+          ))}
+        </motion.div>
+      </div>
+    </div>
+  );
+};
+
+const LeadershipVision = () => {
+  return (
+    <section className="py-24 md:py-40 bg-[#fdfaf6] overflow-hidden">
+      <div className="max-w-7xl mx-auto px-4 grid lg:grid-cols-12 gap-20 items-center">
+        <div className="lg:col-span-5 relative">
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            className="aspect-[3/4] rounded-[5rem] overflow-hidden shadow-3xl border-8 border-white relative z-10 flex items-center justify-center bg-white p-12 md:p-20"
+          >
+            <Logo className="w-full h-auto drop-shadow-2xl" />
+          </motion.div>
+          <div className="absolute -bottom-10 -right-10 w-48 h-48 bg-[#eeb053] rounded-full flex items-center justify-center p-8 shadow-2xl z-20">
+            <Logo className="w-full h-full invert brightness-0" />
+          </div>
+        </div>
+        <div className="lg:col-span-7">
+          <Quote className="w-16 h-16 text-[#eeb053] mb-8 opacity-20" />
+          <h3 className="text-3xl md:text-5xl font-serif font-black text-[#332d2b] leading-tight uppercase mb-10">
+            {LEADERSHIP_MESSAGE.title}
+          </h3>
+          <p className="text-xl md:text-2xl font-serif italic text-[#332d2b]/70 leading-relaxed uppercase mb-12">
+            "{LEADERSHIP_MESSAGE.content}"
+          </p>
+          <div className="flex items-center gap-6">
+            <div className="h-px w-12 bg-[#9c1c22]" />
+            <div>
+              <p className="font-cinzel font-black text-sm uppercase tracking-widest text-[#9c1c22]">{LEADERSHIP_MESSAGE.author}</p>
+              <p className="font-serif italic text-lg uppercase text-[#eeb053]">{LEADERSHIP_MESSAGE.tagline}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const EngagementPathways = () => {
+  const pathways = [
+    { title: "Volunteer", icon: <Users size={32} />, desc: "Join our kinetic pulse on the frontlines of restoration." },
+    { title: "Corporate", icon: <Handshake size={32} />, desc: "Institutionalize impact through strategic philanthropy." },
+    { title: "Sustainer", icon: <HeartHandshake size={32} />, desc: "Fuel long-term change with recurring monthly support." }
+  ];
+  return (
+    <section className="py-24 bg-white">
+      <div className="max-w-7xl mx-auto px-4 grid md:grid-cols-3 gap-8">
+        {pathways.map((p, i) => (
+          <motion.div 
+            key={i}
+            whileHover={{ y: -10 }}
+            className="p-12 rounded-[4rem] bg-[#fdfaf6] border-2 border-transparent hover:border-[#eeb053] transition-all shadow-xl group text-center"
+          >
+            <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center mx-auto mb-8 text-[#9c1c22] shadow-md group-hover:scale-110 transition-transform">
+              {p.icon}
+            </div>
+            <h4 className="text-2xl font-serif font-black uppercase mb-4">{p.title}</h4>
+            <p className="text-lg font-serif italic text-[#332d2b]/50 uppercase mb-8">{p.desc}</p>
+            <button className="text-[10px] font-cinzel font-black text-[#9c1c22] uppercase tracking-[0.4em] flex items-center gap-3 mx-auto">
+              Get Started <MoveRight size={14} />
+            </button>
+          </motion.div>
+        ))}
+      </div>
+    </section>
+  );
+};
+
+const NewsletterSection = () => (
+  <section className="py-24 bg-[#9c1c22] relative overflow-hidden">
+    <div className="absolute inset-0 opacity-5">
+      <Logo className="w-full h-full scale-150 rotate-12" />
+    </div>
+    <div className="max-w-4xl mx-auto px-4 text-center relative z-10 text-white">
+      <Mail className="w-12 h-12 mx-auto mb-8 text-[#eeb053]" />
+      <h3 className="text-4xl md:text-6xl font-serif font-black uppercase mb-8 leading-none">Stay In <span className="text-[#eeb053] italic">Motion.</span></h3>
+      <p className="text-xl font-serif italic uppercase mb-12 opacity-70 tracking-widest">Join the LUV-MAIL movement for monthly restoration insights.</p>
+      <div className="flex flex-col md:flex-row gap-4 max-w-2xl mx-auto">
+        <input 
+          type="email" 
+          placeholder="ENTER YOUR CORRESPONDENCE EMAIL" 
+          className="flex-grow bg-white/10 border-2 border-white/20 px-8 py-5 rounded-full text-white font-cinzel text-xs tracking-widest focus:outline-none focus:border-[#eeb053] transition-all"
+        />
+        <button className="bg-white text-[#9c1c22] px-12 py-5 rounded-full font-cinzel font-black tracking-widest text-xs hover:bg-[#1a1a1a] hover:text-white transition-all">ENROLL</button>
+      </div>
+    </div>
+  </section>
+);
+
+// --- Contact Page View ---
+
+const ContactView = () => {
+  return (
+    <section className="pt-48 pb-32 bg-white relative overflow-hidden">
+      <div className="max-w-7xl mx-auto px-4 relative z-10">
+        <header className="text-center mb-24">
+          <motion.span initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-[#9c1c22] font-cinzel font-black tracking-[0.5em] text-[12px] uppercase mb-8 block">Reach Out</motion.span>
+          <h2 className="text-6xl md:text-[8rem] font-serif font-black text-[#332d2b] mb-12 uppercase leading-none tracking-tighter">
+            Contact <span className="text-[#eeb053] italic">Us.</span>
+          </h2>
+          <p className="text-2xl font-serif italic text-[#332d2b]/60 max-w-4xl mx-auto uppercase">
+            Let's forge pathways of restoration together. Our team is ready to respond to your inquiries.
+          </p>
+        </header>
+
+        <div className="grid lg:grid-cols-2 gap-16 md:gap-32 items-start">
+          <motion.div initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }} className="space-y-16">
+            <div>
+              <h3 className="text-3xl font-serif font-black uppercase mb-8">Headquarters</h3>
+              <div className="space-y-8">
+                <div className="flex items-start gap-6">
+                  <div className="p-4 bg-[#fdfaf6] rounded-2xl text-[#9c1c22] shadow-sm"><MapPin size={24} /></div>
+                  <div>
+                    <p className="text-[10px] font-cinzel font-black uppercase tracking-widest text-[#eeb053] mb-2">Location</p>
+                    <p className="text-xl font-serif italic text-[#332d2b] uppercase">#9960 Raven Hurst Road, Middle River MD 21221</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-6">
+                  <div className="p-4 bg-[#fdfaf6] rounded-2xl text-[#9c1c22] shadow-sm"><Phone size={24} /></div>
+                  <div>
+                    <p className="text-[10px] font-cinzel font-black uppercase tracking-widest text-[#eeb053] mb-2">Voice</p>
+                    <p className="text-xl font-serif italic text-[#332d2b] uppercase">443-402-5802</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-6">
+                  <div className="p-4 bg-[#fdfaf6] rounded-2xl text-[#9c1c22] shadow-sm"><Mail size={24} /></div>
+                  <div>
+                    <p className="text-[10px] font-cinzel font-black uppercase tracking-widest text-[#eeb053] mb-2">Correspondence</p>
+                    <p className="text-xl font-serif italic text-[#332d2b] uppercase">hello@foundationofluv.org</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="p-12 bg-[#f9f5f0] rounded-[4rem] border-2 border-[#eeb053]/20 shadow-xl">
+              <h4 className="text-2xl font-cinzel font-black text-[#9c1c22] mb-6 uppercase">Operating Hours</h4>
+              <p className="text-lg font-serif italic text-[#332d2b]/60 uppercase leading-relaxed">
+                Monday — Friday: 9:00 AM – 6:00 PM EST<br />
+                Saturday: 10:00 AM – 2:00 PM EST<br />
+                Sunday: Emergency Response Only
+              </p>
+            </div>
+          </motion.div>
+
+          <motion.div initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} className="bg-white p-10 md:p-16 rounded-[4rem] shadow-3xl border border-black/5">
+            <h3 className="text-3xl font-serif font-black uppercase mb-12">Send a Message</h3>
+            <form className="space-y-8" onSubmit={(e) => e.preventDefault()}>
+              <div className="grid md:grid-cols-2 gap-8">
+                <div className="space-y-2">
+                  <label className="text-[10px] font-cinzel font-black uppercase tracking-widest opacity-40 ml-4">Full Name</label>
+                  <input type="text" placeholder="YOUR NAME" className="w-full bg-[#fdfaf6] border-2 border-transparent focus:border-[#eeb053] px-8 py-5 rounded-full font-serif italic uppercase outline-none transition-all" />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-cinzel font-black uppercase tracking-widest opacity-40 ml-4">Email Address</label>
+                  <input type="email" placeholder="EMAIL@DOMAIN.COM" className="w-full bg-[#fdfaf6] border-2 border-transparent focus:border-[#eeb053] px-8 py-5 rounded-full font-serif italic uppercase outline-none transition-all" />
+                </div>
+              </div>
+              <div className="space-y-2">
+                <label className="text-[10px] font-cinzel font-black uppercase tracking-widest opacity-40 ml-4">Subject of Interest</label>
+                <select className="w-full bg-[#fdfaf6] border-2 border-transparent focus:border-[#eeb053] px-8 py-5 rounded-full font-serif italic uppercase outline-none appearance-none transition-all cursor-pointer">
+                  <option>GENERAL INQUIRY</option>
+                  <option>VOLUNTEER OPPORTUNITIES</option>
+                  <option>CORPORATE PARTNERSHIPS</option>
+                  <option>PROGRAM ASSISTANCE</option>
+                  <option>PRESS & MEDIA</option>
+                </select>
+              </div>
+              <div className="space-y-2">
+                <label className="text-[10px] font-cinzel font-black uppercase tracking-widest opacity-40 ml-4">Message Content</label>
+                <textarea rows={5} placeholder="TELL US HOW WE CAN RESTORE TOGETHER..." className="w-full bg-[#fdfaf6] border-2 border-transparent focus:border-[#eeb053] px-8 py-6 rounded-[2rem] font-serif italic uppercase outline-none transition-all resize-none"></textarea>
+              </div>
+              <button className="w-full bg-[#9c1c22] text-white py-6 rounded-full font-cinzel font-black uppercase tracking-[0.3em] shadow-xl hover:bg-[#1a1a1a] transition-all flex items-center justify-center gap-4">
+                Deploy Message <Send size={20} />
+              </button>
+            </form>
+          </motion.div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+// --- Video Component ---
+const VideoSection = ({ videoId, title, description }: { videoId: string, title: string, description?: string }) => {
+  return (
+    <div className="max-w-6xl mx-auto px-4 py-20">
+      {title && (
+        <div className="text-center mb-12">
+          <h3 className="text-3xl md:text-5xl font-serif font-black text-[#332d2b] uppercase mb-4">{title}</h3>
+          {description && <p className="text-xl font-serif italic text-[#332d2b]/60 uppercase">{description}</p>}
+        </div>
+      )}
+      <motion.div 
+        initial={{ opacity: 0, scale: 0.95 }}
+        whileInView={{ opacity: 1, scale: 1 }}
+        viewport={{ once: true }}
+        className="relative aspect-video rounded-[3rem] overflow-hidden shadow-3xl border-[12px] md:border-[20px] border-white group"
+      >
+        <iframe 
+          className="absolute inset-0 w-full h-full"
+          src={`https://www.youtube.com/embed/${videoId}?rel=0&modestbranding=1`}
+          title={title}
+          frameBorder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowFullScreen
+        />
+        <div className="absolute inset-0 pointer-events-none border-[1px] border-black/5 rounded-[2rem] md:rounded-[4rem]"></div>
+      </motion.div>
+    </div>
+  );
+};
+
 // --- Page Content Views ---
+
+const HomeView = ({ onNavigate }: { onNavigate: (id: string) => void }) => {
+  const [currentSlide, setCurrentSlide] = useState(0);
+  useEffect(() => {
+    const timer = setInterval(() => setCurrentSlide((prev) => (prev + 1) % HERO_IMAGES.length), 8000);
+    return () => clearInterval(timer);
+  }, []);
+
+  return (
+    <div className="relative z-10">
+      <header className="relative w-full pt-32 pb-16 md:pt-64 md:pb-32 lg:pt-72 lg:pb-40 min-h-[70vh] md:min-h-[90vh] flex items-center overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 text-center flex flex-col items-center w-full">
+          <motion.div initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} className="relative group p-0 md:p-12 w-full max-w-[850px]">
+            <div className="relative aspect-video rounded-[2rem] md:rounded-[4rem] overflow-hidden border-[6px] md:border-[16px] border-white shadow-2xl">
+              <AnimatePresence mode="wait">
+                <motion.div key={currentSlide} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 1 }} className="absolute inset-0">
+                  <img src={HERO_IMAGES[currentSlide].url} alt={HERO_IMAGES[currentSlide].caption} className="w-full h-full object-cover brightness-75" />
+                  <div className="absolute bottom-0 left-0 right-0 p-6 md:p-10 bg-gradient-to-t from-black/80 to-transparent text-left">
+                    <span className="text-[#eeb053] font-cinzel font-black tracking-[0.4em] text-[8px] md:text-[10px] uppercase">Movement Chapter</span>
+                    <h3 className="text-white text-base md:text-4xl font-serif italic font-bold uppercase">{HERO_IMAGES[currentSlide].caption}</h3>
+                  </div>
+                </motion.div>
+              </AnimatePresence>
+            </div>
+            <motion.div animate={{ y: [0, -10, 0] }} transition={{ duration: 6, repeat: Infinity }} className="absolute -top-4 -right-4 md:-top-12 md:-right-12 w-16 h-16 md:w-44 md:h-44 z-40"><Logo className="w-full h-full drop-shadow-2xl" /></motion.div>
+          </motion.div>
+          <div className="mt-8 md:mt-12">
+            <h1 className="hero-text text-3xl md:text-[6rem] font-serif font-black leading-tight text-shine-crimson uppercase">Love in Action,<br /><span className="italic font-normal text-shine text-[#eeb053]">Change in Motion.</span></h1>
+            <p className="mobile-p text-sm md:text-2xl text-[#332d2b]/70 mt-6 max-w-4xl mx-auto font-serif italic text-center uppercase">"We are the kinetic pulse of restoration, engineering pathways where human dignity is an unshakeable reality."</p>
+            <div className="flex flex-col md:flex-row gap-4 md:gap-6 justify-center mt-8 md:mt-12">
+              <button onClick={() => onNavigate('donate')} className="px-10 py-5 bg-[#9c1c22] text-white rounded-full font-cinzel font-black text-lg shadow-xl flex items-center gap-3 hover:bg-[#7a141a] transition-all uppercase">Show some Love <MoveRight /></button>
+              <button onClick={() => onNavigate('aboutus')} className="px-10 py-5 glass-card rounded-full font-cinzel font-bold text-lg border border-[#eeb053]/50 flex items-center justify-center gap-3 hover:bg-white/60 transition-all uppercase">Explore Our Story <ArrowRight /></button>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      {/* NEW: Partners Showcase */}
+      <PartnersMarquee />
+
+      {/* LET'S GIVE THOSE FEET Shoes Section - INTACT */}
+      <section className="min-h-screen py-16 md:py-24 bg-white relative overflow-hidden border-y border-black/5 flex items-center">
+        <div className="max-w-7xl mx-auto px-4 relative z-10 w-full">
+          <div className="text-center mb-10 md:mb-16 relative">
+            <motion.div initial={{ opacity: 0, scale: 0.9 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }}>
+              <h2 className="text-3xl md:text-[6rem] font-black text-[#1a1a1a] leading-[0.8] mb-0 uppercase tracking-[-0.05em] drop-shadow-md">
+                LET'S GIVE <br className="hidden md:block" /> THOSE FEET
+              </h2>
+              <div className="relative inline-block mt-1 md:mt-[-2rem]">
+                <h3 className="text-2xl md:text-[5rem] font-serif italic text-[#9c1c22] leading-none uppercase drop-shadow-sm font-bold">
+                  Shoes
+                </h3>
+              </div>
+            </motion.div>
+          </div>
+
+          <div className="grid lg:grid-cols-2 gap-8 md:gap-16 items-center">
+            <div className="relative order-2 lg:order-1">
+              <div className="relative aspect-square max-w-[240px] md:max-w-[450px] mx-auto p-4 md:p-8 bg-white rounded-full shadow-inner border-[1px] border-black/5">
+                <div className="absolute inset-0 flex items-center justify-center">
+                   <div className="relative w-full h-full">
+                      {[
+                        { url: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&q=80&w=400", pos: "top-0 left-1/2 -translate-x-1/2" },
+                        { url: "https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?auto=format&fit=crop&q=80&w=400", pos: "top-1/4 right-0" },
+                        { url: "https://images.unsplash.com/photo-1605348532760-6753d2c43329?auto=format&fit=crop&q=80&w=400", pos: "bottom-0 right-1/4" },
+                        { url: "https://images.unsplash.com/photo-1560769629-975ec94e6a86?auto=format&fit=crop&q=80&w=400", pos: "bottom-0 left-1/4" },
+                        { url: "https://images.unsplash.com/photo-1460353581641-37baddab0fa2?auto=format&fit=crop&q=80&w=400", pos: "top-1/4 left-0" },
+                        { url: "https://images.unsplash.com/photo-1533681904393-9ab6eba7b4d0?auto=format&fit=crop&q=80&w=400", pos: "bottom-1/4 left-0" },
+                      ].map((img, i) => (
+                        <motion.div 
+                          key={i}
+                          initial={{ opacity: 0, scale: 0.5 }}
+                          whileInView={{ opacity: 1, scale: 1 }}
+                          whileHover={{ scale: 1.1, zIndex: 50 }}
+                          className={`absolute w-10 h-10 md:w-28 md:h-28 rounded-full overflow-hidden border-2 md:border-4 border-white shadow-lg transition-all duration-500 cursor-pointer ${img.pos}`}
+                        >
+                          <img src={img.url} className="w-full h-full object-cover grayscale hover:grayscale-0" alt="Shoe drive donation" />
+                        </motion.div>
+                      ))}
+                   </div>
+                </div>
+                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                  <motion.div 
+                    animate={{ scale: [1, 1.05, 1] }} 
+                    className="w-16 h-16 md:w-44 md:h-44 bg-white rounded-full shadow-[0_0_40px_rgba(156,28,34,0.1)] flex items-center justify-center p-2 md:p-5 border-[1px] border-[#eeb053] relative"
+                  >
+                    <Logo className="w-full h-full z-10" />
+                  </motion.div>
+                </div>
+              </div>
+            </div>
+
+            <div className="order-1 lg:order-2 space-y-4 md:space-y-8 relative">
+              <motion.div 
+                initial={{ rotate: -5, scale: 0.8, opacity: 0 }}
+                whileInView={{ rotate: 0, scale: 1, opacity: 1 }}
+                viewport={{ once: true }}
+                className="relative z-20"
+              >
+                <div className="bg-[#eeb053] text-[#9c1c22] p-5 md:p-8 rounded-[1.5rem] md:rounded-[2.5rem] shadow-2xl relative overflow-hidden">
+                  <h4 className="text-lg md:text-3xl font-black uppercase leading-tight italic text-center text-shine-crimson">
+                    Our Community efforts <br /> where we show love <br /> and help
+                  </h4>
+                </div>
+              </motion.div>
+              <div className="pl-6 border-l-4 border-[#9c1c22]">
+                <p className="text-xl font-serif italic text-[#332d2b]/60 uppercase leading-relaxed">
+                  "At Foundation of Luv (FOL), providing dignity is the first step toward lasting community empowerment."
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* NEW: Leadership Vision */}
+      <LeadershipVision />
+
+      {/* Featured Video Section - Home Page - INTACT */}
+      <section className="bg-[#f9f5f0] border-y border-[#332d2b]/5">
+        <VideoSection 
+          videoId={VIDEO_RESOURCES[0].id} 
+          title="Featured Impact Story" 
+          description={VIDEO_RESOURCES[0].description} 
+        />
+      </section>
+
+      {/* SOLID GROWTH - Poster Section - INTACT */}
+      <section className="min-h-screen py-12 md:py-16 bg-[#1a0c1a] text-white relative overflow-hidden flex items-center border-y border-[#ffffff]/10">
+        <div className="absolute inset-0 bg-gradient-to-br from-[#2d1b4d] via-[#8b1a1a] to-[#df8c3d] opacity-90" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_transparent_0%,_#1a0c1a_100%)] opacity-80" />
+        
+        <div className="max-w-7xl mx-auto px-4 w-full relative z-10 flex flex-col h-full max-h-screen justify-between">
+           {/* Header Area */}
+           <div className="flex justify-between items-center opacity-40 px-2 mb-6">
+             <div className="flex items-center gap-2">
+               <Logo className="w-5 h-5 md:w-6 md:h-6 rounded-full" />
+               <span className="text-[6px] md:text-[9px] font-cinzel tracking-[0.2em] md:tracking-[0.4em] uppercase">FOL Profile</span>
+             </div>
+             <div className="h-px flex-grow mx-4 md:mx-10 bg-white/20" />
+             <span className="text-[6px] md:text-[9px] font-cinzel tracking-[0.2em] md:tracking-[0.4em] uppercase">LUVWATTS</span>
+           </div>
+
+           <div className="grid lg:grid-cols-12 gap-6 md:gap-8 items-center flex-grow">
+             {/* Left Text */}
+             <div className="lg:col-span-4 flex flex-col items-center lg:items-end">
+                <motion.h2 
+                  initial={{ opacity: 0, x: -30 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  className="text-2xl md:text-[4.5rem] font-serif font-black leading-[0.85] tracking-tighter text-center lg:text-right uppercase flex flex-col gap-1 md:gap-2"
+                >
+                  <span className="text-white">Solid</span>
+                  <span className="text-white">Growth,</span>
+                  <span className="text-[#eeb053] italic">Love in</span>
+                  <span className="text-white">Action,</span>
+                  <span className="text-white">Change</span>
+                  <span className="text-[#9c1c22] italic">in Motion</span>
+                </motion.h2>
+             </div>
+
+             {/* Center Graphic */}
+             <div className="lg:col-span-4 flex justify-center relative">
+               <motion.div 
+                 animate={{ scale: [1, 1.03, 1] }}
+                 transition={{ duration: 5, repeat: Infinity }}
+                 className="relative w-full max-w-[200px] md:max-w-[340px] aspect-[4/5] flex items-center justify-center"
+               >
+                 <svg viewBox="0 0 400 500" className="w-full h-full drop-shadow-[0_0_15px_rgba(255,255,255,0.2)] md:drop-shadow-[0_0_25px_rgba(255,255,255,0.3)]">
+                    <filter id="neonGlowS">
+                      <feGaussianBlur stdDeviation="6" result="blur" />
+                      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                    </filter>
+                    <path d="M200,450 C100,350 50,250 50,150 C50,80 120,50 200,120 C280,50 350,80 350,150 C350,250 300,350 200,450 Z" fill="none" stroke="#ffffff" strokeWidth="1" opacity="0.1" />
+                    <path d="M200,440 C110,345 60,245 60,155 C60,95 125,65 200,130 C275,65 340,95 340,155 C340,245 290,345 200,440 Z" fill="none" stroke="#eeb053" strokeWidth="4" filter="url(#neonGlowS)" opacity="0.7" />
+                    <path d="M200,440 C110,345 60,245 60,155 C60,95 125,65 200,130 C275,65 340,95 340,155 C340,245 290,345 200,440 Z" fill="none" stroke="#ffffff" strokeWidth="1.5" />
+                 </svg>
+                 <div className="absolute top-[45%] left-1/2 -translate-x-1/2 -translate-y-1/2">
+                   <Logo className="w-12 h-12 md:w-24 md:h-24 drop-shadow-[0_0_15px_rgba(255,255,255,0.6)]" />
+                 </div>
+               </motion.div>
+             </div>
+           </div>
+        </div>
+      </section>
+
+      {/* NEW: Engagement Pathways */}
+      <EngagementPathways />
+
+      {/* Impact Stats - INTACT */}
+      <section className="py-24 md:py-48 bg-white overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12 md:gap-16">
+            {STATS.map((stat, i) => (
+              <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }} className="text-center">
+                <div className="text-6xl md:text-9xl font-serif font-black text-[#9c1c22] mb-4 md:mb-6 leading-none">
+                  <AnimatedNumber value={stat.value} />
+                  <span className="text-[#eeb053]">{stat.suffix}</span>
+                </div>
+                <h4 className="font-cinzel font-black text-[10px] md:text-[12px] tracking-[0.4em] uppercase mb-4 md:mb-6 text-[#332d2b]">{stat.label}</h4>
+                <div className="h-0.5 w-10 md:w-12 bg-[#9c1c22] mx-auto mb-4 md:mb-6" />
+                <p className="font-serif italic text-lg md:text-xl text-[#332d2b]/40 uppercase leading-snug">{stat.description}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* NEW: Newsletter Section */}
+      <NewsletterSection />
+    </div>
+  );
+};
 
 const DetailedAboutView = () => {
   const { scrollYProgress } = useScroll();
@@ -195,193 +647,6 @@ const RoadmapView = () => (
   </section>
 );
 
-const HomeView = ({ onNavigate }: { onNavigate: (id: string) => void }) => {
-  const [currentSlide, setCurrentSlide] = useState(0);
-  useEffect(() => {
-    const timer = setInterval(() => setCurrentSlide((prev) => (prev + 1) % HERO_IMAGES.length), 8000);
-    return () => clearInterval(timer);
-  }, []);
-
-  return (
-    <div className="relative z-10">
-      <header className="relative w-full pt-32 pb-16 md:pt-64 md:pb-32 lg:pt-72 lg:pb-40 min-h-[70vh] md:min-h-[90vh] flex items-center overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 text-center flex flex-col items-center w-full">
-          <motion.div initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} className="relative group p-0 md:p-12 w-full max-w-[850px]">
-            <div className="relative aspect-video rounded-[2rem] md:rounded-[4rem] overflow-hidden border-[6px] md:border-[16px] border-white shadow-2xl">
-              <AnimatePresence mode="wait">
-                <motion.div key={currentSlide} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 1 }} className="absolute inset-0">
-                  <img src={HERO_IMAGES[currentSlide].url} alt={HERO_IMAGES[currentSlide].caption} className="w-full h-full object-cover brightness-75" />
-                  <div className="absolute bottom-0 left-0 right-0 p-6 md:p-10 bg-gradient-to-t from-black/80 to-transparent text-left">
-                    <span className="text-[#eeb053] font-cinzel font-black tracking-[0.4em] text-[8px] md:text-[10px] uppercase">Movement Chapter</span>
-                    <h3 className="text-white text-base md:text-4xl font-serif italic font-bold uppercase">{HERO_IMAGES[currentSlide].caption}</h3>
-                  </div>
-                </motion.div>
-              </AnimatePresence>
-            </div>
-            <motion.div animate={{ y: [0, -10, 0] }} transition={{ duration: 6, repeat: Infinity }} className="absolute -top-4 -right-4 md:-top-12 md:-right-12 w-16 h-16 md:w-44 md:h-44 z-40"><Logo className="w-full h-full drop-shadow-2xl" /></motion.div>
-          </motion.div>
-          <div className="mt-8 md:mt-12">
-            <h1 className="hero-text text-3xl md:text-[6rem] font-serif font-black leading-tight text-shine-crimson uppercase">Love in Action,<br /><span className="italic font-normal text-shine text-[#eeb053]">Change in Motion.</span></h1>
-            <p className="mobile-p text-sm md:text-2xl text-[#332d2b]/70 mt-6 max-w-4xl mx-auto font-serif italic text-center uppercase">"We are the kinetic pulse of restoration, engineering pathways where human dignity is an unshakeable reality."</p>
-            <div className="flex flex-col md:flex-row gap-4 md:gap-6 justify-center mt-8 md:mt-12">
-              <button onClick={() => onNavigate('donate')} className="px-10 py-5 bg-[#9c1c22] text-white rounded-full font-cinzel font-black text-lg shadow-xl flex items-center gap-3 hover:bg-[#7a141a] transition-all uppercase">Show some Love <MoveRight /></button>
-              <button onClick={() => onNavigate('aboutus')} className="px-10 py-5 glass-card rounded-full font-cinzel font-bold text-lg border border-[#eeb053]/50 flex items-center justify-center gap-3 hover:bg-white/60 transition-all uppercase">Explore Our Story <ArrowRight /></button>
-            </div>
-          </div>
-        </div>
-      </header>
-
-      {/* LET'S GIVE THOSE FEET Shoes - Immersive Outreach Poster Section - Reduced Scale */}
-      <section className="min-h-screen py-16 md:py-24 bg-white relative overflow-hidden border-y border-[#332d2b]/5 flex items-center">
-        <div className="max-w-7xl mx-auto px-4 relative z-10 w-full">
-          <div className="text-center mb-10 md:mb-16 relative">
-            <motion.div initial={{ opacity: 0, scale: 0.9 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }}>
-              <h2 className="text-3xl md:text-[6rem] font-black text-[#1a1a1a] leading-[0.8] mb-0 uppercase tracking-[-0.05em] drop-shadow-md">
-                LET'S GIVE <br className="hidden md:block" /> THOSE FEET
-              </h2>
-              <div className="relative inline-block mt-1 md:mt-[-2rem]">
-                <h3 className="text-2xl md:text-[5rem] font-serif italic text-[#9c1c22] leading-none uppercase drop-shadow-sm font-bold">
-                  Shoes
-                </h3>
-              </div>
-            </motion.div>
-          </div>
-
-          <div className="grid lg:grid-cols-2 gap-8 md:gap-16 items-center">
-            <div className="relative order-2 lg:order-1">
-              <div className="relative aspect-square max-w-[240px] md:max-w-[450px] mx-auto p-4 md:p-8 bg-white rounded-full shadow-inner border-[1px] border-black/5">
-                <div className="absolute inset-0 flex items-center justify-center">
-                   <div className="relative w-full h-full">
-                      {[
-                        { url: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&q=80&w=400", pos: "top-0 left-1/2 -translate-x-1/2" },
-                        { url: "https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?auto=format&fit=crop&q=80&w=400", pos: "top-1/4 right-0" },
-                        { url: "https://images.unsplash.com/photo-1605348532760-6753d2c43329?auto=format&fit=crop&q=80&w=400", pos: "bottom-0 right-1/4" },
-                        { url: "https://images.unsplash.com/photo-1560769629-975ec94e6a86?auto=format&fit=crop&q=80&w=400", pos: "bottom-0 left-1/4" },
-                        { url: "https://images.unsplash.com/photo-1460353581641-37baddab0fa2?auto=format&fit=crop&q=80&w=400", pos: "top-1/4 left-0" },
-                        { url: "https://images.unsplash.com/photo-1533681904393-9ab6eba7b4d0?auto=format&fit=crop&q=80&w=400", pos: "bottom-1/4 left-0" },
-                      ].map((img, i) => (
-                        <motion.div 
-                          key={i}
-                          initial={{ opacity: 0, scale: 0.5 }}
-                          whileInView={{ opacity: 1, scale: 1 }}
-                          whileHover={{ scale: 1.1, zIndex: 50 }}
-                          className={`absolute w-10 h-10 md:w-28 md:h-28 rounded-full overflow-hidden border-2 md:border-4 border-white shadow-lg transition-all duration-500 cursor-pointer ${img.pos}`}
-                        >
-                          <img src={img.url} className="w-full h-full object-cover grayscale hover:grayscale-0" alt="Shoe drive donation" />
-                        </motion.div>
-                      ))}
-                   </div>
-                </div>
-                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                  <motion.div 
-                    animate={{ scale: [1, 1.05, 1] }} 
-                    className="w-16 h-16 md:w-44 md:h-44 bg-white rounded-full shadow-[0_0_40px_rgba(156,28,34,0.1)] flex items-center justify-center p-2 md:p-5 border-[1px] border-[#eeb053] relative"
-                  >
-                    <Logo className="w-full h-full z-10" />
-                  </motion.div>
-                </div>
-              </div>
-            </div>
-
-            <div className="order-1 lg:order-2 space-y-4 md:space-y-8 relative">
-              <motion.div 
-                initial={{ rotate: -5, scale: 0.8, opacity: 0 }}
-                whileInView={{ rotate: 0, scale: 1, opacity: 1 }}
-                viewport={{ once: true }}
-                className="relative z-20"
-              >
-                <div className="bg-[#eeb053] text-[#9c1c22] p-5 md:p-8 rounded-[1.5rem] md:rounded-[2.5rem] shadow-2xl relative overflow-hidden">
-                  <h4 className="text-lg md:text-3xl font-black uppercase leading-tight italic text-center text-shine-crimson">
-                    Our Community efforts <br /> where we show love <br /> and help
-                  </h4>
-                </div>
-              </motion.div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* SOLID GROWTH - Poster Section - Content Fully Contained */}
-      <section className="min-h-screen py-12 md:py-16 bg-[#1a0c1a] text-white relative overflow-hidden flex items-center border-y border-[#ffffff]/10">
-        <div className="absolute inset-0 bg-gradient-to-br from-[#2d1b4d] via-[#8b1a1a] to-[#df8c3d] opacity-90" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_transparent_0%,_#1a0c1a_100%)] opacity-80" />
-        
-        <div className="max-w-7xl mx-auto px-4 w-full relative z-10 flex flex-col h-full max-h-screen justify-between">
-           {/* Header Area */}
-           <div className="flex justify-between items-center opacity-40 px-2 mb-6">
-             <div className="flex items-center gap-2">
-               <Logo className="w-5 h-5 md:w-6 md:h-6 rounded-full" />
-               <span className="text-[6px] md:text-[9px] font-cinzel tracking-[0.2em] md:tracking-[0.4em] uppercase">FOL Profile</span>
-             </div>
-             <div className="h-px flex-grow mx-4 md:mx-10 bg-white/20" />
-             <span className="text-[6px] md:text-[9px] font-cinzel tracking-[0.2em] md:tracking-[0.4em] uppercase">LUVWATTS</span>
-           </div>
-
-           <div className="grid lg:grid-cols-12 gap-6 md:gap-8 items-center flex-grow">
-             {/* Left Text */}
-             <div className="lg:col-span-4 flex flex-col items-center lg:items-end">
-                <motion.h2 
-                  initial={{ opacity: 0, x: -30 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  className="text-2xl md:text-[4.5rem] font-serif font-black leading-[0.85] tracking-tighter text-center lg:text-right uppercase flex flex-col gap-1 md:gap-2"
-                >
-                  <span className="text-white">Solid</span>
-                  <span className="text-white">Growth,</span>
-                  <span className="text-[#eeb053] italic">Love in</span>
-                  <span className="text-white">Action,</span>
-                  <span className="text-white">Change</span>
-                  <span className="text-[#9c1c22] italic">in Motion</span>
-                </motion.h2>
-             </div>
-
-             {/* Center Graphic */}
-             <div className="lg:col-span-4 flex justify-center relative">
-               <motion.div 
-                 animate={{ scale: [1, 1.03, 1] }}
-                 transition={{ duration: 5, repeat: Infinity }}
-                 className="relative w-full max-w-[200px] md:max-w-[340px] aspect-[4/5] flex items-center justify-center"
-               >
-                 <svg viewBox="0 0 400 500" className="w-full h-full drop-shadow-[0_0_15px_rgba(255,255,255,0.2)] md:drop-shadow-[0_0_25px_rgba(255,255,255,0.3)]">
-                    <filter id="neonGlowS">
-                      <feGaussianBlur stdDeviation="6" result="blur" />
-                      <feComposite in="SourceGraphic" in2="blur" operator="over" />
-                    </filter>
-                    <path d="M200,450 C100,350 50,250 50,150 C50,80 120,50 200,120 C280,50 350,80 350,150 C350,250 300,350 200,450 Z" fill="none" stroke="#ffffff" strokeWidth="1" opacity="0.1" />
-                    <path d="M200,440 C110,345 60,245 60,155 C60,95 125,65 200,130 C275,65 340,95 340,155 C340,245 290,345 200,440 Z" fill="none" stroke="#eeb053" strokeWidth="4" filter="url(#neonGlowS)" opacity="0.7" />
-                    <path d="M200,440 C110,345 60,245 60,155 C60,95 125,65 200,130 C275,65 340,95 340,155 C340,245 290,345 200,440 Z" fill="none" stroke="#ffffff" strokeWidth="1.5" />
-                 </svg>
-                 <div className="absolute top-[45%] left-1/2 -translate-x-1/2 -translate-y-1/2">
-                   <Logo className="w-12 h-12 md:w-24 md:h-24 drop-shadow-[0_0_15px_rgba(255,255,255,0.6)]" />
-                 </div>
-               </motion.div>
-             </div>
-           </div>
-        </div>
-      </section>
-
-      {/* Impact Stats */}
-      <section className="py-24 md:py-48 bg-white overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12 md:gap-16">
-            {STATS.map((stat, i) => (
-              <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }} className="text-center">
-                <div className="text-6xl md:text-9xl font-serif font-black text-[#9c1c22] mb-4 md:mb-6 leading-none">
-                  <AnimatedNumber value={stat.value} />
-                  <span className="text-[#eeb053]">{stat.suffix}</span>
-                </div>
-                <h4 className="font-cinzel font-black text-[10px] md:text-[12px] tracking-[0.4em] uppercase mb-4 md:mb-6 text-[#332d2b]">{stat.label}</h4>
-                <div className="h-0.5 w-10 md:w-12 bg-[#9c1c22] mx-auto mb-4 md:mb-6" />
-                <p className="font-serif italic text-lg md:text-xl text-[#332d2b]/40 uppercase leading-snug">{stat.description}</p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-    </div>
-  );
-};
-
 const DonorView = () => (
   <section className="py-24 md:py-48 bg-white pt-48 relative overflow-hidden">
     <div className="max-w-7xl mx-auto px-4">
@@ -401,6 +666,15 @@ const GalleryPageView = () => (
         <span className="text-[#9c1c22] font-cinzel font-black tracking-[0.5em] text-[12px] uppercase mb-8 block">Visual Narrative</span>
         <h2 className="text-5xl md:text-8xl font-serif font-black text-[#332d2b] mb-12 uppercase">Impact <span className="text-[#eeb053] italic">Gallery.</span></h2>
       </div>
+
+      <div className="mb-32">
+        <VideoSection 
+          videoId={VIDEO_RESOURCES[0].id} 
+          title="Motion Gallery" 
+          description="A journey through our mission and global movement." 
+        />
+      </div>
+
       <div className="columns-1 md:columns-2 lg:columns-3 gap-8 space-y-8">
         {GALLERY_IMAGES.map((img, i) => (
           <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="relative group rounded-[3rem] overflow-hidden break-inside-avoid">
@@ -519,31 +793,10 @@ const ProgramsPageView = () => {
                   <p className="text-xl md:text-3xl font-serif italic text-[#332d2b]/70 leading-relaxed uppercase group-hover:text-[#332d2b] transition-colors duration-500">
                     {program.description}
                   </p>
-                  
-                  <div className="mt-12 flex items-center gap-6 group/btn cursor-pointer">
-                    <div className="w-12 h-1 bg-[#eeb053] group-hover/btn:w-24 transition-all duration-500" />
-                    <span className="font-cinzel font-bold text-xs md:text-sm tracking-[0.3em] uppercase opacity-40 group-hover/btn:opacity-100 group-hover/btn:translate-x-2 transition-all duration-500">
-                      Active Chapter Program
-                    </span>
-                    <ArrowRight className="text-[#eeb053] opacity-0 group-hover/btn:opacity-100 group-hover/btn:translate-x-4 transition-all duration-500" />
-                  </div>
                 </motion.div>
-                
-                {/* Decorative background element */}
-                <div className="absolute bottom-0 right-0 w-64 h-64 bg-gradient-to-tl from-[#fdfaf6] to-transparent opacity-0 group-hover:opacity-50 transition-opacity duration-1000" />
               </div>
             </motion.div>
           ))}
-        </motion.div>
-
-        <motion.div 
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          transition={{ delay: 0.8 }}
-          className="mt-32 text-center"
-        >
-          <Logo className="w-24 h-24 mx-auto opacity-20 hover:opacity-100 transition-opacity cursor-pointer grayscale hover:grayscale-0 duration-700" />
-          <p className="mt-8 font-cinzel font-black text-[10px] tracking-[0.5em] uppercase opacity-30">Foundation of Luv Internal Initiative</p>
         </motion.div>
       </div>
     </section>
@@ -602,6 +855,7 @@ const App: React.FC = () => {
       case 'gallery': return <GalleryPageView />; 
       case 'donate': return <DonorView />;
       case 'programs': return <ProgramsPageView />;
+      case 'contact': return <ContactView />;
       default: return <HomeView onNavigate={handleNavigate} />;
     }
   };
