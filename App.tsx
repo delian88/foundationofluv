@@ -82,7 +82,6 @@ const LoadingScreen = () => {
       animate={{ 
         backgroundColor: ["#fdfaf6", "#9c1c22", "#122d4f", "#eeb053", "#fdfaf6"],
       }}
-      // Combined transition properties into a single attribute to fix duplicate attribute error.
       transition={{ 
         duration: 0.8, 
         ease: [0.76, 0, 0.24, 1],
@@ -90,7 +89,6 @@ const LoadingScreen = () => {
       }}
       className="fixed inset-0 z-[300] flex flex-col items-center justify-center overflow-hidden"
     >
-      {/* Background Hearts Drifting */}
       <div className="absolute inset-0 pointer-events-none opacity-30">
         {Array.from({ length: 15 }).map((_, i) => (
           <motion.div
@@ -110,7 +108,6 @@ const LoadingScreen = () => {
         ))}
       </div>
 
-      {/* Loading Fireworks */}
       <div className="absolute inset-0 pointer-events-none">
         <AnimatePresence>
           {bursts.map(burst => (
@@ -284,7 +281,7 @@ const AnimatedNumber = ({ value }: { value: string }) => {
   return <motion.span ref={ref}>{rounded}</motion.span>;
 };
 
-// --- New Rich Content Components ---
+// --- Rich Content Components ---
 
 const PartnersMarquee = () => {
   const partners = ["Microsoft", "Amazon", "OpenAI", "Anthropic", "Google", "Meta", "Harvard", "MIT", "Stanford", "UNICEF", "WHO", "USAID"];
@@ -399,135 +396,7 @@ const NewsletterSection = () => (
   </section>
 );
 
-// --- Contact Page View ---
-
-const ContactView = ({ onSubmitSuccess }: { onSubmitSuccess: () => void }) => {
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    onSubmitSuccess();
-  };
-
-  return (
-    <section className="pt-48 pb-32 bg-white relative overflow-hidden">
-      <div className="max-w-7xl mx-auto px-4 relative z-10">
-        <header className="text-center mb-24">
-          <motion.span initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-[#9c1c22] font-cinzel font-black tracking-[0.5em] text-[12px] uppercase mb-8 block">Reach Out</motion.span>
-          <h2 className="text-6xl md:text-[8rem] font-serif font-black text-[#332d2b] mb-12 uppercase leading-none tracking-tighter">
-            Contact <span className="text-[#eeb053] italic">Us.</span>
-          </h2>
-          <p className="text-2xl font-serif italic text-[#332d2b]/60 max-w-4xl mx-auto uppercase">
-            Let's forge pathways of restoration together. Our team is ready to respond to your inquiries.
-          </p>
-        </header>
-
-        <div className="grid lg:grid-cols-2 gap-16 md:gap-32 items-start">
-          <motion.div initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }} className="space-y-16">
-            <div>
-              <h3 className="text-3xl font-serif font-black uppercase mb-8">Headquarters</h3>
-              <div className="space-y-8">
-                <div className="flex items-start gap-6">
-                  <div className="p-4 bg-[#fdfaf6] rounded-2xl text-[#9c1c22] shadow-sm"><MapPin size={24} /></div>
-                  <div>
-                    <p className="text-[10px] font-cinzel font-black uppercase tracking-widest text-[#eeb053] mb-2">Location</p>
-                    <p className="text-xl font-serif italic text-[#332d2b] uppercase">#9960 Raven Hurst Road, Middle River MD 21221</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-6">
-                  <div className="p-4 bg-[#fdfaf6] rounded-2xl text-[#9c1c22] shadow-sm"><Phone size={24} /></div>
-                  <div>
-                    <p className="text-[10px] font-cinzel font-black uppercase tracking-widest text-[#eeb053] mb-2">Voice</p>
-                    <p className="text-xl font-serif italic text-[#332d2b] uppercase">443-402-5802</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-6">
-                  <div className="p-4 bg-[#fdfaf6] rounded-2xl text-[#9c1c22] shadow-sm"><Mail size={24} /></div>
-                  <div>
-                    <p className="text-[10px] font-cinzel font-black uppercase tracking-widest text-[#eeb053] mb-2">Correspondence</p>
-                    <p className="text-xl font-serif italic text-[#332d2b] uppercase">hello@foundationofluv.org</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="p-12 bg-[#f9f5f0] rounded-[4rem] border-2 border-[#eeb053]/20 shadow-xl">
-              <h4 className="text-2xl font-cinzel font-black text-[#9c1c22] mb-6 uppercase">Operating Hours</h4>
-              <p className="text-lg font-serif italic text-[#332d2b]/60 uppercase leading-relaxed">
-                Monday — Friday: 9:00 AM – 6:00 PM EST<br />
-                Saturday: 10:00 AM – 2:00 PM EST<br />
-                Sunday: Emergency Response Only
-              </p>
-            </div>
-          </motion.div>
-
-          <motion.div initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} className="bg-white p-10 md:p-16 rounded-[4rem] shadow-3xl border border-black/5">
-            <h3 className="text-3xl font-serif font-black uppercase mb-12">Send a Message</h3>
-            <form className="space-y-8" onSubmit={handleSubmit}>
-              <div className="grid md:grid-cols-2 gap-8">
-                <div className="space-y-2">
-                  <label className="text-[10px] font-cinzel font-black uppercase tracking-widest opacity-40 ml-4">Full Name</label>
-                  <input required type="text" placeholder="YOUR NAME" className="w-full bg-[#fdfaf6] border-2 border-transparent focus:border-[#eeb053] px-8 py-5 rounded-full font-serif italic uppercase outline-none transition-all" />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-[10px] font-cinzel font-black uppercase tracking-widest opacity-40 ml-4">Email Address</label>
-                  <input required type="email" placeholder="EMAIL@DOMAIN.COM" className="w-full bg-[#fdfaf6] border-2 border-transparent focus:border-[#eeb053] px-8 py-5 rounded-full font-serif italic uppercase outline-none transition-all" />
-                </div>
-              </div>
-              <div className="space-y-2">
-                <label className="text-[10px] font-cinzel font-black uppercase tracking-widest opacity-40 ml-4">Subject of Interest</label>
-                <select className="w-full bg-[#fdfaf6] border-2 border-transparent focus:border-[#eeb053] px-8 py-5 rounded-full font-serif italic uppercase outline-none appearance-none transition-all cursor-pointer">
-                  <option>GENERAL INQUIRY</option>
-                  <option>VOLUNTEER OPPORTUNITIES</option>
-                  <option>CORPORATE PARTNERSHIPS</option>
-                  <option>PROGRAM ASSISTANCE</option>
-                  <option>PRESS & MEDIA</option>
-                </select>
-              </div>
-              <div className="space-y-2">
-                <label className="text-[10px] font-cinzel font-black uppercase tracking-widest opacity-40 ml-4">Message Content</label>
-                <textarea required rows={5} placeholder="TELL US HOW WE CAN RESTORE TOGETHER..." className="w-full bg-[#fdfaf6] border-2 border-transparent focus:border-[#eeb053] px-8 py-6 rounded-[2rem] font-serif italic uppercase outline-none transition-all resize-none"></textarea>
-              </div>
-              <button type="submit" className="w-full bg-[#9c1c22] text-white py-6 rounded-full font-cinzel font-black uppercase tracking-[0.3em] shadow-xl hover:bg-[#1a1a1a] transition-all flex items-center justify-center gap-4">
-                Send Message <Send size={20} />
-              </button>
-            </form>
-          </motion.div>
-        </div>
-      </div>
-    </section>
-  );
-};
-
-// --- Video Component ---
-const VideoSection = ({ videoId, title, description }: { videoId: string, title: string, description?: string }) => {
-  return (
-    <div className="max-w-6xl mx-auto px-4 py-20">
-      {title && (
-        <div className="text-center mb-12">
-          <h3 className="text-3xl md:text-5xl font-serif font-black text-[#332d2b] uppercase mb-4">{title}</h3>
-          {description && <p className="text-xl font-serif italic text-[#332d2b]/60 uppercase">{description}</p>}
-        </div>
-      )}
-      <motion.div 
-        initial={{ opacity: 0, scale: 0.95 }}
-        whileInView={{ opacity: 1, scale: 1 }}
-        viewport={{ once: true }}
-        className="relative aspect-video rounded-[3rem] overflow-hidden shadow-3xl border-[12px] md:border-[20px] border-white group"
-      >
-        <iframe 
-          className="absolute inset-0 w-full h-full"
-          src={`https://www.youtube.com/embed/${videoId}?rel=0&modestbranding=1`}
-          title={title}
-          frameBorder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          allowFullScreen
-        />
-        <div className="absolute inset-0 pointer-events-none border-[1px] border-black/5 rounded-[2rem] md:rounded-[4rem]"></div>
-      </motion.div>
-    </div>
-  );
-};
-
-// --- Page Content Views ---
+// --- Content Views ---
 
 const HomeView = ({ onNavigate }: { onNavigate: (id: string) => void }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -565,10 +434,8 @@ const HomeView = ({ onNavigate }: { onNavigate: (id: string) => void }) => {
         </div>
       </header>
 
-      {/* Partners Showcase */}
       <PartnersMarquee />
 
-      {/* LET'S GIVE THOSE FEET Shoes Section */}
       <section className="min-h-screen py-16 md:py-24 bg-white relative overflow-hidden border-y border-black/5 flex items-center">
         <div className="max-w-7xl mx-auto px-4 relative z-10 w-full">
           <div className="text-center mb-10 md:mb-16 relative">
@@ -643,10 +510,8 @@ const HomeView = ({ onNavigate }: { onNavigate: (id: string) => void }) => {
         </div>
       </section>
 
-      {/* Leadership Vision */}
       <LeadershipVision />
 
-      {/* Featured Video Section */}
       <section className="bg-[#f9f5f0] border-y border-[#332d2b]/5">
         <VideoSection 
           videoId={VIDEO_RESOURCES[0].id} 
@@ -655,7 +520,6 @@ const HomeView = ({ onNavigate }: { onNavigate: (id: string) => void }) => {
         />
       </section>
 
-      {/* SOLID GROWTH - Poster Section */}
       <section className="min-h-screen py-12 md:py-16 bg-[#1a0c1a] text-white relative overflow-hidden flex items-center border-y border-[#ffffff]/10">
         <div className="absolute inset-0 bg-gradient-to-br from-[#2d1b4d] via-[#8b1a1a] to-[#df8c3d] opacity-90" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_transparent_0%,_#1a0c1a_100%)] opacity-80" />
@@ -711,10 +575,8 @@ const HomeView = ({ onNavigate }: { onNavigate: (id: string) => void }) => {
         </div>
       </section>
 
-      {/* Engagement Pathways */}
       <EngagementPathways />
 
-      {/* Impact Stats */}
       <section className="py-24 md:py-48 bg-white overflow-hidden">
         <div className="max-w-7xl mx-auto px-4">
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12 md:gap-16">
@@ -733,7 +595,6 @@ const HomeView = ({ onNavigate }: { onNavigate: (id: string) => void }) => {
         </div>
       </section>
 
-      {/* Newsletter Section */}
       <NewsletterSection />
     </div>
   );
@@ -744,37 +605,36 @@ const DetailedAboutView = () => {
   const scale = useTransform(scrollYProgress, [0, 0.2], [1, 1.05]);
 
   return (
-    <section className="bg-white pt-48 pb-32 relative overflow-hidden">
+    <section className="bg-white pt-32 pb-16 md:pt-48 md:pb-32 relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 relative z-10">
-        <header className="text-center mb-32">
-          <motion.span initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-[#9c1c22] font-cinzel font-black tracking-[0.5em] text-[12px] uppercase mb-8 block">Organizational Profile</motion.span>
-          <h2 className="text-5xl md:text-[8rem] font-serif font-black text-[#332d2b] mb-12 uppercase leading-none tracking-tighter">
+        <header className="text-center mb-16 md:mb-32">
+          <motion.span initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-[#9c1c22] font-cinzel font-black tracking-[0.5em] text-[10px] md:text-[12px] uppercase mb-6 md:mb-8 block">Organizational Profile</motion.span>
+          <h2 className="text-4xl md:text-[8rem] font-serif font-black text-[#332d2b] mb-8 md:mb-12 uppercase leading-none tracking-tighter break-words">
             {DETAILED_ABOUT.header.split(' ')[0]} <span className="text-[#9c1c22] italic">{DETAILED_ABOUT.header.split(' ').slice(1).join(' ')}</span>
           </h2>
-          <div className="h-2 w-32 bg-[#eeb053] mx-auto rounded-full mb-12" />
-          <p className="text-2xl md:text-3xl font-serif italic text-[#332d2b]/70 max-w-5xl mx-auto uppercase leading-relaxed">
+          <div className="h-2 w-24 md:w-32 bg-[#eeb053] mx-auto rounded-full mb-8 md:mb-12" />
+          <p className="text-xl md:text-3xl font-serif italic text-[#332d2b]/70 max-w-5xl mx-auto uppercase leading-relaxed break-words">
             {DETAILED_ABOUT.intro}
           </p>
         </header>
 
-        {/* Problem Statement Section */}
-        <div className="grid lg:grid-cols-12 gap-20 mb-40 items-center">
+        <div className="grid lg:grid-cols-12 gap-10 md:gap-20 mb-20 md:mb-40 items-center">
           <div className="lg:col-span-7">
-            <h3 className="text-4xl font-serif font-black text-[#332d2b] mb-8 uppercase flex items-center gap-4">
-              <ShieldAlert className="text-[#9c1c22]" size={40} />
+            <h3 className="text-3xl md:text-4xl font-serif font-black text-[#332d2b] mb-6 md:mb-8 uppercase flex items-center gap-4">
+              <ShieldAlert className="text-[#9c1c22] shrink-0" size={32} />
               {DETAILED_ABOUT.problemStatement.title}
             </h3>
-            <p className="text-2xl font-serif italic text-[#332d2b]/70 mb-10 leading-relaxed uppercase">
+            <p className="text-xl md:text-2xl font-serif italic text-[#332d2b]/70 mb-8 md:mb-10 leading-relaxed uppercase">
               {DETAILED_ABOUT.problemStatement.summary}
             </p>
-            <ul className="space-y-6">
+            <ul className="space-y-4 md:space-y-6">
               {DETAILED_ABOUT.problemStatement.crises.map((crisis, i) => (
                 <motion.li 
                   key={i} 
                   initial={{ opacity: 0, x: -20 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   transition={{ delay: i * 0.1 }}
-                  className="flex items-start gap-4 text-xl font-serif italic text-[#332d2b]/60 uppercase"
+                  className="flex items-start gap-4 text-lg md:text-xl font-serif italic text-[#332d2b]/60 uppercase"
                 >
                   <div className="w-1.5 h-1.5 bg-[#9c1c22] rounded-full mt-3 shrink-0" />
                   {crisis}
@@ -783,70 +643,67 @@ const DetailedAboutView = () => {
             </ul>
           </div>
           <div className="lg:col-span-5 relative">
-            <motion.div style={{ scale }} className="rounded-[4rem] overflow-hidden shadow-2xl border-4 border-[#eeb053]">
+            <motion.div style={{ scale }} className="rounded-[2rem] md:rounded-[4rem] overflow-hidden shadow-2xl border-4 border-[#eeb053]">
                <img src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&q=80&w=1200" alt="Foundation Community" className="w-full h-full grayscale hover:grayscale-0 transition-all duration-1000" />
             </motion.div>
           </div>
         </div>
 
-        {/* Mission & Vision & Values */}
-        <div className="grid lg:grid-cols-2 gap-16 mb-40">
-           <div className="p-16 bg-[#fdfaf6] rounded-[4rem] border-2 border-[#9c1c22]/10 shadow-xl">
-             <div className="mb-8">{MISSION_VISION.mission.icon}</div>
-             <h3 className="text-4xl font-serif font-black mb-6 uppercase">{MISSION_VISION.mission.title}</h3>
-             <p className="text-2xl font-serif italic text-[#332d2b]/70 uppercase leading-relaxed">{MISSION_VISION.mission.content}</p>
+        <div className="grid lg:grid-cols-2 gap-8 md:gap-16 mb-20 md:mb-40">
+           <div className="p-8 md:p-16 bg-[#fdfaf6] rounded-[2.5rem] md:rounded-[4rem] border-2 border-[#9c1c22]/10 shadow-xl">
+             <div className="mb-6 md:mb-8">{MISSION_VISION.mission.icon}</div>
+             <h3 className="text-3xl md:text-4xl font-serif font-black mb-4 md:mb-6 uppercase">{MISSION_VISION.mission.title}</h3>
+             <p className="text-xl md:text-2xl font-serif italic text-[#332d2b]/70 uppercase leading-relaxed">{MISSION_VISION.mission.content}</p>
            </div>
-           <div className="p-16 bg-[#fdfaf6] rounded-[4rem] border-2 border-[#eeb053]/10 shadow-xl">
-             <div className="mb-8">{MISSION_VISION.vision.icon}</div>
-             <h3 className="text-4xl font-serif font-black mb-6 uppercase">{MISSION_VISION.vision.title}</h3>
-             <p className="text-2xl font-serif italic text-[#332d2b]/70 uppercase leading-relaxed">{MISSION_VISION.vision.content}</p>
+           <div className="p-8 md:p-16 bg-[#fdfaf6] rounded-[2.5rem] md:rounded-[4rem] border-2 border-[#eeb053]/10 shadow-xl">
+             <div className="mb-6 md:mb-8">{MISSION_VISION.vision.icon}</div>
+             <h3 className="text-3xl md:text-4xl font-serif font-black mb-4 md:mb-6 uppercase">{MISSION_VISION.vision.title}</h3>
+             <p className="text-xl md:text-2xl font-serif italic text-[#332d2b]/70 uppercase leading-relaxed">{MISSION_VISION.vision.content}</p>
            </div>
         </div>
 
-        {/* Core Values */}
-        <div className="mb-40">
-          <div className="text-center mb-20">
-             <h3 className="text-4xl font-serif font-black text-[#332d2b] uppercase">Our Core Values</h3>
-             <div className="h-1 w-20 bg-[#9c1c22] mx-auto mt-4" />
+        <div className="mb-20 md:mb-40">
+          <div className="text-center mb-12 md:mb-20">
+             <h3 className="text-3xl md:text-4xl font-serif font-black text-[#332d2b] uppercase">Our Core Values</h3>
+             <div className="h-1 w-16 md:w-20 bg-[#9c1c22] mx-auto mt-4" />
           </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
             {CORE_VALUES.map((value, i) => (
-              <motion.div key={i} whileHover={{ y: -5 }} className="p-10 bg-white shadow-lg rounded-3xl border border-black/5">
-                <h4 className="text-xl font-cinzel font-black text-[#9c1c22] mb-4 uppercase">{value.term}</h4>
-                <p className="text-lg font-serif italic text-[#332d2b]/60 uppercase">{value.definition}</p>
+              <motion.div key={i} whileHover={{ y: -5 }} className="p-8 md:p-10 bg-white shadow-lg rounded-3xl border border-black/5">
+                <h4 className="text-lg md:text-xl font-cinzel font-black text-[#9c1c22] mb-4 uppercase">{value.term}</h4>
+                <p className="text-base md:text-lg font-serif italic text-[#332d2b]/60 uppercase">{value.definition}</p>
               </motion.div>
             ))}
           </div>
         </div>
 
-        {/* Organizational Purpose */}
-        <div className="mb-40">
-          <div className="text-center mb-20">
-             <h3 className="text-5xl font-serif font-black text-[#332d2b] uppercase">{DETAILED_ABOUT.purpose.title}</h3>
-             <div className="h-1 w-20 bg-[#eeb053] mx-auto mt-4" />
+        <div className="mb-20 md:mb-40">
+          <div className="text-center mb-12 md:mb-20">
+             <h3 className="text-3xl md:text-5xl font-serif font-black text-[#332d2b] uppercase">{DETAILED_ABOUT.purpose.title}</h3>
+             <div className="h-1 w-16 md:w-20 bg-[#eeb053] mx-auto mt-4" />
           </div>
-          <div className="grid md:grid-cols-2 gap-12">
-            <div className="space-y-8">
-               <div className="flex items-center gap-6 mb-10">
-                 <div className="p-5 bg-[#9c1c22] rounded-2xl text-white shadow-lg"><Activity size={32} /></div>
-                 <h4 className="text-3xl font-serif font-black uppercase">1. Programmatic Nonprofit</h4>
+          <div className="grid lg:grid-cols-2 gap-8 md:gap-12">
+            <div className="space-y-6 md:space-y-8">
+               <div className="flex items-center gap-4 md:gap-6 mb-6 md:mb-10">
+                 <div className="p-4 md:p-5 bg-[#9c1c22] rounded-2xl text-white shadow-lg shrink-0"><Activity size={24} /></div>
+                 <h4 className="text-2xl md:text-3xl font-serif font-black uppercase">1. Programmatic Nonprofit</h4>
                </div>
-               <div className="grid gap-4">
+               <div className="grid gap-3 md:gap-4">
                  {DETAILED_ABOUT.purpose.programmatic.map((item, i) => (
-                   <div key={i} className="p-6 bg-[#fdfaf6] rounded-2xl border-l-4 border-[#9c1c22] text-xl font-serif italic text-[#332d2b]/70 uppercase">
+                   <div key={i} className="p-5 md:p-6 bg-[#fdfaf6] rounded-2xl border-l-4 border-[#9c1c22] text-lg md:text-xl font-serif italic text-[#332d2b]/70 uppercase break-words">
                      {item}
                    </div>
                  ))}
                </div>
             </div>
-            <div className="space-y-8">
-               <div className="flex items-center gap-6 mb-10">
-                 <div className="p-5 bg-[#eeb053] rounded-2xl text-white shadow-lg"><ShieldCheck size={32} /></div>
-                 <h4 className="text-3xl font-serif font-black uppercase">2. Holding & Stewardship</h4>
+            <div className="space-y-6 md:space-y-8">
+               <div className="flex items-center gap-4 md:gap-6 mb-6 md:mb-10">
+                 <div className="p-4 md:p-5 bg-[#eeb053] rounded-2xl text-white shadow-lg shrink-0"><ShieldCheck size={24} /></div>
+                 <h4 className="text-2xl md:text-3xl font-serif font-black uppercase">2. Holding & Stewardship</h4>
                </div>
-               <div className="grid gap-4">
+               <div className="grid gap-3 md:gap-4">
                  {DETAILED_ABOUT.purpose.stewardship.map((item, i) => (
-                   <div key={i} className="p-6 bg-[#fdfaf6] rounded-2xl border-l-4 border-[#eeb053] text-xl font-serif italic text-[#332d2b]/70 uppercase">
+                   <div key={i} className="p-5 md:p-6 bg-[#fdfaf6] rounded-2xl border-l-4 border-[#eeb053] text-lg md:text-xl font-serif italic text-[#332d2b]/70 uppercase break-words">
                      {item}
                    </div>
                  ))}
@@ -855,33 +712,32 @@ const DetailedAboutView = () => {
           </div>
         </div>
 
-        {/* 5 Program Pillars */}
-        <div className="mb-40">
-          <div className="text-center mb-20">
-            <span className="text-[#9c1c22] font-cinzel font-black tracking-[0.5em] text-[12px] uppercase mb-8 block">Strategic Impact</span>
-            <h3 className="text-5xl md:text-7xl font-serif font-black text-[#332d2b] uppercase leading-none">The 5 Program <span className="text-[#eeb053] italic">Pillars.</span></h3>
+        <div className="mb-20 md:mb-40">
+          <div className="text-center mb-16 md:mb-20">
+            <span className="text-[#9c1c22] font-cinzel font-black tracking-[0.5em] text-[10px] md:text-[12px] uppercase mb-6 md:mb-8 block">Strategic Impact</span>
+            <h3 className="text-3xl md:text-7xl font-serif font-black text-[#332d2b] uppercase leading-none break-words">The 5 Program <span className="text-[#eeb053] italic">Pillars.</span></h3>
           </div>
-          <div className="space-y-12">
+          <div className="space-y-8 md:space-y-12">
             {DETAILED_ABOUT.pillars.map((pillar, i) => (
               <motion.div 
                 key={pillar.id}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                className="group p-12 bg-[#fdfaf6] rounded-[4rem] border-2 border-transparent hover:border-[#9c1c22]/20 transition-all shadow-xl flex flex-col lg:flex-row gap-12 items-center"
+                className="group p-8 md:p-12 bg-[#fdfaf6] rounded-[2.5rem] md:rounded-[4rem] border-2 border-transparent hover:border-[#9c1c22]/20 transition-all shadow-xl flex flex-col lg:flex-row gap-8 md:gap-12 items-center"
               >
-                <div className="lg:w-1/4 flex flex-col items-center text-center">
-                   <div className="w-24 h-24 bg-white rounded-full flex items-center justify-center text-[#9c1c22] shadow-md group-hover:scale-110 transition-transform mb-6">
-                      {React.cloneElement(pillar.icon as React.ReactElement<any>, { size: 40 })}
+                <div className="lg:w-1/4 flex flex-col items-center text-center shrink-0">
+                   <div className="w-20 h-20 md:w-24 md:h-24 bg-white rounded-full flex items-center justify-center text-[#9c1c22] shadow-md group-hover:scale-110 transition-transform mb-4 md:mb-6">
+                      {React.cloneElement(pillar.icon as React.ReactElement<any>, { size: 32 })}
                    </div>
-                   <h4 className="text-2xl font-serif font-black uppercase text-[#9c1c22] leading-tight">Pillar {pillar.id}</h4>
+                   <h4 className="text-xl md:text-2xl font-serif font-black uppercase text-[#9c1c22] leading-tight">Pillar {pillar.id}</h4>
                 </div>
-                <div className="lg:w-3/4">
-                  <h3 className="text-3xl font-serif font-black uppercase text-[#332d2b] mb-4">{pillar.title}</h3>
-                  <p className="text-xl font-serif italic text-[#332d2b]/70 mb-8 uppercase leading-relaxed font-bold">Objective: {pillar.objective}</p>
-                  <div className="flex flex-wrap gap-3">
+                <div className="lg:w-3/4 w-full">
+                  <h3 className="text-2xl md:text-3xl font-serif font-black uppercase text-[#332d2b] mb-3 md:mb-4">{pillar.title}</h3>
+                  <p className="text-lg md:text-xl font-serif italic text-[#332d2b]/70 mb-6 md:mb-8 uppercase leading-relaxed font-bold break-words">Objective: {pillar.objective}</p>
+                  <div className="flex flex-wrap gap-2 md:gap-3">
                     {pillar.initiatives.map((init, idx) => (
-                      <span key={idx} className="px-6 py-3 bg-white border border-[#eeb053]/30 rounded-full text-sm font-serif italic text-[#332d2b]/60 uppercase shadow-sm">
+                      <span key={idx} className="px-4 py-2 md:px-6 md:py-3 bg-white border border-[#eeb053]/30 rounded-full text-xs md:text-sm font-serif italic text-[#332d2b]/60 uppercase shadow-sm">
                         {init}
                       </span>
                     ))}
@@ -892,22 +748,21 @@ const DetailedAboutView = () => {
           </div>
         </div>
 
-        {/* Closing Statement */}
-        <footer className="text-center py-20 bg-[#1a1a1a] rounded-[5rem] text-white relative overflow-hidden">
+        <footer className="text-center py-12 md:py-20 bg-[#1a1a1a] rounded-[2.5rem] md:rounded-[5rem] text-white relative overflow-hidden">
           <div className="absolute inset-0 opacity-10">
             <Logo className="w-full h-full scale-125 rotate-12" />
           </div>
-          <div className="relative z-10">
-            <h3 className="text-3xl font-serif italic uppercase mb-6 opacity-60">{DETAILED_ABOUT.closing.statement}</h3>
-            <h2 className="text-4xl md:text-7xl font-serif font-black uppercase text-[#eeb053] leading-none mb-4">
+          <div className="relative z-10 px-4">
+            <h3 className="text-xl md:text-3xl font-serif italic uppercase mb-4 md:mb-6 opacity-60">{DETAILED_ABOUT.closing.statement}</h3>
+            <h2 className="text-2xl md:text-7xl font-serif font-black uppercase text-[#eeb053] leading-none mb-4 break-words">
               {DETAILED_ABOUT.closing.tagline.split('.').slice(0,1)}.
               <br />
               {DETAILED_ABOUT.closing.tagline.split('.').slice(1,2)}.
               <br />
               {DETAILED_ABOUT.closing.tagline.split('.').slice(2,3)}.
             </h2>
-            <div className="h-px w-24 bg-[#9c1c22] mx-auto my-10" />
-            <p className="font-cinzel font-black text-xs tracking-[0.6em] uppercase text-white/40">Foundation of Luv Institutional Philosophy</p>
+            <div className="h-px w-16 md:w-24 bg-[#9c1c22] mx-auto my-8 md:my-10" />
+            <p className="font-cinzel font-black text-[10px] tracking-[0.4em] md:tracking-[0.6em] uppercase text-white/40">Foundation of Luv Institutional Philosophy</p>
           </div>
         </footer>
       </div>
@@ -916,16 +771,16 @@ const DetailedAboutView = () => {
 };
 
 const GlobalServicesView = () => (
-  <section className="py-24 md:py-48 bg-white pt-48 relative overflow-hidden">
+  <section className="pt-32 pb-16 md:py-48 bg-white relative overflow-hidden">
     <div className="max-w-7xl mx-auto px-4">
-      <div className="text-center mb-32">
-        <span className="text-[#9c1c22] font-cinzel font-black tracking-[0.5em] text-[12px] uppercase mb-8 block">Global Reach</span>
-        <h2 className="text-5xl md:text-8xl font-serif font-black text-[#332d2b] mb-12 uppercase">International <span className="text-[#eeb053] italic">Architecture.</span></h2>
-        <p className="text-2xl font-serif italic text-[#332d2b]/60 max-w-4xl mx-auto uppercase">
+      <div className="text-center mb-16 md:mb-32">
+        <span className="text-[#9c1c22] font-cinzel font-black tracking-[0.5em] text-[10px] md:text-[12px] uppercase mb-6 md:mb-8 block">Global Reach</span>
+        <h2 className="text-4xl md:text-8xl font-serif font-black text-[#332d2b] mb-8 md:mb-12 uppercase leading-none break-words">International <span className="text-[#eeb053] italic">Architecture.</span></h2>
+        <p className="text-xl md:text-2xl font-serif italic text-[#332d2b]/60 max-w-4xl mx-auto uppercase break-words">
           Foundation of Luv operates a multi-disciplinary suite of services designed to address the convergent crises of the modern era.
         </p>
       </div>
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
         {GLOBAL_SERVICES_DATA.map((service, i) => (
           <motion.div 
             key={i} 
@@ -933,13 +788,13 @@ const GlobalServicesView = () => (
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             whileHover={{ y: -15 }}
-            className="bg-[#fdfaf6] p-12 rounded-[4rem] border-2 border-transparent hover:border-[#eeb053] transition-all shadow-lg flex flex-col h-full"
+            className="bg-[#fdfaf6] p-8 md:p-12 rounded-[2.5rem] md:rounded-[4rem] border-2 border-transparent hover:border-[#eeb053] transition-all shadow-lg flex flex-col h-full"
           >
-            <div className="text-[#9c1c22] mb-10 w-16 h-16 bg-white rounded-2xl flex items-center justify-center shadow-md">
+            <div className="text-[#9c1c22] mb-6 md:mb-10 w-12 h-12 md:w-16 md:h-16 bg-white rounded-2xl flex items-center justify-center shadow-md shrink-0">
               {service.icon}
             </div>
-            <h3 className="text-3xl font-serif font-black text-[#332d2b] mb-6 uppercase leading-tight">{service.title}</h3>
-            <p className="text-xl font-serif text-[#332d2b]/70 italic mb-10 leading-relaxed uppercase">{service.description}</p>
+            <h3 className="text-2xl md:text-3xl font-serif font-black text-[#332d2b] mb-4 md:mb-6 uppercase leading-tight break-words">{service.title}</h3>
+            <p className="text-lg md:text-xl font-serif text-[#332d2b]/70 italic mb-8 md:mb-10 leading-relaxed uppercase break-words">{service.description}</p>
           </motion.div>
         ))}
       </div>
@@ -980,7 +835,6 @@ const RoadmapView = () => (
   </section>
 );
 
-// --- LUVWATTS Component ---
 const LUVWATTSView = () => (
   <section className="py-24 md:py-48 bg-white pt-48 relative overflow-hidden">
     <div className="max-w-7xl mx-auto px-4">
@@ -1078,9 +932,7 @@ const ProgramsPageView = () => {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      transition: {
-        staggerChildren: 0.15
-      }
+      transition: { staggerChildren: 0.15 }
     }
   };
 
@@ -1089,11 +941,7 @@ const ProgramsPageView = () => {
     visible: { 
       opacity: 1, 
       y: 0,
-      transition: {
-        type: "spring",
-        stiffness: 100,
-        damping: 12
-      }
+      transition: { type: "spring", stiffness: 100, damping: 12 }
     }
   };
 
@@ -1113,72 +961,38 @@ const ProgramsPageView = () => {
   return (
     <section className="py-24 md:py-48 bg-[#fdfaf6] pt-48 relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4">
-        <motion.div 
-          initial={{ opacity: 0, y: -20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-center mb-32"
-        >
+        <motion.div initial={{ opacity: 0, y: -20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-32">
           <span className="text-[#9c1c22] font-cinzel font-black tracking-[0.5em] text-[12px] uppercase mb-8 block">The 7 Luv Acts</span>
           <h2 className="text-5xl md:text-8xl font-serif font-black text-[#332d2b] mb-12 uppercase">Our <span className="text-[#9c1c22] italic">Programs.</span></h2>
           <p className="text-xl md:text-2xl font-serif italic text-[#332d2b]/60 max-w-4xl mx-auto uppercase">A deeper look at the specific initiatives driving our mission of restoration.</p>
         </motion.div>
 
-        <motion.div 
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
-          className="space-y-16 md:space-y-24"
-        >
+        <motion.div variants={containerVariants} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} className="space-y-16 md:space-y-24">
           {LUV_ACT_PROGRAMS.map((program) => {
             const IconComponent = getIcon(program.id);
             return (
               <motion.div 
                 key={program.id} 
                 variants={cardVariants}
-                whileHover={{ 
-                  scale: 1.02,
-                  y: -10,
-                  transition: { duration: 0.4 }
-                }}
+                whileHover={{ scale: 1.02, y: -10, transition: { duration: 0.4 } }}
                 className="group bg-white rounded-[3rem] md:rounded-[5rem] overflow-hidden shadow-[0_30px_100px_rgba(0,0,0,0.05)] hover:shadow-[0_40px_120px_rgba(0,0,0,0.1)] flex flex-col lg:flex-row border-b-[15px] md:border-b-[20px] transition-all duration-500" 
                 style={{ borderColor: program.color }}
               >
                 <div className="lg:w-1/3 bg-[#f9f5f0] p-12 md:p-20 flex flex-col items-center justify-center text-center relative overflow-hidden">
-                  <motion.div 
-                    initial={{ opacity: 0, scale: 0 }}
-                    whileInView={{ opacity: 0.05, scale: 1 }}
-                    transition={{ delay: 0.5, duration: 1 }}
-                    className="absolute inset-0 flex items-center justify-center pointer-events-none"
-                  >
+                  <motion.div initial={{ opacity: 0, scale: 0 }} whileInView={{ opacity: 0.05, scale: 1 }} transition={{ delay: 0.5, duration: 1 }} className="absolute inset-0 flex items-center justify-center pointer-events-none">
                     <span className="text-[20rem] font-cinzel font-black" style={{ color: program.color }}>{program.id}</span>
                   </motion.div>
-                  
-                  <motion.div 
-                    whileHover={{ rotate: 360 }}
-                    transition={{ duration: 0.8 }}
-                    className="mb-8 p-6 bg-white rounded-full shadow-lg relative z-10"
-                    style={{ color: program.color }}
-                  >
+                  <motion.div whileHover={{ rotate: 360 }} transition={{ duration: 0.8 }} className="mb-8 p-6 bg-white rounded-full shadow-lg relative z-10" style={{ color: program.color }}>
                     <div className="w-12 h-12 md:w-16 md:h-16 flex items-center justify-center">
                       <IconComponent size={48} className="text-inherit" />
                     </div>
                   </motion.div>
-
-                  <h3 className="text-3xl md:text-4xl font-serif font-black uppercase leading-tight relative z-10 group-hover:scale-105 transition-transform" style={{ color: program.color }}>{program.title}</h3>
-                  <div className="mt-4 h-1 w-0 group-hover:w-20 bg-[#eeb053] transition-all duration-500" />
+                  <h3 className="text-3xl md:text-4xl font-serif font-black uppercase leading-tight relative z-10" style={{ color: program.color }}>{program.title}</h3>
                 </div>
-
                 <div className="lg:w-2/3 p-12 md:p-20 flex flex-col justify-center relative bg-white">
-                  <motion.div
-                    initial={{ opacity: 0, x: 20 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                  >
-                    <p className="text-xl md:text-3xl font-serif italic text-[#332d2b]/70 leading-relaxed uppercase group-hover:text-[#332d2b] transition-colors duration-500">
-                      {program.description}
-                    </p>
-                  </motion.div>
+                  <p className="text-xl md:text-3xl font-serif italic text-[#332d2b]/70 leading-relaxed uppercase group-hover:text-[#332d2b] transition-colors duration-500">
+                    {program.description}
+                  </p>
                 </div>
               </motion.div>
             );
@@ -1189,6 +1003,75 @@ const ProgramsPageView = () => {
   );
 };
 
+const ContactView = ({ onSubmitSuccess }: { onSubmitSuccess: () => void }) => {
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    onSubmitSuccess();
+  };
+
+  return (
+    <section className="pt-48 pb-32 bg-white relative overflow-hidden">
+      <div className="max-w-7xl mx-auto px-4 relative z-10">
+        <header className="text-center mb-24">
+          <motion.span initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-[#9c1c22] font-cinzel font-black tracking-[0.5em] text-[12px] uppercase mb-8 block">Reach Out</motion.span>
+          <h2 className="text-6xl md:text-[8rem] font-serif font-black text-[#332d2b] mb-12 uppercase leading-none tracking-tighter">
+            Contact <span className="text-[#eeb053] italic">Us.</span>
+          </h2>
+        </header>
+
+        <div className="grid lg:grid-cols-2 gap-16 md:gap-32 items-start">
+          <div className="space-y-16">
+            <div>
+              <h3 className="text-3xl font-serif font-black uppercase mb-8">Headquarters</h3>
+              <div className="space-y-8">
+                <div className="flex items-start gap-6">
+                  <div className="p-4 bg-[#fdfaf6] rounded-2xl text-[#9c1c22] shadow-sm"><MapPin size={24} /></div>
+                  <div>
+                    <p className="text-[10px] font-cinzel font-black uppercase tracking-widest text-[#eeb053] mb-2">Location</p>
+                    <p className="text-xl font-serif italic text-[#332d2b] uppercase">#9960 Raven Hurst Road, Middle River MD 21221</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-6">
+                  <div className="p-4 bg-[#fdfaf6] rounded-2xl text-[#9c1c22] shadow-sm"><Phone size={24} /></div>
+                  <div>
+                    <p className="text-[10px] font-cinzel font-black uppercase tracking-widest text-[#eeb053] mb-2">Voice</p>
+                    <p className="text-xl font-serif italic text-[#332d2b] uppercase">443-402-5802</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="bg-white p-10 md:p-16 rounded-[4rem] shadow-3xl border border-black/5">
+            <h3 className="text-3xl font-serif font-black uppercase mb-12">Send a Message</h3>
+            <form className="space-y-8" onSubmit={handleSubmit}>
+              <div className="grid md:grid-cols-2 gap-8">
+                <input required type="text" placeholder="YOUR NAME" className="w-full bg-[#fdfaf6] border-2 border-transparent focus:border-[#eeb053] px-8 py-5 rounded-full font-serif italic uppercase outline-none transition-all" />
+                <input required type="email" placeholder="EMAIL@DOMAIN.COM" className="w-full bg-[#fdfaf6] border-2 border-transparent focus:border-[#eeb053] px-8 py-5 rounded-full font-serif italic uppercase outline-none transition-all" />
+              </div>
+              <textarea required rows={5} placeholder="MESSAGE..." className="w-full bg-[#fdfaf6] border-2 border-transparent focus:border-[#eeb053] px-8 py-6 rounded-[2rem] font-serif italic uppercase outline-none transition-all resize-none"></textarea>
+              <button type="submit" className="w-full bg-[#9c1c22] text-white py-6 rounded-full font-cinzel font-black uppercase tracking-[0.3em] shadow-xl hover:bg-[#1a1a1a] transition-all flex items-center justify-center gap-4">
+                Send <Send size={20} />
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const VideoSection = ({ videoId, title, description }: { videoId: string, title: string, description?: string }) => (
+  <div className="max-w-6xl mx-auto px-4 py-20">
+    <div className="text-center mb-12">
+      <h3 className="text-3xl md:text-5xl font-serif font-black text-[#332d2b] uppercase mb-4">{title}</h3>
+      {description && <p className="text-xl font-serif italic text-[#332d2b]/60 uppercase">{description}</p>}
+    </div>
+    <div className="relative aspect-video rounded-[3rem] overflow-hidden shadow-3xl border-[12px] md:border-[20px] border-white group">
+      <iframe className="absolute inset-0 w-full h-full" src={`https://www.youtube.com/embed/${videoId}?rel=0&modestbranding=1`} title={title} frameBorder="0" allowFullScreen />
+    </div>
+  </div>
+);
+
 const App: React.FC = () => {
   const [currentPage, setCurrentPage] = useState('home');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -1197,10 +1080,7 @@ const App: React.FC = () => {
   const { scrollYProgress } = useScroll();
 
   useEffect(() => {
-    // Elegant loading delay to ensure brand impact
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 3000);
+    const timer = setTimeout(() => setIsLoading(false), 3000);
     return () => clearTimeout(timer);
   }, []);
 
@@ -1236,11 +1116,7 @@ const App: React.FC = () => {
       </AnimatePresence>
 
       {!isLoading && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1 }}
-        >
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1 }}>
           <FireworksBackground />
           <motion.div className="fixed top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#9c1c22] via-[#eeb053] to-[#ffffff] z-[100] origin-left" style={{ scaleX: scrollYProgress }} />
           <nav className="fixed w-full z-50 glass border-b-2 border-[#eeb053]/30">
@@ -1251,19 +1127,18 @@ const App: React.FC = () => {
               <div className="hidden md:flex items-center gap-10">
                 {NAVIGATION.map((item) => (
                   <button key={item.id} onClick={() => handleNavigate(item.id)} className="text-[11px] font-cinzel font-bold uppercase tracking-[0.3em] text-[#332d2b] hover:text-[#9c1c22] transition-all relative group">
-                    {item.name}<span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#eeb053] transition-all group-hover:w-full" />
+                    {item.name}
                   </button>
                 ))}
-                <motion.button onClick={() => handleNavigate('donate')} whileHover={{ scale: 1.05 }} className="bg-[#9c1c22] text-white px-12 py-4 rounded-full text-[11px] font-cinzel font-black tracking-[0.2em] uppercase shadow-xl border-2 border-[#eeb053]">DONATE</motion.button>
+                <button onClick={() => handleNavigate('donate')} className="bg-[#9c1c22] text-white px-12 py-4 rounded-full text-[11px] font-cinzel font-black tracking-[0.2em] uppercase border-2 border-[#eeb053]">DONATE</button>
               </div>
-              <button className="md:hidden p-2 text-[#332d2b]" onClick={() => setIsMenuOpen(!isMenuOpen)} aria-label="Toggle menu">{isMenuOpen ? <X size={28} /> : <Menu size={28} />}</button>
+              <button className="md:hidden p-2 text-[#332d2b]" onClick={() => setIsMenuOpen(!isMenuOpen)}>{isMenuOpen ? <X size={28} /> : <Menu size={28} />}</button>
             </div>
             <AnimatePresence>
               {isMenuOpen && (
                 <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="md:hidden glass border-b border-[#332d2b]/10 overflow-hidden shadow-2xl">
                   <div className="px-8 py-12 space-y-8 bg-white">
                     {NAVIGATION.map((item) => (<button key={item.id} onClick={() => handleNavigate(item.id)} className="block w-full text-left text-2xl font-cinzel font-bold tracking-[0.2em] text-[#332d2b] uppercase">{item.name}</button>))}
-                    <button onClick={() => handleNavigate('donate')} className="w-full bg-[#9c1c22] text-white py-6 rounded-[2rem] font-cinzel font-black text-2xl border-2 border-[#eeb053] uppercase">SHOW SOME LOVE</button>
                   </div>
                 </motion.div>
               )}
@@ -1272,50 +1147,27 @@ const App: React.FC = () => {
           
           <main className="relative z-10">
             <AnimatePresence mode="wait">
-              <motion.div 
-                key={currentPage} 
-                initial={{ opacity: 0, x: 20 }} 
-                animate={{ opacity: 1, x: 0 }} 
-                exit={{ opacity: 0, x: -20 }} 
-                transition={{ duration: 0.5, ease: "anticipate" }}
-              >
+              <motion.div key={currentPage} initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.5 }}>
                 {renderContent()}
               </motion.div>
             </AnimatePresence>
           </main>
 
-          <footer className="bg-[#1a1a1a] text-[#fdfaf6] pt-20 md:pt-32 pb-20 relative overflow-hidden z-20 border-t-8 border-[#eeb053]">
+          <footer className="bg-[#1a1a1a] text-[#fdfaf6] pt-20 pb-20 relative overflow-hidden z-20 border-t-8 border-[#eeb053]">
             <div className="max-w-7xl mx-auto px-4 relative z-10 text-center md:text-left">
               <div className="grid lg:grid-cols-4 gap-16 mb-24 items-start">
                 <div className="lg:col-span-2">
-                  <div onClick={() => handleNavigate('home')} className="cursor-pointer inline-block mb-10"><Logo className="w-24 h-24 md:w-56 md:h-56 brightness-110 drop-shadow-2xl mx-auto md:mx-0" /></div>
+                  <Logo className="w-24 h-24 md:w-56 md:h-56 brightness-110 mx-auto md:mx-0" />
                   <p className="text-2xl text-[#fdfaf6]/60 max-w-lg mb-10 font-serif italic uppercase mx-auto md:mx-0">"Restoring human dignity and transforming global communities through structured compassion."</p>
-                  <div className="flex flex-col gap-4 text-xl font-serif text-[#eeb053] mb-10">
-                    <div className="flex items-center justify-center md:justify-start gap-4"><Phone size={20} className="text-[#9c1c22]" /> 443-402-5802</div>
-                    <div className="flex items-center justify-center md:justify-start gap-4 text-left"><MapPin size={24} className="text-[#9c1c22] shrink-0" /> #9960 Raven Hurst Road, Middle River MD 21221</div>
-                  </div>
-                </div>
-                <div>
-                  <h5 className="text-[#eeb053] font-cinzel font-black uppercase tracking-[0.4em] text-[12px] mb-10">Sitemap</h5>
-                  <ul className="space-y-6 text-xl font-serif italic text-[#fdfaf6]/50 uppercase">
-                    {NAVIGATION.map(n => (<li key={n.id}><button onClick={() => handleNavigate(n.id)} className="hover:text-white transition-colors">{n.name}</button></li>))}
-                  </ul>
-                </div>
-                <div>
-                  <h5 className="text-[#eeb053] font-cinzel font-black uppercase tracking-[0.4em] text-[12px] mb-10">Inquiries</h5>
-                  <p className="text-xl font-serif italic text-[#fdfaf6]/50 leading-relaxed italic uppercase">Direct Correspondence:<br />hello@foundationofluv.org</p>
                 </div>
               </div>
-              <div className="pt-12 border-t border-white/5 text-[#fdfaf6]/20 text-[10px] font-cinzel font-black tracking-[0.4em] uppercase text-center md:text-left">© 2025 FOUNDATION OF LUV. LOVE IN ACTION, CHANGE IN MOTION.</div>
+              <div className="pt-12 border-t border-white/5 text-[#fdfaf6]/20 text-[10px] font-cinzel font-black tracking-[0.4em] uppercase text-center md:text-left">© 2025 FOUNDATION OF LUV.</div>
             </div>
           </footer>
 
           <ScrollToTopButton />
-
           <AnimatePresence>
-            {showToast && (
-              <Toast message="Message Sent Successfully!" onClose={() => setShowToast(false)} />
-            )}
+            {showToast && <Toast message="Message Sent Successfully!" onClose={() => setShowToast(false)} />}
           </AnimatePresence>
         </motion.div>
       )}
