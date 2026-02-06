@@ -3,7 +3,7 @@ import { motion, AnimatePresence, useScroll, useTransform, useMotionValue, useIn
 import { 
   Menu, X, ChevronRight, ArrowRight, Sparkles, MoveRight, ChevronLeft, Calendar, Award, 
   Instagram, Linkedin, Youtube, Globe, Brain, Users, Home, Utensils, GraduationCap, Image as LucideImage,
-  Target, Eye, ShieldCheck, TrendingUp, AlertCircle, Building2, Workflow, Lightbulb, Heart, Info
+  Target, Eye, ShieldCheck, TrendingUp, AlertCircle, Building2, Workflow, Lightbulb, Heart, Info, Phone, MapPin
 } from 'lucide-react';
 import { 
   NAVIGATION, SERVICE_AREAS, STRATEGIC_PHASES, STATS, COLORS, HERO_IMAGES, GALLERY_IMAGES,
@@ -73,7 +73,7 @@ const FireworksBackground = () => {
     const id = Date.now() + Math.random();
     const x = Math.random() * 100;
     const y = Math.random() * 100;
-    const colorValues = ["#9c1c22", "#e2a744", "#df8c3d", "#fdfaf6"];
+    const colorValues = [COLORS.crimson, COLORS.gold, COLORS.accent, COLORS.white];
     const color = colorValues[Math.floor(Math.random() * colorValues.length)];
     setBursts(prev => [...prev, { id, x, y, color }]);
     setTimeout(() => setBursts(prev => prev.filter(b => b.id !== id)), 3000);
@@ -136,7 +136,7 @@ const HomeView = ({ onNavigate }: { onNavigate: (id: string) => void }) => {
                 <motion.div key={currentSlide} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 1 }} className="absolute inset-0">
                   <img src={HERO_IMAGES[currentSlide].url} alt={HERO_IMAGES[currentSlide].caption} className="w-full h-full object-cover brightness-75" />
                   <div className="absolute bottom-0 left-0 right-0 p-8 md:p-14 bg-gradient-to-t from-black/80 to-transparent text-left">
-                    <span className="text-[#e2a744] font-cinzel font-black tracking-[0.4em] text-[10px] uppercase">Movement Chapter</span>
+                    <span className="text-[#eeb053] font-cinzel font-black tracking-[0.4em] text-[10px] uppercase">Movement Chapter</span>
                     <h3 className="text-white text-lg md:text-5xl font-serif italic font-bold">{HERO_IMAGES[currentSlide].caption}</h3>
                   </div>
                 </motion.div>
@@ -146,54 +146,51 @@ const HomeView = ({ onNavigate }: { onNavigate: (id: string) => void }) => {
           </motion.div>
           
           <div className="mt-12">
-            <h1 className="hero-text text-4xl md:text-[8rem] font-serif font-black leading-tight text-shine-crimson">Love in Action,<br /><span className="italic font-normal text-shine">Change in Motion.</span></h1>
+            <h1 className="hero-text text-4xl md:text-[8rem] font-serif font-black leading-tight text-shine-crimson">Love in Action,<br /><span className="italic font-normal text-shine text-[#eeb053]">Change in Motion.</span></h1>
             <p className="mobile-p text-lg md:text-3xl text-[#332d2b]/70 mt-8 max-w-4xl mx-auto font-serif italic text-center">"We are the kinetic pulse of restoration, engineering pathways where human dignity is an unshakeable reality."</p>
             <div className="flex flex-col md:flex-row gap-6 justify-center mt-12">
-              <button onClick={() => onNavigate('donate')} className="px-12 py-6 bg-[#9c1c22] text-white rounded-full font-cinzel font-black text-xl shadow-xl flex items-center gap-3">Join the Movement <MoveRight /></button>
-              <button onClick={() => onNavigate('aboutus')} className="px-12 py-6 glass-card rounded-full font-cinzel font-bold text-xl border border-[#9c1c22]/15 flex items-center justify-center gap-3">Explore Our Story <ArrowRight /></button>
+              <button onClick={() => onNavigate('donate')} className="px-12 py-6 bg-[#9c1c22] text-white rounded-full font-cinzel font-black text-xl shadow-xl flex items-center gap-3 hover:bg-[#7a141a] transition-all">Show some Love <MoveRight /></button>
+              <button onClick={() => onNavigate('aboutus')} className="px-12 py-6 glass-card rounded-full font-cinzel font-bold text-xl border border-[#eeb053]/50 flex items-center justify-center gap-3 hover:bg-white/60 transition-all">Explore Our Story <ArrowRight /></button>
             </div>
           </div>
         </div>
       </header>
 
-      {/* About Us (FOL) Section Requested to be on Home */}
       <section className="py-20 md:py-40 bg-[#f9f5f0] border-y border-[#332d2b]/5">
         <div className="max-w-7xl mx-auto px-4 grid lg:grid-cols-12 gap-20 items-center">
           <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="lg:col-span-5">
-            <div className="p-4 bg-white rounded-[4rem] shadow-2xl">
+            <div className="p-4 bg-white rounded-[4rem] shadow-2xl border-4 border-[#eeb053]">
               <img src="https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&q=80&w=1000" className="rounded-[3.5rem] grayscale" alt="Foundation Origin" />
             </div>
           </motion.div>
           <div className="lg:col-span-7">
             <h2 className="text-4xl md:text-7xl font-serif font-black text-[#332d2b] leading-tight mb-8">ABOUT US (FOL)</h2>
             <p className="text-xl md:text-2xl text-[#332d2b]/80 font-serif leading-relaxed italic border-l-8 border-[#9c1c22] pl-10">
-              Foundation of Love (FOL) was created in 2016 with a simple yet profound belief: that love, dignity, and compassion can transform individuals and communities. Rooted in humanitarian service, advocacy, and holistic support, FOL was established to bridge societal divides, empower the vulnerable, and create lasting pathways to opportunity. Since inception, the foundation has touched lives across diverse demographics through outreach, capacity-building, mentorship, and community-centered initiatives.
+              Foundation of Love (FOL) was created in 2016 with a simple yet profound belief: that love, dignity, and compassion can transform individuals and communities. Rooted in humanitarian service, advocacy, and holistic support, FOL was established to bridge societal divides, empower the vulnerable, and create lasting pathways to opportunity.
             </p>
           </div>
         </div>
       </section>
 
-      {/* Mission & Vision Section (Home) */}
       <section className="py-20 md:py-40 bg-white">
         <div className="max-w-7xl mx-auto px-4 grid md:grid-cols-2 gap-12">
-          <div className="bg-[#fdfaf6] p-14 rounded-[4rem] border border-[#332d2b]/5">
+          <div className="bg-[#fdfaf6] p-14 rounded-[4rem] border-2 border-[#9c1c22]/10">
             <div className="text-[#9c1c22] mb-8"><Target size={48} /></div>
             <h3 className="text-4xl font-serif font-black mb-6">Mission</h3>
             <p className="text-2xl text-[#332d2b]/70 font-serif leading-relaxed italic">{MISSION_VISION.mission.content}</p>
           </div>
-          <div className="bg-[#fdfaf6] p-14 rounded-[4rem] border border-[#332d2b]/5">
-            <div className="text-[#e2a744] mb-8"><Eye size={48} /></div>
+          <div className="bg-[#fdfaf6] p-14 rounded-[4rem] border-2 border-[#eeb053]/20">
+            <div className="text-[#eeb053] mb-8"><Eye size={48} /></div>
             <h3 className="text-4xl font-serif font-black mb-6">Vision</h3>
             <p className="text-2xl text-[#332d2b]/70 font-serif leading-relaxed italic">{MISSION_VISION.vision.content}</p>
           </div>
         </div>
       </section>
 
-      {/* Video Section (Always on Home) */}
       <section className="py-20 md:py-40 bg-[#f9f5f0]">
         <div className="max-w-7xl mx-auto px-4 text-center">
           <h2 className="text-4xl md:text-8xl font-serif font-black text-[#332d2b] mb-12">Love Witnessed.</h2>
-          <div className="relative aspect-video rounded-[3rem] md:rounded-[5rem] overflow-hidden border-[16px] md:border-[32px] border-white shadow-2xl bg-black max-w-5xl mx-auto">
+          <div className="relative aspect-video rounded-[3rem] md:rounded-[5rem] overflow-hidden border-[16px] md:border-[32px] border-[#eeb053] shadow-2xl bg-black max-w-5xl mx-auto">
             <iframe className="w-full h-full" src="https://www.youtube.com/embed/XxfFvLERt7o" title="FoL Impact" frameBorder="0" allowFullScreen></iframe>
           </div>
         </div>
@@ -203,7 +200,7 @@ const HomeView = ({ onNavigate }: { onNavigate: (id: string) => void }) => {
         <div className="max-w-7xl mx-auto px-4 grid md:grid-cols-2 lg:grid-cols-4 gap-12">
           {STATS.map((stat, i) => (
             <div key={i} className="text-center">
-              <div className="text-6xl md:text-8xl font-serif font-black text-[#9c1c22] mb-4"><AnimatedNumber value={stat.value} /><span className="text-[#e2a744]">{stat.suffix}</span></div>
+              <div className="text-6xl md:text-8xl font-serif font-black text-[#9c1c22] mb-4"><AnimatedNumber value={stat.value} /><span className="text-[#eeb053]">{stat.suffix}</span></div>
               <h4 className="font-cinzel font-black text-[12px] tracking-[0.3em] uppercase mb-4 text-[#332d2b]">{stat.label}</h4>
               <p className="font-serif italic text-xl text-[#332d2b]/50">{stat.description}</p>
             </div>
@@ -223,35 +220,24 @@ const DetailedAboutView = () => (
       </div>
 
       <div className="grid lg:grid-cols-12 gap-20 mb-32 items-center">
-        <div className="lg:col-span-7 bg-white p-14 rounded-[3.5rem] shadow-xl">
+        <div className="lg:col-span-7 bg-white p-14 rounded-[3.5rem] shadow-xl border-l-8 border-[#eeb053]">
            <h3 className="text-4xl font-serif font-black mb-10 text-[#332d2b]">{DETAILED_ABOUT.dualRole.intro}</h3>
            <ul className="space-y-8 text-xl font-serif text-[#332d2b]/70 italic">
-             {DETAILED_ABOUT.dualRole.points.map((p, i) => <li key={i} className="flex gap-6"><MoveRight className="text-[#e2a744] shrink-0" /> {p}</li>)}
+             {DETAILED_ABOUT.dualRole.points.map((p, i) => <li key={i} className="flex gap-6"><MoveRight className="text-[#eeb053] shrink-0" /> {p}</li>)}
            </ul>
-           <p className="mt-12 text-2xl font-serif italic text-[#9c1c22] border-t border-black/5 pt-10">{DETAILED_ABOUT.dualRole.collaboration}</p>
         </div>
         <div className="lg:col-span-5"><Logo className="w-full h-full grayscale opacity-20" /></div>
       </div>
 
       <div className="mb-32">
         <h3 className="text-5xl font-serif font-black text-center mb-16">{DETAILED_ABOUT.problemStatement.title}</h3>
-        <p className="text-2xl text-center text-[#332d2b]/60 mb-20 italic max-w-3xl mx-auto">{DETAILED_ABOUT.problemStatement.context}</p>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20">
            {DETAILED_ABOUT.problemStatement.crises.map((item, idx) => (
-             <div key={idx} className="bg-white p-10 rounded-[2rem] border border-[#332d2b]/5 shadow-sm">
+             <div key={idx} className="bg-white p-10 rounded-[2rem] border-2 border-[#9c1c22]/10 shadow-sm hover:border-[#9c1c22] transition-all">
                 <AlertCircle className="text-[#9c1c22] mb-4" />
                 <p className="text-xl text-[#332d2b] font-serif font-bold italic">{item}</p>
              </div>
            ))}
-        </div>
-        <div className="bg-[#4a4440] text-white p-16 rounded-[4rem]">
-          <h4 className="text-3xl font-serif font-black text-center mb-12 text-[#eeb053]">{DETAILED_ABOUT.problemStatement.fragmented.title}</h4>
-          <div className="grid md:grid-cols-3 gap-10">
-             {DETAILED_ABOUT.problemStatement.fragmented.points.map((f, idx) => (
-               <div key={idx} className="text-center italic opacity-80 text-lg">{f}</div>
-             ))}
-          </div>
-          <div className="mt-16 text-center text-4xl font-serif font-black text-[#eeb053] italic">"{DETAILED_ABOUT.problemStatement.closing}"</div>
         </div>
       </div>
 
@@ -259,7 +245,7 @@ const DetailedAboutView = () => (
         <h3 className="text-5xl font-serif font-black text-center mb-20">Core Values</h3>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
           {DETAILED_ABOUT.values.map((v, i) => (
-            <div key={i} className="bg-white p-10 rounded-[2.5rem] border border-[#332d2b]/5 shadow-sm">
+            <div key={i} className="bg-white p-10 rounded-[2.5rem] border border-[#eeb053]/50 shadow-sm hover:bg-[#eeb053]/5 transition-all">
               <h4 className="text-2xl font-serif font-black text-[#9c1c22] mb-4">{v.title}</h4>
               <p className="text-lg text-[#332d2b]/60 font-serif italic leading-relaxed">{v.description}</p>
             </div>
@@ -267,49 +253,9 @@ const DetailedAboutView = () => (
         </div>
       </div>
 
-      <div className="bg-[#332d2b] text-white p-20 rounded-[5rem] mb-32">
-        <h3 className="text-5xl font-serif font-black mb-20 text-center">Ecosystem Role</h3>
-        <div className="grid md:grid-cols-2 gap-16">
-          <div>
-            <h4 className="text-3xl font-serif font-black text-[#eeb053] mb-8">{DETAILED_ABOUT.ecosystem.role1.title}</h4>
-            <ul className="space-y-6 text-xl text-white/70 font-serif italic">
-              {DETAILED_ABOUT.ecosystem.role1.items.map((p, i) => <li key={i} className="flex gap-4"><Workflow size={20} className="text-[#9c1c22] shrink-0" /> {p}</li>)}
-            </ul>
-          </div>
-          <div>
-            <h4 className="text-3xl font-serif font-black text-[#eeb053] mb-8">{DETAILED_ABOUT.ecosystem.role2.title}</h4>
-            <ul className="space-y-6 text-xl text-white/70 font-serif italic">
-              {DETAILED_ABOUT.ecosystem.role2.items.map((p, i) => <li key={i} className="flex gap-4"><Workflow size={20} className="text-[#9c1c22] shrink-0" /> {p}</li>)}
-            </ul>
-          </div>
-        </div>
-      </div>
-
-      <div className="mb-32">
-        <h3 className="text-5xl font-serif font-black text-center mb-24">Program Pillars</h3>
-        <div className="space-y-20">
-          {DETAILED_ABOUT.pillars.map((pillar) => (
-            <div key={pillar.id} className="bg-white p-14 rounded-[4rem] shadow-2xl border border-[#332d2b]/5">
-              <span className="text-[#e2a744] font-cinzel font-black text-xs uppercase tracking-widest block mb-4">Pillar {pillar.id}</span>
-              <h4 className="text-4xl md:text-5xl font-serif font-black text-[#332d2b] mb-8">{pillar.title}</h4>
-              <p className="text-2xl font-serif italic text-[#332d2b]/60 mb-12 border-l-4 border-[#9c1c22] pl-8">{pillar.objective}</p>
-              <div className="grid md:grid-cols-2 gap-12">
-                <div>
-                   <h5 className="font-cinzel font-black text-sm uppercase mb-8 text-[#9c1c22]">Key Initiatives</h5>
-                   <ul className="space-y-4 font-serif text-lg italic opacity-70">
-                     {pillar.initiatives.map((ini, idx) => <li key={idx}>• {ini}</li>)}
-                   </ul>
-                </div>
-                {pillar.advantage && <div className="p-10 bg-[#fdfaf6] rounded-[2rem] border border-[#9c1c22]/10 italic text-xl"><strong>FoL Advantage:</strong> {pillar.advantage}</div>}
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <div className="text-center py-32 bg-[#9c1c22] text-white rounded-[5rem] shadow-2xl px-8">
+      <div className="text-center py-32 bg-[#9c1c22] text-white rounded-[5rem] shadow-2xl px-8 border-b-[20px] border-[#eeb053]">
         <h2 className="text-4xl md:text-6xl font-serif font-black leading-tight italic mb-12">"{DETAILED_ABOUT.closing.quote}"</h2>
-        <p className="text-2xl font-cinzel font-black tracking-widest opacity-60">{DETAILED_ABOUT.closing.tagline}</p>
+        <p className="text-2xl font-cinzel font-black tracking-widest text-[#eeb053]">{DETAILED_ABOUT.closing.tagline}</p>
       </div>
     </div>
   </section>
@@ -320,50 +266,25 @@ const DonorView = () => (
     <div className="max-w-7xl mx-auto px-4">
       <div className="text-center mb-32">
         <Heart className="text-[#9c1c22] w-20 h-20 mx-auto mb-10" />
-        <h2 className="text-5xl md:text-8xl font-serif font-black text-[#332d2b] mb-12">{DONOR_PAGE_CONTENT.different.title}</h2>
+        <h2 className="text-5xl md:text-8xl font-serif font-black text-[#332d2b] mb-12 uppercase">{DONOR_PAGE_CONTENT.different.title}</h2>
         <p className="text-2xl md:text-4xl text-[#332d2b]/70 font-serif italic max-w-4xl mx-auto">{DONOR_PAGE_CONTENT.different.content}</p>
       </div>
 
       <div className="mb-32 grid md:grid-cols-2 lg:grid-cols-3 gap-10">
         {DONOR_PAGE_CONTENT.impactPillars.map((pillar, i) => (
-          <div key={i} className="bg-white p-12 rounded-[3.5rem] shadow-lg border border-[#332d2b]/5">
+          <div key={i} className="bg-white p-12 rounded-[3.5rem] shadow-lg border-t-4 border-[#eeb053]">
              <h4 className="text-2xl font-serif font-black text-[#9c1c22] mb-6">{pillar.title}</h4>
              <p className="text-lg text-[#332d2b]/70 font-serif italic">{pillar.description}</p>
           </div>
         ))}
       </div>
 
-      <div className="grid md:grid-cols-2 gap-16 mb-32">
-        <div className="bg-[#332d2b] text-white p-16 rounded-[4rem]">
-           <h3 className="text-4xl font-serif font-black mb-12 text-[#eeb053]">Our Approach</h3>
-           <ul className="space-y-6 text-xl font-serif italic text-white/70">
-              {DONOR_PAGE_CONTENT.approach.map((item, i) => <li key={i} className="flex gap-6"><Sparkles className="text-[#eeb053] shrink-0" /> {item}</li>)}
-           </ul>
-        </div>
-        <div className="bg-white p-16 rounded-[4rem] border border-[#332d2b]/10">
-           <h3 className="text-4xl font-serif font-black text-[#332d2b] mb-12">{DONOR_PAGE_CONTENT.stewardship.title}</h3>
-           <ul className="space-y-8 text-xl font-serif italic text-[#332d2b]/60 mb-12">
-              {DONOR_PAGE_CONTENT.stewardship.points.map((p, i) => <li key={i} className="flex gap-6"><ShieldCheck className="text-[#9c1c22] shrink-0" /> {p}</li>)}
-           </ul>
-           <p className="text-2xl font-cinzel font-bold text-[#9c1c22] border-t pt-8">{DONOR_PAGE_CONTENT.stewardship.closing}</p>
-        </div>
-      </div>
-
-      <div className="bg-white p-20 rounded-[5rem] shadow-2xl mb-32 text-center border border-[#332d2b]/5">
-        <h3 className="text-5xl font-serif font-black text-[#332d2b] mb-16">{DONOR_PAGE_CONTENT.matters.title}</h3>
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12">
-           {DONOR_PAGE_CONTENT.matters.points.map((point, i) => (
-             <div key={i} className="italic text-xl font-serif font-bold text-[#332d2b]/60">{point}</div>
-           ))}
-        </div>
-      </div>
-
-      <div className="bg-[#9c1c22] text-white p-20 rounded-[5rem] text-center shadow-2xl">
-        <h3 className="text-6xl font-serif font-black mb-16 italic underline decoration-[#eeb053] decoration-4 underline-offset-8">Our Promise</h3>
-        <div className="flex flex-col gap-10 text-3xl font-serif italic opacity-80 mb-20">
+      <div className="bg-[#9c1c22] text-white p-20 rounded-[5rem] text-center shadow-2xl border-4 border-[#eeb053]">
+        <h3 className="text-6xl font-serif font-black mb-16 italic underline decoration-[#eeb053] decoration-8 underline-offset-8 uppercase">Our Promise</h3>
+        <div className="flex flex-col gap-10 text-3xl font-serif italic opacity-90 mb-20">
           {DONOR_PAGE_CONTENT.promise.points.map((p, i) => <p key={i}>"{p}"</p>)}
         </div>
-        <p className="text-4xl font-cinzel font-black tracking-[0.3em]">{DONOR_PAGE_CONTENT.promise.tagline}</p>
+        <p className="text-4xl font-cinzel font-black tracking-[0.3em] text-[#eeb053]">{DONOR_PAGE_CONTENT.promise.tagline}</p>
       </div>
     </div>
   </section>
@@ -374,13 +295,13 @@ const GalleryPageView = () => (
     <div className="max-w-7xl mx-auto px-4">
       <div className="text-center mb-32">
         <h2 className="text-5xl md:text-8xl font-serif font-black text-[#332d2b]">The Visual <span className="italic text-[#eeb053]">Witness.</span></h2>
-        <div className="h-1 w-24 bg-[#9c1c22] mx-auto mt-10 rounded-full" />
+        <div className="h-2 w-32 bg-[#9c1c22] mx-auto mt-10 rounded-full" />
       </div>
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-12">
         {GALLERY_IMAGES.map((img, i) => (
-          <motion.div key={i} initial={{ opacity: 0, scale: 0.9 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} className="group relative aspect-square overflow-hidden rounded-[3rem] shadow-2xl">
+          <motion.div key={i} initial={{ opacity: 0, scale: 0.9 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} className="group relative aspect-square overflow-hidden rounded-[3rem] shadow-2xl border-4 border-transparent hover:border-[#eeb053] transition-all">
             <img src={img.url} alt={img.title} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-end p-12">
+            <div className="absolute inset-0 bg-gradient-to-t from-[#9c1c22]/90 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-end p-12">
               <h4 className="text-white font-cinzel font-bold text-2xl uppercase tracking-[0.2em]">{img.title}</h4>
             </div>
           </motion.div>
@@ -408,10 +329,7 @@ const App: React.FC = () => {
       case 'aboutus': return <DetailedAboutView />;
       case 'gallery': return <GalleryPageView />;
       case 'donate': return <DonorView />;
-      case 'globalservices': return <HomeView onNavigate={handleNavigate} />; // Defaulting for simple state demo
-      case 'roadmap': return <HomeView onNavigate={handleNavigate} />;
-      case 'luvwatts': return <HomeView onNavigate={handleNavigate} />;
-      case 'programs': return <HomeView onNavigate={handleNavigate} />;
+      case 'globalservices': return <HomeView onNavigate={handleNavigate} />;
       default: return <HomeView onNavigate={handleNavigate} />;
     }
   };
@@ -419,9 +337,9 @@ const App: React.FC = () => {
   return (
     <div className="min-h-screen w-full overflow-x-hidden selection:bg-[#9c1c22]/20 selection:text-[#9c1c22] bg-[#fdfaf6] relative">
       <FireworksBackground />
-      <motion.div className="fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#9c1c22] to-[#eeb053] z-[100] origin-left" style={{ scaleX: scrollYProgress }} />
+      <motion.div className="fixed top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#9c1c22] via-[#eeb053] to-[#ffffff] z-[100] origin-left" style={{ scaleX: scrollYProgress }} />
       
-      <nav className="fixed w-full z-50 glass border-b border-[#332d2b]/10">
+      <nav className="fixed w-full z-50 glass border-b-2 border-[#eeb053]/30">
         <div className="max-w-7xl mx-auto px-4 h-20 md:h-32 flex justify-between items-center">
           <div onClick={() => handleNavigate('home')} className="cursor-pointer transition-transform hover:scale-105">
             <Logo className="w-16 h-16 md:w-28 md:h-28" />
@@ -430,10 +348,10 @@ const App: React.FC = () => {
           <div className="hidden md:flex items-center gap-10">
             {NAVIGATION.map((item) => (
               <button key={item.id} onClick={() => handleNavigate(item.id)} className="text-[11px] font-cinzel font-bold uppercase tracking-[0.3em] text-[#332d2b] hover:text-[#9c1c22] transition-all relative group">
-                {item.name}<span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#9c1c22] transition-all group-hover:w-full" />
+                {item.name}<span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#eeb053] transition-all group-hover:w-full" />
               </button>
             ))}
-            <motion.button onClick={() => handleNavigate('donate')} whileHover={{ scale: 1.05 }} className="bg-[#9c1c22] text-white px-12 py-4 rounded-full text-[11px] font-cinzel font-black tracking-[0.2em] uppercase shadow-xl">DONATE</motion.button>
+            <motion.button onClick={() => handleNavigate('donate')} whileHover={{ scale: 1.05 }} className="bg-[#9c1c22] text-white px-12 py-4 rounded-full text-[11px] font-cinzel font-black tracking-[0.2em] uppercase shadow-xl border-2 border-[#eeb053]">DONATE</motion.button>
           </div>
           
           <button className="md:hidden p-2 text-[#332d2b]" onClick={() => setIsMenuOpen(!isMenuOpen)}>{isMenuOpen ? <X size={28} /> : <Menu size={28} />}</button>
@@ -442,9 +360,9 @@ const App: React.FC = () => {
         <AnimatePresence>
           {isMenuOpen && (
             <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="md:hidden glass border-b border-[#332d2b]/10 overflow-hidden shadow-2xl">
-              <div className="px-8 py-12 space-y-8">
+              <div className="px-8 py-12 space-y-8 bg-white">
                 {NAVIGATION.map((item) => (<button key={item.id} onClick={() => handleNavigate(item.id)} className="block w-full text-left text-2xl font-cinzel font-bold tracking-[0.2em] text-[#332d2b]">{item.name}</button>))}
-                <button onClick={() => handleNavigate('donate')} className="w-full bg-[#9c1c22] text-white py-6 rounded-[2rem] font-cinzel font-black text-2xl">DONATE NOW</button>
+                <button onClick={() => handleNavigate('donate')} className="w-full bg-[#9c1c22] text-white py-6 rounded-[2rem] font-cinzel font-black text-2xl border-2 border-[#eeb053]">SHOW SOME LOVE</button>
               </div>
             </motion.div>
           )}
@@ -453,27 +371,34 @@ const App: React.FC = () => {
 
       <main className="relative z-10"><AnimatePresence mode="wait"><motion.div key={currentPage} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.6 }}>{renderContent()}</motion.div></AnimatePresence></main>
 
-      <footer className="bg-[#332d2b] text-[#fdfaf6] pt-20 md:pt-48 pb-20 relative overflow-hidden z-20">
+      <footer className="bg-[#1a1a1a] text-[#fdfaf6] pt-20 md:pt-32 pb-20 relative overflow-hidden z-20 border-t-8 border-[#eeb053]">
         <div className="max-w-7xl mx-auto px-4 relative z-10">
-          <div className="grid lg:grid-cols-4 gap-24 mb-32 items-start text-center md:text-left">
+          <div className="grid lg:grid-cols-4 gap-16 mb-24 items-start text-center md:text-left">
             <div className="lg:col-span-2">
               <div onClick={() => handleNavigate('home')} className="cursor-pointer inline-block mb-10"><Logo className="w-24 h-24 md:w-56 md:h-56 brightness-110 drop-shadow-2xl mx-auto md:mx-0" /></div>
-              <p className="text-3xl text-[#fdfaf6]/40 max-w-lg mb-14 font-serif italic">"Restoring human dignity and transforming global communities through strategic action."</p>
-              <div className="flex justify-center md:justify-start gap-8">
-                <a href="#" className="w-16 h-16 rounded-3xl bg-white/5 flex items-center justify-center border border-white/10 hover:bg-[#9c1c22] transition-all"><Instagram size={28} /></a>
-                <a href="#" className="w-16 h-16 rounded-3xl bg-white/5 flex items-center justify-center border border-white/10 hover:bg-[#9c1c22] transition-all"><Linkedin size={28} /></a>
-                <a href="#" className="w-16 h-16 rounded-3xl bg-white/5 flex items-center justify-center border border-white/10 hover:bg-[#9c1c22] transition-all"><Youtube size={28} /></a>
+              <p className="text-2xl text-[#fdfaf6]/60 max-w-lg mb-10 font-serif italic">"Restoring human dignity and transforming global communities through structured compassion."</p>
+              <div className="flex flex-col gap-4 text-xl font-serif text-[#eeb053] mb-10">
+                <div className="flex items-center justify-center md:justify-start gap-4"><Phone size={20} className="text-[#9c1c22]" /> 443-402-5802</div>
+                <div className="flex items-center justify-center md:justify-start gap-4 text-left"><MapPin size={24} className="text-[#9c1c22] shrink-0" /> #9960 Raven Hurst Road, Middle River MD 21221</div>
+              </div>
+              <div className="flex justify-center md:justify-start gap-6">
+                <a href="#" className="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center border border-white/10 hover:bg-[#9c1c22] transition-all"><Instagram size={24} /></a>
+                <a href="https://www.linkedin.com/company/111352944/admin/dashboard/" target="_blank" rel="noopener noreferrer" className="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center border border-white/10 hover:bg-[#9c1c22] transition-all"><Linkedin size={24} /></a>
+                <a href="#" className="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center border border-white/10 hover:bg-[#9c1c22] transition-all"><Youtube size={24} /></a>
               </div>
             </div>
             <div>
-              <h5 className="text-[#eeb053] font-cinzel font-black uppercase tracking-[0.4em] text-[12px] mb-12">Architecture</h5>
-              <ul className="space-y-8 text-2xl font-serif italic text-[#fdfaf6]/60">
+              <h5 className="text-[#eeb053] font-cinzel font-black uppercase tracking-[0.4em] text-[12px] mb-10">Sitemap</h5>
+              <ul className="space-y-6 text-xl font-serif italic text-[#fdfaf6]/50">
                 {NAVIGATION.map(n => (<li key={n.id}><button onClick={() => handleNavigate(n.id)} className="hover:text-white transition-colors">{n.name}</button></li>))}
               </ul>
             </div>
-            <div><h5 className="text-[#eeb053] font-cinzel font-black uppercase tracking-[0.4em] text-[12px] mb-12">Contact</h5><p className="text-2xl font-serif italic text-[#fdfaf6]/60 leading-relaxed italic">Impact Headquarters<br />hello@foundationofluv.org</p></div>
+            <div>
+              <h5 className="text-[#eeb053] font-cinzel font-black uppercase tracking-[0.4em] text-[12px] mb-10">Inquiries</h5>
+              <p className="text-xl font-serif italic text-[#fdfaf6]/50 leading-relaxed italic">Direct Correspondence:<br />hello@foundationofluv.org</p>
+            </div>
           </div>
-          <div className="pt-12 border-t border-white/5 text-[#fdfaf6]/20 text-[11px] font-cinzel font-black tracking-[0.5em] uppercase text-center md:text-left italic">© 2025 FOUNDATION OF LUV. ALL RIGHTS RESERVED.</div>
+          <div className="pt-12 border-t border-white/5 text-[#fdfaf6]/20 text-[10px] font-cinzel font-black tracking-[0.4em] uppercase text-center md:text-left">© 2025 FOUNDATION OF LUV. LOVE IN ACTION, CHANGE IN MOTION.</div>
         </div>
       </footer>
     </div>

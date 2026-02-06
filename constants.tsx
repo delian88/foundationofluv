@@ -7,13 +7,13 @@ import {
 } from 'lucide-react';
 
 export const COLORS = {
-  crimson: '#9c1c22',
-  beige: '#fdfaf6',
-  cream: '#f9f5f0',
-  gold: '#e2a744',
-  dark: '#332d2b',
-  white: '#ffffff',
-  accent: '#df8c3d'
+  crimson: '#9c1c22', // Primary Red
+  gold: '#eeb053',    // Primary Yellow/Gold
+  white: '#ffffff',   // Primary White
+  beige: '#fdfaf6',   // Soft background
+  cream: '#f9f5f0',   // Secondary background
+  dark: '#1a1a1a',    // Dark for readability
+  accent: '#df8c3d'   // Complementary Orange-Red
 };
 
 export const NAVIGATION = [
@@ -131,7 +131,7 @@ export const DETAILED_ABOUT = {
 
 export const DONOR_PAGE_CONTENT = {
   different: {
-    title: "What Makes Us Different",
+    title: "Show some Love",
     content: "Foundation of Luv bridges advocacy, media, community programs, and ethical technology under one accountable nonprofit structure. We don’t just raise awareness — we build systems that last."
   },
   impactPillars: [
