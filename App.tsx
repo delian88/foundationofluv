@@ -713,16 +713,16 @@ const ProgramsPageView = () => {
     }
   };
 
-  const getIcon = (id: string) => {
+  const getIcon = (id: string): React.ComponentType<{ size?: number; className?: string }> => {
     switch(id) {
-      case "01": return <UsersRound className="text-inherit" />;
-      case "02": return <SchoolIcon className="text-inherit" />;
-      case "03": return <HomeIcon className="text-inherit" />;
-      case "04": return <Utensils className="text-inherit" />;
-      case "05": return <HeartPulse className="text-inherit" />;
-      case "06": return <Coins className="text-inherit" />;
-      case "07": return <Award className="text-inherit" />;
-      default: return <Sparkles className="text-inherit" />;
+      case "01": return UsersRound;
+      case "02": return SchoolIcon;
+      case "03": return HomeIcon;
+      case "04": return Utensils;
+      case "05": return HeartPulse;
+      case "06": return Coins;
+      case "07": return Award;
+      default: return Sparkles;
     }
   };
 
@@ -747,56 +747,59 @@ const ProgramsPageView = () => {
           viewport={{ once: true, margin: "-100px" }}
           className="space-y-16 md:space-y-24"
         >
-          {LUV_ACT_PROGRAMS.map((program, i) => (
-            <motion.div 
-              key={program.id} 
-              variants={cardVariants}
-              whileHover={{ 
-                scale: 1.02,
-                y: -10,
-                transition: { duration: 0.4 }
-              }}
-              className="group bg-white rounded-[3rem] md:rounded-[5rem] overflow-hidden shadow-[0_30px_100px_rgba(0,0,0,0.05)] hover:shadow-[0_40px_120px_rgba(0,0,0,0.1)] flex flex-col lg:flex-row border-b-[15px] md:border-b-[20px] transition-all duration-500" 
-              style={{ borderColor: program.color }}
-            >
-              <div className="lg:w-1/3 bg-[#f9f5f0] p-12 md:p-20 flex flex-col items-center justify-center text-center relative overflow-hidden">
-                <motion.div 
-                  initial={{ opacity: 0, scale: 0 }}
-                  whileInView={{ opacity: 0.05, scale: 1 }}
-                  transition={{ delay: 0.5, duration: 1 }}
-                  className="absolute inset-0 flex items-center justify-center pointer-events-none"
-                >
-                  <span className="text-[20rem] font-cinzel font-black" style={{ color: program.color }}>{program.id}</span>
-                </motion.div>
-                
-                <motion.div 
-                  whileHover={{ rotate: 360 }}
-                  transition={{ duration: 0.8 }}
-                  className="mb-8 p-6 bg-white rounded-full shadow-lg relative z-10"
-                  style={{ color: program.color }}
-                >
-                  <div className="w-12 h-12 md:w-16 md:h-16 flex items-center justify-center">
-                    {React.cloneElement(getIcon(program.id) as React.ReactElement, { size: 48 })}
-                  </div>
-                </motion.div>
+          {LUV_ACT_PROGRAMS.map((program, i) => {
+            const IconComponent = getIcon(program.id);
+            return (
+              <motion.div 
+                key={program.id} 
+                variants={cardVariants}
+                whileHover={{ 
+                  scale: 1.02,
+                  y: -10,
+                  transition: { duration: 0.4 }
+                }}
+                className="group bg-white rounded-[3rem] md:rounded-[5rem] overflow-hidden shadow-[0_30px_100px_rgba(0,0,0,0.05)] hover:shadow-[0_40px_120px_rgba(0,0,0,0.1)] flex flex-col lg:flex-row border-b-[15px] md:border-b-[20px] transition-all duration-500" 
+                style={{ borderColor: program.color }}
+              >
+                <div className="lg:w-1/3 bg-[#f9f5f0] p-12 md:p-20 flex flex-col items-center justify-center text-center relative overflow-hidden">
+                  <motion.div 
+                    initial={{ opacity: 0, scale: 0 }}
+                    whileInView={{ opacity: 0.05, scale: 1 }}
+                    transition={{ delay: 0.5, duration: 1 }}
+                    className="absolute inset-0 flex items-center justify-center pointer-events-none"
+                  >
+                    <span className="text-[20rem] font-cinzel font-black" style={{ color: program.color }}>{program.id}</span>
+                  </motion.div>
+                  
+                  <motion.div 
+                    whileHover={{ rotate: 360 }}
+                    transition={{ duration: 0.8 }}
+                    className="mb-8 p-6 bg-white rounded-full shadow-lg relative z-10"
+                    style={{ color: program.color }}
+                  >
+                    <div className="w-12 h-12 md:w-16 md:h-16 flex items-center justify-center">
+                      <IconComponent size={48} className="text-inherit" />
+                    </div>
+                  </motion.div>
 
-                <h3 className="text-3xl md:text-4xl font-serif font-black uppercase leading-tight relative z-10 group-hover:scale-105 transition-transform" style={{ color: program.color }}>{program.title}</h3>
-                <div className="mt-4 h-1 w-0 group-hover:w-20 bg-[#eeb053] transition-all duration-500" />
-              </div>
+                  <h3 className="text-3xl md:text-4xl font-serif font-black uppercase leading-tight relative z-10 group-hover:scale-105 transition-transform" style={{ color: program.color }}>{program.title}</h3>
+                  <div className="mt-4 h-1 w-0 group-hover:w-20 bg-[#eeb053] transition-all duration-500" />
+                </div>
 
-              <div className="lg:w-2/3 p-12 md:p-20 flex flex-col justify-center relative bg-white">
-                <motion.div
-                  initial={{ opacity: 0, x: 20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.2 + (i * 0.1) }}
-                >
-                  <p className="text-xl md:text-3xl font-serif italic text-[#332d2b]/70 leading-relaxed uppercase group-hover:text-[#332d2b] transition-colors duration-500">
-                    {program.description}
-                  </p>
-                </motion.div>
-              </div>
-            </motion.div>
-          ))}
+                <div className="lg:w-2/3 p-12 md:p-20 flex flex-col justify-center relative bg-white">
+                  <motion.div
+                    initial={{ opacity: 0, x: 20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.2 + (i * 0.1) }}
+                  >
+                    <p className="text-xl md:text-3xl font-serif italic text-[#332d2b]/70 leading-relaxed uppercase group-hover:text-[#332d2b] transition-colors duration-500">
+                      {program.description}
+                    </p>
+                  </motion.div>
+                </div>
+              </motion.div>
+            );
+          })}
         </motion.div>
       </div>
     </section>
