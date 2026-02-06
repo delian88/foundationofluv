@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform, useMotionValue, useInView, animate } from 'framer-motion';
 import { 
@@ -861,6 +862,42 @@ const RoadmapView = () => (
   </section>
 );
 
+// --- LUVWATTS Component ---
+const LUVWATTSView = () => (
+  <section className="py-24 md:py-48 bg-white pt-48 relative overflow-hidden">
+    <div className="max-w-7xl mx-auto px-4">
+      <div className="text-center mb-32">
+        <span className="text-[#9c1c22] font-cinzel font-black tracking-[0.5em] text-[12px] uppercase mb-8 block">The Kinetic Pulse</span>
+        <h2 className="text-5xl md:text-8xl font-serif font-black text-[#332d2b] mb-12 uppercase">
+          {LUVWATTS_CONTENT.title.split(' ')[0]} <span className="text-[#eeb053] italic">{LUVWATTS_CONTENT.title.split(' ').slice(1).join(' ')}</span>
+        </h2>
+        <p className="text-2xl font-serif italic text-[#332d2b]/60 max-w-4xl mx-auto uppercase">
+          {LUVWATTS_CONTENT.description}
+        </p>
+      </div>
+
+      <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+        {LUVWATTS_CONTENT.acronym.map((item, i) => (
+          <motion.div 
+            key={i} 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            whileHover={{ y: -10 }}
+            className="bg-[#fdfaf6] p-10 rounded-[3rem] border border-black/5 flex flex-col items-center text-center group hover:border-[#9c1c22]/20 transition-all shadow-sm hover:shadow-xl"
+          >
+            <div className="text-6xl md:text-8xl font-serif font-black text-[#9c1c22] mb-6 opacity-20 group-hover:opacity-100 transition-opacity">
+              {item.letter}
+            </div>
+            <h3 className="text-2xl font-cinzel font-black text-[#332d2b] mb-4 uppercase">{item.term}</h3>
+            <p className="text-lg font-serif italic text-[#332d2b]/60 uppercase leading-relaxed">{item.definition}</p>
+          </motion.div>
+        ))}
+      </div>
+    </div>
+  </section>
+);
+
 const DonorView = () => (
   <section className="py-24 md:py-48 bg-white pt-48 relative overflow-hidden">
     <div className="max-w-7xl mx-auto px-4">
@@ -1033,37 +1070,6 @@ const ProgramsPageView = () => {
     </section>
   );
 };
-
-const LUVWATTSView = () => (
-  <section className="py-24 md:py-48 bg-white pt-48 relative overflow-hidden min-h-screen">
-    <div className="max-w-7xl mx-auto px-4 relative z-10">
-      <div className="text-center mb-32">
-        <span className="text-[#9c1c22] font-cinzel font-black tracking-[0.5em] text-[12px] uppercase mb-8 block">The Energy of Restoration</span>
-        <h2 className="text-6xl md:text-[10rem] font-serif font-black text-[#332d2b] mb-12 uppercase leading-none tracking-tighter">
-          {LUVWATTS_CONTENT.title.split(' ')[0]} <span className="text-[#9c1c22] italic">{LUVWATTS_CONTENT.title.split(' ').slice(1).join(' ')}</span>
-        </h2>
-        <p className="text-2xl md:text-3xl font-serif italic text-[#332d2b]/60 max-w-5xl mx-auto uppercase leading-relaxed">
-          {LUVWATTS_CONTENT.description}
-        </p>
-      </div>
-
-      <div className="grid lg:grid-cols-2 gap-8 md:gap-12">
-        {LUVWATTS_CONTENT.acronym.map((item, i) => (
-          <motion.div key={i} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} whileHover={{ y: -10 }} className="bg-[#fdfaf6] p-12 md:p-16 rounded-[4rem] border-2 border-transparent hover:border-[#eeb053] transition-all shadow-xl group flex flex-col h-full">
-            <div className="flex items-center gap-10 mb-10">
-              <span className="text-8xl md:text-[10rem] font-cinzel font-black text-[#9c1c22]/10 group-hover:text-[#9c1c22] transition-colors leading-none">{item.letter}</span>
-              <div className="flex flex-col">
-                <span className="text-[#eeb053] font-cinzel font-black text-[10px] uppercase tracking-[0.5em] mb-4">Core Value</span>
-                <h3 className="text-4xl md:text-5xl font-serif font-black text-[#332d2b] uppercase leading-none">{item.term}</h3>
-              </div>
-            </div>
-            <p className="text-xl md:text-2xl font-serif italic text-[#332d2b]/70 uppercase leading-relaxed flex-grow">{item.definition}</p>
-          </motion.div>
-        ))}
-      </div>
-    </div>
-  </section>
-);
 
 const App: React.FC = () => {
   const [currentPage, setCurrentPage] = useState('home');

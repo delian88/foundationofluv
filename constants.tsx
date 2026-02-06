@@ -98,12 +98,12 @@ export const LUVWATTS_CONTENT = {
 
 export const MISSION_VISION = {
   mission: {
-    title: "Our Mission",
+    title: "Mission",
     content: "To uplift individuals and communities through compassion-driven programs that strengthen mental health, families, education, economic opportunity, and ethical innovation.",
     icon: <Target className="w-12 h-12 text-[#9c1c22]" />
   },
   vision: {
-    title: "Our Vision",
+    title: "Vision",
     content: "A world where every person has access to support systems that honor their humanity, protect their dignity, and empower their future.",
     icon: <Eye className="w-12 h-12 text-[#eeb053]" />
   }
@@ -211,20 +211,21 @@ export const STATS = [
 
 export const DETAILED_ABOUT = {
   header: "Foundation of Luv (FOL)",
-  intro: "Foundation of Luv serves as both a direct-impact organization delivering programs and interventions, and a holding, stewardship, and governance body for public-good initiatives. Through strategic collaboration with Azariah Management Group (AMG), FoL transforms advocacy into action.",
+  intro: "Foundation of Luv serves as both: A direct-impact organization delivering programs and interventions, and a holding, stewardship, and governance body for public-good initiatives that cannot legally or ethically sit under for-profit entities. Through strategic collaboration with Azariah Management Group (AMG) and its creative and technical arms, FoL transforms advocacy into action, and awareness into sustainable systems of support.",
   problemStatement: {
-    title: "The Problem We Address",
-    summary: "Existing solutions are often fragmented: Nonprofits lack scalable infrastructure, tech solutions lack human-centered governance, and advocacy stops at storytelling without systems change.",
+    title: "The Problem Statement",
+    summary: "Across communities in the U.S. and globally, we are seeing a convergence of crises. Existing solutions are often fragmented: Nonprofits lack scalable infrastructure and media reach, tech solutions lack human-centered governance, and advocacy campaigns stop at storytelling, without systems change. Foundation of Luv exists to bridge these gaps.",
     crises: [
       "Rising mental health challenges among adults, parents, and youth",
       "Breakdown of family support systems and community cohesion",
       "Economic exclusion of marginalized groups",
       "Limited access to culturally relevant education and advocacy resources",
-      "Rapid technological advancement without adequate ethical safeguards"
+      "Rapid technological advancement without adequate ethical safeguards",
+      "Advocacy content that raises awareness but lacks follow-through impact"
     ]
   },
   purpose: {
-    title: "Organizational Purpose",
+    title: "Organizational Purpose & Role",
     programmatic: [
       "Mental health and family support initiatives",
       "Community education and advocacy",
@@ -232,7 +233,7 @@ export const DETAILED_ABOUT = {
       "Social impact pilots and research"
     ],
     stewardship: [
-      "Nonprofit governance for World AI Force",
+      "Nonprofit governance for World AI Force (as a public good initiative)",
       "Future advocacy-driven platforms and coalitions",
       "Grants, donor-restricted funds, and public partnerships"
     ]
@@ -242,35 +243,35 @@ export const DETAILED_ABOUT = {
       id: 1,
       title: "Mental Health & Emotional Wellness",
       objective: "Normalize mental health support and expand access to culturally relevant care.",
-      initiatives: ["Community mental health workshops", "Parenting and caregiver wellness programs", "Trauma-informed advocacy media campaigns"],
+      initiatives: ["Community mental health workshops", "Parenting and caregiver wellness programs", "Trauma-informed advocacy media campaigns", "Referral networks with licensed professionals", "Digital wellness resources tied to advocacy content"],
       icon: <Brain />
     },
     {
       id: 2,
       title: "Family & Community Stability",
       objective: "Strengthen families as the foundation of resilient communities.",
-      initiatives: ["Family education (communication, conflict resolution)", "Mentorship programs (youth & intergenerational)", "Volunteer mobilization and service projects"],
+      initiatives: ["Family education programs (communication, conflict resolution, parenting)", "Mentorship programs (youth & intergenerational)", "Community needs assessments", "Volunteer mobilization and service projects"],
       icon: <Users />
     },
     {
       id: 3,
       title: "Education, Advocacy & Storytelling",
       objective: "Turn awareness into action through education and media.",
-      initiatives: ["Advocacy-driven docu-series", "Educational toolkits", "Public forums and listening sessions"],
+      initiatives: ["Advocacy-driven docu-series and digital campaigns", "Educational toolkits aligned with media content", "Public forums, town halls, and listening sessions", "Curriculum-aligned resources for schools"],
       icon: <MediaIcon />
     },
     {
       id: 4,
       title: "Economic Empowerment & Inclusion",
       objective: "Create pathways to economic stability and participation.",
-      initiatives: ["Workforce readiness & digital skills training", "Entrepreneur support programs", "Financial literacy workshops"],
+      initiatives: ["Workforce readiness and digital skills training", "Entrepreneur support programs", "Financial literacy workshops", "Access-to-opportunity partnerships"],
       icon: <TrendingUp />
     },
     {
       id: 5,
-      title: "Ethical AI & Public Good Innovation",
-      objective: "Ensure emerging technologies serve humanity, not exploit it.",
-      initiatives: ["Oversight and governance of World AI Force", "Ethical AI education", "AI-for-good pilots in healthcare & safety"],
+      title: "AI & Tech for Good",
+      objective: "Ensuring that underrepresented communities have access to emerging technology that should serve humanity not exploit it.",
+      initiatives: ["Oversight and governance of World AI Force", "Ethical AI education and public awareness", "Research and policy collaboration", "AI-for-good pilots in education, healthcare, and safety"],
       icon: <Cpu />
     }
   ],
@@ -290,7 +291,7 @@ export const DONOR_PAGE_CONTENT = {
     { title: "Family & Community Stability", description: "Strengthening families as the foundation of resilient communities." },
     { title: "Education & Advocacy", description: "Turning powerful storytelling into real-world action and resources." },
     { title: "Economic Empowerment", description: "Creating pathways to opportunity and self-sufficiency." },
-    { title: "Ethical AI & Public Good Innovation", description: "Governing initiatives like World AI Force to ensure technology serves humanity." }
+    { title: "AI & Tech for Good", description: "Governing initiatives like World AI Force to ensure technology serves humanity." }
   ],
   approach: [
     "Community-informed program design",
