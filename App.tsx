@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform, useMotionValue, useInView, animate } from 'framer-motion';
 import { 
@@ -63,41 +64,104 @@ const Logo = ({ className, style }: { className?: string; style?: React.CSSPrope
 };
 
 const LoadingScreen = () => {
+  const [bursts, setBursts] = useState<{ id: number; x: number; y: number }[]>([]);
+
+  useEffect(() => {
+    const burstInterval = setInterval(() => {
+      setBursts(prev => [...prev, { id: Date.now(), x: Math.random() * 100, y: Math.random() * 100 }]);
+      setTimeout(() => {
+        setBursts(prev => prev.slice(1));
+      }, 2000);
+    }, 600);
+    return () => clearInterval(burstInterval);
+  }, []);
+
   return (
     <motion.div
       initial={{ opacity: 1 }}
       exit={{ opacity: 0, y: -100 }}
-      transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
-      className="fixed inset-0 z-[300] bg-[#fdfaf6] flex flex-col items-center justify-center overflow-hidden"
+      animate={{ 
+        backgroundColor: ["#fdfaf6", "#9c1c22", "#122d4f", "#eeb053", "#fdfaf6"],
+      }}
+      // Combined transition properties into a single attribute to fix duplicate attribute error.
+      transition={{ 
+        duration: 0.8, 
+        ease: [0.76, 0, 0.24, 1],
+        backgroundColor: { duration: 8, repeat: Infinity, ease: "linear" } 
+      }}
+      className="fixed inset-0 z-[300] flex flex-col items-center justify-center overflow-hidden"
     >
+      {/* Background Hearts Drifting */}
+      <div className="absolute inset-0 pointer-events-none opacity-30">
+        {Array.from({ length: 15 }).map((_, i) => (
+          <motion.div
+            key={i}
+            initial={{ y: "110vh", x: `${Math.random() * 100}vw`, opacity: 0, scale: 0.5 }}
+            animate={{ y: "-10vh", opacity: [0, 1, 1, 0], rotate: 360 }}
+            transition={{ 
+              duration: 4 + Math.random() * 4, 
+              repeat: Infinity, 
+              delay: Math.random() * 5,
+              ease: "linear" 
+            }}
+            className="absolute text-white"
+          >
+            <Heart size={20 + Math.random() * 40} fill="currentColor" />
+          </motion.div>
+        ))}
+      </div>
+
+      {/* Loading Fireworks */}
+      <div className="absolute inset-0 pointer-events-none">
+        <AnimatePresence>
+          {bursts.map(burst => (
+            <div key={burst.id} className="absolute" style={{ left: `${burst.x}%`, top: `${burst.y}%` }}>
+              {Array.from({ length: 8 }).map((_, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ scale: 0, opacity: 1, x: 0, y: 0 }}
+                  animate={{ 
+                    scale: [0, 1.5, 0], 
+                    opacity: 0,
+                    x: Math.cos((i * 45) * Math.PI / 180) * 100,
+                    y: Math.sin((i * 45) * Math.PI / 180) * 100
+                  }}
+                  transition={{ duration: 1.5, ease: "easeOut" }}
+                  className="absolute w-2 h-2 rounded-full bg-white shadow-[0_0_10px_white]"
+                />
+              ))}
+            </div>
+          ))}
+        </AnimatePresence>
+      </div>
+
       <motion.div
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 1.2, ease: "easeOut" }}
-        className="relative"
+        className="relative z-10"
       >
-        {/* Soft pulsing glow behind the logo */}
         <motion.div
-          animate={{ scale: [1, 1.2, 1], opacity: [0.1, 0.3, 0.1] }}
-          transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute inset-0 bg-[#eeb053] blur-[100px] rounded-full"
+          animate={{ scale: [1, 1.15, 1], opacity: [0.2, 0.5, 0.2] }}
+          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute inset-0 bg-white blur-[80px] rounded-full"
         />
         
         <motion.div
-          animate={{ y: [0, -10, 0] }}
+          animate={{ rotateY: [0, 360], scale: [1, 1.05, 1] }}
           transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
           className="relative w-48 h-48 md:w-64 md:h-64"
         >
-          <Logo className="w-full h-full drop-shadow-3xl" />
+          <Logo className="w-full h-full drop-shadow-[0_0_30px_rgba(255,255,255,0.5)]" />
         </motion.div>
       </motion.div>
 
-      <div className="mt-16 w-64 md:w-80 relative h-0.5 bg-[#332d2b]/10 overflow-hidden rounded-full">
+      <div className="mt-16 w-64 md:w-80 relative h-1 bg-white/20 overflow-hidden rounded-full z-10">
         <motion.div
           initial={{ x: "-100%" }}
           animate={{ x: "0%" }}
           transition={{ duration: 3, ease: "easeInOut" }}
-          className="absolute inset-0 bg-[#9c1c22]"
+          className="absolute inset-0 bg-white shadow-[0_0_15px_white]"
         />
       </div>
 
@@ -105,12 +169,12 @@ const LoadingScreen = () => {
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.5, duration: 1 }}
-        className="mt-8 text-center"
+        className="mt-8 text-center z-10"
       >
-        <span className="block text-[#9c1c22] font-cinzel font-black tracking-[0.4em] text-[10px] md:text-[12px] uppercase">
-          Initializing Restoration
+        <span className="block text-white font-cinzel font-black tracking-[0.5em] text-[12px] md:text-[14px] uppercase drop-shadow-lg">
+          LUV-ACT INITIALIZING
         </span>
-        <span className="block mt-2 text-[#332d2b]/40 font-serif italic text-lg md:text-xl uppercase">
+        <span className="block mt-2 text-white/70 font-serif italic text-xl md:text-2xl uppercase">
           Love in Action, Change in Motion.
         </span>
       </motion.div>
@@ -531,7 +595,7 @@ const HomeView = ({ onNavigate }: { onNavigate: (id: string) => void }) => {
                         { url: "https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?auto=format&fit=crop&q=80&w=400", pos: "top-1/4 right-0" },
                         { url: "https://images.unsplash.com/photo-1605348532760-6753d2c43329?auto=format&fit=crop&q=80&w=400", pos: "bottom-0 right-1/4" },
                         { url: "https://images.unsplash.com/photo-1560769629-975ec94e6a86?auto=format&fit=crop&q=80&w=400", pos: "bottom-0 left-1/4" },
-                        { url: "https://images.unsplash.com/photo-1460353581641-37baddab0fa2?auto=format&fit=crop&q=80&w=400", pos: "top-1/4 left-0" },
+                        { url: "https://images.unsplash.com/photo-1560769629-975ec94e6a86?auto=format&fit=crop&q=80&w=400", pos: "top-1/4 left-0" },
                         { url: "https://images.unsplash.com/photo-1533681904393-9ab6eba7b4d0?auto=format&fit=crop&q=80&w=400", pos: "bottom-1/4 left-0" },
                       ].map((img, i) => (
                         <motion.div 
