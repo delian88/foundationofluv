@@ -6,7 +6,7 @@ import {
   Instagram, Linkedin, Youtube, Globe, Brain, Users, Home, Utensils, GraduationCap, Image as LucideImage,
   Target, Eye, ShieldCheck, TrendingUp, AlertCircle, Building2, Workflow, Lightbulb, Heart, Info, Phone, MapPin,
   CheckCircle2, Footprints, Zap, Star, Activity, LayoutGrid, Newspaper, MessageSquare, Shield, PenTool,
-  Quote, Compass, Anchor
+  Quote, Compass, Anchor, Mic2, UsersRound, Wallet, Stethoscope, Baby, Wallet2, Crosshair
 } from 'lucide-react';
 import { 
   NAVIGATION, STRATEGIC_PHASES, STATS, COLORS, HERO_IMAGES, GALLERY_IMAGES,
@@ -55,19 +55,9 @@ const LogoFallback = ({ className, style }: { className?: string; style?: React.
 
 const Logo = ({ className, style }: { className?: string; style?: React.CSSProperties }) => {
   const [error, setError] = useState(false);
-  
-  if (error) {
-    return <LogoFallback className={className} style={style} />;
-  }
-  
+  if (error) return <LogoFallback className={className} style={style} />;
   return (
-    <img 
-      src="logo.svg" 
-      alt="Foundation of Luv" 
-      className={className} 
-      style={style} 
-      onError={() => setError(true)} 
-    />
+    <img src="logo.svg" alt="Foundation of Luv" className={className} style={style} onError={() => setError(true)} />
   );
 };
 
@@ -82,12 +72,10 @@ const FireworksBackground = () => {
     setBursts(prev => [...prev, { id, x, y, color }]);
     setTimeout(() => setBursts(prev => prev.filter(b => b.id !== id)), 3000);
   }, []);
-
   useEffect(() => {
     const interval = setInterval(() => { spawnBurst(); }, 800);
     return () => clearInterval(interval);
   }, [spawnBurst]);
-
   return (
     <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden bg-transparent">
       <AnimatePresence>
@@ -123,181 +111,200 @@ const AnimatedNumber = ({ value }: { value: string }) => {
 
 // --- Page Content Views ---
 
-// Fix: Implemented DetailedAboutView component
-const DetailedAboutView = () => (
-  <section className="py-24 md:py-48 bg-white pt-48 relative overflow-hidden">
-    <div className="max-w-7xl mx-auto px-4">
-      <div className="text-center mb-32">
-        <span className="text-[#9c1c22] font-cinzel font-black tracking-[0.5em] text-[12px] uppercase mb-8 block">Organizational Profile</span>
-        <h2 className="text-5xl md:text-8xl font-serif font-black text-[#332d2b] mb-12 uppercase">{DETAILED_ABOUT.header}</h2>
-      </div>
-      
-      <div className="grid lg:grid-cols-2 gap-20 mb-32">
-        <div className="bg-[#fdfaf6] p-16 rounded-[4rem] shadow-xl border-l-8 border-[#9c1c22]">
-          <h3 className="text-3xl font-serif font-black mb-8 uppercase">{DETAILED_ABOUT.dualRole.intro}</h3>
-          <ul className="space-y-6">
-            {DETAILED_ABOUT.dualRole.points.map((point, i) => (
-              <li key={i} className="flex gap-4 text-xl font-serif italic text-[#332d2b]/70 uppercase leading-relaxed">
-                <CheckCircle2 className="shrink-0 text-[#eeb053]" /> {point}
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div className="bg-[#f9f5f0] p-16 rounded-[4rem] shadow-xl border-l-8 border-[#eeb053]">
-          <h3 className="text-3xl font-serif font-black mb-8 uppercase">{DETAILED_ABOUT.problemStatement.title}</h3>
-          <ul className="space-y-6">
-            {DETAILED_ABOUT.problemStatement.crises.map((crisis, i) => (
-              <li key={i} className="flex gap-4 text-xl font-serif italic text-[#332d2b]/70 uppercase leading-relaxed">
-                <AlertCircle className="shrink-0 text-[#9c1c22]" /> {crisis}
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
+const DetailedAboutView = () => {
+  const { scrollYProgress } = useScroll();
+  const scale = useTransform(scrollYProgress, [0, 0.2], [1, 1.1]);
 
-      <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-32">
-        {DETAILED_ABOUT.values.map((val, i) => (
-          <div key={i} className="p-10 bg-white border-2 border-[#332d2b]/5 rounded-[3rem] hover:border-[#eeb053] transition-all">
-            <h4 className="text-2xl font-cinzel font-black text-[#9c1c22] mb-4 uppercase">{val.title}</h4>
-            <p className="text-lg font-serif italic text-[#332d2b]/60 uppercase">{val.description}</p>
+  return (
+    <section className="bg-white pt-48 pb-32 relative overflow-hidden">
+      <div className="max-w-7xl mx-auto px-4 relative z-10">
+        {/* Header Section */}
+        <header className="text-center mb-32">
+          <motion.span initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-[#9c1c22] font-cinzel font-black tracking-[0.5em] text-[12px] uppercase mb-8 block">Organizational Profile</motion.span>
+          <h2 className="text-6xl md:text-[10rem] font-serif font-black text-[#332d2b] mb-12 uppercase leading-none tracking-tighter">
+            About <span className="text-[#9c1c22]">FOL</span>
+          </h2>
+          <div className="h-2 w-32 bg-[#eeb053] mx-auto rounded-full mb-12" />
+        </header>
+
+        {/* Background Section */}
+        <div className="grid lg:grid-cols-12 gap-20 mb-40 items-start">
+          <div className="lg:col-span-7">
+             <h3 className="text-4xl font-serif font-black text-[#332d2b] mb-10 uppercase">{DETAILED_ABOUT.background.title}</h3>
+             <p className="text-2xl font-serif italic text-[#332d2b]/70 leading-relaxed uppercase mb-10">
+               {DETAILED_ABOUT.background.content}
+             </p>
+             <div className="p-12 bg-[#fdfaf6] border-l-8 border-[#9c1c22] rounded-r-[3rem]">
+               <p className="text-xl font-serif italic text-[#332d2b]/60 uppercase leading-relaxed">
+                 {DETAILED_ABOUT.background.intro}
+               </p>
+             </div>
           </div>
-        ))}
-      </div>
-
-      <div className="text-center p-20 bg-[#1a1a1a] text-white rounded-[5rem]">
-        <Quote className="w-16 h-16 mx-auto text-[#eeb053] mb-8 opacity-20" />
-        <h3 className="text-4xl font-serif font-black italic mb-6 uppercase">"{DETAILED_ABOUT.closing.quote}"</h3>
-        <p className="text-xl font-cinzel font-black text-[#eeb053] uppercase tracking-widest">{DETAILED_ABOUT.closing.tagline}</p>
-      </div>
-    </div>
-  </section>
-);
-
-// Fix: Implemented DonorView component
-const DonorView = () => (
-  <section className="py-24 md:py-48 bg-white pt-48 relative overflow-hidden">
-    <div className="max-w-7xl mx-auto px-4">
-      <div className="text-center mb-32">
-        <span className="text-[#9c1c22] font-cinzel font-black tracking-[0.5em] text-[12px] uppercase mb-8 block">Support Our Mission</span>
-        <h2 className="text-5xl md:text-8xl font-serif font-black text-[#332d2b] mb-12 uppercase">Give <span className="text-[#eeb053] italic">Luv.</span></h2>
-        <p className="text-2xl font-serif italic text-[#332d2b]/60 max-w-3xl mx-auto uppercase">{DONOR_PAGE_CONTENT.different.content}</p>
-      </div>
-
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-32">
-        {DONOR_PAGE_CONTENT.impactPillars.map((pillar, i) => (
-          <div key={i} className="p-12 bg-[#fdfaf6] rounded-[4rem] shadow-lg border-b-8 border-[#9c1c22]">
-            <h3 className="text-2xl font-serif font-black text-[#332d2b] mb-6 uppercase leading-tight">{pillar.title}</h3>
-            <p className="text-lg font-serif italic text-[#332d2b]/60 uppercase">{pillar.description}</p>
+          <div className="lg:col-span-5 relative">
+            <motion.div style={{ scale }} className="rounded-[4rem] overflow-hidden shadow-2xl border-4 border-[#eeb053]">
+               <img src="https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&q=80&w=1200" alt="Foundation Origin" className="w-full h-full grayscale hover:grayscale-0 transition-all duration-1000" />
+            </motion.div>
+            <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-white p-6 rounded-full shadow-2xl border-4 border-[#9c1c22]">
+              <Logo className="w-full h-full" />
+            </div>
           </div>
-        ))}
-      </div>
-
-      <div className="grid lg:grid-cols-2 gap-20 items-start mb-32">
-        <div className="bg-[#f9f5f0] p-16 rounded-[4rem]">
-          <h3 className="text-3xl font-serif font-black mb-10 uppercase">{DONOR_PAGE_CONTENT.stewardship.title}</h3>
-          <ul className="space-y-6">
-            {DONOR_PAGE_CONTENT.stewardship.points.map((p, i) => (
-              <li key={i} className="flex gap-4 text-xl font-serif italic text-[#332d2b]/70 uppercase">
-                <ShieldCheck className="text-[#eeb053] shrink-0" /> {p}
-              </li>
-            ))}
-          </ul>
-          <p className="mt-12 text-[#9c1c22] font-cinzel font-black uppercase tracking-widest">{DONOR_PAGE_CONTENT.stewardship.closing}</p>
         </div>
-        <div className="space-y-12">
-          <div>
-            <h3 className="text-3xl font-serif font-black mb-8 uppercase">{DONOR_PAGE_CONTENT.matters.title}</h3>
-            <ul className="grid grid-cols-1 gap-4">
-              {DONOR_PAGE_CONTENT.matters.points.map((p, i) => (
-                <li key={i} className="flex gap-4 text-lg font-serif italic text-[#332d2b]/60 uppercase items-center">
-                  <div className="w-2 h-2 rounded-full bg-[#9c1c22]" /> {p}
-                </li>
+
+        {/* Mission & Vision Section */}
+        <div className="grid md:grid-cols-2 gap-12 mb-40">
+           <div className="p-16 rounded-[4rem] bg-[#fdfaf6] border-2 border-[#9c1c22]/10 shadow-xl">
+             <div className="mb-8">{MISSION_VISION.mission.icon}</div>
+             <h3 className="text-4xl font-serif font-black text-[#332d2b] mb-6 uppercase">{MISSION_VISION.mission.title}</h3>
+             <p className="text-xl font-serif italic text-[#332d2b]/60 uppercase leading-relaxed">{MISSION_VISION.mission.content}</p>
+           </div>
+           <div className="p-16 rounded-[4rem] bg-[#f9f5f0] border-2 border-[#eeb053]/20 shadow-xl">
+             <div className="mb-8">{MISSION_VISION.vision.icon}</div>
+             <h3 className="text-4xl font-serif font-black text-[#332d2b] mb-6 uppercase">{MISSION_VISION.vision.title}</h3>
+             <p className="text-xl font-serif italic text-[#332d2b]/60 uppercase leading-relaxed">{MISSION_VISION.vision.content}</p>
+           </div>
+        </div>
+
+        {/* Objectives & Goals Section */}
+        <div className="grid lg:grid-cols-2 gap-20 mb-40">
+           <div>
+             <h3 className="text-4xl font-serif font-black text-[#332d2b] mb-12 uppercase flex items-center gap-6">
+               <Target className="text-[#9c1c22]" /> Objectives
+             </h3>
+             <div className="space-y-6">
+                {DETAILED_ABOUT.objectives.map((obj, i) => (
+                  <motion.div key={i} whileHover={{ x: 10 }} className="flex gap-6 items-start p-8 bg-[#fdfaf6] rounded-[2rem] border-l-4 border-[#9c1c22]">
+                    <CheckCircle2 className="text-[#eeb053] shrink-0" />
+                    <p className="text-xl font-serif font-bold italic text-[#332d2b] uppercase leading-snug">{obj}</p>
+                  </motion.div>
+                ))}
+             </div>
+           </div>
+           <div>
+             <h3 className="text-4xl font-serif font-black text-[#332d2b] mb-12 uppercase flex items-center gap-6">
+               <Crosshair className="text-[#eeb053]" /> Core Goals
+             </h3>
+             <div className="space-y-6">
+                {DETAILED_ABOUT.goals.map((goal, i) => (
+                  <motion.div key={i} whileHover={{ x: 10 }} className="flex gap-6 items-start p-8 bg-white shadow-lg rounded-[2rem] border-l-4 border-[#eeb053]">
+                    <Star className="text-[#9c1c22] shrink-0" fill="#9c1c22" />
+                    <p className="text-xl font-serif font-bold italic text-[#332d2b] uppercase leading-snug">{goal}</p>
+                  </motion.div>
+                ))}
+             </div>
+           </div>
+        </div>
+
+        {/* Principles Section */}
+        <div className="mb-40">
+           <h3 className="text-5xl font-serif font-black text-center mb-20 uppercase">Principles & Philosophy</h3>
+           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
+              {DETAILED_ABOUT.principles.map((pr, i) => (
+                <div key={i} className="p-12 bg-[#fdfaf6] rounded-[3.5rem] border-2 border-transparent hover:border-[#eeb053] transition-all group shadow-sm">
+                   <h4 className="text-2xl font-cinzel font-black text-[#9c1c22] mb-6 uppercase">{pr.title}</h4>
+                   <p className="text-lg font-serif italic text-[#332d2b]/50 group-hover:text-[#332d2b] transition-colors uppercase leading-relaxed">{pr.description}</p>
+                </div>
               ))}
-            </ul>
-          </div>
-          <div className="p-12 bg-[#1a1a1a] text-white rounded-[3rem]">
-            <h3 className="text-2xl font-cinzel font-black text-[#eeb053] mb-6 uppercase">{DONOR_PAGE_CONTENT.promise.title}</h3>
-            <ul className="space-y-4 mb-8">
-              {DONOR_PAGE_CONTENT.promise.points.map((p, i) => (
-                <li key={i} className="flex gap-4 text-lg font-serif italic uppercase opacity-70">
-                  <Heart className="text-[#9c1c22] shrink-0" size={20} /> {p}
-                </li>
-              ))}
-            </ul>
-            <p className="font-serif italic text-white/40 uppercase">{DONOR_PAGE_CONTENT.promise.tagline}</p>
-          </div>
+           </div>
         </div>
-      </div>
-    </div>
-  </section>
-);
 
-// Fix: Implemented GalleryPageView component
-const GalleryPageView = () => (
-  <section className="py-24 md:py-48 bg-white pt-48">
-    <div className="max-w-7xl mx-auto px-4">
-      <div className="text-center mb-32">
-        <span className="text-[#9c1c22] font-cinzel font-black tracking-[0.5em] text-[12px] uppercase mb-8 block">Visual Narrative</span>
-        <h2 className="text-5xl md:text-8xl font-serif font-black text-[#332d2b] mb-12 uppercase">Impact <span className="text-[#eeb053] italic">Gallery.</span></h2>
-      </div>
-      
-      <div className="columns-1 md:columns-2 lg:columns-3 gap-8 space-y-8">
-        {GALLERY_IMAGES.map((img, i) => (
-          <motion.div 
-            key={i} 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="relative group rounded-[3rem] overflow-hidden break-inside-avoid"
-          >
-            <img src={img.url} alt={img.title} className="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-110" />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-10">
-              <h4 className="text-white text-2xl font-serif italic font-bold uppercase">{img.title}</h4>
-            </div>
-          </motion.div>
-        ))}
-      </div>
-    </div>
-  </section>
-);
+        {/* Service Areas Section */}
+        <div className="mb-40">
+           <h3 className="text-5xl font-serif font-black text-center mb-20 uppercase">Core Service Areas</h3>
+           <div className="grid md:grid-cols-2 gap-8">
+              {DETAILED_ABOUT.serviceAreas.map((sa, i) => (
+                <div key={i} className="flex flex-col md:flex-row gap-8 items-center p-10 bg-[#f9f5f0] rounded-[4rem] hover:bg-white hover:shadow-2xl transition-all border border-black/5">
+                   <div className="w-20 h-20 bg-white rounded-3xl shadow-md flex items-center justify-center shrink-0">
+                      <ShieldCheck className="text-[#9c1c22]" size={32} />
+                   </div>
+                   <div>
+                     <h4 className="text-2xl font-serif font-black text-[#332d2b] mb-2 uppercase">{sa.name}</h4>
+                     <p className="text-lg font-serif italic text-[#332d2b]/40 uppercase leading-snug">{sa.detail}</p>
+                   </div>
+                </div>
+              ))}
+           </div>
+        </div>
 
-// Fix: Implemented ProgramsPageView component
-const ProgramsPageView = () => (
-  <section className="py-24 md:py-48 bg-[#fdfaf6] pt-48 relative overflow-hidden">
-    <div className="max-w-7xl mx-auto px-4">
-      <div className="text-center mb-32">
-        <span className="text-[#9c1c22] font-cinzel font-black tracking-[0.5em] text-[12px] uppercase mb-8 block">The 7 Luv Acts</span>
-        <h2 className="text-5xl md:text-8xl font-serif font-black text-[#332d2b] mb-12 uppercase">Our <span className="text-[#9c1c22] italic">Programs.</span></h2>
-        <p className="text-2xl font-serif italic text-[#332d2b]/60 max-w-4xl mx-auto uppercase">A deeper look at the specific initiatives driving our mission of restoration.</p>
-      </div>
+        {/* Strategic Engagement Section */}
+        <div className="mb-40">
+           <h3 className="text-5xl font-serif font-black text-center mb-24 uppercase">Strategic Trajectory</h3>
+           <div className="space-y-16">
+              {DETAILED_ABOUT.strategicEngagement.map((step, i) => (
+                <div key={i} className="bg-white p-14 rounded-[5rem] shadow-2xl flex flex-col lg:flex-row gap-16 border-b-[16px] border-[#9c1c22]">
+                   <div className="lg:w-1/3">
+                      <span className="text-[#eeb053] font-cinzel font-black text-sm uppercase mb-4 block">Deployment Level</span>
+                      <h4 className="text-4xl font-serif font-black text-[#332d2b] uppercase leading-none">{step.level}</h4>
+                   </div>
+                   <div className="lg:w-1/3">
+                      <h5 className="text-[#9c1c22] font-cinzel font-black text-xs uppercase mb-8">Primary Goals</h5>
+                      <ul className="space-y-4">
+                        {step.goals.map((g, idx) => (
+                          <li key={idx} className="flex gap-4 text-lg font-serif italic text-[#332d2b]/60 uppercase"><div className="w-2 h-2 rounded-full bg-[#eeb053] mt-2 shrink-0" /> {g}</li>
+                        ))}
+                      </ul>
+                   </div>
+                   <div className="lg:w-1/3 bg-[#fdfaf6] p-8 rounded-[3rem]">
+                      <h5 className="text-[#332d2b] font-cinzel font-black text-xs uppercase mb-8">Targeted Outputs</h5>
+                      <ul className="space-y-4">
+                        {step.outputs.map((o, idx) => (
+                          <li key={idx} className="flex gap-4 text-lg font-serif font-black text-[#332d2b] uppercase items-center"><Activity size={18} className="text-[#9c1c22]" /> {o}</li>
+                        ))}
+                      </ul>
+                   </div>
+                </div>
+              ))}
+           </div>
+        </div>
 
-      <div className="space-y-24">
-        {LUV_ACT_PROGRAMS.map((program, i) => (
-          <motion.div 
-            key={program.id}
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="bg-white rounded-[5rem] overflow-hidden shadow-2xl flex flex-col lg:flex-row border-b-[20px]"
-            style={{ borderColor: program.color }}
-          >
-            <div className="lg:w-1/3 bg-[#f9f5f0] p-20 flex flex-col items-center justify-center text-center">
-              <span className="text-9xl font-cinzel font-black opacity-10 mb-8" style={{ color: program.color }}>{program.id}</span>
-              <h3 className="text-4xl font-serif font-black uppercase leading-tight" style={{ color: program.color }}>{program.title}</h3>
-            </div>
-            <div className="lg:w-2/3 p-20 flex flex-col justify-center">
-              <p className="text-2xl md:text-3xl font-serif italic text-[#332d2b]/70 leading-relaxed uppercase">{program.description}</p>
-              <div className="mt-12 flex gap-4">
-                 <div className="w-12 h-1 bg-[#eeb053]" />
-                 <p className="font-cinzel font-bold text-sm tracking-widest uppercase opacity-40">Active Chapter Program</p>
-              </div>
-            </div>
-          </motion.div>
-        ))}
+        {/* Statistical Analysis Section */}
+        <div className="mb-40">
+           <h3 className="text-5xl font-serif font-black text-center mb-20 uppercase">Projected Social Impact</h3>
+           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
+              {DETAILED_ABOUT.statisticalAnalysis.map((st, i) => (
+                <div key={i} className="p-12 bg-[#1a1a1a] text-white rounded-[4rem] border-t-8 border-[#eeb053] shadow-2xl">
+                   <h4 className="text-2xl font-cinzel font-black text-[#eeb053] mb-6 uppercase tracking-tighter">{st.area}</h4>
+                   <p className="text-xl font-serif italic text-white/50 uppercase leading-relaxed">{st.projection}</p>
+                </div>
+              ))}
+           </div>
+        </div>
+
+        {/* Touch Points Section */}
+        <div className="mb-40">
+           <h3 className="text-5xl font-serif font-black text-center mb-20 uppercase">Interaction Touch Points</h3>
+           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+              {DETAILED_ABOUT.touchPoints.map((tp, i) => (
+                <div key={i} className="p-10 bg-[#fdfaf6] rounded-[3rem] text-center border-2 border-[#9c1c22]/5">
+                   <h4 className="text-2xl font-serif font-black text-[#332d2b] mb-4 uppercase">{tp.title}</h4>
+                   <p className="text-lg font-serif italic text-[#332d2b]/40 uppercase leading-snug">{tp.description}</p>
+                </div>
+              ))}
+           </div>
+        </div>
+
+        {/* Closing Section */}
+        <footer className="text-center py-32 bg-[#9c1c22] text-white rounded-[6rem] shadow-3xl px-8 border-b-[32px] border-[#eeb053]">
+          <Quote className="w-20 h-20 mx-auto text-[#eeb053] opacity-20 mb-12" />
+          <h2 className="text-4xl md:text-7xl font-serif font-black leading-tight italic mb-16 uppercase">
+            "{DETAILED_ABOUT.closing.quote}"
+          </h2>
+          <div className="flex items-center justify-center gap-8 mb-16">
+            <div className="h-px w-20 bg-white/20" />
+            <p className="text-3xl font-cinzel font-black tracking-[0.3em] text-[#eeb053] uppercase">{DETAILED_ABOUT.closing.tagline}</p>
+            <div className="h-px w-20 bg-white/20" />
+          </div>
+          <div className="flex justify-center gap-10 items-center">
+             <Logo className="w-24 h-24 bg-white p-4 rounded-full" />
+             <div className="text-left border-l border-white/20 pl-10">
+               <p className="text-sm font-cinzel font-black uppercase tracking-widest opacity-50">Foundation of Luv</p>
+               <p className="text-lg font-serif italic uppercase">Institutionalizing Love Since 2016</p>
+             </div>
+          </div>
+        </footer>
       </div>
-    </div>
-  </section>
-);
+    </section>
+  );
+};
 
 const GlobalServicesView = () => (
   <section className="py-24 md:py-48 bg-white pt-48 relative overflow-hidden">
@@ -502,7 +509,7 @@ const HomeView = ({ onNavigate }: { onNavigate: (id: string) => void }) => {
           >
             <div className="mb-8">{MISSION_VISION.mission.icon}</div>
             <h3 className="text-4xl font-serif font-black text-[#332d2b] mb-6 uppercase tracking-tight">{MISSION_VISION.mission.title}</h3>
-            <p className="text-xl font-serif italic text-[#332d2b]/60 leading-relaxed uppercase">{MISSION_VISION.mission.content}</p>
+            <p className="text-xl font-serif italic text-[#332d2b]/60 uppercase leading-relaxed">{MISSION_VISION.mission.content}</p>
           </motion.div>
           <motion.div 
             initial={{ opacity: 0, x: 30 }} 
@@ -512,7 +519,7 @@ const HomeView = ({ onNavigate }: { onNavigate: (id: string) => void }) => {
           >
             <div className="mb-8">{MISSION_VISION.vision.icon}</div>
             <h3 className="text-4xl font-serif font-black text-[#332d2b] mb-6 uppercase tracking-tight">{MISSION_VISION.vision.title}</h3>
-            <p className="text-xl font-serif italic text-[#332d2b]/60 leading-relaxed uppercase">{MISSION_VISION.vision.content}</p>
+            <p className="text-xl font-serif italic text-[#332d2b]/60 uppercase leading-relaxed">{MISSION_VISION.vision.content}</p>
           </motion.div>
         </div>
       </section>
@@ -759,7 +766,128 @@ const HomeView = ({ onNavigate }: { onNavigate: (id: string) => void }) => {
   );
 };
 
-// ... DetailedAboutView, DonorView, GlobalServicesView, RoadmapView, LUVWATTSView, ProgramsPageView are now implemented above ...
+const DonorView = () => (
+  <section className="py-24 md:py-48 bg-white pt-48 relative overflow-hidden">
+    <div className="max-w-7xl mx-auto px-4">
+      <div className="text-center mb-32">
+        <span className="text-[#9c1c22] font-cinzel font-black tracking-[0.5em] text-[12px] uppercase mb-8 block">Support Our Mission</span>
+        <h2 className="text-5xl md:text-8xl font-serif font-black text-[#332d2b] mb-12 uppercase">Give <span className="text-[#eeb053] italic">Luv.</span></h2>
+        <p className="text-2xl font-serif italic text-[#332d2b]/60 max-w-3xl mx-auto uppercase">{DONOR_PAGE_CONTENT.different.content}</p>
+      </div>
+
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-32">
+        {DONOR_PAGE_CONTENT.impactPillars.map((pillar, i) => (
+          <div key={i} className="p-12 bg-[#fdfaf6] rounded-[4rem] shadow-lg border-b-8 border-[#9c1c22]">
+            <h3 className="text-2xl font-serif font-black text-[#332d2b] mb-6 uppercase leading-tight">{pillar.title}</h3>
+            <p className="text-lg font-serif italic text-[#332d2b]/60 uppercase">{pillar.description}</p>
+          </div>
+        ))}
+      </div>
+
+      <div className="grid lg:grid-cols-2 gap-20 items-start mb-32">
+        <div className="bg-[#f9f5f0] p-16 rounded-[4rem]">
+          <h3 className="text-3xl font-serif font-black mb-10 uppercase">{DONOR_PAGE_CONTENT.stewardship.title}</h3>
+          <ul className="space-y-6">
+            {DONOR_PAGE_CONTENT.stewardship.points.map((p, i) => (
+              <li key={i} className="flex gap-4 text-xl font-serif italic text-[#332d2b]/70 uppercase">
+                <ShieldCheck className="text-[#eeb053] shrink-0" /> {p}
+              </li>
+            ))}
+          </ul>
+          <p className="mt-12 text-[#9c1c22] font-cinzel font-black uppercase tracking-widest">{DONOR_PAGE_CONTENT.stewardship.closing}</p>
+        </div>
+        <div className="space-y-12">
+          <div>
+            <h3 className="text-3xl font-serif font-black mb-8 uppercase">{DONOR_PAGE_CONTENT.matters.title}</h3>
+            <ul className="grid grid-cols-1 gap-4">
+              {DONOR_PAGE_CONTENT.matters.points.map((p, i) => (
+                <li key={i} className="flex gap-4 text-lg font-serif italic text-[#332d2b]/60 uppercase items-center">
+                  <div className="w-2 h-2 rounded-full bg-[#9c1c22]" /> {p}
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div className="p-12 bg-[#1a1a1a] text-white rounded-[3rem]">
+            <h3 className="text-2xl font-cinzel font-black text-[#eeb053] mb-6 uppercase">{DONOR_PAGE_CONTENT.promise.title}</h3>
+            <ul className="space-y-4 mb-8">
+              {DONOR_PAGE_CONTENT.promise.points.map((p, i) => (
+                <li key={i} className="flex gap-4 text-lg font-serif italic uppercase opacity-70">
+                  <Heart className="text-[#9c1c22] shrink-0" size={20} /> {p}
+                </li>
+              ))}
+            </ul>
+            <p className="font-serif italic text-white/40 uppercase">{DONOR_PAGE_CONTENT.promise.tagline}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+);
+
+const GalleryPageView = () => (
+  <section className="py-24 md:py-48 bg-white pt-48">
+    <div className="max-w-7xl mx-auto px-4">
+      <div className="text-center mb-32">
+        <span className="text-[#9c1c22] font-cinzel font-black tracking-[0.5em] text-[12px] uppercase mb-8 block">Visual Narrative</span>
+        <h2 className="text-5xl md:text-8xl font-serif font-black text-[#332d2b] mb-12 uppercase">Impact <span className="text-[#eeb053] italic">Gallery.</span></h2>
+      </div>
+      
+      <div className="columns-1 md:columns-2 lg:columns-3 gap-8 space-y-8">
+        {GALLERY_IMAGES.map((img, i) => (
+          <motion.div 
+            key={i} 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="relative group rounded-[3rem] overflow-hidden break-inside-avoid"
+          >
+            <img src={img.url} alt={img.title} className="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-110" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-10">
+              <h4 className="text-white text-2xl font-serif italic font-bold uppercase">{img.title}</h4>
+            </div>
+          </motion.div>
+        ))}
+      </div>
+    </div>
+  </section>
+);
+
+const ProgramsPageView = () => (
+  <section className="py-24 md:py-48 bg-[#fdfaf6] pt-48 relative overflow-hidden">
+    <div className="max-w-7xl mx-auto px-4">
+      <div className="text-center mb-32">
+        <span className="text-[#9c1c22] font-cinzel font-black tracking-[0.5em] text-[12px] uppercase mb-8 block">The 7 Luv Acts</span>
+        <h2 className="text-5xl md:text-8xl font-serif font-black text-[#332d2b] mb-12 uppercase">Our <span className="text-[#9c1c22] italic">Programs.</span></h2>
+        <p className="text-2xl font-serif italic text-[#332d2b]/60 max-w-4xl mx-auto uppercase">A deeper look at the specific initiatives driving our mission of restoration.</p>
+      </div>
+
+      <div className="space-y-24">
+        {LUV_ACT_PROGRAMS.map((program, i) => (
+          <motion.div 
+            key={program.id}
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="bg-white rounded-[5rem] overflow-hidden shadow-2xl flex flex-col lg:flex-row border-b-[20px]"
+            style={{ borderColor: program.color }}
+          >
+            <div className="lg:w-1/3 bg-[#f9f5f0] p-20 flex flex-col items-center justify-center text-center">
+              <span className="text-9xl font-cinzel font-black opacity-10 mb-8" style={{ color: program.color }}>{program.id}</span>
+              <h3 className="text-4xl font-serif font-black uppercase leading-tight" style={{ color: program.color }}>{program.title}</h3>
+            </div>
+            <div className="lg:w-2/3 p-20 flex flex-col justify-center">
+              <p className="text-2xl md:text-3xl font-serif italic text-[#332d2b]/70 leading-relaxed uppercase">{program.description}</p>
+              <div className="mt-12 flex gap-4">
+                 <div className="w-12 h-1 bg-[#eeb053]" />
+                 <p className="font-cinzel font-bold text-sm tracking-widest uppercase opacity-40">Active Chapter Program</p>
+              </div>
+            </div>
+          </motion.div>
+        ))}
+      </div>
+    </div>
+  </section>
+);
 
 const App: React.FC = () => {
   const [currentPage, setCurrentPage] = useState('home');

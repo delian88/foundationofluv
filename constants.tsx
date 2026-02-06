@@ -1,10 +1,12 @@
+
 import React from 'react';
 import { 
   Heart, Shield, Users, Globe, BookOpen, Home, Utensils, Zap, 
   GraduationCap, Briefcase, Landmark, Handshake, HeartPulse, Brain,
   Sparkles, Star, Award, Leaf, Eye, Target, Scale, ShieldCheck, TrendingUp,
   AlertCircle, Building2, Lightbulb, Users2, Workflow, Recycle, Activity,
-  PenTool, CheckCircle2, MessageSquare, Newspaper, Compass, Anchor
+  PenTool, CheckCircle2, MessageSquare, Newspaper, Compass, Anchor,
+  Mic2, Crosshair, UsersRound, Baby, Wallet, Stethoscope, MapPin, Search
 } from 'lucide-react';
 
 export const COLORS = {
@@ -96,52 +98,52 @@ export const LUVWATTS_CONTENT = {
 export const MISSION_VISION = {
   mission: {
     title: "Our Mission",
-    content: "To uplift individuals and communities through compassion-driven programs that strengthen mental health, families, education, economic opportunity, and ethical innovation.",
+    content: "Our mission is to transform lives by spreading compassion, empowering communities, and fostering hope. Through humanitarian service, advocacy, and sustainable support systems, we uplift the vulnerable and create a legacy of equity, wellness, and empowerment.",
     icon: <Target className="w-12 h-12 text-[#9c1c22]" />
   },
   vision: {
     title: "Our Vision",
-    content: "A world where every person has access to support systems that honor their humanity, protect their dignity, and empower their future through institutionalized love.",
+    content: "To create a world rooted in love, dignity, and shared humanity—where every person is empowered to live with purpose, hope, and opportunity.",
     icon: <Eye className="w-12 h-12 text-[#eeb053]" />
   }
 };
 
 export const GLOBAL_SERVICES_DATA = [
   {
-    title: "Mental Wellness Advocacy",
+    title: "Motivational Speaking & Global Advocacy",
+    description: "Global tours, books, and awareness campaigns that spread hope and awareness.",
+    icon: <Mic2 size={32} />,
+    features: ["Global Tours", "Educational Books", "Awareness Campaigns"]
+  },
+  {
+    title: "Community Services",
+    description: "Direct empowerment through workshops and specialized trainings for families and kids.",
+    icon: <UsersRound size={32} />,
+    features: ["Family Workshops", "Youth Training", "Capacity Building"]
+  },
+  {
+    title: "Mental Wellness & Wraparound Services",
     description: "Culturally relevant support networks and trauma-informed resources designed to restore psychological resilience.",
     icon: <Brain size={32} />,
-    features: ["Community workshops", "Digital wellness tools", "Professional referral networks"]
+    features: ["Substance Abuse Support", "Mental Health Resources", "Trauma-Informed Care"]
   },
   {
-    title: "Family Integrity Programs",
-    description: "Strengthening the core unit of society through education, conflict resolution, and shared growth.",
-    icon: <Users size={32} />,
-    features: ["Parenting workshops", "Intergenerational mentorship", "Conflict mediation"]
+    title: "Housing & Shelter",
+    description: "Providing affordable housing solutions and safe havens for displaced and vulnerable individuals.",
+    icon: <Building2 size={32} />,
+    features: ["Affordable Housing", "Transitional Shelters", "Safe Havens"]
   },
   {
-    title: "Economic Participation",
-    description: "Bridging the wealth gap through financial literacy and workforce readiness in emerging markets.",
-    icon: <TrendingUp size={32} />,
-    features: ["Job readiness training", "Financial literacy", "Minority entrepreneur support"]
+    title: "Feeding & Nutrition",
+    description: "Large-scale food drives and nutritional support to ensure no community goes hungry.",
+    icon: <Utensils size={32} />,
+    features: ["Food Security Systems", "Nutrition Education", "Community Drives"]
   },
   {
-    title: "Ethical Technology Governance",
-    description: "Providing a moral compass for emerging technologies like AI to ensure they serve the public good.",
-    icon: <Workflow size={32} />,
-    features: ["AI safety research", "Human-centered tech pilots", "Public awareness campaigns"]
-  },
-  {
-    title: "Humanitarian Logistics",
-    description: "Large-scale distribution of basic needs including food security and secure housing solutions.",
-    icon: <ShieldCheck size={32} />,
-    features: ["Food security systems", "Safe haven housing", "Disaster relief support"]
-  },
-  {
-    title: "Education & Literacy",
-    description: "Empowering the next generation with the tools needed for academic and professional success.",
+    title: "Outreach & Mentorship",
+    description: "Empowering the next generation with guidance, professional skills, and purposeful pathways.",
     icon: <GraduationCap size={32} />,
-    features: ["GED preparation", "College readiness", "Digital literacy"]
+    features: ["Youth Mentorship", "GED Preparation", "Career Pathways"]
   }
 ];
 
@@ -190,33 +192,84 @@ export const STATS = [
 ];
 
 export const DETAILED_ABOUT = {
-  header: "Foundation of Luv Profile",
-  dualRole: {
-    intro: "Foundation of Luv serves as both:",
-    points: [
-      "A direct-impact organization delivering programs and interventions, and",
-      "A holding, stewardship, and governance body for public-good initiatives that cannot legally or ethically sit under for-profit entities."
-    ]
+  header: "About the Foundation of Luv (FOL)",
+  background: {
+    title: "Background",
+    content: "The Foundation of Love (FOL) was created with a simple yet profound belief: that love, dignity, and compassion can transform individuals and communities. Rooted in humanitarian service, advocacy, and holistic support, FOL was established to bridge societal divides, empower the vulnerable, and create lasting pathways to opportunity. Since inception, the foundation has touched lives across diverse demographics through outreach, capacity-building, mentorship, and community-centered initiatives.",
+    intro: "At FOL, we believe love is an energy that transcends barriers. Through our programs in health, education, housing, mental wellness, and community empowerment, we foster resilience and inspire individuals to reach their fullest potential. The foundation also advances global advocacy through motivational speaking, literature, and international tours that spread hope and awareness."
   },
-  problemStatement: {
-    title: "The Problem Statement",
-    crises: [
-      "Rising mental health challenges among adults, parents, and youth",
-      "Breakdown of family support systems and community cohesion",
-      "Economic exclusion of marginalized groups",
-      "Limited access to culturally relevant education",
-      "Rapid technological advancement without ethical safeguards"
-    ]
-  },
-  values: [
-    { title: "Love in Action", description: "Compassion translated into systems, not sentiment." },
-    { title: "Human-Centered Impact", description: "People before profit, always." },
-    { title: "Equity & Inclusion", description: "Culturally grounded, community-led solutions." },
-    { title: "Integrity & Stewardship", description: "Ethical governance and transparency." }
+  objectives: [
+    "To strengthen families and communities through education, workshops, and counseling.",
+    "To provide holistic wraparound services addressing housing, food, mental health, and substance abuse.",
+    "To empower individuals with employability, digital skills, certifications, and access to higher education.",
+    "To advocate for healthcare awareness, financial literacy, and inclusion for underserved populations.",
+    "To build sustainable models of service delivery through global partnerships and collaborations."
+  ],
+  goals: [
+    "Reduce family disintegration through effective counseling and family planning programs.",
+    "Increase access to housing, food, and healthcare services among vulnerable groups.",
+    "Enhance digital and professional readiness for minority communities by securing partnerships with global institutions.",
+    "Establish safe brick-and-mortar hubs that provide day programs, training, and emergency support.",
+    "Launch LUVWATTS as both a unifying community movement and a fashion-forward advocacy initiative to drive fundraising."
+  ],
+  principles: [
+    { title: "Love as Energy (LUVWATTS)", description: "Love is the unifying force that powers transformation." },
+    { title: "Dignity", description: "Every person deserves respect, compassion, and equal opportunity." },
+    { title: "Inclusivity", description: "No one is left behind, regardless of race, gender, or socioeconomic status." },
+    { title: "Sustainability", description: "Solutions must be enduring, scalable, and community-led." },
+    { title: "Empowerment", description: "We do not just give aid—we build capacity for long-term resilience." }
+  ],
+  serviceAreas: [
+    { name: "Motivational Speaking & Global Advocacy", detail: "Global tours, books, and awareness campaigns." },
+    { name: "Community Services", detail: "Workshops and trainings for families and kids." },
+    { name: "Wraparound Services", detail: "Substance abuse and mental health support." },
+    { name: "Housing & Shelter", detail: "Affordable housing and safe havens." },
+    { name: "Feeding Programs", detail: "Food drives and nutrition support." },
+    { name: "Outreach & Mentorship", detail: "Youth empowerment and guidance." },
+    { name: "Family Counseling", detail: "Family planning, breastfeeding, birthing, and child-raising education." },
+    { name: "Education & Job Readiness", detail: "GED preparation, free certifications, and training with partners." },
+    { name: "Financial Literacy & Women Empowerment", detail: "Building financial inclusion for minority women." },
+    { name: "Healthcare Advocacy & Training", detail: "Promoting awareness and access to healthcare resources." }
+  ],
+  touchPoints: [
+    { title: "Brick-and-Mortar Hubs", description: "Safe spaces with day programs, counseling, job training, and housing support." },
+    { title: "Global Partnerships", description: "Collaborations with Microsoft, Amazon, OpenAI, Anthropic, Google, Meta, Harvard, and others." },
+    { title: "LUVWATTS Movement", description: "Signature identity for followers, fashion brand for advocacy, and fundraising channel." },
+    { title: "Digital Access", description: "Online programs, global speaking tours, and virtual mentorship." }
+  ],
+  strategicEngagement: [
+    {
+      level: "Local Engagement (Years 1–2)",
+      goals: ["Partner with local school districts and workforce boards.", "Align with city homeless coalitions and food banks.", "Establish brick-and-mortar hubs for direct support."],
+      outputs: ["Serve 5,000+ households in food/shelter.", "Launch 2 community hubs.", "Enroll 500 in GED programs."]
+    },
+    {
+      level: "State-Level Engagement (Years 1–3)",
+      goals: ["Secure state health department grants for substance abuse.", "Access state housing trust funds for transitional housing.", "Partner with state universities for technical support."],
+      outputs: ["Secure 3 state-level grants annually.", "Certify 2,000 individuals in workforce skills.", "Increase housing capacity by 25%."]
+    },
+    {
+      level: "Federal Engagement (Years 2–4)",
+      goals: ["Align with HUD for housing solutions.", "Partner with SAMHSA for mental health services.", "Collaborate with DOE on career pathways and literacy."],
+      outputs: ["Win 5+ federal grant awards.", "Expand programs to 10 states.", "Serve 100,000 people cumulatively."]
+    },
+    {
+      level: "International Engagement (Years 3–5)",
+      goals: ["Partner with UNICEF, WHO, and World Bank.", "Align with UN Sustainable Development Goals.", "Secure international grants and expand LUVWATTS globally."],
+      outputs: ["International recognition by UN agencies.", "Raise $10M+ in international grants.", "Launch programs in 2–3 countries."]
+    }
+  ],
+  statisticalAnalysis: [
+    { area: "Housing", projection: "Targeting 10-20 individuals annually with temporary housing solutions." },
+    { area: "Feeding Programs", projection: "Serving 1,000 meals yearly across communities." },
+    { area: "Education & Job Readiness", projection: "Enabling 1,200 participants to secure GEDs within 3 years." },
+    { area: "Mental Health", projection: "Offering support services to thousands within 5 years." },
+    { area: "Women's Empowerment", projection: "Reaching hundreds of minority women with financial literacy." },
+    { area: "Global Advocacy", projection: "Engaging 1 million+ people annually through campaigns." }
   ],
   closing: {
-    quote: "Foundation of Luv is not charity for charity’s sake. It is love, structured.",
-    tagline: "Institutionalizing Compassion"
+    quote: "Love is not just a sentiment; it is a system of restoration.",
+    tagline: "Building a Legacy of Luv."
   }
 };
 
