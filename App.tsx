@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform, useMotionValue, useInView, animate } from 'framer-motion';
 import { 
@@ -7,7 +6,7 @@ import {
   Target, Eye, ShieldCheck, TrendingUp, AlertCircle, Building2, Workflow, Lightbulb, Heart, Info, Phone, MapPin,
   CheckCircle2, Footprints, Zap, Star, Activity, LayoutGrid, Newspaper, MessageSquare, Shield, PenTool,
   Quote, Compass, Anchor, Mic2, UsersRound, Wallet, Stethoscope, Baby, Wallet2, Crosshair,
-  Users2 as DemographyIcon
+  Users2 as DemographyIcon, TrendingUp as GrowthIcon
 } from 'lucide-react';
 import { 
   NAVIGATION, STRATEGIC_PHASES, STATS, COLORS, HERO_IMAGES, GALLERY_IMAGES,
@@ -141,7 +140,7 @@ const DetailedAboutView = () => {
           </div>
           <div className="lg:col-span-5 relative">
             <motion.div style={{ scale }} className="rounded-[4rem] overflow-hidden shadow-2xl border-4 border-[#eeb053]">
-               <img src="https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&q=80&w=1200" alt="Foundation Community" className="w-full h-full grayscale hover:grayscale-0 transition-all duration-1000" />
+               <img src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&q=80&w=1200" alt="Foundation Community" className="w-full h-full grayscale hover:grayscale-0 transition-all duration-1000" />
             </motion.div>
             <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-white p-6 rounded-full shadow-2xl border-4 border-[#9c1c22]">
               <Logo className="w-full h-full" />
@@ -383,60 +382,52 @@ const HomeView = ({ onNavigate }: { onNavigate: (id: string) => void }) => {
 
   return (
     <div className="relative z-10">
-      <header className="relative w-full pt-32 pb-16 md:pt-64 md:pb-32 lg:pt-72 lg:pb-40 overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 text-center flex flex-col items-center">
-          <motion.div initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} className="relative group p-0 md:p-12 w-full max-w-[950px]">
-            <div className="relative aspect-video rounded-[2rem] md:rounded-[4rem] overflow-hidden border-[8px] md:border-[24px] border-white shadow-2xl">
+      <header className="relative w-full pt-32 pb-16 md:pt-64 md:pb-32 lg:pt-72 lg:pb-40 min-h-[70vh] md:min-h-[90vh] flex items-center overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 text-center flex flex-col items-center w-full">
+          <motion.div initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} className="relative group p-0 md:p-12 w-full max-w-[850px]">
+            <div className="relative aspect-video rounded-[2rem] md:rounded-[4rem] overflow-hidden border-[6px] md:border-[16px] border-white shadow-2xl">
               <AnimatePresence mode="wait">
                 <motion.div key={currentSlide} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 1 }} className="absolute inset-0">
                   <img src={HERO_IMAGES[currentSlide].url} alt={HERO_IMAGES[currentSlide].caption} className="w-full h-full object-cover brightness-75" />
-                  <div className="absolute bottom-0 left-0 right-0 p-8 md:p-14 bg-gradient-to-t from-black/80 to-transparent text-left">
-                    <span className="text-[#eeb053] font-cinzel font-black tracking-[0.4em] text-[10px] uppercase">Movement Chapter</span>
-                    <h3 className="text-white text-lg md:text-5xl font-serif italic font-bold uppercase">{HERO_IMAGES[currentSlide].caption}</h3>
+                  <div className="absolute bottom-0 left-0 right-0 p-6 md:p-10 bg-gradient-to-t from-black/80 to-transparent text-left">
+                    <span className="text-[#eeb053] font-cinzel font-black tracking-[0.4em] text-[8px] md:text-[10px] uppercase">Movement Chapter</span>
+                    <h3 className="text-white text-base md:text-4xl font-serif italic font-bold uppercase">{HERO_IMAGES[currentSlide].caption}</h3>
                   </div>
                 </motion.div>
               </AnimatePresence>
             </div>
-            <motion.div animate={{ y: [0, -10, 0] }} transition={{ duration: 6, repeat: Infinity }} className="absolute -top-6 -right-6 md:-top-16 md:-right-16 w-24 h-24 md:w-56 md:h-56 z-40"><Logo className="w-full h-full drop-shadow-2xl" /></motion.div>
+            <motion.div animate={{ y: [0, -10, 0] }} transition={{ duration: 6, repeat: Infinity }} className="absolute -top-4 -right-4 md:-top-12 md:-right-12 w-16 h-16 md:w-44 md:h-44 z-40"><Logo className="w-full h-full drop-shadow-2xl" /></motion.div>
           </motion.div>
-          <div className="mt-12">
-            <h1 className="hero-text text-4xl md:text-[8rem] font-serif font-black leading-tight text-shine-crimson uppercase">Love in Action,<br /><span className="italic font-normal text-shine text-[#eeb053]">Change in Motion.</span></h1>
-            <p className="mobile-p text-lg md:text-3xl text-[#332d2b]/70 mt-8 max-w-4xl mx-auto font-serif italic text-center uppercase">"We are the kinetic pulse of restoration, engineering pathways where human dignity is an unshakeable reality."</p>
-            <div className="flex flex-col md:flex-row gap-6 justify-center mt-12">
-              <button onClick={() => onNavigate('donate')} className="px-12 py-6 bg-[#9c1c22] text-white rounded-full font-cinzel font-black text-xl shadow-xl flex items-center gap-3 hover:bg-[#7a141a] transition-all uppercase">Show some Love <MoveRight /></button>
-              <button onClick={() => onNavigate('aboutus')} className="px-12 py-6 glass-card rounded-full font-cinzel font-bold text-xl border border-[#eeb053]/50 flex items-center justify-center gap-3 hover:bg-white/60 transition-all uppercase">Explore Our Story <ArrowRight /></button>
+          <div className="mt-8 md:mt-12">
+            <h1 className="hero-text text-3xl md:text-[6rem] font-serif font-black leading-tight text-shine-crimson uppercase">Love in Action,<br /><span className="italic font-normal text-shine text-[#eeb053]">Change in Motion.</span></h1>
+            <p className="mobile-p text-sm md:text-2xl text-[#332d2b]/70 mt-6 max-w-4xl mx-auto font-serif italic text-center uppercase">"We are the kinetic pulse of restoration, engineering pathways where human dignity is an unshakeable reality."</p>
+            <div className="flex flex-col md:flex-row gap-4 md:gap-6 justify-center mt-8 md:mt-12">
+              <button onClick={() => onNavigate('donate')} className="px-10 py-5 bg-[#9c1c22] text-white rounded-full font-cinzel font-black text-lg shadow-xl flex items-center gap-3 hover:bg-[#7a141a] transition-all uppercase">Show some Love <MoveRight /></button>
+              <button onClick={() => onNavigate('aboutus')} className="px-10 py-5 glass-card rounded-full font-cinzel font-bold text-lg border border-[#eeb053]/50 flex items-center justify-center gap-3 hover:bg-white/60 transition-all uppercase">Explore Our Story <ArrowRight /></button>
             </div>
           </div>
         </div>
       </header>
 
-      {/* LET'S GIVE THOSE FEET Shoes - Immersive Outreach Poster Section */}
-      <section className="py-24 md:py-48 bg-white relative overflow-hidden border-y border-[#332d2b]/5">
-        <div className="max-w-7xl mx-auto px-4 relative z-10">
-          <div className="text-center mb-32 relative">
-             {/* DISTRESSED / GRITTY FONT REPLICA */}
+      {/* LET'S GIVE THOSE FEET Shoes - Immersive Outreach Poster Section - Reduced Scale */}
+      <section className="min-h-screen py-16 md:py-24 bg-white relative overflow-hidden border-y border-[#332d2b]/5 flex items-center">
+        <div className="max-w-7xl mx-auto px-4 relative z-10 w-full">
+          <div className="text-center mb-10 md:mb-16 relative">
             <motion.div initial={{ opacity: 0, scale: 0.9 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }}>
-              <h2 className="text-7xl md:text-[14rem] font-black text-[#1a1a1a] leading-[0.7] mb-0 uppercase tracking-[-0.05em] drop-shadow-md">
-                LET'S GIVE <br />THOSE FEET
+              <h2 className="text-3xl md:text-[6rem] font-black text-[#1a1a1a] leading-[0.8] mb-0 uppercase tracking-[-0.05em] drop-shadow-md">
+                LET'S GIVE <br className="hidden md:block" /> THOSE FEET
               </h2>
-              <div className="relative inline-block mt-[-2rem] md:mt-[-4rem]">
-                <h3 className="text-6xl md:text-[10rem] font-serif italic text-[#9c1c22] leading-none uppercase drop-shadow-sm font-bold">
+              <div className="relative inline-block mt-1 md:mt-[-2rem]">
+                <h3 className="text-2xl md:text-[5rem] font-serif italic text-[#9c1c22] leading-none uppercase drop-shadow-sm font-bold">
                   Shoes
                 </h3>
-                {/* Visual lines mimicking the poster's splash */}
-                <div className="absolute inset-0 z-[-1] pointer-events-none opacity-20">
-                   <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] border-[2px] border-black rounded-full scale-[1.1] rotate-45 border-dashed"></div>
-                </div>
               </div>
             </motion.div>
           </div>
 
-          <div className="grid lg:grid-cols-2 gap-20 items-center">
+          <div className="grid lg:grid-cols-2 gap-8 md:gap-16 items-center">
             <div className="relative order-2 lg:order-1">
-              {/* CIRCULAR ARRANGEMENT OF SHOES */}
-              <div className="relative aspect-square max-w-[700px] mx-auto p-4 md:p-16 bg-white rounded-full shadow-inner border-[1px] border-black/5">
-                
-                {/* Shoe images placed around the circle */}
+              <div className="relative aspect-square max-w-[240px] md:max-w-[450px] mx-auto p-4 md:p-8 bg-white rounded-full shadow-inner border-[1px] border-black/5">
                 <div className="absolute inset-0 flex items-center justify-center">
                    <div className="relative w-full h-full">
                       {[
@@ -452,72 +443,149 @@ const HomeView = ({ onNavigate }: { onNavigate: (id: string) => void }) => {
                           initial={{ opacity: 0, scale: 0.5 }}
                           whileInView={{ opacity: 1, scale: 1 }}
                           whileHover={{ scale: 1.1, zIndex: 50 }}
-                          className={`absolute w-32 h-32 md:w-48 md:h-48 rounded-full overflow-hidden border-8 border-white shadow-2xl transition-all duration-500 cursor-pointer ${img.pos}`}
+                          className={`absolute w-10 h-10 md:w-28 md:h-28 rounded-full overflow-hidden border-2 md:border-4 border-white shadow-lg transition-all duration-500 cursor-pointer ${img.pos}`}
                         >
                           <img src={img.url} className="w-full h-full object-cover grayscale hover:grayscale-0" alt="Shoe drive donation" />
                         </motion.div>
                       ))}
                    </div>
                 </div>
-
-                {/* Central Branding with Heart Pulse */}
                 <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                   <motion.div 
-                    animate={{ scale: [1, 1.05, 1], rotate: [0, 2, -2, 0] }} 
-                    transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-                    className="w-48 h-48 md:w-72 md:h-72 bg-white rounded-full shadow-[0_0_80px_rgba(156,28,34,0.1)] flex items-center justify-center p-8 border-[2px] border-[#eeb053] relative"
+                    animate={{ scale: [1, 1.05, 1] }} 
+                    className="w-16 h-16 md:w-44 md:h-44 bg-white rounded-full shadow-[0_0_40px_rgba(156,28,34,0.1)] flex items-center justify-center p-2 md:p-5 border-[1px] border-[#eeb053] relative"
                   >
                     <Logo className="w-full h-full z-10" />
-                    <div className="absolute inset-0 bg-[#eeb053]/5 rounded-full animate-ping opacity-20"></div>
                   </motion.div>
                 </div>
               </div>
             </div>
 
-            <div className="order-1 lg:order-2 space-y-12 relative">
-              {/* THE ICONIC YELLOW BURST CALLOUT */}
+            <div className="order-1 lg:order-2 space-y-4 md:space-y-8 relative">
               <motion.div 
-                initial={{ rotate: -10, scale: 0.8, opacity: 0 }}
-                whileInView={{ rotate: -5, scale: 1, opacity: 1 }}
+                initial={{ rotate: -5, scale: 0.8, opacity: 0 }}
+                whileInView={{ rotate: 0, scale: 1, opacity: 1 }}
                 viewport={{ once: true }}
                 className="relative z-20"
               >
-                <div className="bg-[#eeb053] text-[#9c1c22] p-12 rounded-[2rem] md:rounded-[4rem] shadow-2xl relative overflow-hidden group">
-                  {/* Burst effect via clip-path background or just a bold styled div */}
-                  <div className="absolute -top-10 -right-10 w-40 h-40 bg-white/20 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-1000"></div>
-                  <h4 className="text-3xl md:text-5xl font-black uppercase leading-tight italic text-center text-shine-crimson">
+                <div className="bg-[#eeb053] text-[#9c1c22] p-5 md:p-8 rounded-[1.5rem] md:rounded-[2.5rem] shadow-2xl relative overflow-hidden">
+                  <h4 className="text-lg md:text-3xl font-black uppercase leading-tight italic text-center text-shine-crimson">
                     Our Community efforts <br /> where we show love <br /> and help
                   </h4>
                 </div>
-                {/* Decorative arrow or accent */}
-                <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 w-12 h-12 bg-[#eeb053] rotate-45 z-[-1]"></div>
               </motion.div>
 
-              <div className="space-y-8 pl-4 border-l-8 border-[#9c1c22]">
-                <p className="text-2xl md:text-3xl text-[#332d2b]/80 font-serif leading-relaxed italic uppercase">
+              <div className="space-y-3 md:space-y-5 pl-4 border-l-4 border-[#9c1c22]">
+                <p className="text-base md:text-xl text-[#332d2b]/80 font-serif leading-relaxed italic uppercase">
                   At Foundation of Luv (FOL), we believe that providing dignity through direct assistance is the first step toward lasting community empowerment. Our shoe drive is a kinetic pulse of restoration.
                 </p>
-                <div className="flex flex-col md:flex-row gap-8">
-                  <div className="flex items-center gap-4">
-                     <Footprints className="text-[#eeb053]" size={32} />
-                     <span className="font-cinzel font-black uppercase text-sm tracking-widest">Global Outreach</span>
+                <div className="flex flex-col md:flex-row gap-2 md:gap-6">
+                  <div className="flex items-center gap-2">
+                     <Footprints className="text-[#eeb053]" size={20} />
+                     <span className="font-cinzel font-black uppercase text-[8px] md:text-xs tracking-widest">Global Outreach</span>
                   </div>
-                  <div className="flex items-center gap-4">
-                     <Heart className="text-[#9c1c22] fill-[#9c1c22]" size={32} />
-                     <span className="font-cinzel font-black uppercase text-sm tracking-widest">Active Compassion</span>
+                  <div className="flex items-center gap-2">
+                     <Heart className="text-[#9c1c22] fill-[#9c1c22]" size={20} />
+                     <span className="font-cinzel font-black uppercase text-[8px] md:text-xs tracking-widest">Active Compassion</span>
                   </div>
                 </div>
               </div>
 
-              <button onClick={() => onNavigate('donate')} className="px-16 py-8 bg-[#1a1a1a] text-white rounded-full font-cinzel font-black text-2xl hover:bg-[#9c1c22] transition-all flex items-center justify-center gap-8 uppercase shadow-[0_20px_60px_rgba(0,0,0,0.2)] w-full md:w-auto">
-                Support The Drive <ArrowRight className="animate-bounce-x" />
+              <button onClick={() => onNavigate('donate')} className="px-6 py-4 md:px-10 md:py-6 bg-[#1a1a1a] text-white rounded-full font-cinzel font-black text-sm md:text-lg hover:bg-[#9c1c22] transition-all flex items-center justify-center gap-3 uppercase shadow-xl w-full md:w-auto">
+                Support The Drive <ArrowRight />
               </button>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Heritage Section */}
+      {/* SOLID GROWTH - Poster Section - Content Fully Contained */}
+      <section className="min-h-screen py-12 md:py-16 bg-[#1a0c1a] text-white relative overflow-hidden flex items-center border-y border-[#ffffff]/10">
+        <div className="absolute inset-0 bg-gradient-to-br from-[#2d1b4d] via-[#8b1a1a] to-[#df8c3d] opacity-90" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_transparent_0%,_#1a0c1a_100%)] opacity-80" />
+        
+        <div className="max-w-7xl mx-auto px-4 w-full relative z-10 flex flex-col h-full max-h-screen justify-between">
+           {/* Header Area */}
+           <div className="flex justify-between items-center opacity-40 px-2 mb-6">
+             <div className="flex items-center gap-2">
+               <Logo className="w-5 h-5 md:w-6 md:h-6 rounded-full" />
+               <span className="text-[6px] md:text-[9px] font-cinzel tracking-[0.2em] md:tracking-[0.4em] uppercase">FOL Profile</span>
+             </div>
+             <div className="h-px flex-grow mx-4 md:mx-10 bg-white/20" />
+             <span className="text-[6px] md:text-[9px] font-cinzel tracking-[0.2em] md:tracking-[0.4em] uppercase">LUVWATTS</span>
+           </div>
+
+           <div className="grid lg:grid-cols-12 gap-6 md:gap-8 items-center flex-grow">
+             {/* Left Text */}
+             <div className="lg:col-span-4 flex flex-col items-center lg:items-end">
+                <motion.h2 
+                  initial={{ opacity: 0, x: -30 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  className="text-2xl md:text-[4.5rem] font-serif font-black leading-[0.85] tracking-tighter text-center lg:text-right uppercase flex flex-col gap-1 md:gap-2"
+                >
+                  <span className="text-white">Solid</span>
+                  <span className="text-white">Growth,</span>
+                  <span className="text-[#eeb053] italic">Love in</span>
+                  <span className="text-white">Action,</span>
+                  <span className="text-white">Change</span>
+                  <span className="text-[#9c1c22] italic">in Motion</span>
+                </motion.h2>
+             </div>
+
+             {/* Center Graphic */}
+             <div className="lg:col-span-4 flex justify-center relative">
+               <motion.div 
+                 animate={{ scale: [1, 1.03, 1] }}
+                 transition={{ duration: 5, repeat: Infinity }}
+                 className="relative w-full max-w-[200px] md:max-w-[340px] aspect-[4/5] flex items-center justify-center"
+               >
+                 <svg viewBox="0 0 400 500" className="w-full h-full drop-shadow-[0_0_15px_rgba(255,255,255,0.2)] md:drop-shadow-[0_0_25px_rgba(255,255,255,0.3)]">
+                    <filter id="neonGlowS">
+                      <feGaussianBlur stdDeviation="6" result="blur" />
+                      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                    </filter>
+                    <path d="M200,450 C100,350 50,250 50,150 C50,80 120,50 200,120 C280,50 350,80 350,150 C350,250 300,350 200,450 Z" fill="none" stroke="#ffffff" strokeWidth="1" opacity="0.1" />
+                    <path d="M200,440 C110,345 60,245 60,155 C60,95 125,65 200,130 C275,65 340,95 340,155 C340,245 290,345 200,440 Z" fill="none" stroke="#eeb053" strokeWidth="4" filter="url(#neonGlowS)" opacity="0.7" />
+                    <path d="M200,440 C110,345 60,245 60,155 C60,95 125,65 200,130 C275,65 340,95 340,155 C340,245 290,345 200,440 Z" fill="none" stroke="#ffffff" strokeWidth="1.5" />
+                 </svg>
+                 <div className="absolute top-[45%] left-1/2 -translate-x-1/2 -translate-y-1/2">
+                   <Logo className="w-12 h-12 md:w-24 md:h-24 drop-shadow-[0_0_15px_rgba(255,255,255,0.6)]" />
+                 </div>
+               </motion.div>
+             </div>
+
+             {/* Right Text */}
+             <div className="lg:col-span-4 flex flex-col justify-center h-full text-center lg:text-left">
+                <div className="space-y-4 md:space-y-6">
+                   <div className="flex items-center justify-center lg:justify-start gap-3">
+                      <div className="w-8 md:w-12 h-px bg-[#eeb053]/50" />
+                      <GrowthIcon className="text-[#eeb053] w-5 h-5 md:w-8 md:h-8" />
+                   </div>
+                   <motion.div 
+                     initial={{ opacity: 0, y: 20 }}
+                     whileInView={{ opacity: 1, y: 0 }}
+                     viewport={{ once: true }}
+                     className="bg-white/5 backdrop-blur-sm p-4 md:p-6 rounded-[1.5rem] md:rounded-[2rem] border border-white/10"
+                   >
+                     <p className="text-xs md:text-lg font-serif italic text-white/90 leading-relaxed uppercase">
+                        "LUVWATTS represents the radiant energy of love when people come together. It embodies the heartbeat of the Foundation of Love — our movement, our community, and our voice."
+                     </p>
+                   </motion.div>
+                </div>
+             </div>
+           </div>
+
+           {/* Footer Area */}
+           <div className="mt-8 flex justify-between items-center opacity-40 px-2 text-[6px] md:text-[8px] font-cinzel tracking-[0.2em] md:tracking-[0.4em] uppercase border-t border-white/10 pt-4">
+             <span>Page 017</span>
+             <span className="hidden md:inline">www.foundationofluv.org</span>
+             <span className="text-right">Foundation of Luv</span>
+           </div>
+        </div>
+      </section>
+
+      {/* Heritage / Impact Sections */}
       <section className="py-24 md:py-40 bg-white">
         <div className="max-w-7xl mx-auto px-4 grid md:grid-cols-2 gap-12">
           <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="p-16 rounded-[4rem] bg-[#fdfaf6] border-2 border-[#9c1c22]/10 flex flex-col items-center text-center shadow-lg">
@@ -533,28 +601,24 @@ const HomeView = ({ onNavigate }: { onNavigate: (id: string) => void }) => {
         </div>
       </section>
 
-      {/* Signature Identity Section */}
-      <section className="py-24 md:py-48 relative overflow-hidden">
+      {/* SIGNATURE IDENTITY - Movement Section */}
+      <section className="py-24 md:py-48 relative overflow-hidden min-h-[60vh] md:min-h-[80vh] flex items-center">
         <div className="absolute inset-0 z-0">
-          <img 
-            src="https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&q=80&w=2000" 
-            className="w-full h-full object-cover brightness-[0.3] scale-110" 
-            alt="Signature Unity"
-          />
+          <img src="https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&q=80&w=2000" className="w-full h-full object-cover brightness-[0.3] scale-110" alt="Signature Unity" />
           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#1a1a1a]/60 to-transparent"></div>
         </div>
-        <div className="max-w-7xl mx-auto px-4 relative z-10 text-center text-white">
+        <div className="max-w-7xl mx-auto px-4 relative z-10 text-center text-white w-full">
           <motion.div initial={{ opacity: 0, scale: 0.9 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ duration: 1 }}>
-            <span className="text-[#eeb053] font-cinzel font-black tracking-[0.5em] text-sm uppercase mb-10 block">Signature Identity</span>
-            <h2 className="text-5xl md:text-[9rem] font-serif font-black uppercase mb-12 leading-none">LUVWATTS</h2>
+            <span className="text-[#eeb053] font-cinzel font-black tracking-[0.5em] text-xs md:text-sm uppercase mb-10 block">Signature Identity</span>
+            <h2 className="text-4xl md:text-[8rem] font-serif font-black uppercase mb-12 leading-none">LUVWATTS</h2>
             <div className="max-w-4xl mx-auto">
-              <p className="text-2xl md:text-4xl font-serif italic text-white/80 leading-relaxed uppercase mb-16">
+              <p className="text-xl md:text-3xl font-serif italic text-white/80 leading-relaxed uppercase mb-16">
                 "It embodies the heartbeat of the Foundation of Love — our movement, our community, and our voice. Through fashion, advocacy, and events, LUVWATTS powers our fundraising and unites supporters globally."
               </p>
-              <div className="flex flex-wrap justify-center gap-12 text-[#eeb053]">
-                <Zap size={48} className="animate-pulse" />
-                <Activity size={48} className="animate-bounce" />
-                <Workflow size={48} className="animate-spin-slow" />
+              <div className="flex flex-wrap justify-center gap-8 md:gap-12 text-[#eeb053]">
+                <Zap size={32} className="animate-pulse md:w-12 md:h-12" />
+                <Activity size={32} className="animate-bounce md:w-12 md:h-12" />
+                <Workflow size={32} className="animate-spin-slow md:w-12 md:h-12" />
               </div>
             </div>
           </motion.div>
@@ -564,65 +628,55 @@ const HomeView = ({ onNavigate }: { onNavigate: (id: string) => void }) => {
       {/* Impact Stats */}
       <section className="py-24 md:py-48 bg-white overflow-hidden">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-16">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12 md:gap-16">
             {STATS.map((stat, i) => (
               <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }} className="text-center">
-                <div className="text-7xl md:text-9xl font-serif font-black text-[#9c1c22] mb-6 leading-none">
+                <div className="text-6xl md:text-9xl font-serif font-black text-[#9c1c22] mb-4 md:mb-6 leading-none">
                   <AnimatedNumber value={stat.value} />
                   <span className="text-[#eeb053]">{stat.suffix}</span>
                 </div>
-                <h4 className="font-cinzel font-black text-[12px] tracking-[0.4em] uppercase mb-6 text-[#332d2b]">{stat.label}</h4>
-                <div className="h-0.5 w-12 bg-[#9c1c22] mx-auto mb-6" />
-                <p className="font-serif italic text-xl text-[#332d2b]/40 uppercase leading-snug">{stat.description}</p>
+                <h4 className="font-cinzel font-black text-[10px] md:text-[12px] tracking-[0.4em] uppercase mb-4 md:mb-6 text-[#332d2b]">{stat.label}</h4>
+                <div className="h-0.5 w-10 md:w-12 bg-[#9c1c22] mx-auto mb-4 md:mb-6" />
+                <p className="font-serif italic text-lg md:text-xl text-[#332d2b]/40 uppercase leading-snug">{stat.description}</p>
               </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Institutional Compassion Section */}
+      {/* LUV ACTS - Institutional Compassion */}
       <section className="py-24 md:py-40 bg-[#f9f5f0] border-y border-[#332d2b]/5">
         <div className="max-w-7xl mx-auto px-4 text-center">
-          <span className="text-[#9c1c22] font-cinzel font-black tracking-[0.4em] text-xs uppercase mb-4 block">Institutional Compassion</span>
-          <h2 className="text-5xl md:text-[7rem] font-serif font-black text-[#332d2b] uppercase leading-none mb-12">The <span className="text-[#9c1c22]">7</span> Luv Acts</h2>
-          <p className="text-2xl font-serif italic text-[#332d2b]/50 max-w-4xl mx-auto mb-20 uppercase">Our foundational framework for community restoration and individual empowerment.</p>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <span className="text-[#9c1c22] font-cinzel font-black tracking-[0.4em] text-[10px] md:text-xs uppercase mb-4 block">Institutional Compassion</span>
+          <h2 className="text-4xl md:text-[6rem] font-serif font-black text-[#332d2b] uppercase leading-none mb-12">The <span className="text-[#9c1c22]">7</span> Luv Acts</h2>
+          <p className="text-xl md:text-2xl font-serif italic text-[#332d2b]/50 max-w-4xl mx-auto mb-16 md:mb-20 uppercase">Our foundational framework for community restoration and individual empowerment.</p>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
             {LUV_ACT_PROGRAMS.map((act, i) => (
-              <motion.div 
-                key={act.id} 
-                whileHover={{ y: -10 }}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
-                className="p-12 rounded-[4rem] border-2 border-transparent hover:border-[#eeb053] transition-all bg-white group shadow-xl text-left flex flex-col h-full"
-              >
-                <div className="flex justify-between items-center mb-8">
-                  <span className="text-5xl font-cinzel font-black text-[#9c1c22]/20 group-hover:text-[#9c1c22] transition-colors uppercase">{act.id}</span>
-                  <div className="w-10 h-1 bg-[#eeb053] group-hover:w-20 transition-all" />
+              <motion.div key={act.id} whileHover={{ y: -10 }} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }} className="p-10 md:p-12 rounded-[3rem] md:rounded-[4rem] border-2 border-transparent hover:border-[#eeb053] transition-all bg-white group shadow-xl text-left flex flex-col h-full">
+                <div className="flex justify-between items-center mb-6 md:mb-8">
+                  <span className="text-4xl md:text-5xl font-cinzel font-black text-[#9c1c22]/20 group-hover:text-[#9c1c22] transition-colors uppercase">{act.id}</span>
+                  <div className="w-8 md:w-10 h-1 bg-[#eeb053] group-hover:w-16 md:group-hover:w-20 transition-all" />
                 </div>
-                <h3 className="text-3xl font-serif font-black text-[#332d2b] mb-6 uppercase tracking-tight leading-none">{act.title}</h3>
-                <p className="text-lg text-[#332d2b]/60 font-serif italic leading-relaxed uppercase">{act.description}</p>
+                <h3 className="text-2xl md:text-3xl font-serif font-black text-[#332d2b] mb-4 md:mb-6 uppercase tracking-tight leading-none">{act.title}</h3>
+                <p className="text-base md:text-lg text-[#332d2b]/60 font-serif italic leading-relaxed uppercase">{act.description}</p>
               </motion.div>
             ))}
           </div>
-          <div className="mt-20">
-            <button onClick={() => onNavigate('programs')} className="px-16 py-8 bg-[#1a1a1a] text-white rounded-full font-cinzel font-black text-xl hover:bg-[#9c1c22] transition-all uppercase flex items-center justify-center gap-4 mx-auto shadow-2xl">
+          <div className="mt-16 md:mt-20">
+            <button onClick={() => onNavigate('programs')} className="px-12 py-6 md:px-16 md:py-8 bg-[#1a1a1a] text-white rounded-full font-cinzel font-black text-lg md:text-xl hover:bg-[#9c1c22] transition-all uppercase flex items-center justify-center gap-4 mx-auto shadow-2xl">
               Deep Dive Into Our Programs <ArrowRight />
             </button>
           </div>
         </div>
       </section>
 
-      {/* Global Restoration Strategic Section */}
+      {/* Roadmap CTA */}
       <section className="py-24 md:py-48 bg-white text-center">
         <div className="max-w-4xl mx-auto px-4">
-          <Compass className="w-16 h-16 mx-auto text-[#eeb053] mb-12" />
-          <h2 className="text-5xl md:text-8xl font-serif font-black text-[#332d2b] uppercase mb-12 leading-none">Where We Are <span className="text-[#9c1c22]">Headed.</span></h2>
-          <p className="text-2xl font-serif italic text-[#332d2b]/60 mb-16 uppercase">Our strategic trajectory is aimed at global restoration and sustainable empowerment.</p>
-          <button onClick={() => onNavigate('roadmap')} className="px-16 py-8 bg-[#9c1c22] text-white rounded-full font-cinzel font-black text-xl hover:bg-[#1a1a1a] transition-all uppercase shadow-2xl">
-             View Strategic Roadmap
-          </button>
+          <Compass className="w-12 h-12 md:w-16 md:h-16 mx-auto text-[#eeb053] mb-10 md:mb-12" />
+          <h2 className="text-4xl md:text-[7rem] font-serif font-black text-[#332d2b] uppercase mb-10 md:mb-12 leading-none">Where We Are <span className="text-[#9c1c22]">Headed.</span></h2>
+          <p className="text-xl md:text-2xl font-serif italic text-[#332d2b]/60 mb-12 md:mb-16 uppercase">Our strategic trajectory is aimed at global restoration and sustainable empowerment.</p>
+          <button onClick={() => onNavigate('roadmap')} className="px-12 py-6 md:px-16 md:py-8 bg-[#9c1c22] text-white rounded-full font-cinzel font-black text-lg md:text-xl hover:bg-[#1a1a1a] transition-all uppercase shadow-2xl">View Strategic Roadmap</button>
         </div>
       </section>
     </div>
@@ -737,7 +791,7 @@ const ProgramsPageView = () => (
 
 // --- LUVWATTS Movement View ---
 const LUVWATTSView = () => (
-  <section className="py-24 md:py-48 bg-white pt-48 relative overflow-hidden">
+  <section className="py-24 md:py-48 bg-white pt-48 relative overflow-hidden min-h-screen">
     <div className="max-w-7xl mx-auto px-4 relative z-10">
       <div className="text-center mb-32">
         <span className="text-[#9c1c22] font-cinzel font-black tracking-[0.5em] text-[12px] uppercase mb-8 block">The Energy of Restoration</span>
@@ -752,14 +806,7 @@ const LUVWATTSView = () => (
 
       <div className="grid lg:grid-cols-2 gap-8 md:gap-12">
         {LUVWATTS_CONTENT.acronym.map((item, i) => (
-          <motion.div 
-            key={i}
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            whileHover={{ y: -10 }}
-            className="bg-[#fdfaf6] p-12 md:p-16 rounded-[4rem] border-2 border-transparent hover:border-[#eeb053] transition-all shadow-xl group flex flex-col h-full"
-          >
+          <motion.div key={i} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} whileHover={{ y: -10 }} className="bg-[#fdfaf6] p-12 md:p-16 rounded-[4rem] border-2 border-transparent hover:border-[#eeb053] transition-all shadow-xl group flex flex-col h-full">
             <div className="flex items-center gap-10 mb-10">
               <span className="text-8xl md:text-[10rem] font-cinzel font-black text-[#9c1c22]/10 group-hover:text-[#9c1c22] transition-colors leading-none">{item.letter}</span>
               <div className="flex flex-col">
@@ -768,9 +815,7 @@ const LUVWATTSView = () => (
               </div>
             </div>
             <div className="h-0.5 w-20 bg-[#9c1c22]/20 mb-10" />
-            <p className="text-xl md:text-2xl font-serif italic text-[#332d2b]/70 uppercase leading-relaxed flex-grow">
-              {item.definition}
-            </p>
+            <p className="text-xl md:text-2xl font-serif italic text-[#332d2b]/70 uppercase leading-relaxed flex-grow">{item.definition}</p>
           </motion.div>
         ))}
       </div>
@@ -785,9 +830,7 @@ const LUVWATTSView = () => (
             "Restoration is not <br /> just a goal—it's a <span className="text-[#eeb053]">Frequency.</span>"
           </h3>
           <div className="flex flex-col md:flex-row gap-8 justify-center items-center">
-            <button className="px-16 py-8 bg-white text-[#9c1c22] rounded-full font-cinzel font-black text-2xl hover:bg-[#1a1a1a] hover:text-white transition-all uppercase shadow-2xl flex items-center gap-4">
-              Get Involved <ArrowRight />
-            </button>
+            <button className="px-16 py-8 bg-white text-[#9c1c22] rounded-full font-cinzel font-black text-2xl hover:bg-[#1a1a1a] hover:text-white transition-all uppercase shadow-2xl flex items-center gap-4">Get Involved <ArrowRight /></button>
             <Logo className="w-32 h-32 bg-white p-6 rounded-full shadow-2xl" />
           </div>
         </div>
