@@ -6,17 +6,17 @@ import {
   AlertCircle, Building2, Lightbulb, Users2, Workflow, Recycle, Activity,
   PenTool, CheckCircle2, MessageSquare, Newspaper, Compass, Anchor,
   Mic2, Crosshair, UsersRound, Baby, Wallet, Stethoscope, MapPin, Search,
-  Users2 as DemographyIcon
+  Cpu, Newspaper as MediaIcon, ShieldAlert
 } from 'lucide-react';
 
 export const COLORS = {
-  crimson: '#9c1c22', // Primary Red
-  gold: '#eeb053',    // Primary Yellow/Gold
-  white: '#ffffff',   // Primary White
-  beige: '#fdfaf6',   // Soft background
-  cream: '#f9f5f0',   // Secondary background
-  dark: '#1a1a1a',    // Dark for readability
-  accent: '#df8c3d'   // Complementary Orange-Red
+  crimson: '#9c1c22', 
+  gold: '#eeb053',    
+  white: '#ffffff',   
+  beige: '#fdfaf6',   
+  cream: '#f9f5f0',   
+  dark: '#1a1a1a',    
+  accent: '#df8c3d'   
 };
 
 export const NAVIGATION = [
@@ -99,15 +99,24 @@ export const LUVWATTS_CONTENT = {
 export const MISSION_VISION = {
   mission: {
     title: "Our Mission",
-    content: "Our mission is to transform lives by spreading compassion, empowering communities, and fostering hope. Through humanitarian service, advocacy, and sustainable support systems, we uplift the vulnerable and create a legacy of equity, wellness, and empowerment.",
+    content: "To uplift individuals and communities through compassion-driven programs that strengthen mental health, families, education, economic opportunity, and ethical innovation.",
     icon: <Target className="w-12 h-12 text-[#9c1c22]" />
   },
   vision: {
     title: "Our Vision",
-    content: "To create a world rooted in love, dignity, and shared humanity—where every person is empowered to live with purpose, hope, and opportunity.",
+    content: "A world where every person has access to support systems that honor their humanity, protect their dignity, and empower their future.",
     icon: <Eye className="w-12 h-12 text-[#eeb053]" />
   }
 };
+
+export const CORE_VALUES = [
+  { term: "Love in Action", definition: "Compassion translated into systems, not sentiment" },
+  { term: "Human-Centered Impact", definition: "People before profit, always" },
+  { term: "Equity & Inclusion", definition: "Culturally grounded, community-led solutions" },
+  { term: "Integrity & Stewardship", definition: "Ethical governance, transparency, accountability" },
+  { term: "Collaboration", definition: "Partnerships over silos" },
+  { term: "Innovation for Good", definition: "Technology as a tool, not a threat" }
+];
 
 export const GLOBAL_SERVICES_DATA = [
   {
@@ -201,117 +210,73 @@ export const STATS = [
 ];
 
 export const DETAILED_ABOUT = {
-  header: "About the Foundation of Luv (FOL)",
-  background: {
-    title: "Our Background",
-    content: "The Foundation of Love (FOL) was created with a simple yet profound belief: that love, dignity, and compassion can transform individuals and communities. Rooted in humanitarian service, advocacy, and holistic support, FOL was established to bridge societal divides, empower the vulnerable, and create lasting pathways to opportunity. Since inception, the foundation has touched lives across diverse demographics through outreach, capacity-building, mentorship, and community-centered initiatives.",
-    intro: "At FOL, we believe love is an energy that transcends barriers. Through our programs in health, education, housing, mental wellness, and community empowerment, we foster resilience and inspire individuals to reach their fullest potential. The foundation also advances global advocacy through motivational speaking, literature, and international tours that spread hope and awareness."
+  header: "Foundation of Luv (FOL)",
+  intro: "Foundation of Luv serves as both a direct-impact organization delivering programs and interventions, and a holding, stewardship, and governance body for public-good initiatives. Through strategic collaboration with Azariah Management Group (AMG), FoL transforms advocacy into action.",
+  problemStatement: {
+    title: "The Problem We Address",
+    summary: "Existing solutions are often fragmented: Nonprofits lack scalable infrastructure, tech solutions lack human-centered governance, and advocacy stops at storytelling without systems change.",
+    crises: [
+      "Rising mental health challenges among adults, parents, and youth",
+      "Breakdown of family support systems and community cohesion",
+      "Economic exclusion of marginalized groups",
+      "Limited access to culturally relevant education and advocacy resources",
+      "Rapid technological advancement without adequate ethical safeguards"
+    ]
   },
-  objectives: [
-    "To strengthen families and communities through education, workshops, and counseling.",
-    "To provide holistic wraparound services addressing housing, food, mental health, and substance abuse.",
-    "To empower individuals with employability, digital skills, certifications, and access to higher education.",
-    "To advocate for healthcare awareness, financial literacy, and inclusion for underserved populations.",
-    "To build sustainable models of service delivery through global partnerships and collaborations."
-  ],
-  goals: [
-    "Reduce family disintegration through effective counseling and family planning programs.",
-    "Increase access to housing, food, and healthcare services among vulnerable groups.",
-    "Enhance digital and professional readiness for minority communities by securing partnerships with global institutions.",
-    "Establish safe brick-and-mortar hubs that provide day programs, training, and emergency support.",
-    "Launch LUVWATTS as both a unifying community movement and a fashion-forward advocacy initiative to drive fundraising."
-  ],
-  principles: [
-    { title: "Love as Energy (LUVWATTS)", description: "Love is the unifying force that powers transformation." },
-    { title: "Dignity", description: "Every person deserves respect, compassion, and equal opportunity." },
-    { title: "Inclusivity", description: "No one is left behind, regardless of race, gender, or socioeconomic status." },
-    { title: "Sustainability", description: "Solutions must be enduring, scalable, and community-led." },
-    { title: "Empowerment", description: "We do not just give aid—we build capacity for long-term resilience." }
-  ],
-  serviceAreas: [
-    { name: "Motivational Speaking & Global Advocacy", detail: "Global tours, books, and awareness campaigns." },
-    { name: "Community Services", detail: "Workshops and trainings for families and kids." },
-    { name: "Wraparound Services", detail: "Substance abuse and mental health support." },
-    { name: "Housing & Shelter", detail: "Affordable housing and safe havens." },
-    { name: "Feeding Programs", detail: "Food drives and nutrition support." },
-    { name: "Outreach & Mentorship", detail: "Youth empowerment and guidance." },
-    { name: "Family Counseling", detail: "Family planning, breastfeeding, birthing, and child-raising education." },
-    { name: "Education & Job Readiness", detail: "GED preparation, free certifications, and training with partners." },
-    { name: "Financial Literacy & Women Empowerment", detail: "Building financial inclusion for minority women." },
-    { name: "Healthcare Advocacy & Training", detail: "Promoting awareness and access to healthcare resources." }
-  ],
-  touchPoints: [
-    { title: "Brick-and-Mortar Hubs", description: "Safe spaces with day programs, counseling, job training, and housing support." },
-    { title: "Global Partnerships", description: "Collaborations with Microsoft, Amazon, OpenAI, Anthropic, Google, Meta, Harvard, and others." },
-    { title: "LUVWATTS Movement", description: "Signature identity for followers, fashion brand for advocacy, and fundraising channel." },
-    { title: "Digital Access", description: "Online programs, global speaking tours, and virtual mentorship." }
-  ],
-  demography: {
-    title: "Who We Serve",
-    primary: "Vulnerable families, children, minority women, youth, and underserved communities.",
-    secondary: "Broader society through reduced poverty, improved mental health, and enhanced community cohesion."
+  purpose: {
+    title: "Organizational Purpose",
+    programmatic: [
+      "Mental health and family support initiatives",
+      "Community education and advocacy",
+      "Youth mentorship and leadership development",
+      "Social impact pilots and research"
+    ],
+    stewardship: [
+      "Nonprofit governance for World AI Force",
+      "Future advocacy-driven platforms and coalitions",
+      "Grants, donor-restricted funds, and public partnerships"
+    ]
   },
-  strategicEngagement: [
+  pillars: [
     {
-      level: "Local Engagement (Years 1–2)",
-      goals: [
-        "Partner with local school districts and workforce boards for GED/job readiness.",
-        "Align feeding/housing with city homeless coalitions and food banks.",
-        "Work with community health centers for wraparound services.",
-        "Establish brick-and-mortar hubs for direct community support."
-      ],
-      outputs: [
-        "Serve 5,000+ households annually in food and shelter.",
-        "Launch 2 major community hubs.",
-        "Enroll 500+ in GED and certification programs."
-      ]
+      id: 1,
+      title: "Mental Health & Emotional Wellness",
+      objective: "Normalize mental health support and expand access to culturally relevant care.",
+      initiatives: ["Community mental health workshops", "Parenting and caregiver wellness programs", "Trauma-informed advocacy media campaigns"],
+      icon: <Brain />
     },
     {
-      level: "State-Level Engagement (Years 1–3)",
-      goals: [
-        "Align with state health departments on substance abuse & maternal health.",
-        "Access state housing trust funds for transitional programs.",
-        "Partner with state universities for technical support and research.",
-        "Scale job readiness via state workforce development boards."
-      ],
-      outputs: [
-        "Secure 3+ state-level grants annually.",
-        "Certify 2,000 individuals by Year 3.",
-        "Increase regional housing capacity by 25%."
-      ]
+      id: 2,
+      title: "Family & Community Stability",
+      objective: "Strengthen families as the foundation of resilient communities.",
+      initiatives: ["Family education (communication, conflict resolution)", "Mentorship programs (youth & intergenerational)", "Volunteer mobilization and service projects"],
+      icon: <Users />
     },
     {
-      level: "Federal Engagement (Years 2–4)",
-      goals: [
-        "Align with HUD for homelessness solutions.",
-        "Partner with SAMHSA for mental health services.",
-        "Apply for USDA food security grants to expand programs.",
-        "Work with DOE on literacy and career pathways."
-      ],
-      outputs: [
-        "Win 5+ federal grant awards by Year 4.",
-        "Expand programs to 10 states.",
-        "Serve 100,000 people cumulatively."
-      ]
+      id: 3,
+      title: "Education, Advocacy & Storytelling",
+      objective: "Turn awareness into action through education and media.",
+      initiatives: ["Advocacy-driven docu-series", "Educational toolkits", "Public forums and listening sessions"],
+      icon: <MediaIcon />
     },
     {
-      level: "International Engagement (Years 3–5)",
-      goals: [
-        "Partner with UNICEF, WHO, UN Women, and UNESCO on thematic programs.",
-        "Align with Sustainable Development Goals (SDGs) for global legitimacy.",
-        "Secure grants from USAID and international development agencies.",
-        "Expand LUVWATTS movement globally via fashion and advocacy tours."
-      ],
-      outputs: [
-        "International recognition by 3+ UN agencies.",
-        "Raise $10M+ in international funding by Year 5.",
-        "Launch programs in 2–3 international countries."
-      ]
+      id: 4,
+      title: "Economic Empowerment & Inclusion",
+      objective: "Create pathways to economic stability and participation.",
+      initiatives: ["Workforce readiness & digital skills training", "Entrepreneur support programs", "Financial literacy workshops"],
+      icon: <TrendingUp />
+    },
+    {
+      id: 5,
+      title: "Ethical AI & Public Good Innovation",
+      objective: "Ensure emerging technologies serve humanity, not exploit it.",
+      initiatives: ["Oversight and governance of World AI Force", "Ethical AI education", "AI-for-good pilots in healthcare & safety"],
+      icon: <Cpu />
     }
   ],
   closing: {
-    quote: "Love is not just a sentiment; it is a system of restoration.",
-    tagline: "Building a Legacy of Luv."
+    statement: "Foundation of Luv is not charity for charity’s sake.",
+    tagline: "Love, structured. Advocacy, governed. Innovation, humanized."
   }
 };
 
