@@ -2,7 +2,8 @@ import React from 'react';
 import { 
   Heart, Shield, Users, Globe, BookOpen, Home, Utensils, Zap, 
   GraduationCap, Briefcase, Landmark, Handshake, HeartPulse, Brain,
-  Sparkles, Star, Award, Leaf, Eye, Target, Scale, ShieldCheck, TrendingUp
+  Sparkles, Star, Award, Leaf, Eye, Target, Scale, ShieldCheck, TrendingUp,
+  AlertCircle, Building2, Lightbulb, Users2, Workflow
 } from 'lucide-react';
 
 export const COLORS = {
@@ -37,133 +38,103 @@ export const MISSION_VISION = {
   }
 };
 
-export const CORE_VALUES = [
-  { title: "Love in Action", description: "Compassion translated into systems, not sentiment" },
-  { title: "Human-Centered Impact", description: "People before profit, always" },
-  { title: "Equity & Inclusion", description: "Culturally grounded, community-led solutions" },
-  { title: "Integrity & Stewardship", description: "Ethical governance, transparency, accountability" },
-  { title: "Collaboration", description: "Partnerships over silos" },
-  { title: "Innovation for Good", description: "Technology as a tool, not a threat" }
-];
-
-export const SERVICE_AREAS = [
-  { title: "Global Advocacy", description: "International tours and campaigns spreading hope and restoring human dignity.", icon: <Globe className="w-6 h-6" /> },
-  { title: "Mental Wellness", description: "Comprehensive mental health support and wraparound recovery services.", icon: <Brain className="w-6 h-6" /> },
-  { title: "Family Solidarity", description: "Empowering families through education, counseling, and community workshops.", icon: <Users className="w-6 h-6" /> },
-  { title: "Safe Havens", description: "Strategic housing solutions providing security and dignity for the vulnerable.", icon: <Home className="w-6 h-6" /> },
-  { title: "Nutrition Equity", description: "Targeted feeding programs ensuring no community is left underserved.", icon: <Utensils className="w-6 h-6" /> },
-  { title: "Workforce Readiness", description: "GED prep and high-level certifications for global job market entry.", icon: <GraduationCap className="w-6 h-6" /> },
-];
-
-export const STRATEGIC_PHASES = [
-  {
-    title: "Community Roots",
-    years: "Phase 1",
-    goals: [
-      "Establish brick-and-mortar hubs for family support.",
-      "Align feeding/housing with local coalitions.",
-      "Launch grassroots trust-building initiatives."
+export const DETAILED_ABOUT = {
+  header: "Foundation of Luv Profile",
+  dualRole: {
+    intro: "Foundation of Luv serves as both:",
+    points: [
+      "A direct-impact organization delivering programs and interventions, and",
+      "A holding, stewardship, and governance body for public-good initiatives that cannot legally or ethically sit under for-profit entities."
     ],
-    outputs: [
-      "Serve 5,000+ households annually.",
-      "Open 2 major community hubs.",
-      "Enroll 500+ in GED programs."
-    ]
+    collaboration: "Through strategic collaboration with Azariah Management Group (AMG) and its creative and technical arms, FoL transforms advocacy into action, and awareness into sustainable systems of support."
   },
-  {
-    title: "Regional Expansion",
-    years: "Phase 2",
-    goals: [
-      "Partner with state health departments on maternal care.",
-      "Access state housing trust funds for transitional programs.",
-      "Expand workforce skills certification network."
+  problemStatement: {
+    title: "The Problem Statement",
+    context: "Across communities in the U.S. and globally, we are seeing a convergence of crises:",
+    crises: [
+      "Rising mental health challenges among adults, parents, and youth",
+      "Breakdown of family support systems and community cohesion",
+      "Economic exclusion of marginalized groups",
+      "Limited access to culturally relevant education and advocacy resources",
+      "Rapid technological advancement without adequate ethical safeguards",
+      "Advocacy content that raises awareness but lacks follow-through impact"
     ],
-    outputs: [
-      "Secure 3+ state-level grants.",
-      "Certify 2,000+ individuals by year end.",
-      "Increase housing capacity by 25%."
-    ]
+    fragmented: {
+      title: "Existing solutions are often fragmented:",
+      points: [
+        "Nonprofits lack scalable infrastructure and media reach",
+        "Tech solutions lack human-centered governance",
+        "Advocacy campaigns stop at storytelling, without systems change"
+      ]
+    },
+    closing: "Foundation of Luv exists to bridge these gaps."
   },
-  {
-    title: "National Scale",
-    years: "Phase 3",
-    goals: [
-      "Secure HUD, SAMHSA, and USDA federal partnerships.",
-      "Scale LUVWATTS movement across 10 major states.",
-      "Develop career pathways with the Dept of Education."
-    ],
-    outputs: [
-      "Win 5+ federal grant awards.",
-      "Reach 100,000 people cumulatively.",
-      "Establish nationwide feeding logistics."
-    ]
+  values: [
+    { title: "Love in Action", description: "Compassion translated into systems, not sentiment" },
+    { title: "Human-Centered Impact", description: "People before profit, always" },
+    { title: "Equity & Inclusion", description: "Culturally grounded, community-led solutions" },
+    { title: "Integrity & Stewardship", description: "Ethical governance, transparency, accountability" },
+    { title: "Collaboration", description: "Partnerships over silos" },
+    { title: "Innovation for Good", description: "Technology as a tool, not a threat" }
+  ],
+  ecosystem: {
+    role1: {
+      title: "1. A Programmatic Nonprofit",
+      items: ["Mental health and family support initiatives", "Community education and advocacy", "Youth mentorship and leadership development", "Social impact pilots and research"]
+    },
+    role2: {
+      title: "2. A Holding & Stewardship Organization",
+      items: ["World AI Force (as a public good initiative)", "Future advocacy-driven platforms and coalitions", "Grants, donor-restricted funds, and public partnerships"]
+    },
+    ensures: ["IRS compliance", "Ethical separation from for-profit entities", "Long-term sustainability and donor trust"]
   },
-  {
-    title: "Global Influence",
-    years: "Phase 4",
-    goals: [
-      "Partner with UN agencies (UNICEF, WHO, UNESCO).",
-      "Align with UN Sustainable Development Goals (SDGs).",
-      "Launch international LUVWATTS tours and fashion hubs."
-    ],
-    outputs: [
-      "International recognition by UN agencies.",
-      "Raise $10M+ for international relief.",
-      "Presence in 3+ international territories."
-    ]
+  pillars: [
+    {
+      id: 1,
+      title: "Mental Health & Emotional Wellness",
+      objective: "Normalize mental health support and expand access to culturally relevant care.",
+      initiatives: ["Community mental health workshops", "Parenting and caregiver wellness programs", "Trauma-informed advocacy media campaigns", "Referral networks with licensed professionals", "Digital wellness resources tied to advocacy content (e.g., BlackbyAngel, Family First)"],
+      targets: ["Parents & caregivers", "Youth and young adults", "Underserved and marginalized communities"]
+    },
+    {
+      id: 2,
+      title: "Family & Community Stability",
+      objective: "Strengthen families as the foundation of resilient communities.",
+      initiatives: ["Family education programs (communication, conflict resolution, parenting)", "Mentorship programs (youth & intergenerational)", "Community needs assessments and response design", "Volunteer mobilization and service projects"]
+    },
+    {
+      id: 3,
+      title: "Education, Advocacy & Storytelling",
+      objective: "Turn awareness into action through education and media.",
+      initiatives: ["Advocacy-driven docu-series and digital campaigns", "Educational toolkits aligned with media content", "Public forums, town halls, and listening sessions", "Curriculum-aligned resources for schools and community groups"],
+      advantage: "Unlike traditional nonprofits, FoL integrates professional media production (via AMG/Studio AMG) to reach wider audiences, influence policy, and support outcomes storytelling."
+    },
+    {
+      id: 4,
+      title: "Economic Empowerment & Inclusion",
+      objective: "Create pathways to economic stability and participation.",
+      initiatives: ["Workforce readiness and digital skills training", "Entrepreneur support programs (especially creatives and technologists)", "Financial literacy workshops", "Access-to-opportunity partnerships"]
+    },
+    {
+      id: 5,
+      title: "Ethical AI, Technology & Public Good",
+      objective: "Ensure emerging technologies serve humanity, not exploit it.",
+      initiatives: ["Oversight and governance of World AI Force", "Ethical AI education and public awareness", "Research and policy collaboration", "AI-for-good pilots in education, healthcare, and community safety"],
+      role: "Acts as the nonprofit anchor and ethical steward, holds IP or licenses for public-good use, and ensures independence."
+    }
+  ],
+  closing: {
+    quote: "Foundation of Luv is not charity for charity’s sake. It is love, structured. Advocacy, governed. Innovation, humanized.",
+    tagline: "It exists to ensure that compassion is not just expressed but institutionalized."
   }
-];
+};
 
-export const PARTNERS = [
-  "Microsoft", "Amazon", "OpenAI", "Google", "United Nations", "World Health Org", "UNICEF", "Harvard University"
-];
-
-export const STATS = [
-  { label: "Housing Units", value: "250", suffix: "+", description: "Secure homes established" },
-  { label: "Global Reach", value: "1.2", suffix: "M", description: "Engaged in 12 months" },
-  { label: "Education", value: "3.5", suffix: "k", description: "Certifications awarded" },
-  { label: "Food Security", value: "50", suffix: "k+", description: "Meals served per quarter" },
-];
-
-export const HERO_IMAGES = [
-  {
-    url: "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&q=80&w=2000",
-    caption: "Feeding the Soul, Restoring Dignity"
-  },
-  {
-    url: "https://images.unsplash.com/photo-1593113598332-cd288d649433?auto=format&fit=crop&q=80&w=2000",
-    caption: "Empowering the Next Generation"
-  },
-  {
-    url: "https://images.unsplash.com/photo-1532629345422-7515f3d16bb6?auto=format&fit=crop&q=80&w=2000",
-    caption: "Global Reach, Individual Impact"
-  },
-  {
-    url: "https://images.unsplash.com/photo-1509099836639-18ba1795216d?auto=format&fit=crop&q=80&w=2000",
-    caption: "Building Communities Together"
-  }
-];
-
-export const GALLERY_IMAGES = [
-  { url: "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&q=80&w=800", title: "Outreach Program" },
-  { url: "https://images.unsplash.com/photo-1532629345422-7515f3d16bb6?auto=format&fit=crop&q=80&w=800", title: "Global Mission" },
-  { url: "https://images.unsplash.com/photo-1542810634-71277d95dcbb?auto=format&fit=crop&q=80&w=800", title: "Community Education" },
-  { url: "https://images.unsplash.com/photo-1524061614234-84496375567e?auto=format&fit=crop&q=80&w=800", title: "Housing Support" },
-  { url: "https://images.unsplash.com/photo-1518391846015-55a9cc003b25?auto=format&fit=crop&q=80&w=800", title: "Youth Mentorship" },
-  { url: "https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?auto=format&fit=crop&q=80&w=800", title: "Humanitarian Aid" },
-  { url: "https://images.unsplash.com/photo-1509099836639-18ba1795216d?auto=format&fit=crop&q=80&w=800", title: "Family Support" },
-  { url: "https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&q=80&w=800", title: "Social Impact" },
-  { url: "https://images.unsplash.com/photo-1544652478-6653e09f18a2?auto=format&fit=crop&q=80&w=800", title: "Tech Empowerment" },
-];
-
-export const DONOR_PAGE = {
-  header: "Invest in Humanity",
-  tagline: "Your support drives systems of love and structures of change.",
+export const DONOR_PAGE_CONTENT = {
   different: {
     title: "What Makes Us Different",
     content: "Foundation of Luv bridges advocacy, media, community programs, and ethical technology under one accountable nonprofit structure. We don’t just raise awareness — we build systems that last."
   },
-  pillars: [
+  impactPillars: [
     { title: "Mental Health & Emotional Wellness", description: "Expanding access to culturally relevant support and education." },
     { title: "Family & Community Stability", description: "Strengthening families as the foundation of resilient communities." },
     { title: "Education & Advocacy", description: "Turning powerful storytelling into real-world action and resources." },
@@ -187,7 +158,7 @@ export const DONOR_PAGE = {
     ],
     closing: "Donor trust is not assumed — it is earned."
   },
-  supportMatters: {
+  matters: {
     title: "Why Your Support Matters",
     points: [
       "Scalable mental health and family programs",
@@ -203,6 +174,57 @@ export const DONOR_PAGE = {
       "Every program is built for real impact.",
       "Every initiative centers humanity first."
     ],
-    closing: "Foundation of Luv. Because love deserves structure."
+    tagline: "Foundation of Luv. Because love deserves structure."
   }
 };
+
+export const STATS = [
+  { label: "Housing Units", value: "250", suffix: "+", description: "Secure homes established" },
+  { label: "Global Reach", value: "1.2", suffix: "M", description: "Engaged in 12 months" },
+  { label: "Education", value: "3.5", suffix: "k", description: "Certifications awarded" },
+  { label: "Food Security", value: "50", suffix: "k+", description: "Meals served per quarter" },
+];
+
+export const SERVICE_AREAS = [
+  { title: "Global Advocacy", description: "International tours and campaigns spreading hope and restoring human dignity.", icon: <Globe className="w-6 h-6" /> },
+  { title: "Mental Wellness", description: "Comprehensive mental health support and wraparound recovery services.", icon: <Brain className="w-6 h-6" /> },
+  { title: "Family Solidarity", description: "Empowering families through education, counseling, and community workshops.", icon: <Users className="w-6 h-6" /> },
+  { title: "Safe Havens", description: "Strategic housing solutions providing security and dignity for the vulnerable.", icon: <Home className="w-6 h-6" /> },
+  { title: "Nutrition Equity", description: "Targeted feeding programs ensuring no community is left underserved.", icon: <Utensils className="w-6 h-6" /> },
+  { title: "Workforce Readiness", description: "GED prep and high-level certifications for global job market entry.", icon: <GraduationCap className="w-6 h-6" /> },
+];
+
+export const STRATEGIC_PHASES = [
+  {
+    title: "Community Roots",
+    years: "Phase 1",
+    goals: ["Establish brick-and-mortar hubs for family support.", "Align feeding/housing with local coalitions.", "Launch grassroots trust-building initiatives."],
+    outputs: ["Serve 5,000+ households annually.", "Open 2 major community hubs.", "Enroll 500+ in GED programs."]
+  },
+  {
+    title: "Regional Expansion",
+    years: "Phase 2",
+    goals: ["Partner with state health departments on maternal care.", "Access state housing trust funds for transitional programs.", "Expand workforce skills certification network."],
+    outputs: ["Secure 3+ state-level grants.", "Certify 2,000+ individuals by year end.", "Increase housing capacity by 25%."]
+  },
+  {
+    title: "National Scale",
+    years: "Phase 3",
+    goals: ["Secure HUD, SAMHSA, and USDA federal partnerships.", "Scale LUVWATTS movement across 10 major states.", "Develop career pathways with the Dept of Education."],
+    outputs: ["Win 5+ federal grant awards.", "Reach 100,000 people cumulatively.", "Establish nationwide feeding logistics."]
+  }
+];
+
+export const GALLERY_IMAGES = [
+  { url: "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&q=80&w=800", title: "Outreach 2024" },
+  { url: "https://images.unsplash.com/photo-1532629345422-7515f3d16bb6?auto=format&fit=crop&q=80&w=800", title: "Global Support" },
+  { url: "https://images.unsplash.com/photo-1542810634-71277d95dcbb?auto=format&fit=crop&q=80&w=800", title: "Community Hub" },
+  { url: "https://images.unsplash.com/photo-1524061614234-84496375567e?auto=format&fit=crop&q=80&w=800", title: "Housing Progress" },
+  { url: "https://images.unsplash.com/photo-1518391846015-55a9cc003b25?auto=format&fit=crop&q=80&w=800", title: "Youth Mentorship" },
+  { url: "https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?auto=format&fit=crop&q=80&w=800", title: "Humanitarian Aid" },
+];
+
+export const HERO_IMAGES = [
+  { url: "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&q=80&w=2000", caption: "Feeding the Soul, Restoring Dignity" },
+  { url: "https://images.unsplash.com/photo-1593113598332-cd288d649433?auto=format&fit=crop&q=80&w=2000", caption: "Empowering the Next Generation" }
+];

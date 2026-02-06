@@ -1,69 +1,68 @@
 <svg width="500" height="500" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <!-- Top Arc for FOUNDATION OF LUV (Radius slightly larger to fit text) -->
-    <path id="topTextArc" d="M 50, 250 A 200,200 0 0,1 450,250" />
-    <!-- Bottom Arc for Motto (Flipped direction to keep text upright at bottom) -->
-    <path id="bottomTextArc" d="M 75, 250 A 175,175 0 0,0 425,250" />
-    
+    <!-- Precise arcs for typography placement -->
+    <path id="topTextArc" d="M 68, 250 A 182,182 0 0,1 432,250" />
+    <path id="bottomTextArc" d="M 85, 250 A 165,165 0 0,0 415,250" />
     <clipPath id="globeClip">
-      <circle cx="250" cy="185" r="75" />
+      <circle cx="250" cy="185" r="70" />
     </clipPath>
   </defs>
 
-  <!-- Outer Borders -->
-  <circle cx="250" cy="250" r="248" fill="#e2a744" />
+  <!-- Outer Golden Frame -->
+  <circle cx="250" cy="250" r="248" fill="#eeb053" />
   <circle cx="250" cy="250" r="242" fill="#ffffff" />
   
   <!-- Main Bicolor Ring -->
-  <circle cx="250" cy="250" r="236" fill="#332d2b" /> <!-- Dark bottom -->
-  <path d="M 14,250 A 236,236 0 0,1 486,250 L 250,250 Z" fill="#f2e9e4" /> <!-- Beige top -->
+  <circle cx="250" cy="250" r="236" fill="#4a4440" /> <!-- Dark Grey Bottom Foundation -->
+  <path d="M 14,250 A 236,236 0 0,1 486,250 L 250,250 Z" fill="#d6d6d6" /> <!-- Light Grey Top Sky -->
   
-  <!-- Inner Separator -->
-  <circle cx="250" cy="250" r="172" stroke="#332d2b" stroke-width="6" fill="none" />
+  <!-- Inner Separator Line -->
+  <circle cx="250" cy="250" r="176" stroke="#4a4440" stroke-width="2" fill="none" />
 
-  <!-- Core Copper/Orange Circle -->
-  <circle cx="250" cy="250" r="168" fill="#df8c3d" />
+  <!-- Inner Orange Core -->
+  <circle cx="250" cy="250" r="172" fill="#df8c3d" />
   
   <!-- Central Globe -->
-  <circle cx="250" cy="185" r="75" fill="#0d2440" />
+  <circle cx="250" cy="185" r="70" fill="#122d4f" />
   <g clip-path="url(#globeClip)">
-    <!-- Simplified Map Shapes -->
     <path d="M210,165 Q225,145 245,165 T275,175 T300,160 T315,185 T285,215 T240,210 T205,190 Z" fill="#df8c3d" />
     <path d="M255,130 Q275,140 270,160 T295,170 T310,150 Z" fill="#df8c3d" />
   </g>
 
-  <!-- Golden Wreaths -->
-  <g fill="#e2a744" opacity="0.9">
-    <!-- Left Wreath -->
+  <!-- Laurel Wreaths (Golden Yellow) -->
+  <g fill="#f1c27d">
+    <!-- Left Branch -->
     <path d="M190,220 Q185,250 200,300 Q215,330 245,355 L250,350 Q220,320 210,280 T205,220 Z" />
     <ellipse cx="188" cy="230" rx="6" ry="11" transform="rotate(-30 188 230)" />
     <ellipse cx="192" cy="260" rx="6" ry="11" transform="rotate(-25 192 260)" />
     <ellipse cx="202" cy="290" rx="6" ry="11" transform="rotate(-20 202 290)" />
     <ellipse cx="218" cy="320" rx="6" ry="11" transform="rotate(-15 218 320)" />
+    <ellipse cx="185" cy="210" rx="5" ry="10" transform="rotate(-35 185 210)" />
     
-    <!-- Right Wreath -->
+    <!-- Right Branch -->
     <path d="M310,220 Q315,250 300,300 Q285,330 255,355 L250,350 Q280,320 290,280 T295,220 Z" />
     <ellipse cx="312" cy="230" rx="6" ry="11" transform="rotate(30 312 230)" />
     <ellipse cx="308" cy="260" rx="6" ry="11" transform="rotate(25 308 260)" />
     <ellipse cx="298" cy="290" rx="6" ry="11" transform="rotate(20 298 290)" />
     <ellipse cx="282" cy="320" rx="6" ry="11" transform="rotate(15 282 320)" />
+    <ellipse cx="315" cy="210" rx="5" ry="10" transform="rotate(35 315 210)" />
   </g>
 
-  <!-- Crimson Heart (Overlapping Globe and Wreaths) -->
-  <path d="M250,235 C210,185 140,210 140,295 C140,370 250,455 250,455 C250,455 360,370 360,295 C360,210 290,185 250,235 Z" fill="#9c1c22" />
+  <!-- Central Heart (Dark Crimson) -->
+  <path d="M250,235 C210,185 140,210 140,295 C140,370 250,455 250,455 C250,455 360,370 360,295 C360,210 290,185 250,235 Z" fill="#8b1a1a" />
 
-  <!-- Side Stars -->
-  <g fill="#e2a744">
-    <path d="M85,250 l9,-12 15,2 -11,11 4,16 -17,-10 -17,10 4,-16 -11,-11 15,-2 z" />
-    <path d="M415,250 l9,-12 15,2 -11,11 4,16 -17,-10 -17,10 4,-16 -11,-11 15,-2 z" />
+  <!-- Border Stars (Golden) -->
+  <g fill="#f1c27d">
+    <path d="M92,250 l10,-12 16,3 -12,12 5,16 -19,-10 -19,10 5,-16 -12,-12 16,-3 z" />
+    <path d="M408,250 l10,-12 16,3 -12,12 5,16 -19,-10 -19,10 5,-16 -12,-12 16,-3 z" />
   </g>
 
-  <!-- Typography (Adjusted font sizes for better fit) -->
-  <text font-family="Cinzel, serif" font-weight="900" font-size="34" fill="#332d2b" letter-spacing="4">
+  <!-- Typography -->
+  <text font-family="'Cormorant Garamond', serif" font-weight="900" font-size="44" fill="#1a1a1a" letter-spacing="2">
     <textPath href="#topTextArc" startOffset="50%" text-anchor="middle">FOUNDATION OF LUV</textPath>
   </text>
   
-  <text font-family="Cinzel, serif" font-weight="700" font-size="20" fill="#ffffff" letter-spacing="2">
-    <textPath href="#bottomTextArc" startOffset="50%" text-anchor="middle" side="right">LOVE IN ACTION CHANGE IN MOTION</textPath>
+  <text font-family="'Cormorant Garamond', serif" font-weight="700" font-size="24" fill="#ffffff" letter-spacing="1">
+    <textPath href="#bottomTextArc" startOffset="50%" text-anchor="middle">LOVE IN ACTION CHANGE IN MOTION</textPath>
   </text>
 </svg>
