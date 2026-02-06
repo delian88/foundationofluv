@@ -25,6 +25,51 @@ export const NAVIGATION = [
   { name: 'Programs', id: 'programs' },
 ];
 
+export const LUV_ACT_PROGRAMS = [
+  {
+    id: "01",
+    title: "Family First Initiative",
+    description: "Workshops on parenting, planning, and child-raising.",
+    color: "#9c1c22"
+  },
+  {
+    id: "02",
+    title: "Pathways to Purpose",
+    description: "GED, job readiness, and certification programs with global partners.",
+    color: "#9c1c22"
+  },
+  {
+    id: "03",
+    title: "Hope Homes",
+    description: "Housing and shelter for displaced and vulnerable individuals.",
+    color: "#9c1c22"
+  },
+  {
+    id: "04",
+    title: "Nourish with Love",
+    description: "Feeding and nutrition programs in underserved communities.",
+    color: "#eeb053"
+  },
+  {
+    id: "05",
+    title: "Healing Circles",
+    description: "Wraparound services for substance abuse and mental health.",
+    color: "#eeb053"
+  },
+  {
+    id: "06",
+    title: "Women in Wealth",
+    description: "Financial literacy & entrepreneurship for minority women.",
+    color: "#eeb053"
+  },
+  {
+    id: "07",
+    title: "College Access Project",
+    description: "Preparing youth for college readiness and scholarships.",
+    color: "#eeb053"
+  }
+];
+
 export const MISSION_VISION = {
   mission: {
     title: "Mission",

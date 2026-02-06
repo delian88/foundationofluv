@@ -7,7 +7,7 @@ import {
 } from 'lucide-react';
 import { 
   NAVIGATION, SERVICE_AREAS, STRATEGIC_PHASES, STATS, COLORS, HERO_IMAGES, GALLERY_IMAGES,
-  MISSION_VISION, DETAILED_ABOUT, DONOR_PAGE_CONTENT
+  MISSION_VISION, DETAILED_ABOUT, DONOR_PAGE_CONTENT, LUV_ACT_PROGRAMS
 } from './constants';
 
 // --- Global UI Components ---
@@ -118,6 +118,109 @@ const AnimatedNumber = ({ value }: { value: string }) => {
 };
 
 // --- Page Content Views ---
+
+const ProgramsPageView = () => {
+  const redBlocks = LUV_ACT_PROGRAMS.filter(p => p.id === "01" || p.id === "02" || p.id === "03");
+  const yellowBlocksGroup1 = LUV_ACT_PROGRAMS.filter(p => p.id === "04" || p.id === "05" || p.id === "06");
+  const yellowBlockLast = LUV_ACT_PROGRAMS.find(p => p.id === "07");
+
+  return (
+    <section className="py-24 md:py-48 bg-white pt-48 relative overflow-hidden">
+      <div className="max-w-7xl mx-auto px-4 relative z-10">
+        <div className="flex flex-col md:flex-row items-center gap-6 mb-16">
+          <Logo className="w-20 h-20 md:w-24 md:h-24" />
+          <h2 className="text-[#9c1c22] font-cinzel font-black tracking-widest text-4xl md:text-5xl uppercase">Foundation of Luv</h2>
+        </div>
+
+        <div className="mb-16">
+          <h1 className="text-6xl md:text-9xl font-serif font-black text-[#9c1c22] leading-none mb-8">PROGRAMS & PROJECTS</h1>
+          <div className="max-w-4xl">
+            <p className="text-2xl md:text-3xl font-serif text-[#332d2b] leading-tight mb-4">
+              At Foundation of Luv we are driven by our objectives and act to fulfill them through our programs & projects.
+            </p>
+            <p className="text-xl md:text-2xl font-serif text-[#332d2b]/60 italic">
+              They are also known as the <span className="text-[#9c1c22] font-bold">7 Luv Act.</span>
+            </p>
+          </div>
+        </div>
+
+        {/* The 3-Column Layout from the Image */}
+        <div className="grid lg:grid-cols-3 gap-8 items-start">
+          {/* COLUMN 1: 01, 02, 03 (Red) */}
+          <div className="flex flex-col gap-8">
+            {redBlocks.map((program) => (
+              <motion.div 
+                key={program.id}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                className="bg-[#9c1c22] text-white p-12 h-full flex flex-col justify-start min-h-[320px] shadow-lg"
+              >
+                <span className="text-7xl font-cinzel font-black block mb-6 opacity-70 leading-none">{program.id}</span>
+                <h3 className="text-3xl md:text-4xl font-serif font-black mb-6 leading-tight uppercase">{program.title}</h3>
+                <p className="text-xl md:text-2xl font-serif opacity-90 leading-relaxed italic border-t border-white/20 pt-6">{program.description}</p>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* COLUMN 2: 04, 05, 06 (Yellow) */}
+          <div className="flex flex-col gap-8">
+            {yellowBlocksGroup1.map((program) => (
+              <motion.div 
+                key={program.id}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                className="bg-[#eeb053] text-[#332d2b] p-12 h-full flex flex-col justify-start min-h-[320px] shadow-lg"
+              >
+                <span className="text-7xl font-cinzel font-black block mb-6 opacity-50 leading-none">{program.id}</span>
+                <h3 className="text-3xl md:text-4xl font-serif font-black mb-6 leading-tight uppercase">{program.title}</h3>
+                <p className="text-xl md:text-2xl font-serif text-[#332d2b]/80 leading-relaxed italic border-t border-black/10 pt-6">{program.description}</p>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* COLUMN 3: Large Photo + 07 (Yellow) */}
+          <div className="flex flex-col gap-8 h-full">
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.95 }} 
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              className="relative aspect-[3/4.5] overflow-hidden shadow-2xl grayscale hover:grayscale-0 transition-all duration-1000 border-8 border-white"
+            >
+              <img 
+                src="https://images.unsplash.com/photo-1593113598332-cd288d649433?auto=format&fit=crop&q=80&w=1200" 
+                alt="Foundation Impact Leader" 
+                className="w-full h-full object-cover" 
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+            </motion.div>
+
+            {yellowBlockLast && (
+              <motion.div 
+                key={yellowBlockLast.id}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                className="bg-[#eeb053] text-[#332d2b] p-12 h-full flex flex-col justify-start min-h-[320px] shadow-lg"
+              >
+                <span className="text-7xl font-cinzel font-black block mb-6 opacity-50 leading-none">{yellowBlockLast.id}</span>
+                <h3 className="text-3xl md:text-4xl font-serif font-black mb-6 leading-tight uppercase">{yellowBlockLast.title}</h3>
+                <p className="text-xl md:text-2xl font-serif text-[#332d2b]/80 leading-relaxed italic border-t border-black/10 pt-6">{yellowBlockLast.description}</p>
+              </motion.div>
+            )}
+          </div>
+        </div>
+
+        {/* Footer styling exactly as the flyer */}
+        <div className="mt-32 pt-12 border-t border-[#332d2b]/10 flex justify-between items-center font-cinzel text-lg md:text-2xl opacity-40 italic">
+          <span>012</span>
+          <span>FOL Profile</span>
+        </div>
+      </div>
+    </section>
+  );
+};
 
 const HomeView = ({ onNavigate }: { onNavigate: (id: string) => void }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -329,6 +432,7 @@ const App: React.FC = () => {
       case 'aboutus': return <DetailedAboutView />;
       case 'gallery': return <GalleryPageView />;
       case 'donate': return <DonorView />;
+      case 'programs': return <ProgramsPageView />;
       case 'globalservices': return <HomeView onNavigate={handleNavigate} />;
       default: return <HomeView onNavigate={handleNavigate} />;
     }
