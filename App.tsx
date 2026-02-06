@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform, useMotionValue, useInView, animate } from 'framer-motion';
 import { 
@@ -7,7 +8,7 @@ import {
   CheckCircle2, Footprints, Zap, Star, Activity, LayoutGrid, Newspaper, MessageSquare, Shield, PenTool,
   Quote, Compass, Anchor, Mic2, UsersRound, Wallet, Stethoscope, Baby, Wallet2, Crosshair,
   Users2 as DemographyIcon, TrendingUp as GrowthIcon, Briefcase, Home as HomeIcon, HeartPulse, GraduationCap as SchoolIcon, Coins,
-  Play, Mail, Handshake, HeartHandshake, Send
+  Play, Mail, Handshake, HeartHandshake, Send, ChevronUp
 } from 'lucide-react';
 import { 
   NAVIGATION, STRATEGIC_PHASES, STATS, COLORS, HERO_IMAGES, GALLERY_IMAGES,
@@ -76,6 +77,46 @@ const Toast = ({ message, onClose }: { message: string; onClose: () => void }) =
     </button>
   </motion.div>
 );
+
+const ScrollToTopButton = () => {
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const toggleVisible = () => {
+      if (window.scrollY > 500) {
+        setVisible(true);
+      } else {
+        setVisible(false);
+      }
+    };
+    window.addEventListener('scroll', toggleVisible);
+    return () => window.removeEventListener('scroll', toggleVisible);
+  }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
+  };
+
+  return (
+    <AnimatePresence>
+      {visible && (
+        <motion.button
+          initial={{ opacity: 0, scale: 0.5, y: 20 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.5, y: 20 }}
+          onClick={scrollToTop}
+          className="fixed bottom-28 right-4 md:right-10 z-[190] w-12 h-12 md:w-16 md:h-16 bg-white border-2 border-[#9c1c22] text-[#9c1c22] rounded-full flex items-center justify-center shadow-2xl hover:bg-[#9c1c22] hover:text-white transition-all group"
+          aria-label="Return to top"
+        >
+          <ChevronUp className="group-hover:-translate-y-1 transition-transform" size={28} />
+        </motion.button>
+      )}
+    </AnimatePresence>
+  );
+};
 
 const FireworksBackground = () => {
   const [bursts, setBursts] = useState<{ id: number; x: number; y: number; color: string }[]>([]);
@@ -957,6 +998,8 @@ const App: React.FC = () => {
           <div className="pt-12 border-t border-white/5 text-[#fdfaf6]/20 text-[10px] font-cinzel font-black tracking-[0.4em] uppercase text-center md:text-left">© 2025 FOUNDATION OF LUV. LOVE IN ACTION, CHANGE IN MOTION.</div>
         </div>
       </footer>
+
+      <ScrollToTopButton />
 
       <AnimatePresence>
         {showToast && (
