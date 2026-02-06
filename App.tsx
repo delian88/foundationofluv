@@ -1,10 +1,12 @@
+
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform, useMotionValue, useInView, animate } from 'framer-motion';
 import { 
   Menu, X, ChevronRight, ArrowRight, Sparkles, MoveRight, ChevronLeft, Calendar, Award, 
   Instagram, Linkedin, Youtube, Globe, Brain, Users, Home, Utensils, GraduationCap, Image as LucideImage,
   Target, Eye, ShieldCheck, TrendingUp, AlertCircle, Building2, Workflow, Lightbulb, Heart, Info, Phone, MapPin,
-  CheckCircle2, Footprints, Zap, Star, Activity, LayoutGrid
+  CheckCircle2, Footprints, Zap, Star, Activity, LayoutGrid, Newspaper, MessageSquare, Shield, PenTool,
+  Quote, Compass, Anchor
 } from 'lucide-react';
 import { 
   NAVIGATION, STRATEGIC_PHASES, STATS, COLORS, HERO_IMAGES, GALLERY_IMAGES,
@@ -121,13 +123,189 @@ const AnimatedNumber = ({ value }: { value: string }) => {
 
 // --- Page Content Views ---
 
+// Fix: Implemented DetailedAboutView component
+const DetailedAboutView = () => (
+  <section className="py-24 md:py-48 bg-white pt-48 relative overflow-hidden">
+    <div className="max-w-7xl mx-auto px-4">
+      <div className="text-center mb-32">
+        <span className="text-[#9c1c22] font-cinzel font-black tracking-[0.5em] text-[12px] uppercase mb-8 block">Organizational Profile</span>
+        <h2 className="text-5xl md:text-8xl font-serif font-black text-[#332d2b] mb-12 uppercase">{DETAILED_ABOUT.header}</h2>
+      </div>
+      
+      <div className="grid lg:grid-cols-2 gap-20 mb-32">
+        <div className="bg-[#fdfaf6] p-16 rounded-[4rem] shadow-xl border-l-8 border-[#9c1c22]">
+          <h3 className="text-3xl font-serif font-black mb-8 uppercase">{DETAILED_ABOUT.dualRole.intro}</h3>
+          <ul className="space-y-6">
+            {DETAILED_ABOUT.dualRole.points.map((point, i) => (
+              <li key={i} className="flex gap-4 text-xl font-serif italic text-[#332d2b]/70 uppercase leading-relaxed">
+                <CheckCircle2 className="shrink-0 text-[#eeb053]" /> {point}
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div className="bg-[#f9f5f0] p-16 rounded-[4rem] shadow-xl border-l-8 border-[#eeb053]">
+          <h3 className="text-3xl font-serif font-black mb-8 uppercase">{DETAILED_ABOUT.problemStatement.title}</h3>
+          <ul className="space-y-6">
+            {DETAILED_ABOUT.problemStatement.crises.map((crisis, i) => (
+              <li key={i} className="flex gap-4 text-xl font-serif italic text-[#332d2b]/70 uppercase leading-relaxed">
+                <AlertCircle className="shrink-0 text-[#9c1c22]" /> {crisis}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+
+      <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-32">
+        {DETAILED_ABOUT.values.map((val, i) => (
+          <div key={i} className="p-10 bg-white border-2 border-[#332d2b]/5 rounded-[3rem] hover:border-[#eeb053] transition-all">
+            <h4 className="text-2xl font-cinzel font-black text-[#9c1c22] mb-4 uppercase">{val.title}</h4>
+            <p className="text-lg font-serif italic text-[#332d2b]/60 uppercase">{val.description}</p>
+          </div>
+        ))}
+      </div>
+
+      <div className="text-center p-20 bg-[#1a1a1a] text-white rounded-[5rem]">
+        <Quote className="w-16 h-16 mx-auto text-[#eeb053] mb-8 opacity-20" />
+        <h3 className="text-4xl font-serif font-black italic mb-6 uppercase">"{DETAILED_ABOUT.closing.quote}"</h3>
+        <p className="text-xl font-cinzel font-black text-[#eeb053] uppercase tracking-widest">{DETAILED_ABOUT.closing.tagline}</p>
+      </div>
+    </div>
+  </section>
+);
+
+// Fix: Implemented DonorView component
+const DonorView = () => (
+  <section className="py-24 md:py-48 bg-white pt-48 relative overflow-hidden">
+    <div className="max-w-7xl mx-auto px-4">
+      <div className="text-center mb-32">
+        <span className="text-[#9c1c22] font-cinzel font-black tracking-[0.5em] text-[12px] uppercase mb-8 block">Support Our Mission</span>
+        <h2 className="text-5xl md:text-8xl font-serif font-black text-[#332d2b] mb-12 uppercase">Give <span className="text-[#eeb053] italic">Luv.</span></h2>
+        <p className="text-2xl font-serif italic text-[#332d2b]/60 max-w-3xl mx-auto uppercase">{DONOR_PAGE_CONTENT.different.content}</p>
+      </div>
+
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-32">
+        {DONOR_PAGE_CONTENT.impactPillars.map((pillar, i) => (
+          <div key={i} className="p-12 bg-[#fdfaf6] rounded-[4rem] shadow-lg border-b-8 border-[#9c1c22]">
+            <h3 className="text-2xl font-serif font-black text-[#332d2b] mb-6 uppercase leading-tight">{pillar.title}</h3>
+            <p className="text-lg font-serif italic text-[#332d2b]/60 uppercase">{pillar.description}</p>
+          </div>
+        ))}
+      </div>
+
+      <div className="grid lg:grid-cols-2 gap-20 items-start mb-32">
+        <div className="bg-[#f9f5f0] p-16 rounded-[4rem]">
+          <h3 className="text-3xl font-serif font-black mb-10 uppercase">{DONOR_PAGE_CONTENT.stewardship.title}</h3>
+          <ul className="space-y-6">
+            {DONOR_PAGE_CONTENT.stewardship.points.map((p, i) => (
+              <li key={i} className="flex gap-4 text-xl font-serif italic text-[#332d2b]/70 uppercase">
+                <ShieldCheck className="text-[#eeb053] shrink-0" /> {p}
+              </li>
+            ))}
+          </ul>
+          <p className="mt-12 text-[#9c1c22] font-cinzel font-black uppercase tracking-widest">{DONOR_PAGE_CONTENT.stewardship.closing}</p>
+        </div>
+        <div className="space-y-12">
+          <div>
+            <h3 className="text-3xl font-serif font-black mb-8 uppercase">{DONOR_PAGE_CONTENT.matters.title}</h3>
+            <ul className="grid grid-cols-1 gap-4">
+              {DONOR_PAGE_CONTENT.matters.points.map((p, i) => (
+                <li key={i} className="flex gap-4 text-lg font-serif italic text-[#332d2b]/60 uppercase items-center">
+                  <div className="w-2 h-2 rounded-full bg-[#9c1c22]" /> {p}
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div className="p-12 bg-[#1a1a1a] text-white rounded-[3rem]">
+            <h3 className="text-2xl font-cinzel font-black text-[#eeb053] mb-6 uppercase">{DONOR_PAGE_CONTENT.promise.title}</h3>
+            <ul className="space-y-4 mb-8">
+              {DONOR_PAGE_CONTENT.promise.points.map((p, i) => (
+                <li key={i} className="flex gap-4 text-lg font-serif italic uppercase opacity-70">
+                  <Heart className="text-[#9c1c22] shrink-0" size={20} /> {p}
+                </li>
+              ))}
+            </ul>
+            <p className="font-serif italic text-white/40 uppercase">{DONOR_PAGE_CONTENT.promise.tagline}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+);
+
+// Fix: Implemented GalleryPageView component
+const GalleryPageView = () => (
+  <section className="py-24 md:py-48 bg-white pt-48">
+    <div className="max-w-7xl mx-auto px-4">
+      <div className="text-center mb-32">
+        <span className="text-[#9c1c22] font-cinzel font-black tracking-[0.5em] text-[12px] uppercase mb-8 block">Visual Narrative</span>
+        <h2 className="text-5xl md:text-8xl font-serif font-black text-[#332d2b] mb-12 uppercase">Impact <span className="text-[#eeb053] italic">Gallery.</span></h2>
+      </div>
+      
+      <div className="columns-1 md:columns-2 lg:columns-3 gap-8 space-y-8">
+        {GALLERY_IMAGES.map((img, i) => (
+          <motion.div 
+            key={i} 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="relative group rounded-[3rem] overflow-hidden break-inside-avoid"
+          >
+            <img src={img.url} alt={img.title} className="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-110" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-10">
+              <h4 className="text-white text-2xl font-serif italic font-bold uppercase">{img.title}</h4>
+            </div>
+          </motion.div>
+        ))}
+      </div>
+    </div>
+  </section>
+);
+
+// Fix: Implemented ProgramsPageView component
+const ProgramsPageView = () => (
+  <section className="py-24 md:py-48 bg-[#fdfaf6] pt-48 relative overflow-hidden">
+    <div className="max-w-7xl mx-auto px-4">
+      <div className="text-center mb-32">
+        <span className="text-[#9c1c22] font-cinzel font-black tracking-[0.5em] text-[12px] uppercase mb-8 block">The 7 Luv Acts</span>
+        <h2 className="text-5xl md:text-8xl font-serif font-black text-[#332d2b] mb-12 uppercase">Our <span className="text-[#9c1c22] italic">Programs.</span></h2>
+        <p className="text-2xl font-serif italic text-[#332d2b]/60 max-w-4xl mx-auto uppercase">A deeper look at the specific initiatives driving our mission of restoration.</p>
+      </div>
+
+      <div className="space-y-24">
+        {LUV_ACT_PROGRAMS.map((program, i) => (
+          <motion.div 
+            key={program.id}
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="bg-white rounded-[5rem] overflow-hidden shadow-2xl flex flex-col lg:flex-row border-b-[20px]"
+            style={{ borderColor: program.color }}
+          >
+            <div className="lg:w-1/3 bg-[#f9f5f0] p-20 flex flex-col items-center justify-center text-center">
+              <span className="text-9xl font-cinzel font-black opacity-10 mb-8" style={{ color: program.color }}>{program.id}</span>
+              <h3 className="text-4xl font-serif font-black uppercase leading-tight" style={{ color: program.color }}>{program.title}</h3>
+            </div>
+            <div className="lg:w-2/3 p-20 flex flex-col justify-center">
+              <p className="text-2xl md:text-3xl font-serif italic text-[#332d2b]/70 leading-relaxed uppercase">{program.description}</p>
+              <div className="mt-12 flex gap-4">
+                 <div className="w-12 h-1 bg-[#eeb053]" />
+                 <p className="font-cinzel font-bold text-sm tracking-widest uppercase opacity-40">Active Chapter Program</p>
+              </div>
+            </div>
+          </motion.div>
+        ))}
+      </div>
+    </div>
+  </section>
+);
+
 const GlobalServicesView = () => (
   <section className="py-24 md:py-48 bg-white pt-48 relative overflow-hidden">
     <div className="max-w-7xl mx-auto px-4">
       <div className="text-center mb-32">
         <span className="text-[#9c1c22] font-cinzel font-black tracking-[0.5em] text-[12px] uppercase mb-8 block">Global Reach</span>
         <h2 className="text-5xl md:text-8xl font-serif font-black text-[#332d2b] mb-12 uppercase">International <span className="text-[#eeb053] italic">Architecture.</span></h2>
-        <p className="text-2xl font-serif italic text-[#332d2b]/60 max-w-4xl mx-auto">
+        <p className="text-2xl font-serif italic text-[#332d2b]/60 max-w-4xl mx-auto uppercase">
           Foundation of Luv operates a multi-disciplinary suite of services designed to address the convergent crises of the modern era.
         </p>
       </div>
@@ -143,14 +321,14 @@ const GlobalServicesView = () => (
             className="bg-[#fdfaf6] p-12 rounded-[4rem] border-2 border-transparent hover:border-[#eeb053] transition-all shadow-lg flex flex-col h-full"
           >
             <div className="text-[#9c1c22] mb-10 w-16 h-16 bg-white rounded-2xl flex items-center justify-center shadow-md">
-              {React.cloneElement(service.icon as React.ReactElement, { size: 32 })}
+              {service.icon}
             </div>
             <h3 className="text-3xl font-serif font-black text-[#332d2b] mb-6 uppercase leading-tight">{service.title}</h3>
-            <p className="text-xl font-serif text-[#332d2b]/70 italic mb-10 leading-relaxed">{service.description}</p>
+            <p className="text-xl font-serif text-[#332d2b]/70 italic mb-10 leading-relaxed uppercase">{service.description}</p>
             <div className="mt-auto pt-8 border-t border-black/5">
                <ul className="space-y-4">
                  {service.features.map((feature, idx) => (
-                   <li key={idx} className="flex items-center gap-4 text-lg font-serif italic text-[#332d2b]/50">
+                   <li key={idx} className="flex items-center gap-4 text-lg font-serif italic text-[#332d2b]/50 uppercase">
                      <div className="w-2 h-2 rounded-full bg-[#eeb053]" /> {feature}
                    </li>
                  ))}
@@ -189,14 +367,14 @@ const RoadmapView = () => (
             <div className="w-full lg:w-1/2">
                <div className="bg-white p-14 rounded-[5rem] shadow-2xl border-b-[16px] border-[#9c1c22]">
                   <span className="text-[#eeb053] font-cinzel font-black tracking-widest text-sm mb-6 block uppercase">{phase.years}</span>
-                  <h3 className="text-4xl md:text-5xl font-serif font-black text-[#332d2b] mb-10 leading-tight">{phase.title}</h3>
+                  <h3 className="text-4xl md:text-5xl font-serif font-black text-[#332d2b] mb-10 leading-tight uppercase">{phase.title}</h3>
                   
                   <div className="space-y-12">
                     <div>
                       <h4 className="text-[#9c1c22] font-cinzel font-black text-xs uppercase tracking-widest mb-6">Strategic Goals</h4>
                       <ul className="space-y-4">
                         {phase.goals.map((goal, idx) => (
-                          <li key={idx} className="flex gap-4 text-xl font-serif italic text-[#332d2b]/60 leading-relaxed">
+                          <li key={idx} className="flex gap-4 text-xl font-serif italic text-[#332d2b]/60 leading-relaxed uppercase">
                             <CheckCircle2 className="shrink-0 text-[#eeb053]" /> {goal}
                           </li>
                         ))}
@@ -206,7 +384,7 @@ const RoadmapView = () => (
                       <h4 className="text-[#332d2b] font-cinzel font-black text-xs uppercase tracking-widest mb-6">Targeted Outputs</h4>
                       <ul className="grid md:grid-cols-2 gap-4">
                         {phase.outputs.map((out, idx) => (
-                          <li key={idx} className="flex gap-4 text-lg font-serif font-black text-[#332d2b] items-center">
+                          <li key={idx} className="flex gap-4 text-lg font-serif font-black text-[#332d2b] items-center uppercase">
                             <Activity className="shrink-0 text-[#9c1c22]" size={18} /> {out}
                           </li>
                         ))}
@@ -234,8 +412,8 @@ const LUVWATTSView = () => (
         <motion.div initial={{ scale: 0.5, opacity: 0 }} whileInView={{ scale: 1, opacity: 1 }} className="mb-12">
           <Heart className="w-32 h-32 mx-auto text-[#eeb053] blur-[2px] animate-pulse" />
         </motion.div>
-        <h2 className="text-6xl md:text-[10rem] font-serif font-black text-white leading-none mb-8">LUVWATTS</h2>
-        <p className="text-2xl md:text-4xl font-serif italic text-white/60 max-w-4xl mx-auto leading-tight">
+        <h2 className="text-6xl md:text-[10rem] font-serif font-black text-white leading-none mb-8 uppercase">LUVWATTS</h2>
+        <p className="text-2xl md:text-4xl font-serif italic text-white/60 max-w-4xl mx-auto leading-tight uppercase">
           "{LUVWATTS_CONTENT.description}"
         </p>
       </div>
@@ -253,7 +431,7 @@ const LUVWATTSView = () => (
             <span className="text-8xl font-cinzel font-black opacity-10 absolute -top-4 -left-4 group-hover:opacity-20">{item.letter}</span>
             <div className="relative z-10">
               <h3 className="text-3xl font-cinzel font-black mb-4 uppercase tracking-tighter">{item.term}</h3>
-              <p className="text-xl font-serif italic opacity-60 group-hover:opacity-100 leading-relaxed">{item.definition}</p>
+              <p className="text-xl font-serif italic opacity-60 group-hover:opacity-100 leading-relaxed uppercase">{item.definition}</p>
             </div>
             <div className="absolute bottom-6 right-6 opacity-0 group-hover:opacity-100 transition-opacity">
               <Zap className="text-white" />
@@ -264,7 +442,7 @@ const LUVWATTSView = () => (
 
       <div className="mt-32 text-center p-20 bg-white text-[#1a1a1a] rounded-[5rem] shadow-[0_0_100px_rgba(238,176,83,0.2)]">
         <h3 className="text-4xl md:text-6xl font-serif font-black mb-10 leading-tight italic uppercase">The Kinetic Heartbeat of Restoration.</h3>
-        <p className="text-2xl font-serif italic opacity-60 mb-12 max-w-2xl mx-auto">It is the energy that drives every program, every volunteer, and every life changed by the Foundation of Luv.</p>
+        <p className="text-2xl font-serif italic opacity-60 mb-12 max-w-2xl mx-auto uppercase">It is the energy that drives every program, every volunteer, and every life changed by the Foundation of Luv.</p>
         <div className="flex justify-center gap-12 text-[#9c1c22]">
           <Activity size={48} className="animate-bounce" />
           <Workflow size={48} className="animate-spin-slow" />
@@ -294,7 +472,7 @@ const HomeView = ({ onNavigate }: { onNavigate: (id: string) => void }) => {
                   <img src={HERO_IMAGES[currentSlide].url} alt={HERO_IMAGES[currentSlide].caption} className="w-full h-full object-cover brightness-75" />
                   <div className="absolute bottom-0 left-0 right-0 p-8 md:p-14 bg-gradient-to-t from-black/80 to-transparent text-left">
                     <span className="text-[#eeb053] font-cinzel font-black tracking-[0.4em] text-[10px] uppercase">Movement Chapter</span>
-                    <h3 className="text-white text-lg md:text-5xl font-serif italic font-bold">{HERO_IMAGES[currentSlide].caption}</h3>
+                    <h3 className="text-white text-lg md:text-5xl font-serif italic font-bold uppercase">{HERO_IMAGES[currentSlide].caption}</h3>
                   </div>
                 </motion.div>
               </AnimatePresence>
@@ -303,34 +481,76 @@ const HomeView = ({ onNavigate }: { onNavigate: (id: string) => void }) => {
           </motion.div>
           
           <div className="mt-12">
-            <h1 className="hero-text text-4xl md:text-[8rem] font-serif font-black leading-tight text-shine-crimson">Love in Action,<br /><span className="italic font-normal text-shine text-[#eeb053]">Change in Motion.</span></h1>
-            <p className="mobile-p text-lg md:text-3xl text-[#332d2b]/70 mt-8 max-w-4xl mx-auto font-serif italic text-center">"We are the kinetic pulse of restoration, engineering pathways where human dignity is an unshakeable reality."</p>
+            <h1 className="hero-text text-4xl md:text-[8rem] font-serif font-black leading-tight text-shine-crimson uppercase">Love in Action,<br /><span className="italic font-normal text-shine text-[#eeb053]">Change in Motion.</span></h1>
+            <p className="mobile-p text-lg md:text-3xl text-[#332d2b]/70 mt-8 max-w-4xl mx-auto font-serif italic text-center uppercase">"We are the kinetic pulse of restoration, engineering pathways where human dignity is an unshakeable reality."</p>
             <div className="flex flex-col md:flex-row gap-6 justify-center mt-12">
-              <button onClick={() => onNavigate('donate')} className="px-12 py-6 bg-[#9c1c22] text-white rounded-full font-cinzel font-black text-xl shadow-xl flex items-center gap-3 hover:bg-[#7a141a] transition-all">Show some Love <MoveRight /></button>
-              <button onClick={() => onNavigate('aboutus')} className="px-12 py-6 glass-card rounded-full font-cinzel font-bold text-xl border border-[#eeb053]/50 flex items-center justify-center gap-3 hover:bg-white/60 transition-all">Explore Our Story <ArrowRight /></button>
+              <button onClick={() => onNavigate('donate')} className="px-12 py-6 bg-[#9c1c22] text-white rounded-full font-cinzel font-black text-xl shadow-xl flex items-center gap-3 hover:bg-[#7a141a] transition-all uppercase">Show some Love <MoveRight /></button>
+              <button onClick={() => onNavigate('aboutus')} className="px-12 py-6 glass-card rounded-full font-cinzel font-bold text-xl border border-[#eeb053]/50 flex items-center justify-center gap-3 hover:bg-white/60 transition-all uppercase">Explore Our Story <ArrowRight /></button>
             </div>
           </div>
         </div>
       </header>
 
-      {/* Intro / About Summary */}
-      <section className="py-20 md:py-40 bg-[#f9f5f0] border-y border-[#332d2b]/5">
+      {/* Mission & Vision Highlights */}
+      <section className="py-24 md:py-40 bg-white">
+        <div className="max-w-7xl mx-auto px-4 grid md:grid-cols-2 gap-12">
+          <motion.div 
+            initial={{ opacity: 0, x: -30 }} 
+            whileInView={{ opacity: 1, x: 0 }} 
+            viewport={{ once: true }}
+            className="p-16 rounded-[4rem] bg-[#fdfaf6] border-2 border-[#9c1c22]/10 flex flex-col items-center text-center shadow-lg"
+          >
+            <div className="mb-8">{MISSION_VISION.mission.icon}</div>
+            <h3 className="text-4xl font-serif font-black text-[#332d2b] mb-6 uppercase tracking-tight">{MISSION_VISION.mission.title}</h3>
+            <p className="text-xl font-serif italic text-[#332d2b]/60 leading-relaxed uppercase">{MISSION_VISION.mission.content}</p>
+          </motion.div>
+          <motion.div 
+            initial={{ opacity: 0, x: 30 }} 
+            whileInView={{ opacity: 1, x: 0 }} 
+            viewport={{ once: true }}
+            className="p-16 rounded-[4rem] bg-[#f9f5f0] border-2 border-[#eeb053]/20 flex flex-col items-center text-center shadow-lg"
+          >
+            <div className="mb-8">{MISSION_VISION.vision.icon}</div>
+            <h3 className="text-4xl font-serif font-black text-[#332d2b] mb-6 uppercase tracking-tight">{MISSION_VISION.vision.title}</h3>
+            <p className="text-xl font-serif italic text-[#332d2b]/60 leading-relaxed uppercase">{MISSION_VISION.vision.content}</p>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Intro Summary / The FOL Profile */}
+      <section className="py-20 md:py-40 bg-[#fdfaf6] border-y border-[#332d2b]/5">
         <div className="max-w-7xl mx-auto px-4 grid lg:grid-cols-12 gap-20 items-center">
           <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="lg:col-span-5">
-            <div className="p-4 bg-white rounded-[4rem] shadow-2xl border-4 border-[#eeb053]">
-              <img src="https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&q=80&w=1000" className="rounded-[3.5rem] grayscale" alt="Foundation Origin" />
+            <div className="relative">
+              <div className="p-4 bg-white rounded-[4rem] shadow-2xl border-4 border-[#eeb053]">
+                <img src="https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&q=80&w=1000" className="rounded-[3.5rem] grayscale" alt="Foundation Origin" />
+              </div>
+              <div className="absolute -bottom-8 -right-8 w-32 h-32 bg-[#9c1c22] rounded-full flex items-center justify-center text-white shadow-xl">
+                 <Anchor size={48} />
+              </div>
             </div>
           </motion.div>
           <div className="lg:col-span-7">
-            <h2 className="text-4xl md:text-7xl font-serif font-black text-[#332d2b] leading-tight mb-8">ABOUT US (FOL)</h2>
-            <p className="text-xl md:text-2xl text-[#332d2b]/80 font-serif leading-relaxed italic border-l-8 border-[#9c1c22] pl-10">
-              Foundation of Love (FOL) was created in 2016 with a simple yet profound belief: that love, dignity, and compassion can transform individuals and communities. Rooted in humanitarian service, advocacy, and holistic support, FOL was established to bridge societal divides, empower the vulnerable, and create lasting pathways to opportunity.
+            <span className="text-[#9c1c22] font-cinzel font-black tracking-widest text-xs uppercase mb-6 block">Our Heritage</span>
+            <h2 className="text-4xl md:text-7xl font-serif font-black text-[#332d2b] leading-tight mb-8 uppercase">Engineering <span className="text-[#9c1c22] italic">Change</span> Since 2016.</h2>
+            <p className="text-xl md:text-2xl text-[#332d2b]/80 font-serif leading-relaxed italic border-l-8 border-[#9c1c22] pl-10 uppercase mb-12">
+              Foundation of Love (FOL) was created with a simple yet profound belief: that love, dignity, and compassion can transform individuals and communities. We bridge the gap between advocacy storytelling and systemic action.
             </p>
+            <div className="grid grid-cols-2 gap-8">
+              <div className="flex gap-4 items-start">
+                <CheckCircle2 className="text-[#eeb053] shrink-0" />
+                <p className="text-sm font-serif font-black uppercase">Independent Stewardship</p>
+              </div>
+              <div className="flex gap-4 items-start">
+                <CheckCircle2 className="text-[#eeb053] shrink-0" />
+                <p className="text-sm font-serif font-black uppercase">Programmatic Innovation</p>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Community Outreach Highlights */}
+      {/* Community Restore - Shoe Drive Highlight */}
       <section className="py-24 md:py-40 bg-white relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4">
           <div className="grid lg:grid-cols-2 gap-20 items-center">
@@ -344,9 +564,9 @@ const HomeView = ({ onNavigate }: { onNavigate: (id: string) => void }) => {
                      </div>
                    ))}
                 </div>
-                <div className="absolute inset-0 flex items-center justify-center">
+                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                   <div className="bg-white p-6 rounded-full shadow-2xl border-4 border-[#9c1c22] w-48 h-48 flex items-center justify-center">
-                    <Logo className="w-full h-full" />
+                    <Footprints size={80} className="text-[#9c1c22]" />
                   </div>
                 </div>
               </motion.div>
@@ -354,291 +574,192 @@ const HomeView = ({ onNavigate }: { onNavigate: (id: string) => void }) => {
             <div>
               <span className="text-[#9c1c22] font-cinzel font-black tracking-widest text-xs uppercase mb-6 block">Community Outreach</span>
               <h2 className="text-5xl md:text-8xl font-serif font-black text-[#332d2b] mb-10 leading-tight uppercase">Let's Give <br />Those Feet <span className="text-[#9c1c22] italic">Shoes.</span></h2>
-              <p className="text-2xl font-serif italic text-[#332d2b]/60 mb-12">
-                Our community efforts where we show love and help those in need. Simple acts of restoration create waves of progress.
+              <p className="text-2xl font-serif italic text-[#332d2b]/60 mb-12 uppercase leading-relaxed">
+                Our community efforts where we show love and help those in need. Simple acts of restoration create waves of progress. Providing dignity through direct assistance is the first step toward lasting community empowerment.
               </p>
               <div className="bg-[#eeb053]/20 p-8 rounded-[2rem] border-l-8 border-[#eeb053]">
-                <p className="text-xl font-serif font-bold italic text-[#332d2b]">"Providing dignity through direct assistance is the first step toward lasting community empowerment."</p>
+                <p className="text-xl font-serif font-bold italic text-[#332d2b] uppercase">"We believe humanity deserves more than awareness; it deserves a system that acts."</p>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* The 7 Luv Acts Highlights */}
+      {/* The 7 Luv Acts - Core Architecture */}
       <section className="py-24 md:py-40 bg-[#f9f5f0] border-y border-[#332d2b]/5">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="text-center mb-24">
-             <span className="text-[#9c1c22] font-cinzel font-black tracking-[0.4em] text-xs uppercase mb-4 block">Our Architecture</span>
-             <h2 className="text-5xl md:text-8xl font-serif font-black text-[#332d2b] uppercase">The 7 Luv Acts</h2>
-          </div>
+        <div className="max-w-7xl mx-auto px-4 text-center">
+          <span className="text-[#9c1c22] font-cinzel font-black tracking-[0.4em] text-xs uppercase mb-4 block">Institutional Compassion</span>
+          <h2 className="text-5xl md:text-[7rem] font-serif font-black text-[#332d2b] uppercase leading-none mb-12">The <span className="text-[#9c1c22]">7</span> Luv Acts</h2>
+          <p className="text-2xl font-serif italic text-[#332d2b]/50 max-w-4xl mx-auto mb-20 uppercase">Our foundational framework for community restoration and individual empowerment.</p>
+          
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {LUV_ACT_PROGRAMS.slice(0, 6).map((act, i) => (
+            {LUV_ACT_PROGRAMS.map((act, i) => (
               <motion.div 
                 key={act.id} 
                 whileHover={{ y: -10 }}
-                className="p-10 rounded-[3rem] border-2 border-transparent hover:border-[#eeb053] transition-all bg-white group shadow-sm"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+                className="p-12 rounded-[4rem] border-2 border-transparent hover:border-[#eeb053] transition-all bg-white group shadow-xl text-left flex flex-col h-full"
               >
-                <span className="text-4xl font-cinzel font-black text-[#9c1c22]/20 group-hover:text-[#9c1c22] transition-colors mb-6 block">{act.id}</span>
-                <h3 className="text-2xl font-serif font-black text-[#332d2b] mb-4 uppercase">{act.title}</h3>
-                <p className="text-lg text-[#332d2b]/60 font-serif italic leading-relaxed">{act.description}</p>
+                <div className="flex justify-between items-center mb-8">
+                  <span className="text-5xl font-cinzel font-black text-[#9c1c22]/20 group-hover:text-[#9c1c22] transition-colors uppercase">{act.id}</span>
+                  <div className="w-10 h-1 bg-[#eeb053] group-hover:w-20 transition-all" />
+                </div>
+                <h3 className="text-3xl font-serif font-black text-[#332d2b] mb-6 uppercase tracking-tight leading-none">{act.title}</h3>
+                <p className="text-lg text-[#332d2b]/60 font-serif italic leading-relaxed uppercase">{act.description}</p>
               </motion.div>
             ))}
           </div>
-          <div className="mt-16 text-center">
-            <button onClick={() => onNavigate('programs')} className="text-xl font-cinzel font-bold text-[#9c1c22] flex items-center gap-3 mx-auto hover:gap-6 transition-all">View All Restoration Pillars <ArrowRight /></button>
+          <div className="mt-20">
+            <button onClick={() => onNavigate('programs')} className="px-16 py-8 bg-[#1a1a1a] text-white rounded-full font-cinzel font-black text-xl hover:bg-[#9c1c22] transition-all uppercase flex items-center justify-center gap-4 mx-auto shadow-2xl">
+              Deep Dive Into Our Programs <ArrowRight />
+            </button>
           </div>
         </div>
       </section>
 
-      {/* Leadership Highlight */}
-      <section className="py-20 md:py-40 bg-[#1a1a1a] text-white relative overflow-hidden">
-        <div className="absolute inset-0 opacity-10 pointer-events-none">
-          <Logo className="w-full h-full scale-150 rotate-12" />
+      {/* Leadership Full Quote Section */}
+      <section className="py-24 md:py-48 bg-[#1a1a1a] text-white relative overflow-hidden">
+        <div className="absolute inset-0 opacity-5 pointer-events-none grayscale brightness-50">
+           <Logo className="w-full h-full scale-150" />
         </div>
-        <div className="max-w-7xl mx-auto px-4 grid lg:grid-cols-2 gap-20 items-center relative z-10">
-          <div className="order-2 lg:order-1">
-            <h2 className="text-[#eeb053] font-cinzel font-black tracking-widest text-sm uppercase mb-8">{LEADERSHIP_MESSAGE.title}</h2>
-            <div className="relative">
-               <span className="text-[12rem] font-serif font-black absolute -top-24 -left-12 opacity-10 text-[#eeb053]">"</span>
-               <p className="text-3xl md:text-5xl font-serif italic leading-tight mb-12">
-                 {LEADERSHIP_MESSAGE.content}
-               </p>
-            </div>
-            <div className="flex items-center gap-6">
-              <div className="h-1 w-20 bg-[#9c1c22]"></div>
-              <div>
-                <p className="text-2xl font-cinzel font-black text-[#eeb053] uppercase">{LEADERSHIP_MESSAGE.author}</p>
-                <p className="text-lg font-serif italic opacity-50">{LEADERSHIP_MESSAGE.tagline}</p>
-              </div>
-            </div>
-          </div>
-          <div className="order-1 lg:order-2">
-            <div className="relative p-6">
-              <div className="aspect-square rounded-[4rem] overflow-hidden shadow-[0_0_80px_rgba(238,176,83,0.3)] border-4 border-[#eeb053] bg-white flex items-center justify-center p-8 md:p-16">
-                 <Logo className="w-full h-full" />
-              </div>
-              <motion.div 
-                animate={{ rotate: 360 }} 
-                transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                className="absolute -bottom-10 -right-10 w-40 h-40 hidden md:block"
-              >
-                <svg viewBox="0 0 200 200" className="w-full h-full">
-                  <path id="circlePath" d="M 100, 100 m -75, 0 a 75,75 0 1,0 150,0 a 75,75 0 1,0 -150,0" fill="transparent" />
-                  <text fill="#eeb053" className="font-cinzel font-bold text-[10px] tracking-[0.2em] uppercase">
-                    <textPath href="#circlePath">Restoring Human Dignity • Leading with Love • </textPath>
-                  </text>
-                </svg>
-              </motion.div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* LUVWATTS Movement Section */}
-      <section className="py-24 md:py-40 bg-white border-y border-[#332d2b]/5">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="grid lg:grid-cols-2 gap-20 items-center">
+        <div className="max-w-5xl mx-auto px-4 relative z-10 text-center">
+          <Quote className="w-24 h-24 mx-auto text-[#eeb053] opacity-20 mb-12" />
+          <motion.h2 
+            initial={{ opacity: 0, y: 30 }} 
+            whileInView={{ opacity: 1, y: 0 }} 
+            viewport={{ once: true }}
+            className="text-3xl md:text-6xl font-serif font-black leading-tight italic mb-16 uppercase"
+          >
+            "{LEADERSHIP_MESSAGE.content}"
+          </motion.h2>
+          <div className="flex items-center justify-center gap-8">
+            <div className="h-px w-20 bg-[#9c1c22]" />
             <div>
-              <span className="text-[#9c1c22] font-cinzel font-black tracking-widest text-xs uppercase mb-6 block">The Kinetic Pulse</span>
-              <h2 className="text-5xl md:text-8xl font-serif font-black text-[#332d2b] mb-10 leading-tight uppercase">Solid Growth, <br /><span className="text-[#9c1c22]">Love in Action.</span></h2>
-              <p className="text-2xl font-serif italic text-[#332d2b]/60 mb-12">
-                {LUVWATTS_CONTENT.description}
-              </p>
-              <button onClick={() => onNavigate('luvwatts')} className="px-12 py-6 bg-[#1a1a1a] text-white rounded-full font-cinzel font-black text-xl hover:bg-[#332d2b] transition-all flex items-center gap-4 uppercase">Explore LUVWATTS <ArrowRight /></button>
+               <p className="text-3xl font-cinzel font-black text-[#eeb053] uppercase">{LEADERSHIP_MESSAGE.author}</p>
+               <p className="text-xl font-serif italic opacity-40 uppercase">{LEADERSHIP_MESSAGE.tagline}</p>
             </div>
-            <div className="relative group">
+            <div className="h-px w-20 bg-[#9c1c22]" />
+          </div>
+        </div>
+      </section>
+
+      {/* LUVWATTS Movement Section - Interactive Block */}
+      <section className="py-24 md:py-40 bg-white border-y border-[#332d2b]/5 relative">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="grid lg:grid-cols-2 gap-24 items-center">
+            <div>
+              <div className="flex items-center gap-4 mb-8">
+                <Zap className="text-[#eeb053] fill-[#eeb053]" />
+                <span className="text-[#9c1c22] font-cinzel font-black tracking-widest text-xs uppercase">The Kinetic Heartbeat</span>
+              </div>
+              <h2 className="text-5xl md:text-[8rem] font-serif font-black text-[#332d2b] mb-10 leading-none uppercase">LUVWATTS <span className="text-[#9c1c22] italic">ENERGY.</span></h2>
+              <p className="text-2xl font-serif italic text-[#332d2b]/60 mb-12 uppercase leading-relaxed">
+                {LUVWATTS_CONTENT.description} It represents the radiant energy of love when people come together. Our movement is structured to accelerate transformation.
+              </p>
+              <div className="grid grid-cols-2 gap-10 mb-16">
+                 <div className="p-8 rounded-3xl bg-[#fdfaf6] border-l-4 border-[#9c1c22]">
+                   <h4 className="text-xl font-cinzel font-black mb-2 uppercase">RESTORATION</h4>
+                   <p className="text-sm font-serif italic opacity-50 uppercase">Active healing systems.</p>
+                 </div>
+                 <div className="p-8 rounded-3xl bg-[#f9f5f0] border-l-4 border-[#eeb053]">
+                   <h4 className="text-xl font-cinzel font-black mb-2 uppercase">VELOCITY</h4>
+                   <p className="text-sm font-serif italic opacity-50 uppercase">Fast-tracked progress.</p>
+                 </div>
+              </div>
+              <button onClick={() => onNavigate('luvwatts')} className="px-14 py-8 bg-[#1a1a1a] text-white rounded-full font-cinzel font-black text-xl hover:bg-[#332d2b] transition-all flex items-center gap-6 uppercase shadow-xl">
+                The LUVWATTS Movement <MoveRight />
+              </button>
+            </div>
+            <div className="relative">
+               {/* Visual Heart Pulse Element */}
                <motion.div 
                  initial={{ opacity: 0, scale: 0.9 }} 
                  whileInView={{ opacity: 1, scale: 1 }} 
                  viewport={{ once: true }}
-                 className="aspect-square bg-gradient-to-br from-[#9c1c22] to-[#df8c3d] rounded-[5rem] shadow-3xl p-1 flex items-center justify-center relative overflow-hidden"
+                 className="aspect-square bg-gradient-to-br from-[#9c1c22] to-[#df8c3d] rounded-[6rem] shadow-3xl p-1 flex items-center justify-center relative overflow-hidden"
                >
-                 <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1550684848-fac1c5b4e853?auto=format&fit=crop&q=80&w=1200')] bg-cover opacity-30 mix-blend-overlay"></div>
-                 <div className="w-full h-full bg-[#1a1a1a] rounded-[4.8rem] flex items-center justify-center p-12">
-                   <div className="relative">
-                      <Heart className="w-64 h-64 text-[#9c1c22] blur-md absolute inset-0 opacity-50" />
+                 <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1550684848-fac1c5b4e853?auto=format&fit=crop&q=80&w=1200')] bg-cover opacity-20 mix-blend-overlay"></div>
+                 <div className="w-full h-full bg-[#1a1a1a] rounded-[5.8rem] flex items-center justify-center p-16 relative">
+                   <div className="relative group cursor-pointer">
+                      <Heart className="w-64 h-64 text-[#9c1c22] blur-xl absolute inset-0 opacity-40 group-hover:opacity-100 transition-opacity" />
                       <Heart className="w-64 h-64 text-[#eeb053] relative z-10 animate-pulse" />
                       <div className="absolute inset-0 flex items-center justify-center">
-                        <Zap className="text-white w-20 h-20" />
+                        <motion.div animate={{ scale: [1, 1.2, 1], rotate: [0, 10, -10, 0] }} transition={{ duration: 4, repeat: Infinity }}>
+                          <Zap className="text-white w-24 h-24 drop-shadow-[0_0_20px_rgba(255,255,255,0.5)]" />
+                        </motion.div>
                       </div>
                    </div>
                  </div>
-                 <div className="absolute bottom-12 right-12 text-right">
-                    <p className="font-cinzel font-black text-4xl text-white tracking-[0.2em]">017</p>
-                    <p className="font-serif italic text-white/50">Movement Energy</p>
+                 <div className="absolute bottom-16 right-16 text-right">
+                    <p className="font-cinzel font-black text-6xl text-white tracking-[0.2em] leading-none mb-2">017</p>
+                    <p className="font-serif italic text-white/40 uppercase tracking-widest text-xs">Chapter Energy</p>
                  </div>
                </motion.div>
             </div>
           </div>
         </div>
       </section>
+
+      {/* Impact Numbers Section */}
+      <section className="py-24 md:py-48 bg-white overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-16">
+            {STATS.map((stat, i) => (
+              <motion.div 
+                key={i} 
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+                className="text-center"
+              >
+                <div className="text-7xl md:text-9xl font-serif font-black text-[#9c1c22] mb-6 leading-none">
+                  <AnimatedNumber value={stat.value} />
+                  <span className="text-[#eeb053]">{stat.suffix}</span>
+                </div>
+                <h4 className="font-cinzel font-black text-[12px] tracking-[0.4em] uppercase mb-6 text-[#332d2b]">{stat.label}</h4>
+                <div className="h-0.5 w-12 bg-[#9c1c22] mx-auto mb-6" />
+                <p className="font-serif italic text-xl text-[#332d2b]/40 uppercase leading-snug">{stat.description}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Impact Video Call to Action */}
+      <section className="py-24 md:py-48 bg-[#f9f5f0] text-center overflow-hidden border-y border-black/5">
+        <div className="max-w-4xl mx-auto px-4">
+          <h2 className="text-5xl md:text-8xl font-serif font-black text-[#332d2b] uppercase mb-16 leading-none">Witness the <span className="text-[#9c1c22] italic">Love.</span></h2>
+          <div className="relative aspect-video rounded-[5rem] overflow-hidden border-[24px] border-white shadow-2xl bg-black">
+             <iframe className="w-full h-full" src="https://www.youtube.com/embed/XxfFvLERt7o" title="Impact Documentary" frameBorder="0" allowFullScreen></iframe>
+          </div>
+          <div className="mt-16">
+             <button onClick={() => onNavigate('gallery')} className="text-2xl font-cinzel font-black text-[#9c1c22] uppercase tracking-widest hover:gap-8 transition-all flex items-center justify-center gap-4 mx-auto">
+                Explore The Gallery <ArrowRight />
+             </button>
+          </div>
+        </div>
+      </section>
+
+      {/* Roadmap Teaser */}
+      <section className="py-24 md:py-48 bg-white text-center">
+        <div className="max-w-4xl mx-auto px-4">
+          <Compass className="w-16 h-16 mx-auto text-[#eeb053] mb-12" />
+          <h2 className="text-5xl md:text-8xl font-serif font-black text-[#332d2b] uppercase mb-12 leading-none">Where We Are <span className="text-[#9c1c22]">Headed.</span></h2>
+          <p className="text-2xl font-serif italic text-[#332d2b]/60 mb-16 uppercase">Our strategic trajectory is aimed at global restoration and sustainable empowerment.</p>
+          <button onClick={() => onNavigate('roadmap')} className="px-16 py-8 bg-[#9c1c22] text-white rounded-full font-cinzel font-black text-xl hover:bg-[#1a1a1a] transition-all uppercase shadow-2xl">
+             View Strategic Roadmap
+          </button>
+        </div>
+      </section>
     </div>
   );
 };
 
-const ProgramsPageView = () => {
-  const redBlocks = LUV_ACT_PROGRAMS.filter(p => p.id === "01" || p.id === "02" || p.id === "03");
-  const yellowBlocksGroup1 = LUV_ACT_PROGRAMS.filter(p => p.id === "04" || p.id === "05" || p.id === "06");
-  const yellowBlockLast = LUV_ACT_PROGRAMS.find(p => p.id === "07");
-
-  return (
-    <section className="py-24 md:py-48 bg-white pt-48 relative overflow-hidden">
-      <div className="max-w-7xl mx-auto px-4 relative z-10">
-        <div className="flex flex-col md:flex-row items-center gap-6 mb-16">
-          <Logo className="w-20 h-20 md:w-24 md:h-24" />
-          <h2 className="text-[#9c1c22] font-cinzel font-black tracking-widest text-4xl md:text-5xl uppercase">Foundation of Luv</h2>
-        </div>
-
-        <div className="mb-16">
-          <h1 className="text-6xl md:text-9xl font-serif font-black text-[#9c1c22] leading-none mb-8 uppercase">Programs & Projects</h1>
-          <div className="max-w-4xl">
-            <p className="text-2xl md:text-3xl font-serif text-[#332d2b] leading-tight mb-4">
-              At Foundation of Luv we are driven by our objectives and act to fulfill them through our programs & projects.
-            </p>
-            <p className="text-xl md:text-2xl font-serif text-[#332d2b]/60 italic">
-              They are also known as the <span className="text-[#9c1c22] font-bold">7 Luv Act.</span>
-            </p>
-          </div>
-        </div>
-
-        <div className="grid lg:grid-cols-3 gap-8 items-start">
-          <div className="flex flex-col gap-8">
-            {redBlocks.map((program) => (
-              <motion.div key={program.id} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="bg-[#9c1c22] text-white p-12 h-full flex flex-col justify-start min-h-[320px] shadow-lg">
-                <span className="text-7xl font-cinzel font-black block mb-6 opacity-70 leading-none">{program.id}</span>
-                <h3 className="text-3xl md:text-4xl font-serif font-black mb-6 leading-tight uppercase">{program.title}</h3>
-                <p className="text-xl md:text-2xl font-serif opacity-90 leading-relaxed italic border-t border-white/20 pt-6">{program.description}</p>
-              </motion.div>
-            ))}
-          </div>
-          <div className="flex flex-col gap-8">
-            {yellowBlocksGroup1.map((program) => (
-              <motion.div key={program.id} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="bg-[#eeb053] text-[#332d2b] p-12 h-full flex flex-col justify-start min-h-[320px] shadow-lg">
-                <span className="text-7xl font-cinzel font-black block mb-6 opacity-50 leading-none">{program.id}</span>
-                <h3 className="text-3xl md:text-4xl font-serif font-black mb-6 leading-tight uppercase">{program.title}</h3>
-                <p className="text-xl md:text-2xl font-serif text-[#332d2b]/80 leading-relaxed italic border-t border-black/10 pt-6">{program.description}</p>
-              </motion.div>
-            ))}
-          </div>
-          <div className="flex flex-col gap-8 h-full">
-            <motion.div initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} className="relative aspect-[3/4.5] overflow-hidden shadow-2xl grayscale hover:grayscale-0 transition-all duration-1000 border-8 border-white">
-              <img src="https://images.unsplash.com/photo-1593113598332-cd288d649433?auto=format&fit=crop&q=80&w=1200" alt="Foundation Impact Leader" className="w-full h-full object-cover" />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
-            </motion.div>
-            {yellowBlockLast && (
-              <motion.div key={yellowBlockLast.id} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="bg-[#eeb053] text-[#332d2b] p-12 h-full flex flex-col justify-start min-h-[320px] shadow-lg">
-                <span className="text-7xl font-cinzel font-black block mb-6 opacity-50 leading-none">{yellowBlockLast.id}</span>
-                <h3 className="text-3xl md:text-4xl font-serif font-black mb-6 leading-tight uppercase">{yellowBlockLast.title}</h3>
-                <p className="text-xl md:text-2xl font-serif text-[#332d2b]/80 leading-relaxed italic border-t border-black/10 pt-6">{yellowBlockLast.description}</p>
-              </motion.div>
-            )}
-          </div>
-        </div>
-        <div className="mt-32 pt-12 border-t border-[#332d2b]/10 flex justify-between items-center font-cinzel text-lg md:text-2xl opacity-40 italic">
-          <span>012</span>
-          <span>FOL Profile</span>
-        </div>
-      </div>
-    </section>
-  );
-};
-
-const DetailedAboutView = () => (
-  <section className="py-24 md:py-48 bg-[#fdfaf6] pt-48">
-    <div className="max-w-7xl mx-auto px-4">
-      <div className="mb-24 text-center">
-        <span className="text-[#9c1c22] font-cinzel font-black tracking-[0.5em] text-[12px] uppercase mb-8 block">In-Depth Foundation Profile</span>
-        <h2 className="text-5xl md:text-8xl font-serif font-black text-[#332d2b] leading-tight mb-12 uppercase">{DETAILED_ABOUT.header}</h2>
-      </div>
-      <div className="grid lg:grid-cols-12 gap-20 mb-32 items-center">
-        <div className="lg:col-span-7 bg-white p-14 rounded-[3.5rem] shadow-xl border-l-8 border-[#eeb053]">
-           <h3 className="text-4xl font-serif font-black mb-10 text-[#332d2b] uppercase">{DETAILED_ABOUT.dualRole.intro}</h3>
-           <ul className="space-y-8 text-xl font-serif text-[#332d2b]/70 italic">
-             {DETAILED_ABOUT.dualRole.points.map((p, i) => <li key={i} className="flex gap-6"><MoveRight className="text-[#eeb053] shrink-0" /> {p}</li>)}
-           </ul>
-        </div>
-        <div className="lg:col-span-5"><Logo className="w-full h-full grayscale opacity-20" /></div>
-      </div>
-      <div className="mb-32">
-        <h3 className="text-5xl font-serif font-black text-center mb-16 uppercase">The Problem Statement</h3>
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20">
-           {DETAILED_ABOUT.problemStatement.crises.map((item, idx) => (
-             <div key={idx} className="bg-white p-10 rounded-[2rem] border-2 border-[#9c1c22]/10 shadow-sm hover:border-[#9c1c22] transition-all">
-                <AlertCircle className="text-[#9c1c22] mb-4" />
-                <p className="text-xl text-[#332d2b] font-serif font-bold italic uppercase">{item}</p>
-             </div>
-           ))}
-        </div>
-      </div>
-      <div className="mb-32">
-        <h3 className="text-5xl font-serif font-black text-center mb-20 uppercase">Core Values</h3>
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
-          {DETAILED_ABOUT.values.map((v, i) => (
-            <div key={i} className="bg-white p-10 rounded-[2.5rem] border border-[#eeb053]/50 shadow-sm hover:bg-[#eeb053]/5 transition-all">
-              <h4 className="text-2xl font-serif font-black text-[#9c1c22] mb-4 uppercase">{v.title}</h4>
-              <p className="text-lg text-[#332d2b]/60 font-serif italic leading-relaxed">{v.description}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-      <div className="text-center py-32 bg-[#9c1c22] text-white rounded-[5rem] shadow-2xl px-8 border-b-[20px] border-[#eeb053]">
-        <h2 className="text-4xl md:text-6xl font-serif font-black leading-tight italic mb-12">"{DETAILED_ABOUT.closing.quote}"</h2>
-        <p className="text-2xl font-cinzel font-black tracking-widest text-[#eeb053] uppercase">{DETAILED_ABOUT.closing.tagline}</p>
-      </div>
-    </div>
-  </section>
-);
-
-const DonorView = () => (
-  <section className="py-48 bg-[#fdfaf6] pt-48 relative z-10">
-    <div className="max-w-7xl mx-auto px-4">
-      <div className="text-center mb-32">
-        <Heart className="text-[#9c1c22] w-20 h-20 mx-auto mb-10" />
-        <h2 className="text-5xl md:text-8xl font-serif font-black text-[#332d2b] mb-12 uppercase">Show Some Love</h2>
-        <p className="text-2xl md:text-4xl text-[#332d2b]/70 font-serif italic max-w-4xl mx-auto uppercase">{DONOR_PAGE_CONTENT.different.content}</p>
-      </div>
-      <div className="mb-32 grid md:grid-cols-2 lg:grid-cols-3 gap-10">
-        {DONOR_PAGE_CONTENT.impactPillars.map((pillar, i) => (
-          <div key={i} className="bg-white p-12 rounded-[3.5rem] shadow-lg border-t-4 border-[#eeb053]">
-             <h4 className="text-2xl font-serif font-black text-[#9c1c22] mb-6 uppercase">{pillar.title}</h4>
-             <p className="text-lg text-[#332d2b]/70 font-serif italic">{pillar.description}</p>
-          </div>
-        ))}
-      </div>
-      <div className="bg-[#9c1c22] text-white p-20 rounded-[5rem] text-center shadow-2xl border-4 border-[#eeb053]">
-        <h3 className="text-6xl font-serif font-black mb-16 italic underline decoration-[#eeb053] decoration-8 underline-offset-8 uppercase">Our Promise</h3>
-        <div className="flex flex-col gap-10 text-3xl font-serif italic opacity-90 mb-20 uppercase">
-          {DONOR_PAGE_CONTENT.promise.points.map((p, i) => <p key={i}>"{p}"</p>)}
-        </div>
-        <p className="text-4xl font-cinzel font-black tracking-[0.3em] text-[#eeb053] uppercase">{DONOR_PAGE_CONTENT.promise.tagline}</p>
-      </div>
-    </div>
-  </section>
-);
-
-const GalleryPageView = () => (
-  <section className="py-48 bg-white min-h-screen pt-48 relative z-10">
-    <div className="max-w-7xl mx-auto px-4">
-      <div className="text-center mb-32">
-        <h2 className="text-5xl md:text-8xl font-serif font-black text-[#332d2b] uppercase">The Visual Witness</h2>
-        <div className="h-2 w-32 bg-[#9c1c22] mx-auto mt-10 rounded-full" />
-      </div>
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-12">
-        {GALLERY_IMAGES.map((img, i) => (
-          <motion.div key={i} initial={{ opacity: 0, scale: 0.9 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} className="group relative aspect-square overflow-hidden rounded-[3rem] shadow-2xl border-4 border-transparent hover:border-[#eeb053] transition-all">
-            <img src={img.url} alt={img.title} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#9c1c22]/90 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-end p-12">
-              <h4 className="text-white font-cinzel font-bold text-2xl uppercase tracking-[0.2em]">{img.title}</h4>
-            </div>
-          </motion.div>
-        ))}
-      </div>
-    </div>
-  </section>
-);
-
-// --- Global App Layout ---
+// ... DetailedAboutView, DonorView, GlobalServicesView, RoadmapView, LUVWATTSView, ProgramsPageView are now implemented above ...
 
 const App: React.FC = () => {
   const [currentPage, setCurrentPage] = useState('home');
@@ -657,7 +778,7 @@ const App: React.FC = () => {
       case 'globalservices': return <GlobalServicesView />;
       case 'roadmap': return <RoadmapView />;
       case 'luvwatts': return <LUVWATTSView />;
-      case 'gallery': return <GalleryPageView />;
+      case 'gallery': return <GalleryPageView />; 
       case 'donate': return <DonorView />;
       case 'programs': return <ProgramsPageView />;
       default: return <HomeView onNavigate={handleNavigate} />;
@@ -696,11 +817,11 @@ const App: React.FC = () => {
       </nav>
       <main className="relative z-10"><AnimatePresence mode="wait"><motion.div key={currentPage} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.6 }}>{renderContent()}</motion.div></AnimatePresence></main>
       <footer className="bg-[#1a1a1a] text-[#fdfaf6] pt-20 md:pt-32 pb-20 relative overflow-hidden z-20 border-t-8 border-[#eeb053]">
-        <div className="max-w-7xl mx-auto px-4 relative z-10">
-          <div className="grid lg:grid-cols-4 gap-16 mb-24 items-start text-center md:text-left">
+        <div className="max-w-7xl mx-auto px-4 relative z-10 text-center md:text-left">
+          <div className="grid lg:grid-cols-4 gap-16 mb-24 items-start">
             <div className="lg:col-span-2">
               <div onClick={() => handleNavigate('home')} className="cursor-pointer inline-block mb-10"><Logo className="w-24 h-24 md:w-56 md:h-56 brightness-110 drop-shadow-2xl mx-auto md:mx-0" /></div>
-              <p className="text-2xl text-[#fdfaf6]/60 max-w-lg mb-10 font-serif italic uppercase">"Restoring human dignity and transforming global communities through structured compassion."</p>
+              <p className="text-2xl text-[#fdfaf6]/60 max-w-lg mb-10 font-serif italic uppercase mx-auto md:mx-0">"Restoring human dignity and transforming global communities through structured compassion."</p>
               <div className="flex flex-col gap-4 text-xl font-serif text-[#eeb053] mb-10">
                 <div className="flex items-center justify-center md:justify-start gap-4"><Phone size={20} className="text-[#9c1c22]" /> 443-402-5802</div>
                 <div className="flex items-center justify-center md:justify-start gap-4 text-left"><MapPin size={24} className="text-[#9c1c22] shrink-0" /> #9960 Raven Hurst Road, Middle River MD 21221</div>

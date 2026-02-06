@@ -3,7 +3,8 @@ import {
   Heart, Shield, Users, Globe, BookOpen, Home, Utensils, Zap, 
   GraduationCap, Briefcase, Landmark, Handshake, HeartPulse, Brain,
   Sparkles, Star, Award, Leaf, Eye, Target, Scale, ShieldCheck, TrendingUp,
-  AlertCircle, Building2, Lightbulb, Users2, Workflow, Recycle, Activity
+  AlertCircle, Building2, Lightbulb, Users2, Workflow, Recycle, Activity,
+  PenTool, CheckCircle2, MessageSquare, Newspaper, Compass, Anchor
 } from 'lucide-react';
 
 export const COLORS = {
@@ -29,57 +30,57 @@ export const LUV_ACT_PROGRAMS = [
   {
     id: "01",
     title: "Family First Initiative",
-    description: "Workshops on parenting, planning, and child-raising.",
+    description: "Workshops on parenting, planning, and child-raising. Strengthening the nuclear and extended family unit.",
     color: "#9c1c22"
   },
   {
     id: "02",
     title: "Pathways to Purpose",
-    description: "GED, job readiness, and certification programs with global partners.",
+    description: "GED, job readiness, and certification programs with global partners to secure economic futures.",
     color: "#9c1c22"
   },
   {
     id: "03",
     title: "Hope Homes",
-    description: "Housing and shelter for displaced and vulnerable individuals.",
+    description: "Housing and shelter for displaced and vulnerable individuals. Building secure havens for restoration.",
     color: "#9c1c22"
   },
   {
     id: "04",
     title: "Nourish with Love",
-    description: "Feeding and nutrition programs in underserved communities.",
+    description: "Feeding and nutrition programs in underserved communities. Ensuring no stomach goes empty.",
     color: "#eeb053"
   },
   {
     id: "05",
     title: "Healing Circles",
-    description: "Wraparound services for substance abuse and mental health.",
+    description: "Wraparound services for substance abuse and mental health. A holistic approach to recovery.",
     color: "#eeb053"
   },
   {
     id: "06",
     title: "Women in Wealth",
-    description: "Financial literacy & entrepreneurship for minority women.",
+    description: "Financial literacy & entrepreneurship for minority women. Empowering the matriarchs of our society.",
     color: "#eeb053"
   },
   {
     id: "07",
     title: "College Access Project",
-    description: "Preparing youth for college readiness and scholarships.",
+    description: "Preparing youth for college readiness and scholarships. Opening doors to higher education.",
     color: "#eeb053"
   }
 ];
 
 export const LEADERSHIP_MESSAGE = {
   title: "A Message from Our Leadership",
-  content: "At Foundation of Luv, we don't just see numbers; we see faces. We see families who need a hand up, children who deserve an education, and communities that require restoration. Our '7 Luv Act' isn't just a program—it's a promise to institutionalize compassion in everything we do.",
+  content: "At Foundation of Luv, we don't just see numbers; we see faces. We see families who need a hand up, children who deserve an education, and communities that require restoration. Our '7 Luv Act' isn't just a program—it's a promise to institutionalize compassion in everything we do. We are bridging the gap between awareness and sustainable systems.",
   author: "Leadership Council",
   tagline: "Building a Legacy of restoration."
 };
 
 export const LUVWATTS_CONTENT = {
   title: "The LUVWATTS Movement",
-  description: "LUVWATTS represents the radiant energy of love when people come together. It embodies the heartbeat of the Foundation of Love—our movement, our community, and our voice.",
+  description: "LUVWATTS represents the radiant energy of love when people come together. It is the kinetic pulse of restoration, engineering pathways where human dignity is an unshakeable reality.",
   acronym: [
     { letter: "L", term: "Light", definition: "Illuminating paths of restoration for those in darkness." },
     { letter: "U", term: "Unity", definition: "Forging unbreakable community bonds across divides." },
@@ -94,14 +95,14 @@ export const LUVWATTS_CONTENT = {
 
 export const MISSION_VISION = {
   mission: {
-    title: "Mission",
+    title: "Our Mission",
     content: "To uplift individuals and communities through compassion-driven programs that strengthen mental health, families, education, economic opportunity, and ethical innovation.",
-    icon: <Target className="w-8 h-8" />
+    icon: <Target className="w-12 h-12 text-[#9c1c22]" />
   },
   vision: {
-    title: "Vision",
-    content: "A world where every person has access to support systems that honor their humanity, protect their dignity, and empower their future.",
-    icon: <Eye className="w-8 h-8" />
+    title: "Our Vision",
+    content: "A world where every person has access to support systems that honor their humanity, protect their dignity, and empower their future through institutionalized love.",
+    icon: <Eye className="w-12 h-12 text-[#eeb053]" />
   }
 };
 
@@ -109,37 +110,37 @@ export const GLOBAL_SERVICES_DATA = [
   {
     title: "Mental Wellness Advocacy",
     description: "Culturally relevant support networks and trauma-informed resources designed to restore psychological resilience.",
-    icon: <Brain />,
+    icon: <Brain size={32} />,
     features: ["Community workshops", "Digital wellness tools", "Professional referral networks"]
   },
   {
     title: "Family Integrity Programs",
     description: "Strengthening the core unit of society through education, conflict resolution, and shared growth.",
-    icon: <Users />,
+    icon: <Users size={32} />,
     features: ["Parenting workshops", "Intergenerational mentorship", "Conflict mediation"]
   },
   {
     title: "Economic Participation",
     description: "Bridging the wealth gap through financial literacy and workforce readiness in emerging markets.",
-    icon: <TrendingUp />,
+    icon: <TrendingUp size={32} />,
     features: ["Job readiness training", "Financial literacy", "Minority entrepreneur support"]
   },
   {
     title: "Ethical Technology Governance",
     description: "Providing a moral compass for emerging technologies like AI to ensure they serve the public good.",
-    icon: <Workflow />,
+    icon: <Workflow size={32} />,
     features: ["AI safety research", "Human-centered tech pilots", "Public awareness campaigns"]
   },
   {
     title: "Humanitarian Logistics",
     description: "Large-scale distribution of basic needs including food security and secure housing solutions.",
-    icon: <ShieldCheck />,
+    icon: <ShieldCheck size={32} />,
     features: ["Food security systems", "Safe haven housing", "Disaster relief support"]
   },
   {
     title: "Education & Literacy",
     description: "Empowering the next generation with the tools needed for academic and professional success.",
-    icon: <GraduationCap />,
+    icon: <GraduationCap size={32} />,
     features: ["GED preparation", "College readiness", "Digital literacy"]
   }
 ];
@@ -188,53 +189,82 @@ export const STATS = [
   { label: "Food Security", value: "50", suffix: "k+", description: "Meals served per quarter" },
 ];
 
-// Detailed About Section Content
 export const DETAILED_ABOUT = {
-  header: "Engineering Pathways to Human Dignity",
+  header: "Foundation of Luv Profile",
   dualRole: {
-    intro: "Foundation of Love (FOL) serves as both a sanctuary and a catalyst.",
+    intro: "Foundation of Luv serves as both:",
     points: [
-      "A Sanctuary: Providing immediate relief through the 7 Luv Acts.",
-      "A Catalyst: Driving systemic change through ethical tech and policy advocacy.",
-      "A Movement: Restoring human dignity through structured compassion."
+      "A direct-impact organization delivering programs and interventions, and",
+      "A holding, stewardship, and governance body for public-good initiatives that cannot legally or ethically sit under for-profit entities."
     ]
   },
   problemStatement: {
+    title: "The Problem Statement",
     crises: [
-      "Systemic Poverty & Inequity",
-      "Mental Health Crisis",
-      "Educational Gaps",
-      "Technological Misalignment",
-      "Family Fragmentation"
+      "Rising mental health challenges among adults, parents, and youth",
+      "Breakdown of family support systems and community cohesion",
+      "Economic exclusion of marginalized groups",
+      "Limited access to culturally relevant education",
+      "Rapid technological advancement without ethical safeguards"
     ]
   },
   values: [
-    { title: "Dignity", description: "Every individual is inherently valuable and deserves respect." },
-    { title: "Integrity", description: "Operating with radical transparency and ethical consistency." },
-    { title: "Innovation", description: "Leveraging technology and creativity for social good." }
+    { title: "Love in Action", description: "Compassion translated into systems, not sentiment." },
+    { title: "Human-Centered Impact", description: "People before profit, always." },
+    { title: "Equity & Inclusion", description: "Culturally grounded, community-led solutions." },
+    { title: "Integrity & Stewardship", description: "Ethical governance and transparency." }
   ],
   closing: {
-    quote: "Compassion is not an emotion; it is a system of action.",
-    tagline: "The Pulse of Restoration"
+    quote: "Foundation of Luv is not charity for charity’s sake. It is love, structured.",
+    tagline: "Institutionalizing Compassion"
   }
 };
 
-// Donor Section Content
 export const DONOR_PAGE_CONTENT = {
   different: {
-    content: "Your contribution fuels a movement designed for sustainable, long-term generational impact."
+    title: "What Makes Us Different",
+    content: "Foundation of Luv bridges advocacy, media, community programs, and ethical technology under one accountable nonprofit structure. We don’t just raise awareness — we build systems that last."
   },
   impactPillars: [
-    { title: "Direct Relief", description: "Immediate access to food, housing, and essentials." },
-    { title: "Education", description: "Funding GED programs and collegiate pathways." },
-    { title: "Wellness", description: "Providing critical mental health support services." }
+    { title: "Mental Health & Emotional Wellness", description: "Expanding access to culturally relevant support and education." },
+    { title: "Family & Community Stability", description: "Strengthening families as the foundation of resilient communities." },
+    { title: "Education & Advocacy", description: "Turning powerful storytelling into real-world action and resources." },
+    { title: "Economic Empowerment", description: "Creating pathways to opportunity and self-sufficiency." },
+    { title: "Ethical AI & Public Good Innovation", description: "Governing initiatives like World AI Force to ensure technology serves humanity." }
   ],
-  promise: {
+  approach: [
+    "Community-informed program design",
+    "Ethical governance and transparency",
+    "Strategic partnerships with proven experts",
+    "Media and technology used responsibly for public benefit",
+    "Measurable outcomes and clear reporting"
+  ],
+  stewardship: {
+    title: "Stewardship & Accountability",
     points: [
-      "100% Transparency in allocation.",
-      "Direct Impact on local communities.",
-      "Sustained support for long-term growth."
+      "Independent board governance",
+      "Strict conflict-of-interest policies",
+      "Transparent financial management",
+      "Clear separation from for-profit vendors"
     ],
-    tagline: "Building a Legacy Together"
+    closing: "Donor trust is not assumed — it is earned."
+  },
+  matters: {
+    title: "Why Your Support Matters",
+    points: [
+      "Scalable mental health and family programs",
+      "Community education and advocacy initiatives",
+      "Ethical oversight of emerging technologies",
+      "Long-term solutions instead of short-term relief"
+    ]
+  },
+  promise: {
+    title: "Our Promise",
+    points: [
+      "Every dollar is stewarded with integrity.",
+      "Every program is built for real impact.",
+      "Every initiative centers humanity first."
+    ],
+    tagline: "Foundation of Luv. Because love deserves structure."
   }
 };
