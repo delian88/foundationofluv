@@ -357,7 +357,7 @@ const LeadershipVision = () => {
   );
 };
 
-const EngagementPathways = () => {
+const EngagementPathways = ({ onNavigate }: { onNavigate: (id: string) => void }) => {
   const pathways = [
     { title: "Volunteer", icon: <Users size={32} />, desc: "Join our kinetic pulse on the frontlines of restoration." },
     { title: "Corporate", icon: <Handshake size={32} />, desc: "Institutionalize impact through strategic philanthropy." },
@@ -377,7 +377,10 @@ const EngagementPathways = () => {
             </div>
             <h4 className="text-2xl font-serif font-black uppercase mb-4">{p.title}</h4>
             <p className="text-lg font-serif italic text-[#332d2b]/50 uppercase mb-8">{p.desc}</p>
-            <button className="text-[10px] font-cinzel font-black text-[#9c1c22] uppercase tracking-[0.4em] flex items-center gap-3 mx-auto">
+            <button 
+              onClick={() => onNavigate('contact')}
+              className="text-[10px] font-cinzel font-black text-[#9c1c22] uppercase tracking-[0.4em] flex items-center gap-3 mx-auto hover:text-[#eeb053] transition-colors"
+            >
               Get Started <MoveRight size={14} />
             </button>
           </motion.div>
@@ -587,7 +590,7 @@ const HomeView = ({ onNavigate }: { onNavigate: (id: string) => void }) => {
         </div>
       </section>
 
-      <EngagementPathways />
+      <EngagementPathways onNavigate={onNavigate} />
 
       <section className="py-24 md:py-48 bg-white overflow-hidden">
         <div className="max-w-7xl mx-auto px-4">
@@ -596,22 +599,26 @@ const HomeView = ({ onNavigate }: { onNavigate: (id: string) => void }) => {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="text-3xl md:text-5xl font-serif font-black uppercase text-[#332d2b]"
+              className="text-3xl md:text-5xl font-serif font-black uppercase text-[#332d2b] tracking-tight leading-tight"
             >
               Luv in action <span className="text-[#9c1c22] italic">creates change</span> in 5 years
             </motion.h2>
             <div className="h-1 w-20 bg-[#eeb053] mx-auto mt-6" />
           </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12 md:gap-24 lg:gap-32">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12 md:gap-16 lg:gap-20">
             {STATS.map((stat, i) => (
-              <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }} className="text-center px-10">
-                <div className="text-5xl md:text-6xl font-serif font-black text-[#9c1c22] mb-4 md:mb-6 leading-none whitespace-nowrap">
+              <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }} className="flex flex-col items-center text-center px-4">
+                <div className="text-5xl md:text-6xl lg:text-7xl font-serif font-black text-[#9c1c22] mb-4 md:mb-6 leading-none whitespace-nowrap">
                   <AnimatedNumber value={stat.value} />
                   <span className="text-[#eeb053]">{stat.suffix}</span>
                 </div>
-                <h4 className="font-cinzel font-black text-[9px] md:text-[10px] tracking-[0.5em] uppercase mb-4 md:mb-6 text-[#332d2b] leading-relaxed">{stat.label}</h4>
-                <div className="h-0.5 w-6 md:w-8 bg-[#9c1c22] mx-auto mb-4 md:mb-6" />
-                <p className="font-serif italic text-sm md:text-base text-[#332d2b]/40 uppercase leading-snug">{stat.description}</p>
+                <h4 className="font-cinzel font-black text-[10px] md:text-[11px] lg:text-[12px] tracking-[0.4em] uppercase mb-4 md:mb-6 text-[#332d2b] leading-relaxed max-w-[200px]">
+                  {stat.label}
+                </h4>
+                <div className="h-0.5 w-6 md:w-8 bg-[#9c1c22] mb-4 md:mb-6" />
+                <p className="font-serif italic text-sm md:text-base lg:text-lg text-[#332d2b]/40 uppercase leading-snug">
+                  {stat.description}
+                </p>
               </motion.div>
             ))}
           </div>
