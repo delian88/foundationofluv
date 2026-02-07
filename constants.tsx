@@ -245,7 +245,7 @@ export const HERO_IMAGES = [
 export const STATS = [
   { label: "Annual Housing", value: "20", suffix: "", description: "Temporary solutions" },
   { label: "Community Meals", value: "1000", suffix: "+", description: "Served yearly" },
-  { label: "Workforce Readiness", value: "1200", suffix: "", description: "Certifications in 3 years" },
+  { label: "Workforce Readiness", value: "1200", suffix: "", description: "Certifications" },
   { label: "Advocacy Reach", value: "1", suffix: "M+", description: "People engaged annually" },
 ];
 

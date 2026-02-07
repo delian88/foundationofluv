@@ -591,6 +591,17 @@ const HomeView = ({ onNavigate }: { onNavigate: (id: string) => void }) => {
 
       <section className="py-24 md:py-48 bg-white overflow-hidden">
         <div className="max-w-7xl mx-auto px-4">
+          <div className="text-center mb-16 md:mb-24">
+            <motion.h2 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="text-3xl md:text-5xl font-serif font-black uppercase text-[#332d2b]"
+            >
+              Luv in action <span className="text-[#9c1c22] italic">creates change</span> in 5 years
+            </motion.h2>
+            <div className="h-1 w-20 bg-[#eeb053] mx-auto mt-6" />
+          </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12 md:gap-24 lg:gap-32">
             {STATS.map((stat, i) => (
               <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }} className="text-center px-10">
