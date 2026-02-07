@@ -1141,7 +1141,14 @@ const VideoSection = ({ videoId, title, description }: { videoId: string, title:
       {description && <p className="text-xl font-serif italic text-[#332d2b]/60 uppercase">{description}</p>}
     </div>
     <div className="relative aspect-video rounded-[2rem] md:rounded-[3rem] overflow-hidden shadow-3xl border-[8px] md:border-[20px] border-white group">
-      <iframe className="absolute inset-0 w-full h-full" src={`https://www.youtube.com/embed/${videoId}?rel=0&modestbranding=1`} title={title} frameBorder="0" allowFullScreen />
+      <iframe 
+        className="absolute inset-0 w-full h-full" 
+        src={`https://www.youtube.com/embed/${videoId}?rel=0&modestbranding=1&autoplay=1&mute=1&playlist=${videoId}&loop=1`} 
+        title={title} 
+        frameBorder="0" 
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+        allowFullScreen 
+      />
     </div>
   </div>
 );

@@ -32,7 +32,7 @@ export const NAVIGATION = [
 
 export const TEAM_MEMBERS = [
   {
-    name: "Name of Team Member",
+    name: "Kelvin Watkins",
     role: "Founder & Chief Visionary",
     bio: "A pioneer in structured compassion and humanitarian engineering with over 20 years of experience in community restoration.",
     image: "profile-icon"
@@ -231,7 +231,7 @@ export const GALLERY_IMAGES = [
 
 export const VIDEO_RESOURCES = [
   { 
-    id: "7-4W_0Uu648", 
+    id: "XxfFvLERt7o", 
     title: "Foundation of Love Impact", 
     description: "Witness the stories of transformation and the kinetic pulse of our global outreach efforts."
   }
