@@ -287,11 +287,22 @@ export const DONOR_PAGE_CONTENT = {
     content: "Foundation of Luv bridges advocacy, media, community programs, and ethical technology under one accountable nonprofit structure. We don’t just raise awareness — we build systems that last."
   },
   impactPillars: [
-    { title: "Mental Health & Emotional Wellness", description: "Expanding access to culturally relevant support and education." },
-    { title: "Family & Community Stability", description: "Strengthening families as the foundation of resilient communities." },
-    { title: "Education & Advocacy", description: "Turning powerful storytelling into real-world action and resources." },
-    { title: "Economic Empowerment", description: "Creating pathways to opportunity and self-sufficiency." },
-    { title: "AI & Tech for Good", description: "Governing initiatives like World AI Force to ensure technology serves humanity." }
+    { 
+      title: "Mental Health & Emotional Wellness", 
+      description: "Providing Support & Access to Resources for all in need." 
+    },
+    { 
+      title: "FAMILY & COMMUNITY STABILITY", 
+      description: "Strengthening Families as the foundation for a Transformed Community" 
+    },
+    { 
+      title: "Financial Literacy & Skill Empowerment", 
+      description: "Creating pathways to strengthen families, access opportunities & build self-sufficiency" 
+    },
+    { 
+      title: "AI & TECH FOR GOOD", 
+      description: "(A decentralized digital ecosystem “World AI Force” that ensures technology serves humanity for good)" 
+    }
   ],
   approach: [
     "Community-informed program design",
