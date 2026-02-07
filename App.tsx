@@ -437,7 +437,7 @@ const HomeView = ({ onNavigate }: { onNavigate: (id: string) => void }) => {
           </motion.div>
           <div className="mt-8 md:mt-12">
             <h1 className="hero-text text-3xl md:text-[6rem] font-serif font-black leading-tight text-shine-crimson uppercase">Love in Action,<br /><span className="italic font-normal text-shine text-[#eeb053]">Change in Motion.</span></h1>
-            <p className="mobile-p text-sm md:text-2xl text-[#332d2b]/70 mt-6 max-w-4xl mx-auto font-serif italic text-center uppercase">"We are the kinetic pulse of restoration, engineering pathways where human dignity is an unshakeable reality."</p>
+            <p className="mobile-p text-sm md:text-2xl text-[#332d2b]/70 mt-6 max-w-4xl mx-auto font-serif italic text-center uppercase">"WE ARE THE KINETIC PULSE OF TRANSFORMATION, ENGINEERING PATHWAYS TO LOVE AND HUMANITY"</p>
             <div className="flex flex-col md:flex-row gap-4 md:gap-6 justify-center mt-8 md:mt-12">
               <button onClick={() => onNavigate('donate')} className="px-10 py-5 bg-[#9c1c22] text-white rounded-full font-cinzel font-black text-lg shadow-xl flex items-center gap-3 hover:bg-[#7a141a] transition-all uppercase">Show some Love <MoveRight /></button>
               <button onClick={() => onNavigate('aboutus')} className="px-10 py-5 glass-card rounded-full font-cinzel font-bold text-lg border border-[#eeb053]/50 flex items-center justify-center gap-3 hover:bg-white/60 transition-all uppercase">Explore Our Story <ArrowRight /></button>

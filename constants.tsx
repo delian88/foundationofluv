@@ -123,7 +123,7 @@ export const LEADERSHIP_MESSAGE = {
 
 export const LUVWATTS_CONTENT = {
   title: "The LUVWATTS Movement",
-  description: "LUVWATTS represents the radiant energy of love when people come together. It is the kinetic pulse of restoration, engineering pathways where human dignity is an unshakeable reality.",
+  description: "WE ARE THE KINETIC PULSE OF TRANSFORMATION, ENGINEERING PATHWAYS TO LOVE AND HUMANITY.",
   acronym: [
     { letter: "L", term: "Light", definition: "Illuminating paths of restoration for those in darkness." },
     { letter: "U", term: "Unity", definition: "Forging unbreakable community bonds across divides." },
