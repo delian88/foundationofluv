@@ -24,9 +24,49 @@ export const NAVIGATION = [
   { name: 'Global Services', id: 'globalservices' },
   { name: 'Roadmap', id: 'roadmap' },
   { name: 'LUVWATTS', id: 'luvwatts' },
+  { name: 'Team', id: 'team' },
   { name: 'Gallery', id: 'gallery' },
   { name: 'Programs', id: 'programs' },
   { name: 'Contact Us', id: 'contact' },
+];
+
+export const TEAM_MEMBERS = [
+  {
+    name: "Name of Team Member",
+    role: "Founder & Chief Visionary",
+    bio: "A pioneer in structured compassion and humanitarian engineering with over 20 years of experience in community restoration.",
+    image: "profile-icon"
+  },
+  {
+    name: "Name of Team Member",
+    role: "Executive Director",
+    bio: "Strategic operations leader focused on scaling the '7 Luv Act' programs across global chapters.",
+    image: "profile-icon"
+  },
+  {
+    name: "Name of Team Member",
+    role: "Head of AI for Good",
+    bio: "Directing the 'World AI Force' initiative to ensure ethical technology serves the most vulnerable communities.",
+    image: "profile-icon"
+  },
+  {
+    name: "Name of Team Member",
+    role: "Director of Family Stability",
+    bio: "Devoted to strengthening the foundational units of society through education and resource access.",
+    image: "profile-icon"
+  },
+  {
+    name: "Name of Team Member",
+    role: "Global Advocacy Lead",
+    bio: "Amplifying local stories onto global stages to drive systemic change and legislative transformation.",
+    image: "profile-icon"
+  },
+  {
+    name: "Name of Team Member",
+    role: "Financial Literacy Advocate",
+    bio: "Creating sustainable economic pathways for families through skill empowerment and community reinvestment.",
+    image: "profile-icon"
+  }
 ];
 
 export const LUV_ACT_PROGRAMS = [
@@ -301,7 +341,7 @@ export const DONOR_PAGE_CONTENT = {
     },
     { 
       title: "AI & TECH FOR GOOD", 
-      description: "(A decentralized digital ecosystem “World AI Force” that ensures technology serves humanity for good)" 
+      description: "(A decentralized digital ecosystem “World AI Force\" that ensures technology serves humanity for good)" 
     }
   ],
   approach: [

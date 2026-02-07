@@ -7,12 +7,12 @@ import {
   CheckCircle2, Footprints, Zap, Star, Activity, LayoutGrid, Newspaper, MessageSquare, Shield, PenTool,
   Quote, Compass, Anchor, Mic2, UsersRound, Wallet, Stethoscope, Baby, Wallet2, Crosshair,
   Users2 as DemographyIcon, TrendingUp as GrowthIcon, Briefcase, Home as HomeIcon, HeartPulse, GraduationCap as SchoolIcon, Coins,
-  Play, Mail, Handshake, HeartHandshake, Send, ChevronUp, Cpu, ShieldAlert
+  Play, Mail, Handshake, HeartHandshake, Send, ChevronUp, Cpu, ShieldAlert, UserRound
 } from 'lucide-react';
 import { 
   NAVIGATION, STRATEGIC_PHASES, STATS, COLORS, HERO_IMAGES, GALLERY_IMAGES,
   MISSION_VISION, DETAILED_ABOUT, DONOR_PAGE_CONTENT, LUV_ACT_PROGRAMS, LEADERSHIP_MESSAGE, LUVWATTS_CONTENT,
-  GLOBAL_SERVICES_DATA, VIDEO_RESOURCES, CORE_VALUES
+  GLOBAL_SERVICES_DATA, VIDEO_RESOURCES, CORE_VALUES, TEAM_MEMBERS
 } from './constants';
 
 // --- Global UI Components ---
@@ -591,16 +591,16 @@ const HomeView = ({ onNavigate }: { onNavigate: (id: string) => void }) => {
 
       <section className="py-24 md:py-48 bg-white overflow-hidden">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12 md:gap-16">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12 md:gap-24 lg:gap-32">
             {STATS.map((stat, i) => (
-              <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }} className="text-center">
-                <div className="text-6xl md:text-9xl font-serif font-black text-[#9c1c22] mb-4 md:mb-6 leading-none">
+              <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }} className="text-center px-10">
+                <div className="text-5xl md:text-6xl font-serif font-black text-[#9c1c22] mb-4 md:mb-6 leading-none whitespace-nowrap">
                   <AnimatedNumber value={stat.value} />
                   <span className="text-[#eeb053]">{stat.suffix}</span>
                 </div>
-                <h4 className="font-cinzel font-black text-[10px] md:text-[12px] tracking-[0.4em] uppercase mb-4 md:mb-6 text-[#332d2b]">{stat.label}</h4>
-                <div className="h-0.5 w-10 md:w-12 bg-[#9c1c22] mx-auto mb-4 md:mb-6" />
-                <p className="font-serif italic text-lg md:text-xl text-[#332d2b]/40 uppercase leading-snug">{stat.description}</p>
+                <h4 className="font-cinzel font-black text-[9px] md:text-[10px] tracking-[0.5em] uppercase mb-4 md:mb-6 text-[#332d2b] leading-relaxed">{stat.label}</h4>
+                <div className="h-0.5 w-6 md:w-8 bg-[#9c1c22] mx-auto mb-4 md:mb-6" />
+                <p className="font-serif italic text-sm md:text-base text-[#332d2b]/40 uppercase leading-snug">{stat.description}</p>
               </motion.div>
             ))}
           </div>
@@ -611,6 +611,50 @@ const HomeView = ({ onNavigate }: { onNavigate: (id: string) => void }) => {
     </div>
   );
 };
+
+const TeamView = () => (
+  <section className="pt-48 pb-32 bg-white relative overflow-hidden">
+    <div className="max-w-7xl mx-auto px-4">
+      <header className="text-center mb-24">
+        <motion.span initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-[#9c1c22] font-cinzel font-black tracking-[0.5em] text-[12px] uppercase mb-8 block">Our Leadership</motion.span>
+        <h2 className="text-5xl md:text-[8rem] font-serif font-black text-[#332d2b] mb-12 uppercase leading-none tracking-tighter">
+          Meet the <span className="text-[#eeb053] italic">Team.</span>
+        </h2>
+        <p className="text-2xl font-serif italic text-[#332d2b]/60 max-w-3xl mx-auto uppercase">The dedicated minds and hearts engineering the kinetic pulse of restoration.</p>
+      </header>
+
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-12 md:gap-16">
+        {TEAM_MEMBERS.map((member, i) => (
+          <motion.div 
+            key={i} 
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: i * 0.1 }}
+            className="group"
+          >
+            <div className="relative aspect-[4/5] rounded-[3rem] overflow-hidden mb-8 border-4 border-transparent group-hover:border-[#eeb053] transition-all duration-500 shadow-xl bg-[#fdfaf6] flex items-center justify-center">
+              {member.image === 'profile-icon' ? (
+                <div className="w-full h-full flex items-center justify-center bg-[#fdfaf6] text-[#9c1c22]/20 group-hover:text-[#9c1c22]/40 transition-colors">
+                  <UserRound size={160} strokeWidth={1} />
+                </div>
+              ) : (
+                <img src={member.image} alt={member.name} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-110" />
+              )}
+              <div className="absolute inset-0 bg-gradient-to-t from-[#1a1a1a] via-transparent to-transparent opacity-0 group-hover:opacity-90 transition-opacity flex items-end p-8">
+                <p className="text-white text-lg font-serif italic leading-relaxed uppercase">{member.bio}</p>
+              </div>
+            </div>
+            <div className="text-center">
+              <h3 className="text-3xl font-serif font-black text-[#332d2b] uppercase mb-2 group-hover:text-[#9c1c22] transition-colors">{member.name}</h3>
+              <p className="font-cinzel font-black text-xs tracking-[0.3em] text-[#eeb053] uppercase">{member.role}</p>
+            </div>
+          </motion.div>
+        ))}
+      </div>
+    </div>
+  </section>
+);
 
 const DetailedAboutView = () => {
   const { scrollYProgress } = useScroll();
@@ -991,7 +1035,7 @@ const ProgramsPageView = () => {
                 style={{ borderColor: program.color }}
               >
                 <div className="lg:w-1/3 bg-[#f9f5f0] p-12 md:p-20 flex flex-col items-center justify-center text-center relative overflow-hidden">
-                  <motion.div initial={{ opacity: 0, scale: 0 }} whileInView={{ opacity: 0.05, scale: 1 }} transition={{ delay: 0.5, duration: 1 }} className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                  <motion.div initial={{ opacity: 0, scale: 0 }} whileInView={{ opacity: 0.05, scale: 1 }} transition={{ delay: 0.5, duration: 1 }} className="absolute inset-0 flex items-center justify-center pointer-none">
                     <span className="text-[12rem] md:text-[20rem] font-cinzel font-black" style={{ color: program.color }}>{program.id}</span>
                   </motion.div>
                   <motion.div whileHover={{ rotate: 360 }} transition={{ duration: 0.8 }} className="mb-8 p-6 bg-white rounded-full shadow-lg relative z-10" style={{ color: program.color }}>
@@ -1115,6 +1159,7 @@ const App: React.FC = () => {
       case 'globalservices': return <GlobalServicesView />;
       case 'roadmap': return <RoadmapView />;
       case 'luvwatts': return <LUVWATTSView />;
+      case 'team': return <TeamView />;
       case 'gallery': return <GalleryPageView />; 
       case 'donate': return <DonorView />;
       case 'programs': return <ProgramsPageView />;
@@ -1191,6 +1236,7 @@ const App: React.FC = () => {
                     <li><button onClick={() => handleNavigate('globalservices')} className="hover:text-white transition-colors">Global Services</button></li>
                     <li><button onClick={() => handleNavigate('roadmap')} className="hover:text-white transition-colors">Roadmap</button></li>
                     <li><button onClick={() => handleNavigate('luvwatts')} className="hover:text-white transition-colors">LUVWATTS</button></li>
+                    <li><button onClick={() => handleNavigate('team')} className="hover:text-white transition-colors">Team</button></li>
                     <li><button onClick={() => handleNavigate('gallery')} className="hover:text-white transition-colors">Gallery</button></li>
                     <li><button onClick={() => handleNavigate('programs')} className="hover:text-white transition-colors">Programs</button></li>
                     <li><button onClick={() => handleNavigate('contact')} className="hover:text-white transition-colors">Contact Us</button></li>
