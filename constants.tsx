@@ -32,39 +32,15 @@ export const NAVIGATION = [
 
 export const TEAM_MEMBERS = [
   {
-    name: "Kelvin Watkins",
+    name: "Kevin Watkins",
     role: "Founder & Chief Visionary",
     bio: "A pioneer in structured compassion and humanitarian engineering with over 20 years of experience in community restoration.",
     image: "profile-icon"
   },
   {
-    name: "Name of Team Member",
+    name: "Antoinette Watkins",
     role: "Executive Director",
-    bio: "Strategic operations leader focused on scaling the '7 Luv Act' programs across global chapters.",
-    image: "profile-icon"
-  },
-  {
-    name: "Name of Team Member",
-    role: "Head of AI for Good",
-    bio: "Directing the 'World AI Force' initiative to ensure ethical technology serves the most vulnerable communities.",
-    image: "profile-icon"
-  },
-  {
-    name: "Name of Team Member",
-    role: "Director of Family Stability",
-    bio: "Devoted to strengthening the foundational units of society through education and resource access.",
-    image: "profile-icon"
-  },
-  {
-    name: "Name of Team Member",
-    role: "Global Advocacy Lead",
-    bio: "Amplifying local stories onto global stages to drive systemic change and legislative transformation.",
-    image: "profile-icon"
-  },
-  {
-    name: "Name of Team Member",
-    role: "Financial Literacy Advocate",
-    bio: "Creating sustainable economic pathways for families through skill empowerment and community reinvestment.",
+    bio: "Strategic operations leader focused on scaling the '7 Luv Act' programs across global chapters and managing organizational growth.",
     image: "profile-icon"
   }
 ];
