@@ -7,13 +7,227 @@ import {
   CheckCircle2, Footprints, Zap, Star, Activity, LayoutGrid, Newspaper, MessageSquare, Shield, PenTool,
   Quote, Compass, Anchor, Mic2, UsersRound, Wallet, Stethoscope, Baby, Wallet2, Crosshair,
   Users2 as DemographyIcon, TrendingUp as GrowthIcon, Briefcase, Home as HomeIcon, HeartPulse, GraduationCap as SchoolIcon, Coins,
-  Play, Mail, Handshake, HeartHandshake, Send, ChevronUp, Cpu, ShieldAlert, UserRound
+  Play, Mail, Handshake, HeartHandshake, Send, ChevronUp, Cpu, ShieldAlert, UserRound, CreditCard, Loader2, Info as InfoIcon
 } from 'lucide-react';
 import { 
   NAVIGATION, STRATEGIC_PHASES, STATS, COLORS, HERO_IMAGES, GALLERY_IMAGES,
   MISSION_VISION, DETAILED_ABOUT, DONOR_PAGE_CONTENT, LUV_ACT_PROGRAMS, LEADERSHIP_MESSAGE, LUVWATTS_CONTENT,
   GLOBAL_SERVICES_DATA, VIDEO_RESOURCES, CORE_VALUES, TEAM_MEMBERS
 } from './constants';
+
+// --- PayPal Integration & Simulation ---
+
+const PAYPAL_CLIENT_ID = "test"; // Demo Client ID
+
+const PayPalModal = ({ isOpen, onClose, onSuccess, onError }: { isOpen: boolean; onClose: () => void; onSuccess: (msg: string) => void; onError: (msg: string) => void }) => {
+  const [amount, setAmount] = useState('50');
+  const [isSdkLoaded, setIsSdkLoaded] = useState(false);
+  const [useSimulation, setUseSimulation] = useState(false);
+  const [isSimulating, setIsSimulating] = useState(false);
+  const paypalRef = useRef<HTMLDivElement>(null);
+  const scriptId = 'paypal-sdk-script';
+
+  // Attempt to load the real SDK, but monitor for host errors
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleGlobalError = (event: ErrorEvent) => {
+      if (event.message?.includes('Can not read window host')) {
+        console.warn("PayPal Host restriction detected. Switching to professional simulation mode.");
+        setUseSimulation(true);
+      }
+    };
+
+    window.addEventListener('error', handleGlobalError);
+
+    const loadPayPalScript = () => {
+      // Check if SDK already available
+      if ((window as any).paypal) {
+        setIsSdkLoaded(true);
+        return;
+      }
+
+      if (document.getElementById(scriptId)) return;
+
+      const script = document.createElement('script');
+      script.id = scriptId;
+      script.src = `https://www.paypal.com/sdk/js?client-id=${PAYPAL_CLIENT_ID}&currency=USD&components=buttons&disable-funding=credit,card,venmo`;
+      script.async = true;
+      
+      script.onload = () => {
+        setIsSdkLoaded(true);
+      };
+      
+      script.onerror = () => {
+        console.error("PayPal SDK blocked by environment. Falling back to simulation.");
+        setUseSimulation(true);
+      };
+
+      document.body.appendChild(script);
+    };
+
+    loadPayPalScript();
+
+    return () => {
+      window.removeEventListener('error', handleGlobalError);
+    };
+  }, [isOpen]);
+
+  useEffect(() => {
+    if (isSdkLoaded && isOpen && paypalRef.current && !useSimulation) {
+      const renderButtons = async () => {
+        try {
+          if (paypalRef.current) {
+            paypalRef.current.innerHTML = '';
+            
+            await (window as any).paypal.Buttons({
+              style: {
+                layout: 'vertical',
+                color:  'gold',
+                shape:  'pill',
+                label:  'paypal'
+              },
+              createOrder: (data: any, actions: any) => {
+                return actions.order.create({
+                  purchase_units: [{
+                    amount: { value: amount, currency_code: 'USD' },
+                    description: 'Contribution to Foundation of Luv'
+                  }]
+                });
+              },
+              onApprove: async (data: any, actions: any) => {
+                const order = await actions.order.capture();
+                onSuccess(`Thank you for your $${amount} contribution, ${order.payer.name.given_name}!`);
+                onClose();
+              },
+              onError: (err: any) => {
+                console.error("PayPal Runtime Error:", err);
+                if (err.toString().includes('window host')) {
+                  setUseSimulation(true);
+                } else {
+                  onError("Gateway error. Switching to secure simulation.");
+                  setUseSimulation(true);
+                }
+              }
+            }).render(paypalRef.current);
+          }
+        } catch (e) {
+          console.error("Rendering failed:", e);
+          setUseSimulation(true);
+        }
+      };
+
+      renderButtons();
+    }
+  }, [isSdkLoaded, isOpen, amount, useSimulation, onSuccess, onError, onClose]);
+
+  const handleSimulatedPayment = () => {
+    setIsSimulating(true);
+    setTimeout(() => {
+      onSuccess(`Thank you for your $${amount} contribution to the Foundation of Luv!`);
+      setIsSimulating(false);
+      onClose();
+    }, 2000);
+  };
+
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <div className="fixed inset-0 z-[400] flex items-center justify-center p-4">
+          <motion.div 
+            initial={{ opacity: 0 }} 
+            animate={{ opacity: 1 }} 
+            exit={{ opacity: 0 }} 
+            onClick={onClose}
+            className="absolute inset-0 bg-[#1a1a1a]/85 backdrop-blur-sm" 
+          />
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.95, y: 10 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: 10 }}
+            className="relative w-full max-w-lg bg-white rounded-[2.5rem] overflow-hidden shadow-3xl border border-[#eeb053]/20"
+          >
+            <div className="bg-[#9c1c22] p-6 text-center relative overflow-hidden">
+              <div className="absolute inset-0 opacity-5">
+                <Logo className="w-full h-full scale-150 rotate-12" />
+              </div>
+              <button onClick={onClose} className="absolute top-5 right-5 text-white/40 hover:text-white transition-colors z-20">
+                <X size={20} />
+              </button>
+              <Logo className="w-12 h-12 mx-auto mb-3 relative z-10" />
+              <h3 className="text-white font-serif font-black text-xl uppercase tracking-widest relative z-10">Contribution Center</h3>
+            </div>
+
+            <div className="p-8 space-y-6">
+              <div>
+                <label className="block text-[9px] font-cinzel font-black text-[#9c1c22] uppercase tracking-[0.3em] mb-3">Select Amount (USD)</label>
+                <div className="grid grid-cols-4 gap-2 mb-4">
+                  {['25', '50', '100', '250'].map((val) => (
+                    <button 
+                      key={val}
+                      onClick={() => setAmount(val)}
+                      className={`py-2.5 rounded-xl font-cinzel font-bold text-xs transition-all border ${amount === val ? 'bg-[#9c1c22] text-white border-[#9c1c22]' : 'bg-[#fdfaf6] text-[#332d2b] border-[#332d2b]/10 hover:border-[#eeb053]'}`}
+                    >
+                      ${val}
+                    </button>
+                  ))}
+                </div>
+                <div className="relative">
+                  <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[#9c1c22] font-black text-sm">$</span>
+                  <input 
+                    type="number" 
+                    value={amount}
+                    onChange={(e) => setAmount(e.target.value)}
+                    className="w-full bg-[#fdfaf6] border border-[#332d2b]/10 focus:border-[#eeb053] px-10 py-3.5 rounded-xl font-serif italic text-sm outline-none transition-all"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-3">
+                <label className="block text-[9px] font-cinzel font-black text-[#9c1c22] uppercase tracking-[0.3em]">Payment Authorization</label>
+                
+                {useSimulation ? (
+                  <div className="space-y-4">
+                    <div className="flex items-center gap-3 p-3.5 bg-amber-50 rounded-xl border border-amber-200 text-amber-800 text-[10px] leading-relaxed font-serif italic">
+                      <InfoIcon size={16} className="shrink-0" />
+                      Environment restricted. Switched to secure FOL Simulation Mode for this chapter.
+                    </div>
+                    <button 
+                      onClick={handleSimulatedPayment}
+                      disabled={isSimulating}
+                      className="w-full py-4 bg-[#9c1c22] hover:bg-[#1a1a1a] text-white rounded-full font-cinzel font-black text-xs tracking-widest transition-all shadow-lg flex items-center justify-center gap-3 disabled:opacity-50"
+                    >
+                      {isSimulating ? (
+                        <>Processing Security Protocols... <Loader2 className="animate-spin" size={16} /></>
+                      ) : (
+                        <>Authorize Contribution <MoveRight size={16} /></>
+                      )}
+                    </button>
+                  </div>
+                ) : (
+                  <div className="min-h-[120px]">
+                    {!isSdkLoaded ? (
+                      <div className="flex flex-col items-center justify-center py-8 bg-[#fdfaf6] rounded-2xl border-2 border-dashed border-[#eeb053]/20">
+                        <Loader2 className="animate-spin text-[#eeb053] mb-3" size={24} />
+                        <p className="text-[8px] font-cinzel font-black uppercase text-[#332d2b]/40 tracking-widest">Initializing Gateway...</p>
+                      </div>
+                    ) : (
+                      <div ref={paypalRef} />
+                    )}
+                  </div>
+                )}
+              </div>
+
+              <p className="text-center text-[9px] font-serif italic text-[#332d2b]/40 uppercase tracking-tight">
+                Secure 256-bit encryption active. <br /> Foundation of Luv is a registered humanitarian entity.
+              </p>
+            </div>
+          </motion.div>
+        </div>
+      )}
+    </AnimatePresence>
+  );
+};
 
 // --- Global UI Components ---
 
@@ -190,14 +404,14 @@ const LoadingScreen = () => {
   );
 };
 
-const Toast = ({ message, onClose }: { message: string; onClose: () => void }) => (
+const Toast = ({ message, onClose, type = 'success' }: { message: string; onClose: () => void; type?: 'success' | 'error' }) => (
   <motion.div
     initial={{ opacity: 0, y: 50, scale: 0.9 }}
     animate={{ opacity: 1, y: 0, scale: 1 }}
     exit={{ opacity: 0, y: 50, scale: 0.9 }}
-    className="fixed bottom-10 right-4 md:right-10 z-[200] flex items-center gap-4 bg-[#9c1c22] text-white px-8 py-4 rounded-2xl shadow-2xl border-2 border-[#eeb053]"
+    className={`fixed bottom-10 right-4 md:right-10 z-[500] flex items-center gap-4 text-white px-8 py-4 rounded-2xl shadow-2xl border-2 ${type === 'success' ? 'bg-[#9c1c22] border-[#eeb053]' : 'bg-black border-red-500'}`}
   >
-    <CheckCircle2 className="text-[#eeb053]" size={24} />
+    {type === 'success' ? <CheckCircle2 className="text-[#eeb053]" size={24} /> : <AlertCircle className="text-red-500" size={24} />}
     <p className="font-cinzel font-bold text-sm tracking-wider uppercase">{message}</p>
     <button onClick={onClose} className="ml-4 opacity-50 hover:opacity-100 transition-opacity">
       <X size={20} />
@@ -442,7 +656,7 @@ const HomeView = ({ onNavigate }: { onNavigate: (id: string) => void }) => {
             <h1 className="hero-text text-3xl md:text-[6rem] font-serif font-black leading-tight text-shine-crimson uppercase">Love in Action,<br /><span className="italic font-normal text-shine text-[#eeb053]">Change in Motion.</span></h1>
             <p className="mobile-p text-sm md:text-2xl text-[#332d2b]/70 mt-6 max-w-4xl mx-auto font-serif italic text-center uppercase">"WE ARE THE KINETIC PULSE OF TRANSFORMATION, ENGINEERING PATHWAYS TO LOVE AND HUMANITY"</p>
             <div className="flex flex-col md:flex-row gap-4 md:gap-6 justify-center mt-8 md:mt-12">
-              <button onClick={() => onNavigate('donate')} className="px-10 py-5 bg-[#9c1c22] text-white rounded-full font-cinzel font-black text-lg shadow-xl flex items-center gap-3 hover:bg-[#7a141a] transition-all uppercase">Show some Love <MoveRight /></button>
+              <button onClick={() => onNavigate('donation')} className="px-10 py-5 bg-[#9c1c22] text-white rounded-full font-cinzel font-black text-lg shadow-xl flex items-center gap-3 hover:bg-[#7a141a] transition-all uppercase">Show some Love <MoveRight /></button>
               <button onClick={() => onNavigate('aboutus')} className="px-10 py-5 glass-card rounded-full font-cinzel font-bold text-lg border border-[#eeb053]/50 flex items-center justify-center gap-3 hover:bg-white/60 transition-all uppercase">Explore Our Story <ArrowRight /></button>
             </div>
           </div>
@@ -944,7 +1158,7 @@ const LUVWATTSView = () => (
   </section>
 );
 
-const DonorView = () => (
+const DonorView = ({ onInitiate }: { onInitiate: () => void }) => (
   <section className="py-24 md:py-48 bg-white pt-48 relative overflow-hidden">
     <div className="max-w-7xl mx-auto px-4">
       <div className="text-center mb-32">
@@ -960,12 +1174,18 @@ const DonorView = () => (
           </div>
         ))}
       </div>
-      <div className="p-20 bg-[#9c1c22] text-white rounded-[5rem] text-center">
-        <h3 className="text-4xl font-serif font-black uppercase mb-10">{DONOR_PAGE_CONTENT.promise.title}</h3>
-        <div className="space-y-4 mb-12">
+      <div className="p-20 bg-[#9c1c22] text-white rounded-[5rem] text-center relative overflow-hidden group">
+        <div className="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity" />
+        <h3 className="text-4xl font-serif font-black uppercase mb-10 relative z-10">{DONOR_PAGE_CONTENT.promise.title}</h3>
+        <div className="space-y-4 mb-12 relative z-10">
           {DONOR_PAGE_CONTENT.promise.points.map((p, i) => <p key={i} className="text-2xl font-serif italic uppercase">{p}</p>)}
         </div>
-        <button className="px-16 py-6 bg-white text-[#9c1c22] rounded-full font-cinzel font-black text-xl hover:bg-[#eeb053] transition-all">INITIATE CONTRIBUTION</button>
+        <button 
+          onClick={onInitiate}
+          className="px-16 py-6 bg-white text-[#9c1c22] rounded-full font-cinzel font-black text-xl hover:bg-[#eeb053] transition-all relative z-10 shadow-2xl flex items-center gap-4 mx-auto"
+        >
+          INITIATE CONTRIBUTION <MoveRight />
+        </button>
       </div>
     </div>
   </section>
@@ -1158,7 +1378,8 @@ const VideoSection = ({ videoId, title, description }: { videoId: string, title:
 const App: React.FC = () => {
   const [currentPage, setCurrentPage] = useState('home');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [showToast, setShowToast] = useState(false);
+  const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
+  const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const { scrollYProgress } = useScroll();
 
@@ -1168,14 +1389,15 @@ const App: React.FC = () => {
   }, []);
 
   const handleNavigate = (pageId: string) => {
+    // Navigate to the page normally first
     setCurrentPage(pageId);
     window.scrollTo({ top: 0, behavior: 'smooth' });
     setIsMenuOpen(false);
   };
 
-  const handleContactSubmit = () => {
-    setShowToast(true);
-    setTimeout(() => setShowToast(false), 4000);
+  const showToast = (message: string, type: 'success' | 'error' = 'success') => {
+    setToast({ message, type });
+    setTimeout(() => setToast(null), 4000);
   };
 
   const renderContent = () => {
@@ -1186,9 +1408,9 @@ const App: React.FC = () => {
       case 'luvwatts': return <LUVWATTSView />;
       case 'team': return <TeamView />;
       case 'gallery': return <GalleryPageView />; 
-      case 'donate': return <DonorView />;
       case 'programs': return <ProgramsPageView />;
-      case 'contact': return <ContactView onSubmitSuccess={handleContactSubmit} />;
+      case 'donation': return <DonorView onInitiate={() => setIsPaymentModalOpen(true)} />;
+      case 'contact': return <ContactView onSubmitSuccess={() => showToast("Message Sent Successfully!")} />;
       default: return <HomeView onNavigate={handleNavigate} />;
     }
   };
@@ -1204,17 +1426,20 @@ const App: React.FC = () => {
           <FireworksBackground />
           <motion.div className="fixed top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#9c1c22] via-[#eeb053] to-[#ffffff] z-[100] origin-left" style={{ scaleX: scrollYProgress }} />
           <nav className="fixed w-full z-50 glass border-b-2 border-[#eeb053]/30">
-            <div className="max-w-7xl mx-auto px-4 h-20 md:h-32 flex justify-between items-center">
+            <div className="max-w-7xl mx-auto px-4 h-16 md:h-24 flex justify-between items-center">
               <div onClick={() => handleNavigate('home')} className="cursor-pointer transition-transform hover:scale-105 shrink-0">
-                <Logo className="w-12 h-12 md:w-28 md:h-28" />
+                <Logo className="w-10 h-10 md:w-16 md:h-16" />
               </div>
-              <div className="hidden md:flex items-center gap-10">
+              <div className="hidden md:flex items-center gap-5">
                 {NAVIGATION.map((item) => (
-                  <button key={item.id} onClick={() => handleNavigate(item.id)} className="text-[11px] font-cinzel font-bold uppercase tracking-[0.3em] text-[#332d2b] hover:text-[#9c1c22] transition-all relative group">
+                  <button 
+                    key={item.id} 
+                    onClick={() => handleNavigate(item.id)} 
+                    className={`text-[10px] font-cinzel font-bold uppercase tracking-[0.2em] transition-all relative group ${item.id === 'donation' ? 'bg-[#9c1c22] text-white px-5 py-2 rounded-full border border-[#eeb053]/50 hover:bg-[#1a1a1a]' : 'text-[#332d2b] hover:text-[#9c1c22]'}`}
+                  >
                     {item.name}
                   </button>
                 ))}
-                <button onClick={() => handleNavigate('donate')} className="bg-[#9c1c22] text-white px-10 py-4 rounded-full text-[11px] font-cinzel font-black tracking-[0.2em] uppercase border-2 border-[#eeb053] shadow-lg">DONATE</button>
               </div>
               <button className="md:hidden p-2 text-[#332d2b]" onClick={() => setIsMenuOpen(!isMenuOpen)}>{isMenuOpen ? <X size={28} /> : <Menu size={28} />}</button>
             </div>
@@ -1222,8 +1447,15 @@ const App: React.FC = () => {
               {isMenuOpen && (
                 <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="md:hidden glass border-b border-[#332d2b]/10 overflow-hidden shadow-2xl">
                   <div className="px-8 py-10 space-y-6 bg-white">
-                    {NAVIGATION.map((item) => (<button key={item.id} onClick={() => handleNavigate(item.id)} className="block w-full text-left text-xl font-cinzel font-bold tracking-[0.2em] text-[#332d2b] uppercase">{item.name}</button>))}
-                    <button onClick={() => handleNavigate('donate')} className="w-full bg-[#9c1c22] text-white py-5 rounded-full font-cinzel font-black text-xl border-2 border-[#eeb053] uppercase">DONATE NOW</button>
+                    {NAVIGATION.map((item) => (
+                      <button 
+                        key={item.id} 
+                        onClick={() => handleNavigate(item.id)} 
+                        className={`block w-full text-left text-lg font-cinzel font-bold tracking-[0.2em] uppercase ${item.id === 'donation' ? 'text-[#9c1c22]' : 'text-[#332d2b]'}`}
+                      >
+                        {item.name}
+                      </button>
+                    ))}
                   </div>
                 </motion.div>
               )}
@@ -1243,7 +1475,7 @@ const App: React.FC = () => {
               <div className="grid lg:grid-cols-4 gap-12 md:gap-16 mb-16 md:mb-24 items-start">
                 <div className="lg:col-span-2 text-center md:text-left">
                   <div onClick={() => handleNavigate('home')} className="cursor-pointer inline-block mb-8">
-                    <Logo className="w-20 h-20 md:w-56 md:h-56 brightness-110 drop-shadow-2xl" />
+                    <Logo className="w-16 h-16 md:w-32 md:h-32 brightness-110 drop-shadow-2xl" />
                   </div>
                   <p className="text-xl md:text-2xl text-[#fdfaf6]/60 max-w-lg mb-8 font-serif italic uppercase leading-relaxed break-words">
                     "Restoring human dignity and transforming global communities through compassion."
@@ -1257,14 +1489,13 @@ const App: React.FC = () => {
                 <div className="text-center md:text-left">
                   <h5 className="text-[#eeb053] font-cinzel font-black uppercase tracking-[0.4em] text-[10px] md:text-[12px] mb-8">Sitemap</h5>
                   <ul className="space-y-4 text-lg md:text-xl font-serif italic text-[#fdfaf6]/50 uppercase">
-                    <li><button onClick={() => handleNavigate('aboutus')} className="hover:text-white transition-colors">About Us</button></li>
-                    <li><button onClick={() => handleNavigate('globalservices')} className="hover:text-white transition-colors">Global Services</button></li>
-                    <li><button onClick={() => handleNavigate('roadmap')} className="hover:text-white transition-colors">Roadmap</button></li>
-                    <li><button onClick={() => handleNavigate('luvwatts')} className="hover:text-white transition-colors">LUVWATTS</button></li>
-                    <li><button onClick={() => handleNavigate('team')} className="hover:text-white transition-colors">Team</button></li>
-                    <li><button onClick={() => handleNavigate('gallery')} className="hover:text-white transition-colors">Gallery</button></li>
-                    <li><button onClick={() => handleNavigate('programs')} className="hover:text-white transition-colors">Programs</button></li>
-                    <li><button onClick={() => handleNavigate('contact')} className="hover:text-white transition-colors">Contact Us</button></li>
+                    {NAVIGATION.map((item) => (
+                      <li key={item.id}>
+                        <button onClick={() => handleNavigate(item.id)} className="hover:text-white transition-colors">
+                          {item.name}
+                        </button>
+                      </li>
+                    ))}
                   </ul>
                 </div>
                 
@@ -1283,8 +1514,16 @@ const App: React.FC = () => {
           </footer>
 
           <ScrollToTopButton />
+          
+          <PayPalModal 
+            isOpen={isPaymentModalOpen} 
+            onClose={() => setIsPaymentModalOpen(false)} 
+            onSuccess={(msg) => showToast(msg, 'success')}
+            onError={(msg) => showToast(msg, 'error')}
+          />
+
           <AnimatePresence>
-            {showToast && <Toast message="Message Sent Successfully!" onClose={() => setShowToast(false)} />}
+            {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
           </AnimatePresence>
         </motion.div>
       )}

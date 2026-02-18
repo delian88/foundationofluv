@@ -28,6 +28,7 @@ export const NAVIGATION = [
   { name: 'Gallery', id: 'gallery' },
   { name: 'Programs', id: 'programs' },
   { name: 'Contact Us', id: 'contact' },
+  { name: 'Donation', id: 'donation' },
 ];
 
 export const TEAM_MEMBERS = [
