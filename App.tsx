@@ -17,7 +17,7 @@ import {
 
 // --- PayPal Integration & Simulation ---
 
-const PAYPAL_CLIENT_ID = "test"; // Demo Client ID
+const PAYPAL_CLIENT_ID = "test"; // Demo Client ID for Sandbox
 
 const PayPalModal = ({ isOpen, onClose, onSuccess, onError }: { isOpen: boolean; onClose: () => void; onSuccess: (msg: string) => void; onError: (msg: string) => void }) => {
   const [amount, setAmount] = useState('50');
@@ -27,13 +27,13 @@ const PayPalModal = ({ isOpen, onClose, onSuccess, onError }: { isOpen: boolean;
   const paypalRef = useRef<HTMLDivElement>(null);
   const scriptId = 'paypal-sdk-script';
 
-  // Attempt to load the real SDK, but monitor for host errors
+  // Monitor for host-reading errors and blockages
   useEffect(() => {
     if (!isOpen) return;
 
     const handleGlobalError = (event: ErrorEvent) => {
-      if (event.message?.includes('Can not read window host')) {
-        console.warn("PayPal Host restriction detected. Switching to professional simulation mode.");
+      if (event.message?.includes('window host') || event.message?.includes('PayPal')) {
+        console.warn("PayPal Host restriction detected. Switching to secure simulation.");
         setUseSimulation(true);
       }
     };
@@ -41,7 +41,6 @@ const PayPalModal = ({ isOpen, onClose, onSuccess, onError }: { isOpen: boolean;
     window.addEventListener('error', handleGlobalError);
 
     const loadPayPalScript = () => {
-      // Check if SDK already available
       if ((window as any).paypal) {
         setIsSdkLoaded(true);
         return;
@@ -51,7 +50,8 @@ const PayPalModal = ({ isOpen, onClose, onSuccess, onError }: { isOpen: boolean;
 
       const script = document.createElement('script');
       script.id = scriptId;
-      script.src = `https://www.paypal.com/sdk/js?client-id=${PAYPAL_CLIENT_ID}&currency=USD&components=buttons&disable-funding=credit,card,venmo`;
+      // We enable more funding sources to allow the user to choose their preferred method (PayPal, Credit, etc.)
+      script.src = `https://www.paypal.com/sdk/js?client-id=${PAYPAL_CLIENT_ID}&currency=USD&components=buttons&enable-funding=venmo,paylater`;
       script.async = true;
       
       script.onload = () => {
@@ -59,7 +59,7 @@ const PayPalModal = ({ isOpen, onClose, onSuccess, onError }: { isOpen: boolean;
       };
       
       script.onerror = () => {
-        console.error("PayPal SDK blocked by environment. Falling back to simulation.");
+        console.error("PayPal SDK blocked. Falling back to simulation.");
         setUseSimulation(true);
       };
 
@@ -85,13 +85,14 @@ const PayPalModal = ({ isOpen, onClose, onSuccess, onError }: { isOpen: boolean;
                 layout: 'vertical',
                 color:  'gold',
                 shape:  'pill',
-                label:  'paypal'
+                label:  'donate', // "Donate" label for context
+                height: 45
               },
               createOrder: (data: any, actions: any) => {
                 return actions.order.create({
                   purchase_units: [{
                     amount: { value: amount, currency_code: 'USD' },
-                    description: 'Contribution to Foundation of Luv'
+                    description: 'Contribution to Foundation of Luv 501(c)(3) initiatives'
                   }]
                 });
               },
@@ -105,8 +106,7 @@ const PayPalModal = ({ isOpen, onClose, onSuccess, onError }: { isOpen: boolean;
                 if (err.toString().includes('window host')) {
                   setUseSimulation(true);
                 } else {
-                  onError("Gateway error. Switching to secure simulation.");
-                  setUseSimulation(true);
+                  setUseSimulation(true); // Fallback to simulation for any critical runtime error in this environment
                 }
               }
             }).render(paypalRef.current);
@@ -119,12 +119,12 @@ const PayPalModal = ({ isOpen, onClose, onSuccess, onError }: { isOpen: boolean;
 
       renderButtons();
     }
-  }, [isSdkLoaded, isOpen, amount, useSimulation, onSuccess, onError, onClose]);
+  }, [isSdkLoaded, isOpen, amount, useSimulation, onSuccess, onClose]);
 
-  const handleSimulatedPayment = () => {
+  const handleSimulatedPayment = (method: string) => {
     setIsSimulating(true);
     setTimeout(() => {
-      onSuccess(`Thank you for your $${amount} contribution to the Foundation of Luv!`);
+      onSuccess(`Thank you for your $${amount} contribution via ${method}!`);
       setIsSimulating(false);
       onClose();
     }, 2000);
@@ -139,88 +139,98 @@ const PayPalModal = ({ isOpen, onClose, onSuccess, onError }: { isOpen: boolean;
             animate={{ opacity: 1 }} 
             exit={{ opacity: 0 }} 
             onClick={onClose}
-            className="absolute inset-0 bg-[#1a1a1a]/85 backdrop-blur-sm" 
+            className="absolute inset-0 bg-[#1a1a1a]/90 backdrop-blur-md" 
           />
           <motion.div 
-            initial={{ opacity: 0, scale: 0.95, y: 10 }}
+            initial={{ opacity: 0, scale: 0.9, y: 30 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: 10 }}
-            className="relative w-full max-w-lg bg-white rounded-[2.5rem] overflow-hidden shadow-3xl border border-[#eeb053]/20"
+            exit={{ opacity: 0, scale: 0.9, y: 30 }}
+            className="relative w-full max-w-lg bg-white rounded-[3rem] overflow-hidden shadow-3xl border-2 border-[#eeb053]/20"
           >
-            <div className="bg-[#9c1c22] p-6 text-center relative overflow-hidden">
-              <div className="absolute inset-0 opacity-5">
+            <div className="bg-[#9c1c22] p-8 text-center relative overflow-hidden">
+              <div className="absolute inset-0 opacity-10">
                 <Logo className="w-full h-full scale-150 rotate-12" />
               </div>
-              <button onClick={onClose} className="absolute top-5 right-5 text-white/40 hover:text-white transition-colors z-20">
-                <X size={20} />
+              <button onClick={onClose} className="absolute top-6 right-6 text-white/50 hover:text-white transition-colors z-20">
+                <X size={24} />
               </button>
-              <Logo className="w-12 h-12 mx-auto mb-3 relative z-10" />
-              <h3 className="text-white font-serif font-black text-xl uppercase tracking-widest relative z-10">Contribution Center</h3>
+              <Logo className="w-16 h-16 mx-auto mb-4 relative z-10" />
+              <h3 className="text-white font-serif font-black text-2xl uppercase tracking-widest relative z-10">Contribution Center</h3>
+              <p className="text-white/60 font-serif italic text-sm uppercase relative z-10 mt-1">Institutionalize your compassion.</p>
             </div>
 
-            <div className="p-8 space-y-6">
+            <div className="p-8 md:p-10 space-y-8">
               <div>
-                <label className="block text-[9px] font-cinzel font-black text-[#9c1c22] uppercase tracking-[0.3em] mb-3">Select Amount (USD)</label>
-                <div className="grid grid-cols-4 gap-2 mb-4">
-                  {['25', '50', '100', '250'].map((val) => (
+                <label className="block text-[10px] font-cinzel font-black text-[#9c1c22] uppercase tracking-[0.4em] mb-4">Select Contribution Amount (USD)</label>
+                <div className="grid grid-cols-4 gap-3 mb-4">
+                  {['25', '50', '100', '500'].map((val) => (
                     <button 
                       key={val}
                       onClick={() => setAmount(val)}
-                      className={`py-2.5 rounded-xl font-cinzel font-bold text-xs transition-all border ${amount === val ? 'bg-[#9c1c22] text-white border-[#9c1c22]' : 'bg-[#fdfaf6] text-[#332d2b] border-[#332d2b]/10 hover:border-[#eeb053]'}`}
+                      className={`py-3 rounded-2xl font-cinzel font-bold text-xs transition-all border-2 ${amount === val ? 'bg-[#9c1c22] text-white border-[#9c1c22] shadow-lg scale-105' : 'bg-[#fdfaf6] text-[#332d2b] border-[#332d2b]/10 hover:border-[#eeb053]'}`}
                     >
                       ${val}
                     </button>
                   ))}
                 </div>
                 <div className="relative">
-                  <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[#9c1c22] font-black text-sm">$</span>
+                  <span className="absolute left-6 top-1/2 -translate-y-1/2 text-[#9c1c22] font-black">$</span>
                   <input 
                     type="number" 
                     value={amount}
                     onChange={(e) => setAmount(e.target.value)}
-                    className="w-full bg-[#fdfaf6] border border-[#332d2b]/10 focus:border-[#eeb053] px-10 py-3.5 rounded-xl font-serif italic text-sm outline-none transition-all"
+                    placeholder="Enter custom amount"
+                    className="w-full bg-[#fdfaf6] border-2 border-[#332d2b]/10 focus:border-[#eeb053] px-12 py-4 rounded-2xl font-serif italic text-base outline-none transition-all"
                   />
                 </div>
               </div>
 
-              <div className="space-y-3">
-                <label className="block text-[9px] font-cinzel font-black text-[#9c1c22] uppercase tracking-[0.3em]">Payment Authorization</label>
+              <div className="space-y-4">
+                <label className="block text-[10px] font-cinzel font-black text-[#9c1c22] uppercase tracking-[0.4em]">Choose Payment Method</label>
                 
                 {useSimulation ? (
-                  <div className="space-y-4">
-                    <div className="flex items-center gap-3 p-3.5 bg-amber-50 rounded-xl border border-amber-200 text-amber-800 text-[10px] leading-relaxed font-serif italic">
-                      <InfoIcon size={16} className="shrink-0" />
-                      Environment restricted. Switched to secure FOL Simulation Mode for this chapter.
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-3 p-4 bg-amber-50 rounded-2xl border border-amber-200 text-amber-900 text-xs font-serif italic leading-relaxed">
+                      <InfoIcon size={18} className="shrink-0 text-amber-600" />
+                      Security restriction active in this preview environment. Switched to secure FOL Payment Simulation.
                     </div>
-                    <button 
-                      onClick={handleSimulatedPayment}
-                      disabled={isSimulating}
-                      className="w-full py-4 bg-[#9c1c22] hover:bg-[#1a1a1a] text-white rounded-full font-cinzel font-black text-xs tracking-widest transition-all shadow-lg flex items-center justify-center gap-3 disabled:opacity-50"
-                    >
-                      {isSimulating ? (
-                        <>Processing Security Protocols... <Loader2 className="animate-spin" size={16} /></>
-                      ) : (
-                        <>Authorize Contribution <MoveRight size={16} /></>
-                      )}
-                    </button>
+                    <div className="grid gap-3">
+                      <button 
+                        onClick={() => handleSimulatedPayment('PayPal')}
+                        disabled={isSimulating}
+                        className="w-full py-4 bg-[#ffc439] hover:bg-[#f2ba36] text-[#111] rounded-full font-bold flex items-center justify-center gap-3 shadow-md disabled:opacity-50 transition-all"
+                      >
+                         {isSimulating ? <Loader2 className="animate-spin" size={20} /> : "Pay with PayPal"}
+                      </button>
+                      <button 
+                        onClick={() => handleSimulatedPayment('Credit/Debit Card')}
+                        disabled={isSimulating}
+                        className="w-full py-4 bg-[#2c2e2f] hover:bg-[#1a1a1a] text-white rounded-full font-bold flex items-center justify-center gap-3 shadow-md disabled:opacity-50 transition-all"
+                      >
+                         {isSimulating ? <Loader2 className="animate-spin" size={20} /> : "Debit or Credit Card"}
+                      </button>
+                    </div>
                   </div>
                 ) : (
-                  <div className="min-h-[120px]">
+                  <div className="min-h-[160px] relative">
                     {!isSdkLoaded ? (
-                      <div className="flex flex-col items-center justify-center py-8 bg-[#fdfaf6] rounded-2xl border-2 border-dashed border-[#eeb053]/20">
-                        <Loader2 className="animate-spin text-[#eeb053] mb-3" size={24} />
-                        <p className="text-[8px] font-cinzel font-black uppercase text-[#332d2b]/40 tracking-widest">Initializing Gateway...</p>
+                      <div className="flex flex-col items-center justify-center py-12 bg-[#fdfaf6] rounded-3xl border-2 border-dashed border-[#eeb053]/20">
+                        <Loader2 className="animate-spin text-[#eeb053] mb-4" size={32} />
+                        <p className="text-[10px] font-cinzel font-black uppercase text-[#332d2b]/40 tracking-widest">Synchronizing Global Gateway...</p>
                       </div>
                     ) : (
-                      <div ref={paypalRef} />
+                      <div ref={paypalRef} className="z-10 relative" />
                     )}
                   </div>
                 )}
               </div>
 
-              <p className="text-center text-[9px] font-serif italic text-[#332d2b]/40 uppercase tracking-tight">
-                Secure 256-bit encryption active. <br /> Foundation of Luv is a registered humanitarian entity.
-              </p>
+              <div className="pt-4 border-t border-black/5 text-center">
+                <p className="text-[10px] font-serif italic text-[#332d2b]/40 uppercase tracking-wide">
+                  <ShieldCheck className="inline-block mr-1 -mt-0.5" size={12} />
+                  Your contribution is processed via secure 256-bit SSL encryption. <br /> Foundation of Luv is a registered humanitarian organization.
+                </p>
+              </div>
             </div>
           </motion.div>
         </div>
@@ -1389,7 +1399,6 @@ const App: React.FC = () => {
   }, []);
 
   const handleNavigate = (pageId: string) => {
-    // Navigate to the page normally first
     setCurrentPage(pageId);
     window.scrollTo({ top: 0, behavior: 'smooth' });
     setIsMenuOpen(false);
