@@ -7,7 +7,8 @@ import {
   CheckCircle2, Footprints, Zap, Star, Activity, LayoutGrid, Newspaper, MessageSquare, Shield, PenTool,
   Quote, Compass, Anchor, Mic2, UsersRound, Wallet, Stethoscope, Baby, Wallet2, Crosshair,
   Users2 as DemographyIcon, TrendingUp as GrowthIcon, Briefcase, Home as HomeIcon, HeartPulse, GraduationCap as SchoolIcon, Coins,
-  Play, Mail, Handshake, HeartHandshake, Send, ChevronUp, Cpu, ShieldAlert, UserRound, CreditCard, Loader2, Info as InfoIcon
+  Play, Mail, Handshake, HeartHandshake, Send, ChevronUp, Cpu, ShieldAlert, UserRound, CreditCard, Loader2, Info as InfoIcon,
+  ExternalLink, Lock
 } from 'lucide-react';
 import { 
   NAVIGATION, STRATEGIC_PHASES, STATS, COLORS, HERO_IMAGES, GALLERY_IMAGES,
@@ -15,30 +16,26 @@ import {
   GLOBAL_SERVICES_DATA, VIDEO_RESOURCES, CORE_VALUES, TEAM_MEMBERS
 } from './constants';
 
-// --- PayPal Integration & Simulation ---
+// --- PayPal Integration ---
 
-const PAYPAL_CLIENT_ID = "test"; // Demo Client ID for Sandbox
+const PAYPAL_CLIENT_ID = "test"; // Demo Client ID for Sandbox environment
 
 const PayPalModal = ({ isOpen, onClose, onSuccess, onError }: { isOpen: boolean; onClose: () => void; onSuccess: (msg: string) => void; onError: (msg: string) => void }) => {
   const [amount, setAmount] = useState('50');
   const [isSdkLoaded, setIsSdkLoaded] = useState(false);
-  const [useSimulation, setUseSimulation] = useState(false);
-  const [isSimulating, setIsSimulating] = useState(false);
+  const [sdkError, setSdkError] = useState<string | null>(null);
   const paypalRef = useRef<HTMLDivElement>(null);
   const scriptId = 'paypal-sdk-script';
 
-  // Monitor for host-reading errors and blockages
+  // Function to generate the real direct PayPal link as a fallback
+  const getDirectPayPalUrl = () => {
+    // This is the real PayPal donation portal URL format
+    const businessEmail = "hello@foundationofluv.org";
+    return `https://www.paypal.com/donate/?business=${encodeURIComponent(businessEmail)}&amount=${amount}&currency_code=USD&item_name=Foundation+of+Luv+Contribution`;
+  };
+
   useEffect(() => {
     if (!isOpen) return;
-
-    const handleGlobalError = (event: ErrorEvent) => {
-      if (event.message?.includes('window host') || event.message?.includes('PayPal')) {
-        console.warn("PayPal Host restriction detected. Switching to secure simulation.");
-        setUseSimulation(true);
-      }
-    };
-
-    window.addEventListener('error', handleGlobalError);
 
     const loadPayPalScript = () => {
       if ((window as any).paypal) {
@@ -50,7 +47,7 @@ const PayPalModal = ({ isOpen, onClose, onSuccess, onError }: { isOpen: boolean;
 
       const script = document.createElement('script');
       script.id = scriptId;
-      // We enable more funding sources to allow the user to choose their preferred method (PayPal, Credit, etc.)
+      // Real PayPal SDK URL with preferred funding sources enabled
       script.src = `https://www.paypal.com/sdk/js?client-id=${PAYPAL_CLIENT_ID}&currency=USD&components=buttons&enable-funding=venmo,paylater`;
       script.async = true;
       
@@ -59,8 +56,7 @@ const PayPalModal = ({ isOpen, onClose, onSuccess, onError }: { isOpen: boolean;
       };
       
       script.onerror = () => {
-        console.error("PayPal SDK blocked. Falling back to simulation.");
-        setUseSimulation(true);
+        setSdkError("The PayPal Secure Gateway was unable to initialize in this frame. Please use the Direct Portal below.");
       };
 
       document.body.appendChild(script);
@@ -68,13 +64,18 @@ const PayPalModal = ({ isOpen, onClose, onSuccess, onError }: { isOpen: boolean;
 
     loadPayPalScript();
 
-    return () => {
-      window.removeEventListener('error', handleGlobalError);
+    // Listen for the specific 'window host' error that happens internally in PayPal SDK
+    const handleError = (e: ErrorEvent) => {
+      if (e.message?.includes('window host')) {
+        setSdkError("Security context restriction detected. Direct Secure Portal enabled.");
+      }
     };
+    window.addEventListener('error', handleError);
+    return () => window.removeEventListener('error', handleError);
   }, [isOpen]);
 
   useEffect(() => {
-    if (isSdkLoaded && isOpen && paypalRef.current && !useSimulation) {
+    if (isSdkLoaded && isOpen && paypalRef.current && !sdkError) {
       const renderButtons = async () => {
         try {
           if (paypalRef.current) {
@@ -85,14 +86,14 @@ const PayPalModal = ({ isOpen, onClose, onSuccess, onError }: { isOpen: boolean;
                 layout: 'vertical',
                 color:  'gold',
                 shape:  'pill',
-                label:  'donate', // "Donate" label for context
-                height: 45
+                label:  'donate',
+                height: 48
               },
               createOrder: (data: any, actions: any) => {
                 return actions.order.create({
                   purchase_units: [{
                     amount: { value: amount, currency_code: 'USD' },
-                    description: 'Contribution to Foundation of Luv 501(c)(3) initiatives'
+                    description: 'Contribution to Foundation of Luv Humanitarian Programs'
                   }]
                 });
               },
@@ -102,33 +103,20 @@ const PayPalModal = ({ isOpen, onClose, onSuccess, onError }: { isOpen: boolean;
                 onClose();
               },
               onError: (err: any) => {
-                console.error("PayPal Runtime Error:", err);
-                if (err.toString().includes('window host')) {
-                  setUseSimulation(true);
-                } else {
-                  setUseSimulation(true); // Fallback to simulation for any critical runtime error in this environment
-                }
+                console.error("PayPal Interactive Error:", err);
+                setSdkError("interactive_blocked");
               }
             }).render(paypalRef.current);
           }
         } catch (e) {
-          console.error("Rendering failed:", e);
-          setUseSimulation(true);
+          console.error("PayPal Rendering Exception:", e);
+          setSdkError("interactive_blocked");
         }
       };
 
       renderButtons();
     }
-  }, [isSdkLoaded, isOpen, amount, useSimulation, onSuccess, onClose]);
-
-  const handleSimulatedPayment = (method: string) => {
-    setIsSimulating(true);
-    setTimeout(() => {
-      onSuccess(`Thank you for your $${amount} contribution via ${method}!`);
-      setIsSimulating(false);
-      onClose();
-    }, 2000);
-  };
+  }, [isSdkLoaded, isOpen, amount, sdkError, onSuccess, onClose]);
 
   return (
     <AnimatePresence>
@@ -139,14 +127,15 @@ const PayPalModal = ({ isOpen, onClose, onSuccess, onError }: { isOpen: boolean;
             animate={{ opacity: 1 }} 
             exit={{ opacity: 0 }} 
             onClick={onClose}
-            className="absolute inset-0 bg-[#1a1a1a]/90 backdrop-blur-md" 
+            className="absolute inset-0 bg-[#1a1a1a]/95 backdrop-blur-md" 
           />
           <motion.div 
-            initial={{ opacity: 0, scale: 0.9, y: 30 }}
+            initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.9, y: 30 }}
-            className="relative w-full max-w-lg bg-white rounded-[3rem] overflow-hidden shadow-3xl border-2 border-[#eeb053]/20"
+            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+            className="relative w-full max-w-lg bg-white rounded-[3.5rem] overflow-hidden shadow-3xl border border-[#eeb053]/30"
           >
+            {/* Header */}
             <div className="bg-[#9c1c22] p-8 text-center relative overflow-hidden">
               <div className="absolute inset-0 opacity-10">
                 <Logo className="w-full h-full scale-150 rotate-12" />
@@ -155,80 +144,88 @@ const PayPalModal = ({ isOpen, onClose, onSuccess, onError }: { isOpen: boolean;
                 <X size={24} />
               </button>
               <Logo className="w-16 h-16 mx-auto mb-4 relative z-10" />
-              <h3 className="text-white font-serif font-black text-2xl uppercase tracking-widest relative z-10">Contribution Center</h3>
-              <p className="text-white/60 font-serif italic text-sm uppercase relative z-10 mt-1">Institutionalize your compassion.</p>
+              <h3 className="text-white font-serif font-black text-2xl uppercase tracking-[0.2em] relative z-10">Contribution Center</h3>
+              <div className="flex items-center justify-center gap-2 mt-2 relative z-10">
+                <Lock size={12} className="text-[#eeb053]" />
+                <span className="text-[10px] font-cinzel font-bold text-[#eeb053] uppercase tracking-widest">Secure PayPal Encryption Active</span>
+              </div>
             </div>
 
-            <div className="p-8 md:p-10 space-y-8">
+            <div className="p-8 md:p-12 space-y-8">
+              {/* Amount Selection */}
               <div>
-                <label className="block text-[10px] font-cinzel font-black text-[#9c1c22] uppercase tracking-[0.4em] mb-4">Select Contribution Amount (USD)</label>
-                <div className="grid grid-cols-4 gap-3 mb-4">
-                  {['25', '50', '100', '500'].map((val) => (
+                <label className="block text-[11px] font-cinzel font-black text-[#9c1c22] uppercase tracking-[0.4em] mb-4">Select Your Gift (USD)</label>
+                <div className="grid grid-cols-4 gap-3 mb-6">
+                  {['25', '50', '100', '250'].map((val) => (
                     <button 
                       key={val}
                       onClick={() => setAmount(val)}
-                      className={`py-3 rounded-2xl font-cinzel font-bold text-xs transition-all border-2 ${amount === val ? 'bg-[#9c1c22] text-white border-[#9c1c22] shadow-lg scale-105' : 'bg-[#fdfaf6] text-[#332d2b] border-[#332d2b]/10 hover:border-[#eeb053]'}`}
+                      className={`py-3 rounded-2xl font-cinzel font-black text-xs transition-all border-2 ${amount === val ? 'bg-[#9c1c22] text-white border-[#9c1c22] shadow-xl scale-105' : 'bg-[#fdfaf6] text-[#332d2b] border-[#332d2b]/10 hover:border-[#eeb053]'}`}
                     >
                       ${val}
                     </button>
                   ))}
                 </div>
                 <div className="relative">
-                  <span className="absolute left-6 top-1/2 -translate-y-1/2 text-[#9c1c22] font-black">$</span>
+                  <span className="absolute left-6 top-1/2 -translate-y-1/2 text-[#9c1c22] font-black text-lg">$</span>
                   <input 
                     type="number" 
                     value={amount}
                     onChange={(e) => setAmount(e.target.value)}
                     placeholder="Enter custom amount"
-                    className="w-full bg-[#fdfaf6] border-2 border-[#332d2b]/10 focus:border-[#eeb053] px-12 py-4 rounded-2xl font-serif italic text-base outline-none transition-all"
+                    className="w-full bg-[#fdfaf6] border-2 border-[#332d2b]/10 focus:border-[#9c1c22] px-12 py-5 rounded-2xl font-serif italic text-lg outline-none transition-all shadow-inner"
                   />
                 </div>
               </div>
 
+              {/* Payment Section */}
               <div className="space-y-4">
-                <label className="block text-[10px] font-cinzel font-black text-[#9c1c22] uppercase tracking-[0.4em]">Choose Payment Method</label>
+                <label className="block text-[11px] font-cinzel font-black text-[#9c1c22] uppercase tracking-[0.4em]">Choose Your Method</label>
                 
-                {useSimulation ? (
-                  <div className="space-y-3">
-                    <div className="flex items-center gap-3 p-4 bg-amber-50 rounded-2xl border border-amber-200 text-amber-900 text-xs font-serif italic leading-relaxed">
-                      <InfoIcon size={18} className="shrink-0 text-amber-600" />
-                      Security restriction active in this preview environment. Switched to secure FOL Payment Simulation.
+                {sdkError ? (
+                  <div className="space-y-6">
+                    <div className="flex items-start gap-4 p-5 bg-amber-50 rounded-3xl border border-amber-200">
+                      <AlertCircle size={24} className="text-amber-600 shrink-0 mt-1" />
+                      <div>
+                        <p className="text-[#332d2b] text-sm font-bold leading-tight mb-1 uppercase">Embedded Gateway Restricted</p>
+                        <p className="text-[#332d2b]/70 text-xs font-serif italic leading-relaxed uppercase">
+                          Due to security policies in this frame, we have enabled the direct secure portal to finalize your contribution.
+                        </p>
+                      </div>
                     </div>
-                    <div className="grid gap-3">
-                      <button 
-                        onClick={() => handleSimulatedPayment('PayPal')}
-                        disabled={isSimulating}
-                        className="w-full py-4 bg-[#ffc439] hover:bg-[#f2ba36] text-[#111] rounded-full font-bold flex items-center justify-center gap-3 shadow-md disabled:opacity-50 transition-all"
-                      >
-                         {isSimulating ? <Loader2 className="animate-spin" size={20} /> : "Pay with PayPal"}
-                      </button>
-                      <button 
-                        onClick={() => handleSimulatedPayment('Credit/Debit Card')}
-                        disabled={isSimulating}
-                        className="w-full py-4 bg-[#2c2e2f] hover:bg-[#1a1a1a] text-white rounded-full font-bold flex items-center justify-center gap-3 shadow-md disabled:opacity-50 transition-all"
-                      >
-                         {isSimulating ? <Loader2 className="animate-spin" size={20} /> : "Debit or Credit Card"}
-                      </button>
-                    </div>
+                    
+                    <a 
+                      href={getDirectPayPalUrl()}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-full py-5 bg-[#0070ba] hover:bg-[#005ea6] text-white rounded-full font-cinzel font-black text-xs tracking-[0.2em] flex items-center justify-center gap-3 shadow-2xl transition-all hover:scale-[1.02] active:scale-95 group"
+                    >
+                      Open Secure PayPal Portal <ExternalLink size={18} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                    </a>
+                    
+                    <p className="text-center text-[10px] font-serif italic text-[#332d2b]/40 uppercase leading-relaxed">
+                      Clicking above will open a real PayPal payment window <br /> handled directly by PayPal Holdings, Inc.
+                    </p>
                   </div>
                 ) : (
-                  <div className="min-h-[160px] relative">
+                  <div className="min-h-[180px] relative">
                     {!isSdkLoaded ? (
-                      <div className="flex flex-col items-center justify-center py-12 bg-[#fdfaf6] rounded-3xl border-2 border-dashed border-[#eeb053]/20">
+                      <div className="flex flex-col items-center justify-center py-16 bg-[#fdfaf6] rounded-[3rem] border-2 border-dashed border-[#eeb053]/30">
                         <Loader2 className="animate-spin text-[#eeb053] mb-4" size={32} />
-                        <p className="text-[10px] font-cinzel font-black uppercase text-[#332d2b]/40 tracking-widest">Synchronizing Global Gateway...</p>
+                        <p className="text-[10px] font-cinzel font-black uppercase text-[#332d2b]/40 tracking-widest">Handshaking Secure Gateway...</p>
                       </div>
                     ) : (
-                      <div ref={paypalRef} className="z-10 relative" />
+                      <div ref={paypalRef} className="relative z-10" />
                     )}
                   </div>
                 )}
               </div>
 
-              <div className="pt-4 border-t border-black/5 text-center">
-                <p className="text-[10px] font-serif italic text-[#332d2b]/40 uppercase tracking-wide">
-                  <ShieldCheck className="inline-block mr-1 -mt-0.5" size={12} />
-                  Your contribution is processed via secure 256-bit SSL encryption. <br /> Foundation of Luv is a registered humanitarian organization.
+              {/* Trust Footer */}
+              <div className="pt-6 border-t border-black/5 text-center">
+                <p className="text-[10px] font-serif italic text-[#332d2b]/40 uppercase tracking-widest leading-relaxed">
+                  Foundation of Luv (FOL) is a 501(c)(3) nonprofit. <br />
+                  100% of your gift supports humanitarian transformation.
                 </p>
               </div>
             </div>
