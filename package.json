@@ -5,8 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:api": "node server.mjs",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "migrate": "node migrate.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.107.0",
