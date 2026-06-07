@@ -82,12 +82,6 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ onLogin }) => {
       borderRadius: 10, padding: '12px 16px', color: '#fca5a5',
       fontSize: 14, marginBottom: 20, textAlign: 'center' as const,
     },
-    hint: {
-      marginTop: 28, padding: '16px', borderRadius: 10,
-      background: 'rgba(238,176,83,0.06)', border: '1px solid rgba(238,176,83,0.15)',
-      color: '#9ca3af', fontSize: 12, lineHeight: 1.6,
-    },
-    hintTitle: { color: '#eeb053', fontWeight: 600, marginBottom: 4, display: 'block' },
   };
 
   return (
@@ -132,11 +126,6 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ onLogin }) => {
             {loading ? '⏳ Signing in...' : '🔐 Sign In'}
           </button>
         </form>
-        <div style={S.hint}>
-          <span style={S.hintTitle}>🔑 First time?</span>
-          Create an admin account in Supabase Dashboard → Authentication → Users → Add User,
-          then sign in here.
-        </div>
       </div>
     </div>
   );
