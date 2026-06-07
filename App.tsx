@@ -1675,19 +1675,19 @@ const WorkshopView: React.FC<WorkshopViewProps> = ({ onNavigate, cms }) => {
                 />
               </div>
               {/* Actions */}
-              <div className="flex items-center justify-center gap-4 mt-8">
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-8 w-full max-w-md mx-auto">
                 <a
                   href={cms['workshop:flyer_url']}
                   download="LuvWorks-Workshop-Flyer.jpg"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-7 py-3.5 bg-[#9c1c22] hover:bg-[#332d2b] text-white rounded-full font-cinzel font-black text-[10px] uppercase tracking-widest transition-all shadow-xl border border-[#eeb053]/20"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 bg-[#9c1c22] hover:bg-[#332d2b] text-white rounded-full font-cinzel font-black text-[10px] uppercase tracking-widest transition-all shadow-xl border border-[#eeb053]/20"
                 >
                   <FileText size={14} /> Download Flyer
                 </a>
                 <button
                   onClick={() => onNavigate('register-workshop')}
-                  className="inline-flex items-center gap-2 px-7 py-3.5 bg-[#eeb053] hover:bg-[#d49a3a] text-[#332d2b] rounded-full font-cinzel font-black text-[10px] uppercase tracking-widest transition-all shadow-xl"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 bg-[#eeb053] hover:bg-[#d49a3a] text-[#332d2b] rounded-full font-cinzel font-black text-[10px] uppercase tracking-widest transition-all shadow-xl"
                 >
                   Register Now →
                 </button>
@@ -1704,12 +1704,12 @@ const WorkshopView: React.FC<WorkshopViewProps> = ({ onNavigate, cms }) => {
               initial={{ opacity: 0, x: -30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              className="p-8 md:p-12 bg-white rounded-[3rem] border border-[#eeb053]/15 shadow-xl flex flex-col"
+              className="p-6 sm:p-8 md:p-12 bg-white rounded-[2rem] sm:rounded-[3rem] border border-[#eeb053]/15 shadow-xl flex flex-col"
             >
               <div className="w-16 h-16 bg-[#9c1c22]/10 rounded-2xl flex items-center justify-center mb-8 text-[#9c1c22]">
                 <Shield size={32} />
               </div>
-              <h3 className="text-3xl font-serif font-black text-[#332d2b] uppercase mb-6">Track 1: Cybersecurity</h3>
+              <h3 className="text-2xl sm:text-3xl font-serif font-black text-[#332d2b] uppercase mb-6">Track 1: Cybersecurity</h3>
               <p className="text-lg font-serif italic text-[#332d2b]/60 uppercase mb-8">
                 Protect your digital footprint, secure your online assets, and recognize sophisticated threats.
               </p>
@@ -1722,7 +1722,7 @@ const WorkshopView: React.FC<WorkshopViewProps> = ({ onNavigate, cms }) => {
                   "Mobile Device & App Permission Safety",
                   "Business Cybersecurity & Threat Models"
                 ].map((item, index) => (
-                  <li key={index} className="flex gap-4 items-start text-[#332d2b]/80 font-serif uppercase text-base text-left">
+                  <li key={index} className="flex gap-4 items-start text-[#332d2b]/80 font-serif uppercase text-sm sm:text-base text-left">
                     <CheckCircle2 className="text-[#9c1c22] shrink-0 mt-1" size={18} />
                     <span>{item}</span>
                   </li>
@@ -1735,12 +1735,12 @@ const WorkshopView: React.FC<WorkshopViewProps> = ({ onNavigate, cms }) => {
               initial={{ opacity: 0, x: 30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              className="p-8 md:p-12 bg-white rounded-[3rem] border border-[#eeb053]/15 shadow-xl flex flex-col"
+              className="p-6 sm:p-8 md:p-12 bg-white rounded-[2rem] sm:rounded-[3rem] border border-[#eeb053]/15 shadow-xl flex flex-col"
             >
               <div className="w-16 h-16 bg-[#eeb053]/10 rounded-2xl flex items-center justify-center mb-8 text-[#eeb053]">
                 <Coins size={32} />
               </div>
-              <h3 className="text-3xl font-serif font-black text-[#332d2b] uppercase mb-6">Track 2: Financial Literacy</h3>
+              <h3 className="text-2xl sm:text-3xl font-serif font-black text-[#332d2b] uppercase mb-6">Track 2: Financial Literacy</h3>
               <p className="text-lg font-serif italic text-[#332d2b]/60 uppercase mb-8">
                 Take control of your money, build wealth, and learn strategies for multiple income sources.
               </p>
@@ -1753,7 +1753,7 @@ const WorkshopView: React.FC<WorkshopViewProps> = ({ onNavigate, cms }) => {
                   "Protecting Yourself Against Financial Fraud & Theft",
                   "Establishing & Scaling Multiple Income Streams"
                 ].map((item, index) => (
-                  <li key={index} className="flex gap-4 items-start text-[#332d2b]/80 font-serif uppercase text-base text-left">
+                  <li key={index} className="flex gap-4 items-start text-[#332d2b]/80 font-serif uppercase text-sm sm:text-base text-left">
                     <CheckCircle2 className="text-[#eeb053] shrink-0 mt-1" size={18} />
                     <span>{item}</span>
                   </li>
@@ -2018,11 +2018,11 @@ const WorkshopRegisterView: React.FC<WorkshopRegisterViewProps> = ({ onSubmitSuc
           </p>
         </header>
 
-        <form onSubmit={handleSubmit} className="bg-white/40 glass p-6 md:p-12 rounded-[3rem] border border-[#eeb053]/20 shadow-xl space-y-12 text-left">
+        <form onSubmit={handleSubmit} className="bg-white/40 glass p-4 sm:p-6 md:p-12 rounded-[2rem] sm:rounded-[3rem] border border-[#eeb053]/20 shadow-xl space-y-12 text-left">
           {/* Ticket Path Toggle */}
           <div>
             <h3 className="text-lg font-cinzel font-black tracking-widest text-[#9c1c22] uppercase mb-6 border-b border-[#332d2b]/10 pb-2">Ticket Options</h3>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <label className={`cursor-pointer p-6 rounded-2xl border-2 flex flex-col transition-all ${formData.ticketType === 'free' ? 'border-[#9c1c22] bg-white shadow-md' : 'border-transparent bg-white/20 hover:bg-white/40'}`}>
                 <input type="radio" name="ticketType" checked={formData.ticketType === 'free'} onChange={() => setFormData(p => ({ ...p, ticketType: 'free' }))} className="sr-only" />
                 <span className="text-[10px] font-cinzel font-black uppercase tracking-wider text-[#332d2b]">General Admission</span>
@@ -2072,7 +2072,7 @@ const WorkshopRegisterView: React.FC<WorkshopRegisterViewProps> = ({ onSubmitSuc
             <h3 className="text-lg font-cinzel font-black tracking-widest text-[#9c1c22] uppercase border-b border-[#332d2b]/10 pb-2">2. Participant Profile</h3>
             <div>
               <label className="block text-[9px] font-cinzel font-black tracking-widest text-[#332d2b] uppercase mb-4">Which best describes you? *</label>
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                 {[
                   "Student",
                   "Entrepreneur/Business Owner",
