@@ -38,19 +38,19 @@ export const TEAM_MEMBERS = [
     name: "Kevin Watkins",
     role: "Founder & Chief Visionary",
     bio: "A pioneer in structured compassion and humanitarian engineering with over 20 years of experience in community restoration.",
-    image: "https://foundationofluv.org/public/gallery/pic11.jpeg"
+    image: "kevin_watkins.jpg"
   },
   {
     name: "Antoinette Watkins",
     role: "Executive Director",
     bio: "Strategic operations leader focused on scaling the '7 Luv Act' programs across global chapters and managing organizational growth.",
-    image: "https://foundationofluv.org/public/gallery/pic13.jpeg"
+    image: "antoinette_watkins.jpg"
   },
   {
     name: "Chiffon W.",
     role: "Program Director",
     bio: "Dedicated to the strategic implementation and oversight of our core humanitarian programs, ensuring measurable impact across all chapters.",
-    image: "https://foundationofluv.org/public/gallery/pic12.jpeg"
+    image: "chiffon_w.jpg"
   }
 ];
 

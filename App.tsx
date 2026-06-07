@@ -291,7 +291,7 @@ const Logo = ({ className, style }: { className?: string; style?: React.CSSPrope
   const [error, setError] = useState(false);
   if (error) return <LogoFallback className={className} style={style} />;
   return (
-    <img src="logo.svg" alt="Foundation of Luv" className={className} style={style} onError={() => setError(true)} />
+    <img src="logo.png" alt="Foundation of Luv" className={className} style={style} onError={() => setError(true)} />
   );
 };
 
@@ -1591,7 +1591,16 @@ const ResourcesView = () => (
 // --- Root Component ---
 
 const App: React.FC = () => {
-  const [currentPage, setCurrentPage] = useState('home');
+  const getInitialPage = () => {
+    const path = window.location.pathname.replace(/^\//, '');
+    const validPages = NAVIGATION.map(item => item.id);
+    if (validPages.includes(path)) {
+      return path;
+    }
+    return 'home';
+  };
+
+  const [currentPage, setCurrentPage] = useState(getInitialPage);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
   const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
@@ -1603,8 +1612,18 @@ const App: React.FC = () => {
     return () => clearTimeout(timer);
   }, []);
 
+  useEffect(() => {
+    const handlePopState = () => {
+      setCurrentPage(getInitialPage());
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
   const handleNavigate = (pageId: string) => {
     setCurrentPage(pageId);
+    const targetPath = pageId === 'home' ? '/' : `/${pageId}`;
+    window.history.pushState(null, '', targetPath);
     window.scrollTo({ top: 0, behavior: 'smooth' });
     setIsMenuOpen(false);
   };
