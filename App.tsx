@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import AdminApp from './admin/AdminApp';
+import { supabase } from './supabase';
 import { motion, AnimatePresence, useScroll, useTransform, useMotionValue, useInView, animate } from 'framer-motion';
 import { 
   Menu, X, ChevronRight, ArrowRight, Sparkles, MoveRight, ChevronLeft, Calendar, Award, 
@@ -8,12 +10,13 @@ import {
   Quote, Compass, Anchor, Mic2, UsersRound, Wallet, Stethoscope, Baby, Wallet2, Crosshair,
   Users2 as DemographyIcon, TrendingUp as GrowthIcon, Briefcase, Home as HomeIcon, HeartPulse, GraduationCap as SchoolIcon, Coins,
   Play, Mail, Handshake, HeartHandshake, Send, ChevronUp, Cpu, ShieldAlert, UserRound, CreditCard, Loader2, Info as InfoIcon,
-  ExternalLink, Lock, Facebook, Tv2, FileText, Share2
+  ExternalLink, Lock, Facebook, Tv2, FileText, Share2, Clock, UploadCloud, Check
 } from 'lucide-react';
 import { 
   NAVIGATION, STRATEGIC_PHASES, STATS, COLORS, HERO_IMAGES, GALLERY_IMAGES,
   MISSION_VISION, DETAILED_ABOUT, DONOR_PAGE_CONTENT, LUV_ACT_PROGRAMS, LEADERSHIP_MESSAGE, LUVWATTS_CONTENT,
-  GLOBAL_SERVICES_DATA, VIDEO_RESOURCES, CORE_VALUES, TEAM_MEMBERS, SHOE_DRIVE_IMAGES, RESOURCES_CONTENT
+  GLOBAL_SERVICES_DATA, VIDEO_RESOURCES, CORE_VALUES, TEAM_MEMBERS, SHOE_DRIVE_IMAGES, RESOURCES_CONTENT,
+  WORKSHOP_DETAILS
 } from './constants';
 
 // --- PayPal Integration ---
@@ -638,7 +641,7 @@ const NewsletterSection = () => (
 
 // --- Content Views ---
 
-const HomeView = ({ onNavigate }: { onNavigate: (id: string) => void }) => {
+const HomeView = ({ onNavigate, cms }: { onNavigate: (id: string) => void; cms: Record<string, string> }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
   useEffect(() => {
     const timer = setInterval(() => setCurrentSlide((prev) => (prev + 1) % HERO_IMAGES.length), 8000);
@@ -664,8 +667,8 @@ const HomeView = ({ onNavigate }: { onNavigate: (id: string) => void }) => {
             <motion.div animate={{ y: [0, -10, 0] }} transition={{ duration: 6, repeat: Infinity }} className="absolute -top-4 -right-4 md:-top-12 md:-right-12 w-16 h-16 md:w-44 md:h-44 z-40"><Logo className="w-full h-full drop-shadow-2xl" /></motion.div>
           </motion.div>
           <div className="mt-8 md:mt-12">
-            <h1 className="hero-text text-3xl md:text-[6rem] font-serif font-black leading-tight text-shine-crimson uppercase">Love in Action,<br /><span className="italic font-normal text-shine text-[#eeb053]">Change in Motion.</span></h1>
-            <p className="mobile-p text-sm md:text-2xl text-[#332d2b]/70 mt-6 max-w-4xl mx-auto font-serif italic text-center uppercase">"WE ARE THE KINETIC PULSE OF TRANSFORMATION, ENGINEERING PATHWAYS TO LOVE AND HUMANITY"</p>
+            <h1 className="hero-text text-3xl md:text-[6rem] font-serif font-black leading-tight text-shine-crimson uppercase" dangerouslySetInnerHTML={{ __html: cms['hero:title'] }} />
+            <p className="mobile-p text-sm md:text-2xl text-[#332d2b]/70 mt-6 max-w-4xl mx-auto font-serif italic text-center uppercase">"{cms['hero:subtitle']}"</p>
             <div className="flex flex-col md:flex-row gap-4 md:gap-6 justify-center mt-8 md:mt-12">
               <button onClick={() => onNavigate('donation')} className="px-10 py-5 bg-[#9c1c22] text-white rounded-full font-cinzel font-black text-lg shadow-xl flex items-center gap-3 hover:bg-[#7a141a] transition-all uppercase">Show some Love <MoveRight /></button>
               <button onClick={() => onNavigate('aboutus')} className="px-10 py-5 glass-card rounded-full font-cinzel font-bold text-lg border border-[#eeb053]/50 flex items-center justify-center gap-3 hover:bg-white/60 transition-all uppercase">Explore Our Story <ArrowRight /></button>
@@ -899,7 +902,7 @@ const TeamView = () => (
   </section>
 );
 
-const DetailedAboutView = () => {
+const DetailedAboutView = ({ cms }: { cms: Record<string, string> }) => {
   const { scrollYProgress } = useScroll();
   const scale = useTransform(scrollYProgress, [0, 0.2], [1, 1.05]);
 
@@ -913,7 +916,7 @@ const DetailedAboutView = () => {
           </h2>
           <div className="h-2 w-24 md:w-32 bg-[#eeb053] mx-auto rounded-full mb-8 md:mb-12" />
           <p className="text-xl md:text-3xl font-serif italic text-[#332d2b]/70 max-w-5xl mx-auto uppercase leading-relaxed break-words">
-            {DETAILED_ABOUT.intro}
+            {cms['about:intro']}
           </p>
         </header>
 
@@ -1309,7 +1312,7 @@ const ProgramsPageView = () => {
   );
 };
 
-const ContactView = ({ onSubmitSuccess }: { onSubmitSuccess: () => void }) => {
+const ContactView = ({ onSubmitSuccess, cms }: { onSubmitSuccess: () => void; cms: Record<string, string> }) => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onSubmitSuccess();
@@ -1334,14 +1337,14 @@ const ContactView = ({ onSubmitSuccess }: { onSubmitSuccess: () => void }) => {
                   <div className="p-4 bg-[#fdfaf6] rounded-2xl text-[#9c1c22] shadow-sm"><MapPin size={24} /></div>
                   <div>
                     <p className="text-[10px] font-cinzel font-black uppercase tracking-widest text-[#eeb053] mb-2">Location</p>
-                    <p className="text-xl font-serif italic text-[#332d2b] uppercase break-words">#9960 Raven Hurst Road, Middle River MD 21221</p>
+                    <p className="text-xl font-serif italic text-[#332d2b] uppercase break-words">{cms['contact:address']}</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-6">
                   <div className="p-4 bg-[#fdfaf6] rounded-2xl text-[#9c1c22] shadow-sm"><Phone size={24} /></div>
                   <div>
                     <p className="text-[10px] font-cinzel font-black uppercase tracking-widest text-[#eeb053] mb-2">Voice</p>
-                    <p className="text-xl font-serif italic text-[#332d2b] uppercase">443-402-5802</p>
+                    <p className="text-xl font-serif italic text-[#332d2b] uppercase">{cms['contact:phone']}</p>
                   </div>
                 </div>
               </div>
@@ -1588,12 +1591,655 @@ const ResourcesView = () => (
   </section>
 );
 
+// --- Workshop View ---
+interface WorkshopViewProps {
+  onNavigate: (pageId: string) => void;
+  cms: Record<string, string>;
+}
+
+const WorkshopView: React.FC<WorkshopViewProps> = ({ onNavigate, cms }) => {
+  return (
+    <section className="pt-24 pb-16 md:pt-48 md:pb-32 bg-[#fdfaf6] relative overflow-hidden animate-fadeIn">
+      {/* Background gradients */}
+      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#9c1c22]/5 rounded-full blur-[100px] pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-[#eeb053]/5 rounded-full blur-[100px] pointer-events-none" />
+
+      <div className="max-w-7xl mx-auto px-4">
+        {/* Hero Header */}
+        <header className="text-center mb-16 md:mb-24">
+          <motion.span 
+            initial={{ opacity: 0 }} 
+            animate={{ opacity: 1 }} 
+            className="text-[#9c1c22] font-cinzel font-black tracking-[0.5em] text-[10px] md:text-[12px] uppercase mb-6 md:mb-8 block"
+          >
+            Empowerment Initiative
+          </motion.span>
+          <h1 className="text-3xl md:text-6xl lg:text-7xl font-serif font-black text-[#332d2b] mb-8 uppercase leading-tight tracking-tighter">
+            Cybersecurity & <br />
+            <span className="text-[#eeb053] italic">Financial Literacy</span> Workshop
+          </h1>
+          <div className="h-2 w-24 bg-[#9c1c22] mx-auto rounded-full mb-8" />
+          <p className="text-xl md:text-2xl font-serif italic text-[#332d2b]/60 max-w-3xl mx-auto uppercase mb-12">
+            Learn practical skills to protect yourself online and make smarter financial decisions in a digital age.
+          </p>
+
+          {/* Quick Details Bar */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto bg-white/40 glass p-8 rounded-[2rem] border border-[#eeb053]/20 shadow-xl mb-12">
+            <div className="flex flex-col items-center">
+              <Calendar className="text-[#9c1c22] mb-3 w-8 h-8" />
+              <span className="text-[10px] font-cinzel font-black tracking-widest text-[#332d2b]/40 uppercase mb-1">Date</span>
+              <span className="text-sm font-serif font-bold text-[#332d2b] uppercase">{cms['workshop:date']}</span>
+            </div>
+            <div className="flex flex-col items-center border-y md:border-y-0 md:border-x border-[#332d2b]/10 py-6 md:py-0">
+              <Clock className="text-[#eeb053] mb-3 w-8 h-8" />
+              <span className="text-[10px] font-cinzel font-black tracking-widest text-[#332d2b]/40 uppercase mb-1">Time</span>
+              <span className="text-sm font-serif font-bold text-[#332d2b] uppercase">{cms['workshop:time']}</span>
+            </div>
+            <div className="flex flex-col items-center">
+              <MapPin className="text-[#9c1c22] mb-3 w-8 h-8" />
+              <span className="text-[10px] font-cinzel font-black tracking-widest text-[#332d2b]/40 uppercase mb-1">Location</span>
+              <span className="text-sm font-serif font-bold text-[#332d2b] uppercase">{cms['workshop:location']}</span>
+            </div>
+          </div>
+
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => onNavigate('register-workshop')}
+            className="px-10 py-5 bg-[#9c1c22] hover:bg-[#332d2b] text-white rounded-full font-cinzel font-black text-sm uppercase tracking-widest transition-all shadow-xl border border-[#eeb053]/30"
+          >
+            Register Now
+          </motion.button>
+        </header>
+
+        {/* Tracks Section */}
+        <section className="mb-24">
+          <div className="grid md:grid-cols-2 gap-12">
+            {/* Track 1: Cybersecurity */}
+            <motion.div 
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="p-8 md:p-12 bg-white rounded-[3rem] border border-[#eeb053]/15 shadow-xl flex flex-col"
+            >
+              <div className="w-16 h-16 bg-[#9c1c22]/10 rounded-2xl flex items-center justify-center mb-8 text-[#9c1c22]">
+                <Shield size={32} />
+              </div>
+              <h3 className="text-3xl font-serif font-black text-[#332d2b] uppercase mb-6">Track 1: Cybersecurity</h3>
+              <p className="text-lg font-serif italic text-[#332d2b]/60 uppercase mb-8">
+                Protect your digital footprint, secure your online assets, and recognize sophisticated threats.
+              </p>
+              <ul className="space-y-4 flex-grow">
+                {[
+                  "Password Security & Multi-Factor Authentication (MFA)",
+                  "Social Engineering, Phishing, & Scam Awareness",
+                  "Online Privacy, Tracking, & VPNs",
+                  "Safe Social Media & Device Sharing Habits",
+                  "Mobile Device & App Permission Safety",
+                  "Business Cybersecurity & Threat Models"
+                ].map((item, index) => (
+                  <li key={index} className="flex gap-4 items-start text-[#332d2b]/80 font-serif uppercase text-base text-left">
+                    <CheckCircle2 className="text-[#9c1c22] shrink-0 mt-1" size={18} />
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </motion.div>
+
+            {/* Track 2: Financial Literacy */}
+            <motion.div 
+              initial={{ opacity: 0, x: 30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="p-8 md:p-12 bg-white rounded-[3rem] border border-[#eeb053]/15 shadow-xl flex flex-col"
+            >
+              <div className="w-16 h-16 bg-[#eeb053]/10 rounded-2xl flex items-center justify-center mb-8 text-[#eeb053]">
+                <Coins size={32} />
+              </div>
+              <h3 className="text-3xl font-serif font-black text-[#332d2b] uppercase mb-6">Track 2: Financial Literacy</h3>
+              <p className="text-lg font-serif italic text-[#332d2b]/60 uppercase mb-8">
+                Take control of your money, build wealth, and learn strategies for multiple income sources.
+              </p>
+              <ul className="space-y-4 flex-grow">
+                {[
+                  "Smart Budgeting & Personal Finance Structuring",
+                  "Generational Wealth & Saving Strategies",
+                  "Introduction to Stocks, Bonds, & Mutual Funds",
+                  "Debt Reduction & Credit Score Optimization",
+                  "Protecting Yourself Against Financial Fraud & Theft",
+                  "Establishing & Scaling Multiple Income Streams"
+                ].map((item, index) => (
+                  <li key={index} className="flex gap-4 items-start text-[#332d2b]/80 font-serif uppercase text-base text-left">
+                    <CheckCircle2 className="text-[#eeb053] shrink-0 mt-1" size={18} />
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </motion.div>
+          </div>
+        </section>
+
+        {/* Speakers Section */}
+        <section className="mb-24">
+          <div className="text-center mb-16">
+            <h3 className="text-3xl md:text-5xl font-serif font-black uppercase text-[#332d2b] tracking-tight">Workshop Facilitators</h3>
+            <div className="h-1 w-20 bg-[#eeb053] mx-auto mt-4" />
+          </div>
+          <div className="grid md:grid-cols-3 gap-8">
+            {WORKSHOP_DETAILS.facilitators.map((speaker, index) => (
+              <div key={index} className="bg-white rounded-[3rem] p-8 shadow-lg text-center border border-black/5 hover:border-[#9c1c22] transition-colors flex flex-col items-center">
+                <img src={speaker.image} alt={speaker.name} className="w-32 h-32 md:w-40 md:h-40 object-cover rounded-full border-4 border-[#eeb053]/30 shadow-md mb-6" />
+                <h4 className="text-2xl font-serif font-black text-[#332d2b] uppercase mb-2">{speaker.name}</h4>
+                <p className="text-[#9c1c22] font-cinzel font-black tracking-widest text-[10px] uppercase mb-4">{speaker.role}</p>
+                <p className="text-sm font-serif text-[#332d2b]/60 uppercase leading-relaxed">
+                  {speaker.name === "Kevin Watkins" && "Pioneer in structured compassion and digital equity."}
+                  {speaker.name === "Antoinette Watkins" && "Strategic operations and community-first growth specialist."}
+                  {speaker.name === "Chiffon W." && "Expert in program design and measurable social empowerment impact."}
+                </p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Pricing / Admission Section */}
+        <section className="bg-white/40 glass rounded-[4rem] border border-[#eeb053]/20 shadow-xl p-8 md:p-16 max-w-5xl mx-auto">
+          <div className="text-center mb-12">
+            <h3 className="text-3xl md:text-4xl font-serif font-black uppercase text-[#332d2b] mb-4">Choose Your Ticket</h3>
+            <p className="text-lg font-serif italic text-[#332d2b]/60 uppercase">Both ticket paths offer complete access to the core workshop content.</p>
+          </div>
+          <div className="grid md:grid-cols-2 gap-8 md:gap-12">
+            {/* Free */}
+            <div className="bg-white/80 p-8 rounded-[3rem] border border-black/5 flex flex-col justify-between">
+              <div>
+                <span className="text-[9px] font-cinzel font-black tracking-widest text-[#332d2b]/40 uppercase block mb-2">{WORKSHOP_DETAILS.pricing.free.name}</span>
+                <div className="text-5xl font-serif font-black text-[#332d2b] mb-4">{WORKSHOP_DETAILS.pricing.free.price}</div>
+                <p className="text-base font-serif text-[#332d2b]/60 uppercase leading-relaxed mb-6">{WORKSHOP_DETAILS.pricing.free.description}</p>
+              </div>
+              <button 
+                onClick={() => onNavigate('register-workshop')}
+                className="w-full py-4 border border-[#9c1c22] hover:bg-[#9c1c22] text-[#9c1c22] hover:text-white rounded-full font-cinzel font-black text-[10px] uppercase tracking-widest transition-all"
+              >
+                Get General Ticket
+              </button>
+            </div>
+
+            {/* Paid */}
+            <div className="bg-[#1a1a1a] text-white p-8 rounded-[3rem] border-2 border-[#eeb053] flex flex-col justify-between shadow-2xl relative overflow-hidden text-left">
+              <div className="absolute top-4 right-4 bg-[#eeb053] text-[#1a1a1a] px-3 py-1 rounded-full text-[8px] font-cinzel font-black uppercase tracking-wider">Recommended</div>
+              <div>
+                <span className="text-[9px] font-cinzel font-black tracking-widest text-[#eeb053] uppercase block mb-2">{WORKSHOP_DETAILS.pricing.paid.name}</span>
+                <div className="text-5xl font-serif font-black text-[#eeb053] mb-4">{WORKSHOP_DETAILS.pricing.paid.price}</div>
+                <p className="text-base font-serif text-white/60 uppercase leading-relaxed mb-6">{WORKSHOP_DETAILS.pricing.paid.description}</p>
+              </div>
+              <button 
+                onClick={() => onNavigate('register-workshop')}
+                className="w-full py-4 bg-[#eeb053] hover:bg-[#df8c3d] text-[#1a1a1a] rounded-full font-cinzel font-black text-[10px] uppercase tracking-widest transition-all text-center"
+              >
+                Get VIP Certificate Ticket
+              </button>
+            </div>
+          </div>
+        </section>
+      </div>
+    </section>
+  );
+};
+
+// --- Workshop Registration View ---
+interface RegistrationForm {
+  fullName: string;
+  email: string;
+  phone: string;
+  city: string;
+  organization: string;
+  jobTitle: string;
+  profile: string;
+  interests: string[];
+  cybersecurityLevel: string;
+  financialLevel: string;
+  referral: string;
+  specialRequirements: string;
+  questions: string;
+  consentMarketing: boolean;
+  consentData: boolean;
+  consentPhotos: boolean;
+  ticketType: 'free' | 'paid';
+  paymentMethod: string;
+  paymentReference: string;
+  proofName: string;
+}
+
+interface WorkshopRegisterViewProps {
+  onSubmitSuccess: () => void;
+}
+
+const WorkshopRegisterView: React.FC<WorkshopRegisterViewProps> = ({ onSubmitSuccess }) => {
+  const [formData, setFormData] = useState<RegistrationForm>({
+    fullName: '',
+    email: '',
+    phone: '',
+    city: '',
+    organization: '',
+    jobTitle: '',
+    profile: '',
+    interests: [],
+    cybersecurityLevel: 'Beginner',
+    financialLevel: 'Beginner',
+    referral: '',
+    specialRequirements: '',
+    questions: '',
+    consentMarketing: false,
+    consentData: false,
+    consentPhotos: false,
+    ticketType: 'free',
+    paymentMethod: 'Bank Transfer',
+    paymentReference: '',
+    proofName: ''
+  });
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleTextChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleCheckboxChange = (name: keyof RegistrationForm) => {
+    setFormData(prev => ({ ...prev, [name]: !prev[name] }));
+  };
+
+  const handleInterestToggle = (topic: string) => {
+    setFormData(prev => {
+      const interests = prev.interests.includes(topic)
+        ? prev.interests.filter(t => t !== topic)
+        : [...prev.interests, topic];
+      return { ...prev, interests };
+    });
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setFormData(prev => ({ ...prev, proofName: e.target.files![0].name }));
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    try {
+      const { error } = await supabase.from('workshop_registrations').insert({
+        full_name: formData.fullName,
+        email: formData.email,
+        phone: formData.phone,
+        city: formData.city,
+        organization: formData.organization,
+        job_title: formData.jobTitle,
+        profile: formData.profile,
+        interests: formData.interests,
+        cybersecurity_level: formData.cybersecurityLevel,
+        financial_level: formData.financialLevel,
+        referral: formData.referral,
+        special_requirements: formData.specialRequirements,
+        questions: formData.questions,
+        consent_marketing: formData.consentMarketing,
+        consent_data: formData.consentData,
+        consent_photos: formData.consentPhotos,
+        ticket_type: formData.ticketType === 'paid' ? 'vip' : 'free',
+        payment_method: formData.paymentMethod,
+        payment_reference: formData.paymentReference,
+      });
+      if (error) console.error('Supabase error:', error);
+    } catch (err) {
+      console.error('Registration error:', err);
+    }
+    setIsSubmitting(false);
+    setIsSubmitted(true);
+    onSubmitSuccess();
+  };
+
+  if (isSubmitted) {
+    return (
+      <section className="pt-24 pb-16 md:pt-48 md:pb-32 bg-[#fdfaf6] min-h-[80vh] flex items-center justify-center">
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="max-w-2xl w-full mx-auto px-4 text-center"
+        >
+          <div className="w-24 h-24 bg-green-500/10 rounded-full flex items-center justify-center mx-auto mb-8 text-green-500 shadow-xl">
+            <Check size={48} className="stroke-[3]" />
+          </div>
+          <h2 className="text-3xl md:text-5xl font-serif font-black text-[#332d2b] uppercase mb-6">Registration Confirmed</h2>
+          <div className="h-1 w-20 bg-[#eeb053] mx-auto mb-8" />
+          <p className="text-xl font-serif text-[#332d2b]/70 uppercase leading-relaxed mb-12">
+            Thank you for registering for the Cybersecurity & Financial Literacy Workshop. A confirmation email with event details will be sent to your email address shortly.
+          </p>
+          <a
+            href="/workshop"
+            onClick={(e) => {
+              e.preventDefault();
+              window.history.pushState(null, '', '/workshop');
+              window.dispatchEvent(new PopStateEvent('popstate'));
+            }}
+            className="inline-flex items-center gap-3 px-8 py-4 bg-[#9c1c22] hover:bg-[#332d2b] text-white rounded-full font-cinzel font-black text-[10px] uppercase tracking-widest transition-all shadow-md"
+          >
+            Return to Workshop Page <MoveRight size={14} />
+          </a>
+        </motion.div>
+      </section>
+    );
+  }
+
+  return (
+    <section className="pt-24 pb-16 md:pt-48 md:pb-32 bg-[#fdfaf6] relative overflow-hidden">
+      <div className="max-w-4xl mx-auto px-4">
+        {/* Header */}
+        <header className="text-center mb-16">
+          <motion.span initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-[#9c1c22] font-cinzel font-black tracking-[0.5em] text-[10px] md:text-[12px] uppercase mb-6 block">Workshop Registration</motion.span>
+          <h1 className="text-3xl md:text-5xl font-serif font-black text-[#332d2b] uppercase leading-tight tracking-tight mb-6 text-shine">
+            Secure Your Place.
+          </h1>
+          <p className="text-lg font-serif italic text-[#332d2b]/60 max-w-2xl mx-auto uppercase">
+            Learn practical skills to protect yourself online and make smarter financial decisions.
+          </p>
+        </header>
+
+        <form onSubmit={handleSubmit} className="bg-white/40 glass p-6 md:p-12 rounded-[3rem] border border-[#eeb053]/20 shadow-xl space-y-12 text-left">
+          {/* Ticket Path Toggle */}
+          <div>
+            <h3 className="text-lg font-cinzel font-black tracking-widest text-[#9c1c22] uppercase mb-6 border-b border-[#332d2b]/10 pb-2">Ticket Options</h3>
+            <div className="grid grid-cols-2 gap-4">
+              <label className={`cursor-pointer p-6 rounded-2xl border-2 flex flex-col transition-all ${formData.ticketType === 'free' ? 'border-[#9c1c22] bg-white shadow-md' : 'border-transparent bg-white/20 hover:bg-white/40'}`}>
+                <input type="radio" name="ticketType" checked={formData.ticketType === 'free'} onChange={() => setFormData(p => ({ ...p, ticketType: 'free' }))} className="sr-only" />
+                <span className="text-[10px] font-cinzel font-black uppercase tracking-wider text-[#332d2b]">General Admission</span>
+                <span className="text-2xl font-serif font-black text-[#9c1c22] mt-1">$0</span>
+              </label>
+              <label className={`cursor-pointer p-6 rounded-2xl border-2 flex flex-col transition-all ${formData.ticketType === 'paid' ? 'border-[#eeb053] bg-white shadow-lg' : 'border-transparent bg-white/20 hover:bg-white/40'}`}>
+                <input type="radio" name="ticketType" checked={formData.ticketType === 'paid'} onChange={() => setFormData(p => ({ ...p, ticketType: 'paid' }))} className="sr-only" />
+                <span className="text-[10px] font-cinzel font-black uppercase tracking-wider text-[#332d2b]">VIP Certification</span>
+                <span className="text-2xl font-serif font-black text-[#eeb053] mt-1">$49</span>
+              </label>
+            </div>
+          </div>
+
+          {/* Personal Information */}
+          <div className="space-y-6">
+            <h3 className="text-lg font-cinzel font-black tracking-widest text-[#9c1c22] uppercase border-b border-[#332d2b]/10 pb-2">1. Personal Information</h3>
+            <div className="grid md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-[9px] font-cinzel font-black tracking-widest text-[#332d2b] uppercase mb-2">Full Name *</label>
+                <input required type="text" name="fullName" value={formData.fullName} onChange={handleTextChange} className="w-full px-5 py-4 rounded-xl border border-[#332d2b]/10 bg-white/60 focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#9c1c22] text-[#332d2b]" />
+              </div>
+              <div>
+                <label className="block text-[9px] font-cinzel font-black tracking-widest text-[#332d2b] uppercase mb-2">Email Address *</label>
+                <input required type="email" name="email" value={formData.email} onChange={handleTextChange} className="w-full px-5 py-4 rounded-xl border border-[#332d2b]/10 bg-white/60 focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#9c1c22] text-[#332d2b]" />
+              </div>
+              <div>
+                <label className="block text-[9px] font-cinzel font-black tracking-widest text-[#332d2b] uppercase mb-2">Phone Number *</label>
+                <input required type="tel" name="phone" value={formData.phone} onChange={handleTextChange} className="w-full px-5 py-4 rounded-xl border border-[#332d2b]/10 bg-white/60 focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#9c1c22] text-[#332d2b]" />
+              </div>
+              <div>
+                <label className="block text-[9px] font-cinzel font-black tracking-widest text-[#332d2b] uppercase mb-2">City/Town</label>
+                <input type="text" name="city" value={formData.city} onChange={handleTextChange} className="w-full px-5 py-4 rounded-xl border border-[#332d2b]/10 bg-white/60 focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#9c1c22] text-[#332d2b]" />
+              </div>
+              <div>
+                <label className="block text-[9px] font-cinzel font-black tracking-widest text-[#332d2b] uppercase mb-2">Organization/Company (Optional)</label>
+                <input type="text" name="organization" value={formData.organization} onChange={handleTextChange} className="w-full px-5 py-4 rounded-xl border border-[#332d2b]/10 bg-white/60 focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#9c1c22] text-[#332d2b]" />
+              </div>
+              <div>
+                <label className="block text-[9px] font-cinzel font-black tracking-widest text-[#332d2b] uppercase mb-2">Job Title/Profession (Optional)</label>
+                <input type="text" name="jobTitle" value={formData.jobTitle} onChange={handleTextChange} className="w-full px-5 py-4 rounded-xl border border-[#332d2b]/10 bg-white/60 focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#9c1c22] text-[#332d2b]" />
+              </div>
+            </div>
+          </div>
+
+          {/* Participant Profile */}
+          <div className="space-y-6">
+            <h3 className="text-lg font-cinzel font-black tracking-widest text-[#9c1c22] uppercase border-b border-[#332d2b]/10 pb-2">2. Participant Profile</h3>
+            <div>
+              <label className="block text-[9px] font-cinzel font-black tracking-widest text-[#332d2b] uppercase mb-4">Which best describes you? *</label>
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                {[
+                  "Student",
+                  "Entrepreneur/Business Owner",
+                  "Employee",
+                  "Freelancer",
+                  "Government Worker",
+                  "Financial Professional",
+                  "IT/Cybersecurity Professional",
+                  "Other"
+                ].map((role) => (
+                  <label key={role} className={`cursor-pointer p-4 rounded-xl border flex items-center justify-between text-xs font-serif uppercase transition-all ${formData.profile === role ? 'border-[#9c1c22] bg-[#9c1c22]/5 text-[#9c1c22] font-black' : 'border-[#332d2b]/10 bg-white/40 text-[#332d2b]'}`}>
+                    <input required type="radio" name="profile" checked={formData.profile === role} onChange={() => setFormData(p => ({ ...p, profile: role }))} className="sr-only" />
+                    {role}
+                    {formData.profile === role && <Check size={14} />}
+                  </label>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Workshop Interests */}
+          <div className="space-y-6">
+            <h3 className="text-lg font-cinzel font-black tracking-widest text-[#9c1c22] uppercase border-b border-[#332d2b]/10 pb-2">3. Workshop Interests (Select All That Apply)</h3>
+            <div className="grid md:grid-cols-2 gap-8">
+              {/* Cybersecurity Track */}
+              <div>
+                <h4 className="text-sm font-cinzel font-black text-[#9c1c22] tracking-wider uppercase mb-4">Cybersecurity</h4>
+                <div className="space-y-3">
+                  {[
+                    "Password Security & MFA",
+                    "Social Engineering & Phishing Awareness",
+                    "Online Privacy",
+                    "Safe Social Media Practices",
+                    "Mobile Security",
+                    "Business Cybersecurity Basics",
+                    "Data Protection"
+                  ].map((topic) => (
+                    <label key={topic} className="flex items-center gap-3 cursor-pointer text-sm font-serif uppercase text-[#332d2b]">
+                      <input type="checkbox" checked={formData.interests.includes(topic)} onChange={() => handleInterestToggle(topic)} className="w-4 h-4 accent-[#9c1c22]" />
+                      {topic}
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              {/* Financial Literacy Track */}
+              <div>
+                <h4 className="text-sm font-cinzel font-black text-[#eeb053] tracking-wider uppercase mb-4">Financial Literacy</h4>
+                <div className="space-y-3">
+                  {[
+                    "Budgeting & Personal Finance",
+                    "Saving Strategies",
+                    "Investing Basics",
+                    "Debt Management",
+                    "Credit & Loans",
+                    "Financial Fraud Prevention",
+                    "Building Multiple Income Streams"
+                  ].map((topic) => (
+                    <label key={topic} className="flex items-center gap-3 cursor-pointer text-sm font-serif uppercase text-[#332d2b]">
+                      <input type="checkbox" checked={formData.interests.includes(topic)} onChange={() => handleInterestToggle(topic)} className="w-4 h-4 accent-[#eeb053]" />
+                      {topic}
+                    </label>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Experience Level */}
+          <div className="space-y-6">
+            <h3 className="text-lg font-cinzel font-black tracking-widest text-[#9c1c22] uppercase border-b border-[#332d2b]/10 pb-2">4. Experience Level</h3>
+            <div className="grid md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-[9px] font-cinzel font-black tracking-widest text-[#332d2b] uppercase mb-2">Cybersecurity Knowledge Level</label>
+                <select name="cybersecurityLevel" value={formData.cybersecurityLevel} onChange={handleTextChange} className="w-full px-5 py-4 rounded-xl border border-[#332d2b]/10 bg-white/60 focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#9c1c22] text-[#332d2b] font-serif uppercase">
+                  <option value="Beginner">Beginner</option>
+                  <option value="Intermediate">Intermediate</option>
+                  <option value="Advanced">Advanced</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-[9px] font-cinzel font-black tracking-widest text-[#332d2b] uppercase mb-2">Financial Literacy Knowledge Level</label>
+                <select name="financialLevel" value={formData.financialLevel} onChange={handleTextChange} className="w-full px-5 py-4 rounded-xl border border-[#332d2b]/10 bg-white/60 focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#eeb053] text-[#332d2b] font-serif uppercase">
+                  <option value="Beginner">Beginner</option>
+                  <option value="Intermediate">Intermediate</option>
+                  <option value="Advanced">Advanced</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          {/* Logistics & Logistics Details */}
+          <div className="space-y-6">
+            <h3 className="text-lg font-cinzel font-black tracking-widest text-[#9c1c22] uppercase border-b border-[#332d2b]/10 pb-2">5. Logistics & Questions</h3>
+            <div className="space-y-6">
+              <div>
+                <label className="block text-[9px] font-cinzel font-black tracking-widest text-[#332d2b] uppercase mb-2">How did you hear about this workshop?</label>
+                <select name="referral" value={formData.referral} onChange={handleTextChange} className="w-full px-5 py-4 rounded-xl border border-[#332d2b]/10 bg-white/60 focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#9c1c22] text-[#332d2b] font-serif uppercase">
+                  <option value="">Select an option</option>
+                  <option value="Facebook">Facebook</option>
+                  <option value="Instagram">Instagram</option>
+                  <option value="LinkedIn">LinkedIn</option>
+                  <option value="WhatsApp">WhatsApp</option>
+                  <option value="Friend/Colleague">Friend/Colleague</option>
+                  <option value="Email">Email</option>
+                  <option value="Website">Website</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-[9px] font-cinzel font-black tracking-widest text-[#332d2b] uppercase mb-2">Do you have any accessibility or special requirements?</label>
+                <textarea rows={3} name="specialRequirements" value={formData.specialRequirements} onChange={handleTextChange} className="w-full px-5 py-4 rounded-xl border border-[#332d2b]/10 bg-white/60 focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#9c1c22] text-[#332d2b] font-serif" placeholder="Tell us if you require sign language interpreters, closed captioning, physical accessibility support, etc." />
+              </div>
+              <div>
+                <label className="block text-[9px] font-cinzel font-black tracking-widest text-[#332d2b] uppercase mb-2">What is one question or challenge you'd like addressed during the workshop?</label>
+                <textarea rows={3} name="questions" value={formData.questions} onChange={handleTextChange} className="w-full px-5 py-4 rounded-xl border border-[#332d2b]/10 bg-white/60 focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#9c1c22] text-[#332d2b] font-serif" placeholder="e.g., How do I protect my small business domain from spoofing? or What index funds are best for beginners?" />
+              </div>
+            </div>
+          </div>
+
+          {/* Paid Options Upload Zone */}
+          {formData.ticketType === 'paid' && (
+            <motion.div 
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              className="space-y-6 bg-[#1a1a1a]/5 p-6 md:p-8 rounded-[2rem] border border-[#eeb053]/30 overflow-hidden"
+            >
+              <h3 className="text-lg font-cinzel font-black tracking-widest text-[#eeb053] uppercase border-b border-black/10 pb-2">6. Paid Workshop Verification</h3>
+              <div className="grid md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-[9px] font-cinzel font-black tracking-widest text-[#332d2b] uppercase mb-2">Payment Method</label>
+                  <select name="paymentMethod" value={formData.paymentMethod} onChange={handleTextChange} className="w-full px-5 py-4 rounded-xl border border-[#332d2b]/10 bg-white focus:outline-none focus:ring-1 focus:ring-[#eeb053] text-[#332d2b] font-serif uppercase">
+                    <option value="Bank Transfer">Bank Transfer</option>
+                    <option value="PayPal">PayPal</option>
+                    <option value="Venmo">Venmo</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-[9px] font-cinzel font-black tracking-widest text-[#332d2b] uppercase mb-2">Payment Reference Number *</label>
+                  <input required={formData.ticketType === 'paid'} type="text" name="paymentReference" value={formData.paymentReference} onChange={handleTextChange} className="w-full px-5 py-4 rounded-xl border border-[#332d2b]/10 bg-white focus:outline-none focus:ring-1 focus:ring-[#eeb053] text-[#332d2b]" placeholder="Transaction Hash, ID, or Reference Name" />
+                </div>
+              </div>
+              <div>
+                <label className="block text-[9px] font-cinzel font-black tracking-widest text-[#332d2b] uppercase mb-2">Upload Proof of Payment (Required) *</label>
+                <div 
+                  onClick={() => fileInputRef.current?.click()}
+                  className="cursor-pointer border-2 border-dashed border-[#eeb053]/40 hover:border-[#eeb053] rounded-2xl p-8 text-center bg-white/60 hover:bg-white transition-all flex flex-col items-center justify-center gap-3"
+                >
+                  <UploadCloud size={36} className="text-[#eeb053]" />
+                  <span className="text-xs font-serif uppercase text-[#332d2b]/80">
+                    {formData.proofName ? `Selected: ${formData.proofName}` : "Click to select or drag your receipt/screenshot here"}
+                  </span>
+                  <input ref={fileInputRef} required={formData.ticketType === 'paid'} type="file" onChange={handleFileChange} className="hidden" accept="image/*,.pdf" />
+                </div>
+              </div>
+            </motion.div>
+          )}
+
+          {/* Consent Checkboxes */}
+          <div className="space-y-4">
+            <h3 className="text-lg font-cinzel font-black tracking-widest text-[#9c1c22] uppercase border-b border-[#332d2b]/10 pb-2">Consent & Agreement</h3>
+            <div className="space-y-3">
+              <label className="flex items-start gap-4 cursor-pointer text-sm font-serif uppercase text-[#332d2b]">
+                <input required type="checkbox" checked={formData.consentData} onChange={() => handleCheckboxChange('consentData')} className="mt-1 w-4 h-4 accent-[#9c1c22]" />
+                <span>I consent to the collection and processing of my registration information for workshop administration purposes. *</span>
+              </label>
+              <label className="flex items-start gap-4 cursor-pointer text-sm font-serif uppercase text-[#332d2b]">
+                <input type="checkbox" checked={formData.consentMarketing} onChange={() => handleCheckboxChange('consentMarketing')} className="mt-1 w-4 h-4 accent-[#9c1c22]" />
+                <span>I agree to receive workshop updates via email and SMS. (Optional)</span>
+              </label>
+              <label className="flex items-start gap-4 cursor-pointer text-sm font-serif uppercase text-[#332d2b]">
+                <input type="checkbox" checked={formData.consentPhotos} onChange={() => handleCheckboxChange('consentPhotos')} className="mt-1 w-4 h-4 accent-[#9c1c22]" />
+                <span>I understand that workshop photos/videos may be taken and used for promotional purposes. (Optional)</span>
+              </label>
+            </div>
+          </div>
+
+          {/* Submit */}
+          <div className="pt-6">
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="w-full py-5 bg-[#9c1c22] hover:bg-[#332d2b] disabled:bg-[#332d2b]/60 text-white rounded-full font-cinzel font-black text-xs uppercase tracking-widest transition-all shadow-xl flex items-center justify-center gap-3 border border-[#eeb053]/30"
+            >
+              {isSubmitting ? (
+                <>
+                  <Loader2 size={16} className="animate-spin" /> Processing...
+                </>
+              ) : (
+                <>Register Now</>
+              )}
+            </button>
+          </div>
+        </form>
+      </div>
+    </section>
+  );
+};
+
 // --- Root Component ---
 
 const App: React.FC = () => {
+  // Route to admin panel if on /admin
+  if (window.location.pathname.startsWith('/admin')) {
+    return <AdminApp />;
+  }
+
+  const [cms, setCms] = useState<Record<string, string>>({
+    'hero:title': 'Love in Action,<br/><span class="italic font-normal text-shine text-[#eeb053]">Change in Motion.</span>',
+    'hero:subtitle': 'WE ARE THE KINETIC PULSE OF TRANSFORMATION, ENGINEERING PATHWAYS TO LOVE AND HUMANITY',
+    'about:intro': 'At FOL, we believe love is an energy that transcends barriers. Through our programs in health, education, housing, mental wellness, and community empowerment, we foster resilience and inspire individuals to reach their fullest potential. Foundation of Luv serves as both: A direct-impact organization delivering programs and interventions, and a holding, stewardship, and governance body for public-good initiatives that cannot legally or ethically sit under for-profit entities. Through strategic collaboration with Azariah Management Group (AMG) and its creative and technical arms, FoL transforms advocacy into action, and awareness into sustainable systems of support.',
+    'contact:phone': '443-402-5802',
+    'contact:address': '#9960 Raven Hurst Road, Middle River MD 21221',
+    'contact:email': 'hello@foundationofluv.org',
+    'workshop:date': 'Saturday, July 18, 2026',
+    'workshop:time': '10:00 AM - 3:00 PM EST',
+    'workshop:location': 'Online & Middle River MD'
+  });
+
+  useEffect(() => {
+    const fetchCms = async () => {
+      try {
+        const { data, error } = await supabase.from('site_content').select('section, key, value');
+        if (data && !error) {
+          const newCms: Record<string, string> = { ...cms };
+          data.forEach((row: any) => {
+            newCms[`${row.section}:${row.key}`] = row.value ?? '';
+          });
+          setCms(newCms);
+        }
+      } catch (err) {
+        console.error('Failed to fetch CMS content:', err);
+      }
+    };
+    fetchCms();
+  }, []);
+
   const getInitialPage = () => {
     const path = window.location.pathname.replace(/^\//, '');
-    const validPages = NAVIGATION.map(item => item.id);
+    const validPages = [...NAVIGATION.map(item => item.id), 'register-workshop'];
     if (validPages.includes(path)) {
       return path;
     }
@@ -1635,7 +2281,7 @@ const App: React.FC = () => {
 
   const renderContent = () => {
     switch (currentPage) {
-      case 'aboutus': return <DetailedAboutView />;
+      case 'aboutus': return <DetailedAboutView cms={cms} />;
       case 'globalservices': return <GlobalServicesView />;
       case 'roadmap': return <RoadmapView />;
       case 'luvwatts': return <LUVWATTSView />;
@@ -1644,9 +2290,11 @@ const App: React.FC = () => {
       case 'programs': return <ProgramsPageView />;
       case 'blog': return <BlogView />;
       case 'resources': return <ResourcesView />;
+      case 'workshop': return <WorkshopView onNavigate={handleNavigate} cms={cms} />;
+      case 'register-workshop': return <WorkshopRegisterView onSubmitSuccess={() => showToast("Registration Submitted Successfully!")} />;
       case 'donation': return <DonorView onInitiate={() => setIsPaymentModalOpen(true)} />;
-      case 'contact': return <ContactView onSubmitSuccess={() => showToast("Message Sent Successfully!")} />;
-      default: return <HomeView onNavigate={handleNavigate} />;
+      case 'contact': return <ContactView onSubmitSuccess={() => showToast("Message Sent Successfully!")} cms={cms} />;
+      default: return <HomeView onNavigate={handleNavigate} cms={cms} />;
     }
   };
 
@@ -1716,8 +2364,8 @@ const App: React.FC = () => {
                     "Restoring human dignity and transforming global communities through compassion."
                   </p>
                   <div className="flex flex-col gap-4 text-lg md:text-xl font-serif text-[#eeb053]">
-                    <div className="flex items-center justify-center md:justify-start gap-3"><Phone size={18} className="text-[#9c1c22]" /> 443-402-5802</div>
-                    <div className="flex items-center justify-center md:justify-start gap-3"><MapPin size={18} className="text-[#9c1c22]" /> #9960 Raven Hurst Road, Middle River MD 21221</div>
+                    <div className="flex items-center justify-center md:justify-start gap-3"><Phone size={18} className="text-[#9c1c22]" /> {cms['contact:phone']}</div>
+                    <div className="flex items-center justify-center md:justify-start gap-3"><MapPin size={18} className="text-[#9c1c22]" /> {cms['contact:address']}</div>
                   </div>
                   {/* Social Media Links */}
                   <div className="flex items-center justify-center md:justify-start gap-4 mt-8">
@@ -1753,7 +2401,7 @@ const App: React.FC = () => {
                   <h5 className="text-[#eeb053] font-cinzel font-black uppercase tracking-[0.4em] text-[10px] md:text-[12px] mb-8">Inquiries</h5>
                   <p className="text-lg md:text-xl font-serif italic text-[#fdfaf6]/50 leading-relaxed uppercase break-words">
                     Direct Correspondence:<br />
-                    <span className="text-[#eeb053] lowercase">hello@foundationofluv.org</span>
+                    <span className="text-[#eeb053] lowercase">{cms['contact:email']}</span>
                   </p>
                   <div className="mt-8">
                     <a

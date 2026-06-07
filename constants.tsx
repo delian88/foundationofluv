@@ -29,6 +29,7 @@ export const NAVIGATION = [
   { name: 'Programs', id: 'programs' },
   { name: 'Blog', id: 'blog' },
   { name: 'Resources', id: 'resources' },
+  { name: 'Workshop', id: 'workshop' },
   { name: 'Contact Us', id: 'contact' },
   { name: 'Donation', id: 'donation' },
 ];
@@ -397,5 +398,30 @@ export const RESOURCES_CONTENT = {
     title: "FOL TV",
     description: "Our flagship media platform featuring 'Family First' and other transformative programming.",
     flagship: "Family First Initiative"
+  }
+};
+
+export const WORKSHOP_DETAILS = {
+  title: "Cybersecurity & Financial Literacy Workshop",
+  description: "Learn practical skills to protect yourself online and make smarter financial decisions.",
+  date: "Saturday, July 18, 2026",
+  time: "10:00 AM - 3:00 PM EST",
+  location: "Online (Zoom Link Provided Upon Registration) & Hybrid at Middle River MD",
+  facilitators: [
+    { name: "Kevin Watkins", role: "Founder & Chief Visionary", image: "kevin_watkins.jpg" },
+    { name: "Antoinette Watkins", role: "Executive Director", image: "antoinette_watkins.jpg" },
+    { name: "Chiffon W.", role: "Program Director", image: "chiffon_w.jpg" }
+  ],
+  pricing: {
+    free: {
+      name: "General Admission",
+      price: "$0",
+      description: "Access to all live workshop sessions, Q&A, and basic digital resource materials."
+    },
+    paid: {
+      name: "VIP Ticket with Certification",
+      price: "$49",
+      description: "Includes official Certificate of Completion, 1-on-1 post-workshop coaching session, and permanent access to recorded video sessions."
+    }
   }
 };
