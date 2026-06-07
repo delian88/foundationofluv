@@ -6,7 +6,7 @@ import {
   AlertCircle, Building2, Lightbulb, Users2, Workflow, Recycle, Activity,
   PenTool, CheckCircle2, MessageSquare, Newspaper, Compass, Anchor,
   Mic2, Crosshair, UsersRound, Baby, Wallet, Stethoscope, MapPin, Search,
-  Cpu, Newspaper as MediaIcon, ShieldAlert
+  Cpu, Newspaper as MediaIcon, ShieldAlert, Tv2
 } from 'lucide-react';
 
 export const COLORS = {
@@ -27,6 +27,8 @@ export const NAVIGATION = [
   { name: 'Team', id: 'team' },
   { name: 'Gallery', id: 'gallery' },
   { name: 'Programs', id: 'programs' },
+  { name: 'Blog', id: 'blog' },
+  { name: 'Resources', id: 'resources' },
   { name: 'Contact Us', id: 'contact' },
   { name: 'Donation', id: 'donation' },
 ];
@@ -36,13 +38,19 @@ export const TEAM_MEMBERS = [
     name: "Kevin Watkins",
     role: "Founder & Chief Visionary",
     bio: "A pioneer in structured compassion and humanitarian engineering with over 20 years of experience in community restoration.",
-    image: "profile-icon"
+    image: "https://foundationofluv.org/public/gallery/pic11.jpeg"
   },
   {
     name: "Antoinette Watkins",
     role: "Executive Director",
     bio: "Strategic operations leader focused on scaling the '7 Luv Act' programs across global chapters and managing organizational growth.",
-    image: "profile-icon"
+    image: "https://foundationofluv.org/public/gallery/pic13.jpeg"
+  },
+  {
+    name: "Chiffon W.",
+    role: "Program Director",
+    bio: "Dedicated to the strategic implementation and oversight of our core humanitarian programs, ensuring measurable impact across all chapters.",
+    image: "https://foundationofluv.org/public/gallery/pic12.jpeg"
   }
 ];
 
@@ -88,14 +96,20 @@ export const LUV_ACT_PROGRAMS = [
     title: "College Access Project",
     description: "Preparing youth for college readiness and scholarships. Opening doors to higher education.",
     color: "#eeb053"
+  },
+  {
+    id: "08",
+    title: "FOL TV",
+    description: "Our flagship media platform featuring 'Family First' and other transformative programming.",
+    color: "#9c1c22"
   }
 ];
 
 export const LEADERSHIP_MESSAGE = {
-  title: "A Message from Our Leadership",
-  content: "At Foundation of Luv, we don't just see numbers; we see faces. We see families who need a hand up, children who deserve an education, and communities that require restoration. Our '7 Luv Act' isn't just a program—it's a promise to institutionalize compassion in everything we do. We are bridging the gap between awareness and sustainable systems.",
-  author: "Leadership Council",
-  tagline: "Building a Legacy of restoration."
+  title: "Leading with Vision, Inspiring Love & Success",
+  content: "At the Foundation of Love, we open our hearts to you with a simple yet powerful invitation: join us in building a world where compassion, dignity, and humanity are the cornerstones of progress. Love is not just an emotion; it is energy, strength, and a universal language that can heal divides and transform lives. We believe in the power of families and communities as the first building blocks of peace and transformation. Through counseling, mentorship, and guidance, we strengthen bonds that shape future generations, ensuring that every child, parent, and community member finds support, hope, and belonging.",
+  author: "Kevin Watkins",
+  tagline: "Chief Executive Officer & Founder"
 };
 
 export const LUVWATTS_CONTENT = {
@@ -196,14 +210,23 @@ export const STRATEGIC_PHASES = [
 ];
 
 export const GALLERY_IMAGES = [
-  { url: "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&q=80&w=800", title: "Outreach 2024" },
-  { url: "https://images.unsplash.com/photo-1532629345422-7515f3d16bb6?auto=format&fit=crop&q=80&w=800", title: "Global Support" },
-  { url: "https://images.unsplash.com/photo-1542810634-71277d95dcbb?auto=format&fit=crop&q=80&w=800", title: "Community Hub" },
-  { url: "https://images.unsplash.com/photo-1524061614234-84496375567e?auto=format&fit=crop&q=80&w=800", title: "Housing Progress" },
-  { url: "https://images.unsplash.com/photo-1518391846015-55a9cc003b25?auto=format&fit=crop&q=80&w=800", title: "Youth Mentorship" },
-  { url: "https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?auto=format&fit=crop&q=80&w=800", title: "Humanitarian Aid" },
-  { url: "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&q=80&w=800", title: "Community Shoe Drive" },
-  { url: "https://images.unsplash.com/photo-1516245834210-c4c142787335?auto=format&fit=crop&q=80&w=800", title: "LUVWATTS Movement" }
+  { url: "https://foundationofluv.org/public/gallery/pic1.jpeg", title: "Humanitarian Impact" },
+  { url: "https://foundationofluv.org/public/gallery/pic2.jpeg", title: "Global Outreach" },
+  { url: "https://foundationofluv.org/public/gallery/pic3.jpeg", title: "Community Restoration" },
+  { url: "https://foundationofluv.org/public/gallery/pic4.jpeg", title: "Family Support" },
+  { url: "https://foundationofluv.org/public/gallery/pic5.jpeg", title: "Educational Access" },
+  { url: "https://foundationofluv.org/public/gallery/pic6.jpeg", title: "Economic Empowerment" },
+  { url: "https://foundationofluv.org/public/gallery/pic7.jpeg", title: "Mental Wellness" },
+  { url: "https://foundationofluv.org/public/gallery/pic8.jpeg", title: "Youth Mentorship" },
+  { url: "https://foundationofluv.org/public/gallery/pic9.jpeg", title: "Housing Progress" },
+  { url: "https://foundationofluv.org/public/gallery/pic10.jpeg", title: "Humanitarian Aid" },
+  { url: "https://foundationofluv.org/public/gallery/pic11.jpeg", title: "Global Advocacy" },
+  { url: "https://foundationofluv.org/public/gallery/pic12.jpeg", title: "Transformation in Motion" },
+];
+
+export const SHOE_DRIVE_IMAGES = [
+  "https://foundationofluv.org/public/gallery/pic2.jpeg",
+  "https://foundationofluv.org/public/gallery/pop.jpeg"
 ];
 
 export const VIDEO_RESOURCES = [
@@ -228,7 +251,7 @@ export const STATS = [
 
 export const DETAILED_ABOUT = {
   header: "Foundation of Luv (FOL)",
-  intro: "Foundation of Luv serves as both: A direct-impact organization delivering programs and interventions, and a holding, stewardship, and governance body for public-good initiatives that cannot legally or ethically sit under for-profit entities. Through strategic collaboration with Azariah Management Group (AMG) and its creative and technical arms, FoL transforms advocacy into action, and awareness into sustainable systems of support.",
+  intro: "At FOL, we believe love is an energy that transcends barriers. Through our programs in health, education, housing, mental wellness, and community empowerment, we foster resilience and inspire individuals to reach their fullest potential. Foundation of Luv serves as both: A direct-impact organization delivering programs and interventions, and a holding, stewardship, and governance body for public-good initiatives that cannot legally or ethically sit under for-profit entities. Through strategic collaboration with Azariah Management Group (AMG) and its creative and technical arms, FoL transforms advocacy into action, and awareness into sustainable systems of support.",
   problemStatement: {
     title: "The Problem Statement",
     summary: "Across communities in the U.S. and globally, we are seeing a convergence of crises. Existing solutions are often fragmented: Nonprofits lack scalable infrastructure and media reach, tech solutions lack human-centered governance, and advocacy campaigns stop at storytelling, without systems change. Foundation of Luv exists to bridge these gaps.",
@@ -293,7 +316,7 @@ export const DETAILED_ABOUT = {
     }
   ],
   closing: {
-    statement: "Foundation of Luv is not charity for charity’s sake.",
+    statement: "Foundation of Luv is not charity for charity's sake.",
     tagline: "Love, structured. Advocacy, governed. Innovation, humanized."
   }
 };
@@ -301,7 +324,7 @@ export const DETAILED_ABOUT = {
 export const DONOR_PAGE_CONTENT = {
   different: {
     title: "What Makes Us Different",
-    content: "Foundation of Luv bridges advocacy, media, community programs, and ethical technology under one accountable nonprofit structure. We don’t just raise awareness — we build systems that last."
+    content: "Foundation of Luv bridges advocacy, media, community programs, and ethical technology under one accountable nonprofit structure. We don't just raise awareness — we build systems that last."
   },
   impactPillars: [
     { 
@@ -318,7 +341,7 @@ export const DONOR_PAGE_CONTENT = {
     },
     { 
       title: "AI & TECH FOR GOOD", 
-      description: "(A decentralized digital ecosystem “World AI Force\" that ensures technology serves humanity for good)" 
+      description: "(A decentralized digital ecosystem \"World AI Force\" that ensures technology serves humanity for good)" 
     }
   ],
   approach: [
@@ -355,5 +378,24 @@ export const DONOR_PAGE_CONTENT = {
       "Every initiative centers humanity first."
     ],
     tagline: "Foundation of Luv. Because love deserves structure."
+  }
+};
+
+export const RESOURCES_CONTENT = {
+  pdf: {
+    title: "FOL Organization Profile",
+    description: "The official Foundation of Luv profile: Love in Action, Change in Motion.",
+    url: "https://foundationofluv.org/public/FOL_Profile.pdf"
+  },
+  socials: {
+    youtube: "https://www.youtube.com/@FoundationofLuv",
+    instagram: "https://www.instagram.com/foundationofluvorg?igsh=Z2o1b2IxdXZrNWk2",
+    linkedin: "https://www.linkedin.com/company/foundationofluv/?viewAsMember=true",
+    facebook: "https://www.facebook.com/groups/1801208874599151"
+  },
+  folTv: {
+    title: "FOL TV",
+    description: "Our flagship media platform featuring 'Family First' and other transformative programming.",
+    flagship: "Family First Initiative"
   }
 };

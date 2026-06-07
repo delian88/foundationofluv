@@ -8,12 +8,12 @@ import {
   Quote, Compass, Anchor, Mic2, UsersRound, Wallet, Stethoscope, Baby, Wallet2, Crosshair,
   Users2 as DemographyIcon, TrendingUp as GrowthIcon, Briefcase, Home as HomeIcon, HeartPulse, GraduationCap as SchoolIcon, Coins,
   Play, Mail, Handshake, HeartHandshake, Send, ChevronUp, Cpu, ShieldAlert, UserRound, CreditCard, Loader2, Info as InfoIcon,
-  ExternalLink, Lock
+  ExternalLink, Lock, Facebook, Tv2, FileText, Share2
 } from 'lucide-react';
 import { 
   NAVIGATION, STRATEGIC_PHASES, STATS, COLORS, HERO_IMAGES, GALLERY_IMAGES,
   MISSION_VISION, DETAILED_ABOUT, DONOR_PAGE_CONTENT, LUV_ACT_PROGRAMS, LEADERSHIP_MESSAGE, LUVWATTS_CONTENT,
-  GLOBAL_SERVICES_DATA, VIDEO_RESOURCES, CORE_VALUES, TEAM_MEMBERS
+  GLOBAL_SERVICES_DATA, VIDEO_RESOURCES, CORE_VALUES, TEAM_MEMBERS, SHOE_DRIVE_IMAGES, RESOURCES_CONTENT
 } from './constants';
 
 // --- PayPal Integration ---
@@ -517,11 +517,11 @@ const AnimatedNumber = ({ value }: { value: string }) => {
 // --- Rich Content Components ---
 
 const PartnersMarquee = () => {
-  const partners = ["Microsoft", "Amazon", "OpenAI", "Anthropic", "Google", "Meta", "Harvard", "MIT", "Stanford", "UNICEF", "WHO", "USAID"];
+  const partners = ["Microsoft", "Amazon", "OpenAI", "Anthropic", "Google", "Meta", "Harvard", "MIT", "Stanford", "UNICEF", "WHO", "USAID", "FOL TV", "Family First"];
   return (
     <div className="py-20 bg-white border-y border-black/5 overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 mb-10 text-center">
-        <span className="text-[#9c1c22] font-cinzel font-black tracking-[0.4em] text-[10px] uppercase">Institutional Alliances & Strategic Partners</span>
+        <span className="text-[#9c1c22] font-cinzel font-black tracking-[0.4em] text-[10px] uppercase">Institutional Alliances &amp; Strategic Partners</span>
       </div>
       <div className="relative flex overflow-x-hidden">
         <motion.div 
@@ -629,6 +629,10 @@ const NewsletterSection = () => (
         <button className="bg-white text-[#9c1c22] px-12 py-5 rounded-full font-cinzel font-black tracking-widest text-xs hover:bg-[#1a1a1a] hover:text-white transition-all">ENROLL</button>
       </div>
     </div>
+    <div className="flex justify-center gap-6 mt-12 text-white/50">
+        <Instagram size={24} className="hover:text-white transition-colors cursor-pointer" />
+        <Facebook size={24} className="hover:text-white transition-colors cursor-pointer" />
+    </div>
   </section>
 );
 
@@ -693,12 +697,12 @@ const HomeView = ({ onNavigate }: { onNavigate: (id: string) => void }) => {
                 <div className="absolute inset-0 flex items-center justify-center">
                    <div className="relative w-full h-full">
                       {[
-                        { url: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&q=80&w=400", pos: "top-0 left-1/2 -translate-x-1/2" },
-                        { url: "https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?auto=format&fit=crop&q=80&w=400", pos: "top-1/4 right-0" },
-                        { url: "https://images.unsplash.com/photo-1595341888016-a392ef81b7de?auto=format&fit=crop&q=80&w=400", pos: "bottom-0 right-1/4" },
-                        { url: "https://images.unsplash.com/photo-1560769629-975ec94e6a86?auto=format&fit=crop&q=80&w=400", pos: "bottom-0 left-1/4" },
-                        { url: "https://images.unsplash.com/photo-1512374382149-233c42b6a83b?auto=format&fit=crop&q=80&w=400", pos: "top-1/4 left-0" },
-                        { url: "https://images.unsplash.com/photo-1514989940723-e8e51635b782?auto=format&fit=crop&q=80&w=400", pos: "bottom-1/4 left-0" },
+                        { url: SHOE_DRIVE_IMAGES[0], pos: "top-0 left-1/2 -translate-x-1/2" },
+                        { url: SHOE_DRIVE_IMAGES[1], pos: "top-1/4 right-0" },
+                        { url: "https://foundationofluv.org/public/gallery/pic3.jpeg", pos: "bottom-0 right-1/4" },
+                        { url: "https://foundationofluv.org/public/gallery/pic4.jpeg", pos: "bottom-0 left-1/4" },
+                        { url: "https://foundationofluv.org/public/gallery/pic5.jpeg", pos: "top-1/4 left-0" },
+                        { url: "https://foundationofluv.org/public/gallery/pic6.jpeg", pos: "bottom-1/4 left-0" },
                       ].map((img, i) => (
                         <motion.div 
                           key={i}
@@ -707,7 +711,7 @@ const HomeView = ({ onNavigate }: { onNavigate: (id: string) => void }) => {
                           whileHover={{ scale: 1.1, zIndex: 50 }}
                           className={`absolute w-10 h-10 md:w-28 md:h-28 rounded-full overflow-hidden border-2 md:border-4 border-white shadow-lg transition-all duration-500 cursor-pointer ${img.pos}`}
                         >
-                          <img src={img.url} className="w-full h-full object-cover grayscale hover:grayscale-0" alt="Shoe drive donation" />
+                          <img src={img.url} className="w-full h-full object-cover grayscale hover:grayscale-0" alt="Community outreach" />
                         </motion.div>
                       ))}
                    </div>
@@ -1255,6 +1259,7 @@ const ProgramsPageView = () => {
       case "05": return HeartPulse;
       case "06": return Coins;
       case "07": return Award;
+      case "08": return Tv2;
       default: return Sparkles;
     }
   };
@@ -1380,6 +1385,209 @@ const VideoSection = ({ videoId, title, description }: { videoId: string, title:
   </div>
 );
 
+// --- Blog & Resources Views ---
+
+const BlogView = () => {
+  const posts = [
+    {
+      title: "Love in Action: Our 2025 Community Impact Report",
+      date: "March 2026",
+      category: "Impact",
+      excerpt: "A deep dive into how the 7 Luv Acts transformed thousands of lives across our communities over the past year — from housing to healing.",
+      image: "https://foundationofluv.org/public/gallery/pic1.jpeg"
+    },
+    {
+      title: "FOL TV Launch: Family First Goes Live",
+      date: "February 2026",
+      category: "Media",
+      excerpt: "Our flagship media platform is live. FOL TV is now streaming Family First and other transformative programming to inspire and uplift communities worldwide.",
+      image: "https://foundationofluv.org/public/gallery/pic3.jpeg"
+    },
+    {
+      title: "Women in Wealth: Empowering Minority Entrepreneurs",
+      date: "January 2026",
+      category: "Programs",
+      excerpt: "The Women in Wealth initiative continues to break barriers, equipping minority women with the financial literacy and entrepreneurship skills to build generational wealth.",
+      image: "https://foundationofluv.org/public/gallery/pic6.jpeg"
+    },
+    {
+      title: "LUVWATTS: The Kinetic Pulse of Transformation",
+      date: "December 2025",
+      category: "Movement",
+      excerpt: "Understanding the philosophy behind LUVWATTS — how Light, Unity, Velocity, Wisdom, Action, Truth, Transformation, and Stewardship drive our mission.",
+      image: "https://foundationofluv.org/public/gallery/pic7.jpeg"
+    },
+    {
+      title: "College Access Project: Opening Doors to Higher Education",
+      date: "November 2025",
+      category: "Education",
+      excerpt: "Hundreds of youth are now college-ready thanks to our scholarships, readiness programs, and dedicated mentors who walk beside them every step of the way.",
+      image: "https://foundationofluv.org/public/gallery/pic8.jpeg"
+    },
+    {
+      title: "Hope Homes: Building Safe Havens for the Vulnerable",
+      date: "October 2025",
+      category: "Housing",
+      excerpt: "Our Hope Homes initiative continues to provide shelter and stability for displaced individuals and families, restoring dignity one home at a time.",
+      image: "https://foundationofluv.org/public/gallery/pic9.jpeg"
+    }
+  ];
+
+  const categoryColors: Record<string, string> = {
+    "Impact": "#9c1c22",
+    "Media": "#122d4f",
+    "Programs": "#eeb053",
+    "Movement": "#df8c3d",
+    "Education": "#2d7a4f",
+    "Housing": "#4a3c8c"
+  };
+
+  return (
+    <section className="pt-24 pb-16 md:pt-48 md:pb-32 bg-[#fdfaf6] relative overflow-hidden">
+      <div className="max-w-7xl mx-auto px-4">
+        <header className="text-center mb-16 md:mb-32">
+          <motion.span initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-[#9c1c22] font-cinzel font-black tracking-[0.5em] text-[10px] md:text-[12px] uppercase mb-6 md:mb-8 block">Stories of Impact</motion.span>
+          <h2 className="text-3xl md:text-[8rem] font-serif font-black text-[#332d2b] mb-8 md:mb-12 uppercase leading-none tracking-tighter">
+            The <span className="text-[#eeb053] italic">Blog.</span>
+          </h2>
+          <div className="h-2 w-24 bg-[#9c1c22] mx-auto rounded-full mb-8" />
+          <p className="text-xl md:text-2xl font-serif italic text-[#332d2b]/60 max-w-3xl mx-auto uppercase">News, stories, and updates from the frontlines of humanitarian transformation.</p>
+        </header>
+
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12">
+          {posts.map((post, i) => (
+            <motion.article
+              key={i}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.1 }}
+              whileHover={{ y: -10 }}
+              className="group bg-white rounded-[3rem] overflow-hidden shadow-lg hover:shadow-2xl border-2 border-transparent hover:border-[#eeb053] transition-all duration-500 flex flex-col"
+            >
+              <div className="relative aspect-[16/10] overflow-hidden">
+                <img src={post.image} alt={post.title} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-110" />
+                <div className="absolute top-4 left-4">
+                  <span
+                    className="px-4 py-2 rounded-full text-white font-cinzel font-black text-[9px] uppercase tracking-widest"
+                    style={{ backgroundColor: categoryColors[post.category] || '#9c1c22' }}
+                  >
+                    {post.category}
+                  </span>
+                </div>
+              </div>
+              <div className="p-8 md:p-10 flex flex-col flex-grow">
+                <p className="text-[10px] font-cinzel font-black text-[#eeb053] uppercase tracking-widest mb-4">{post.date}</p>
+                <h3 className="text-xl md:text-2xl font-serif font-black text-[#332d2b] uppercase leading-tight mb-4 group-hover:text-[#9c1c22] transition-colors">{post.title}</h3>
+                <p className="text-base font-serif italic text-[#332d2b]/60 uppercase leading-relaxed flex-grow">{post.excerpt}</p>
+                <div className="mt-8 flex items-center gap-3 text-[#9c1c22] font-cinzel font-black text-[10px] uppercase tracking-widest group-hover:text-[#eeb053] transition-colors">
+                  Read More <MoveRight size={14} />
+                </div>
+              </div>
+            </motion.article>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const ResourcesView = () => (
+  <section className="pt-24 pb-16 md:pt-48 md:pb-32 bg-white relative overflow-hidden">
+    <div className="max-w-7xl mx-auto px-4">
+      <header className="text-center mb-16 md:mb-32">
+        <motion.span initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-[#9c1c22] font-cinzel font-black tracking-[0.5em] text-[10px] md:text-[12px] uppercase mb-6 md:mb-8 block">Tools &amp; Connections</motion.span>
+        <h2 className="text-3xl md:text-[8rem] font-serif font-black text-[#332d2b] mb-8 md:mb-12 uppercase leading-none tracking-tighter">
+          Resources.
+        </h2>
+        <div className="h-2 w-24 bg-[#eeb053] mx-auto rounded-full mb-8" />
+        <p className="text-xl md:text-2xl font-serif italic text-[#332d2b]/60 max-w-3xl mx-auto uppercase">Everything you need to engage, connect, and support our mission.</p>
+      </header>
+
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12 mb-24">
+        {/* FOL Profile PDF */}
+        <motion.a
+          href={RESOURCES_CONTENT.pdf.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          whileHover={{ y: -10 }}
+          className="group p-10 md:p-12 bg-[#fdfaf6] rounded-[3rem] border-2 border-transparent hover:border-[#9c1c22] transition-all shadow-lg flex flex-col items-center text-center"
+        >
+          <div className="w-20 h-20 bg-[#9c1c22] rounded-3xl flex items-center justify-center mb-8 text-white group-hover:scale-110 transition-transform shadow-xl">
+            <FileText size={36} />
+          </div>
+          <h3 className="text-2xl font-serif font-black uppercase text-[#332d2b] mb-4 group-hover:text-[#9c1c22] transition-colors">{RESOURCES_CONTENT.pdf.title}</h3>
+          <p className="text-lg font-serif italic text-[#332d2b]/60 uppercase mb-8">{RESOURCES_CONTENT.pdf.description}</p>
+          <span className="flex items-center gap-3 text-[10px] font-cinzel font-black text-[#9c1c22] uppercase tracking-widest">
+            Download PDF <ExternalLink size={14} />
+          </span>
+        </motion.a>
+
+        {/* FOL TV */}
+        <motion.a
+          href={`https://www.youtube.com/@FoundationofLuv`}
+          target="_blank"
+          rel="noopener noreferrer"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          whileHover={{ y: -10 }}
+          className="group p-10 md:p-12 bg-[#fdfaf6] rounded-[3rem] border-2 border-transparent hover:border-[#eeb053] transition-all shadow-lg flex flex-col items-center text-center"
+        >
+          <div className="w-20 h-20 bg-[#eeb053] rounded-3xl flex items-center justify-center mb-8 text-white group-hover:scale-110 transition-transform shadow-xl">
+            <Tv2 size={36} />
+          </div>
+          <h3 className="text-2xl font-serif font-black uppercase text-[#332d2b] mb-4 group-hover:text-[#eeb053] transition-colors">{RESOURCES_CONTENT.folTv.title}</h3>
+          <p className="text-lg font-serif italic text-[#332d2b]/60 uppercase mb-8">{RESOURCES_CONTENT.folTv.description}</p>
+          <span className="flex items-center gap-3 text-[10px] font-cinzel font-black text-[#eeb053] uppercase tracking-widest">
+            Watch Now <Play size={14} />
+          </span>
+        </motion.a>
+
+        {/* Connect */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          className="p-10 md:p-12 bg-[#fdfaf6] rounded-[3rem] border-2 border-transparent shadow-lg flex flex-col items-center text-center"
+        >
+          <div className="w-20 h-20 bg-[#332d2b] rounded-3xl flex items-center justify-center mb-8 text-white shadow-xl">
+            <Share2 size={36} />
+          </div>
+          <h3 className="text-2xl font-serif font-black uppercase text-[#332d2b] mb-8">Follow the Movement</h3>
+          <div className="grid grid-cols-2 gap-4 w-full">
+            <a href={RESOURCES_CONTENT.socials.youtube} target="_blank" rel="noopener noreferrer"
+               className="flex items-center gap-3 justify-center p-4 bg-white rounded-2xl border border-black/5 hover:border-red-500 hover:text-red-500 transition-all font-cinzel font-black text-[10px] uppercase tracking-wider text-[#332d2b] shadow-sm">
+              <Youtube size={18} /> YouTube
+            </a>
+            <a href={RESOURCES_CONTENT.socials.instagram} target="_blank" rel="noopener noreferrer"
+               className="flex items-center gap-3 justify-center p-4 bg-white rounded-2xl border border-black/5 hover:border-pink-500 hover:text-pink-500 transition-all font-cinzel font-black text-[10px] uppercase tracking-wider text-[#332d2b] shadow-sm">
+              <Instagram size={18} /> Instagram
+            </a>
+            <a href={RESOURCES_CONTENT.socials.linkedin} target="_blank" rel="noopener noreferrer"
+               className="flex items-center gap-3 justify-center p-4 bg-white rounded-2xl border border-black/5 hover:border-blue-600 hover:text-blue-600 transition-all font-cinzel font-black text-[10px] uppercase tracking-wider text-[#332d2b] shadow-sm">
+              <Linkedin size={18} /> LinkedIn
+            </a>
+            <a href={RESOURCES_CONTENT.socials.facebook} target="_blank" rel="noopener noreferrer"
+               className="flex items-center gap-3 justify-center p-4 bg-white rounded-2xl border border-black/5 hover:border-blue-500 hover:text-blue-500 transition-all font-cinzel font-black text-[10px] uppercase tracking-wider text-[#332d2b] shadow-sm">
+              <Facebook size={18} /> Facebook
+            </a>
+          </div>
+        </motion.div>
+      </div>
+
+      {/* Featured Video */}
+      <div className="bg-[#f9f5f0] rounded-[4rem] overflow-hidden">
+        <VideoSection
+          videoId={VIDEO_RESOURCES[0].id}
+          title="Featured Impact Video"
+          description={VIDEO_RESOURCES[0].description}
+        />
+      </div>
+    </div>
+  </section>
+);
+
 // --- Root Component ---
 
 const App: React.FC = () => {
@@ -1413,8 +1621,10 @@ const App: React.FC = () => {
       case 'roadmap': return <RoadmapView />;
       case 'luvwatts': return <LUVWATTSView />;
       case 'team': return <TeamView />;
-      case 'gallery': return <GalleryPageView />; 
+      case 'gallery': return <GalleryPageView />;
       case 'programs': return <ProgramsPageView />;
+      case 'blog': return <BlogView />;
+      case 'resources': return <ResourcesView />;
       case 'donation': return <DonorView onInitiate={() => setIsPaymentModalOpen(true)} />;
       case 'contact': return <ContactView onSubmitSuccess={() => showToast("Message Sent Successfully!")} />;
       default: return <HomeView onNavigate={handleNavigate} />;
@@ -1490,6 +1700,21 @@ const App: React.FC = () => {
                     <div className="flex items-center justify-center md:justify-start gap-3"><Phone size={18} className="text-[#9c1c22]" /> 443-402-5802</div>
                     <div className="flex items-center justify-center md:justify-start gap-3"><MapPin size={18} className="text-[#9c1c22]" /> #9960 Raven Hurst Road, Middle River MD 21221</div>
                   </div>
+                  {/* Social Media Links */}
+                  <div className="flex items-center justify-center md:justify-start gap-4 mt-8">
+                    <a href={RESOURCES_CONTENT.socials.youtube} target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-white/10 hover:bg-[#9c1c22] rounded-full flex items-center justify-center text-white/50 hover:text-white transition-all">
+                      <Youtube size={18} />
+                    </a>
+                    <a href={RESOURCES_CONTENT.socials.instagram} target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-white/10 hover:bg-[#9c1c22] rounded-full flex items-center justify-center text-white/50 hover:text-white transition-all">
+                      <Instagram size={18} />
+                    </a>
+                    <a href={RESOURCES_CONTENT.socials.linkedin} target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-white/10 hover:bg-[#9c1c22] rounded-full flex items-center justify-center text-white/50 hover:text-white transition-all">
+                      <Linkedin size={18} />
+                    </a>
+                    <a href={RESOURCES_CONTENT.socials.facebook} target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-white/10 hover:bg-[#9c1c22] rounded-full flex items-center justify-center text-white/50 hover:text-white transition-all">
+                      <Facebook size={18} />
+                    </a>
+                  </div>
                 </div>
                 
                 <div className="text-center md:text-left">
@@ -1511,6 +1736,16 @@ const App: React.FC = () => {
                     Direct Correspondence:<br />
                     <span className="text-[#eeb053] lowercase">hello@foundationofluv.org</span>
                   </p>
+                  <div className="mt-8">
+                    <a
+                      href={RESOURCES_CONTENT.pdf.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-3 px-6 py-3 bg-[#eeb053]/20 hover:bg-[#eeb053] text-[#eeb053] hover:text-[#332d2b] rounded-full font-cinzel font-black text-[10px] uppercase tracking-widest transition-all border border-[#eeb053]/30"
+                    >
+                      <FileText size={14} /> FOL Profile PDF
+                    </a>
+                  </div>
                 </div>
               </div>
               <div className="pt-10 border-t border-white/5 text-[#fdfaf6]/30 text-[9px] md:text-[11px] font-cinzel font-black tracking-[0.2em] md:tracking-[0.4em] uppercase text-center md:text-left break-words">
