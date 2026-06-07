@@ -16,8 +16,25 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ onLogin }) => {
     setLoading(true);
     setError('');
     const { data, error: authError } = await supabase.auth.signInWithPassword({ email, password });
-    if (authError) setError(authError.message);
-    else if (data.user) onLogin();
+    if (authError) {
+      setError(authError.message);
+    } else if (data.user) {
+      // Trigger login alert email to admin
+      fetch('/api/send-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type: 'login_alert',
+          payload: {
+            email: data.user.email || email,
+            time: new Date().toLocaleString(),
+            userAgent: navigator.userAgent
+          }
+        })
+      }).catch(err => console.error('Login alert trigger failure:', err));
+
+      onLogin();
+    }
     setLoading(false);
   };
 

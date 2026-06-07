@@ -1890,7 +1890,36 @@ const WorkshopRegisterView: React.FC<WorkshopRegisterViewProps> = ({ onSubmitSuc
         payment_method: formData.paymentMethod,
         payment_reference: formData.paymentReference,
       });
-      if (error) console.error('Supabase error:', error);
+      if (error) {
+        console.error('Supabase error:', error);
+      } else {
+        // Trigger email notifications
+        fetch('/api/send-email', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            type: 'registration',
+            payload: {
+              full_name: formData.fullName,
+              email: formData.email,
+              phone: formData.phone,
+              city: formData.city,
+              organization: formData.organization,
+              job_title: formData.jobTitle,
+              profile: formData.profile,
+              interests: formData.interests,
+              cybersecurity_level: formData.cybersecurityLevel,
+              financial_level: formData.financialLevel,
+              referral: formData.referral,
+              special_requirements: formData.specialRequirements,
+              questions: formData.questions,
+              ticket_type: formData.ticketType === 'paid' ? 'vip' : 'free',
+              payment_method: formData.paymentMethod,
+              payment_reference: formData.paymentReference,
+            }
+          })
+        }).catch(err => console.error('Email trigger failure:', err));
+      }
     } catch (err) {
       console.error('Registration error:', err);
     }

@@ -50,12 +50,38 @@ const AdminEmail: React.FC = () => {
     });
 
     if (!error) {
-      // Open email client with pre-filled message (mailto)
       const allEmails = recipientEmails.join(',');
       const mailtoUrl = `mailto:${allEmails}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 
-      if (recipientEmails.length <= 20) {
-        window.location.href = mailtoUrl;
+      try {
+        const emailRes = await fetch('/api/send-email', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            type: 'admin_email',
+            payload: {
+              recipients: recipientEmails,
+              subject,
+              body,
+            }
+          })
+        });
+
+        if (emailRes.ok) {
+          showToast(`🚀 successfully sent to ${recipientEmails.length} recipient(s) via SMTP!`);
+        } else {
+          const errData = await emailRes.json().catch(() => ({}));
+          showToast(`⚠️ SMTP error: ${errData.error || 'Failed to send'}`);
+          if (recipientEmails.length <= 20) {
+            window.location.href = mailtoUrl;
+          }
+        }
+      } catch (err) {
+        console.error('SMTP fetch failure:', err);
+        showToast('⚠️ SMTP service unavailable. Fallback to mail client.');
+        if (recipientEmails.length <= 20) {
+          window.location.href = mailtoUrl;
+        }
       }
 
       // Refresh logs
@@ -65,7 +91,6 @@ const AdminEmail: React.FC = () => {
       setBody('');
       setSelectedSingle(null);
       setSingleSearch('');
-      showToast(`✅ Email logged! Opened email client for ${recipientEmails.length} recipient(s)`);
     } else {
       showToast('Error saving email log. Please try again.');
     }
@@ -220,7 +245,7 @@ const AdminEmail: React.FC = () => {
           </button>
 
           <p style={{ fontSize: 12, color: '#4b5563', textAlign: 'center' as const, marginTop: 10, lineHeight: 1.5 }}>
-            Email is logged to Supabase and opens your local email client for delivery. For automated SMTP, configure in Supabase Dashboard → Settings → SMTP.
+            Email is logged to Supabase and sent automatically via Gmail SMTP serverless dispatch.
           </p>
         </div>
 

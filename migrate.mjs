@@ -175,6 +175,35 @@ async function runMigration() {
     console.log('\nSQL to paste:\n');
     console.log(SQL);
   }
+
+  // Create Super Admin user if possible
+  console.log('\nSetting up Super Admin account in Supabase Auth...');
+  try {
+    const adminUserResult = await callAPI(
+      `${PROJECT_REF}.supabase.co`,
+      '/auth/v1/admin/users',
+      'POST',
+      {
+        'Authorization': `Bearer ${SERVICE_KEY}`,
+        'apikey': SERVICE_KEY,
+        'Content-Type': 'application/json',
+      },
+      JSON.stringify({
+        email: env.ADMIN_EMAIL || 'info@azariahmg.com',
+        password: env.ADMIN_PASSWORD || 'Admin@webmaster$1',
+        email_confirm: true
+      })
+    );
+    if (adminUserResult.status === 201) {
+      console.log(`✅ Super Admin account successfully created for ${env.ADMIN_EMAIL || 'info@azariahmg.com'}!`);
+    } else if (adminUserResult.status === 422) {
+      console.log('ℹ️ Super Admin account already exists (422 email registered).');
+    } else {
+      console.log(`⚠️ Note: Super Admin creation returned status ${adminUserResult.status}: ${adminUserResult.body}`);
+    }
+  } catch (err) {
+    console.log('⚠️ Failed to auto-create Super Admin account. Please create it manually in the Supabase Auth dashboard.', err.message);
+  }
 }
 
 runMigration().catch(console.error);
