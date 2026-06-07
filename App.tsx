@@ -1652,6 +1652,50 @@ const WorkshopView: React.FC<WorkshopViewProps> = ({ onNavigate, cms }) => {
           </motion.button>
         </header>
 
+        {/* Workshop Poster / Flyer */}
+        {cms['workshop:flyer_url'] && (
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.2 }}
+            className="mb-24 flex flex-col items-center"
+          >
+            <span className="text-[#9c1c22] font-cinzel font-black tracking-[0.5em] text-[10px] md:text-[12px] uppercase mb-8 block">Event Flyer</span>
+            <div className="relative max-w-2xl w-full mx-auto">
+              {/* Glow backdrop */}
+              <div className="absolute -inset-4 bg-gradient-to-b from-[#eeb053]/20 via-[#9c1c22]/10 to-[#eeb053]/20 rounded-[3rem] blur-3xl pointer-events-none" />
+              {/* Poster card */}
+              <div className="relative bg-white rounded-[2.5rem] border-4 border-[#eeb053]/40 shadow-[0_30px_80px_rgba(156,28,34,0.2)] overflow-hidden">
+                <img
+                  src={cms['workshop:flyer_url']}
+                  alt="LuvWorks Workshop Flyer"
+                  className="w-full h-auto block"
+                  style={{ objectFit: 'contain' }}
+                  onError={e => { (e.target as HTMLImageElement).style.display = 'none'; }}
+                />
+              </div>
+              {/* Actions */}
+              <div className="flex items-center justify-center gap-4 mt-8">
+                <a
+                  href={cms['workshop:flyer_url']}
+                  download="LuvWorks-Workshop-Flyer.jpg"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-7 py-3.5 bg-[#9c1c22] hover:bg-[#332d2b] text-white rounded-full font-cinzel font-black text-[10px] uppercase tracking-widest transition-all shadow-xl border border-[#eeb053]/20"
+                >
+                  <FileText size={14} /> Download Flyer
+                </a>
+                <button
+                  onClick={() => onNavigate('register-workshop')}
+                  className="inline-flex items-center gap-2 px-7 py-3.5 bg-[#eeb053] hover:bg-[#d49a3a] text-[#332d2b] rounded-full font-cinzel font-black text-[10px] uppercase tracking-widest transition-all shadow-xl"
+                >
+                  Register Now →
+                </button>
+              </div>
+            </div>
+          </motion.div>
+        )}
+
         {/* Tracks Section */}
         <section className="mb-24">
           <div className="grid md:grid-cols-2 gap-12">
@@ -2245,7 +2289,8 @@ const App: React.FC = () => {
     'contact:email': 'hello@foundationofluv.org',
     'workshop:date': 'Saturday, July 18, 2026',
     'workshop:time': '10:00 AM - 3:00 PM EST',
-    'workshop:location': 'Online & Middle River MD'
+    'workshop:location': 'Online & Middle River MD',
+    'workshop:flyer_url': '/workshop-poster.jpg'
   });
 
   useEffect(() => {
