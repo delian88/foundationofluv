@@ -239,6 +239,54 @@ const server = http.createServer(async (req, res) => {
       return;
     }
 
+    if (type === 'certificate_email') {
+      // recipients: Array<{ email: string, name: string, certBase64: string }>
+      const { recipients, subject, body: emailBody } = payload;
+      if (!Array.isArray(recipients) || recipients.length === 0) {
+        res.writeHead(400, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: 'Recipients must be a non-empty array' }));
+        return;
+      }
+
+      await Promise.all(recipients.map(r => {
+        // certBase64 is a data URL: "data:image/png;base64,<data>"
+        const base64Data = (r.certBase64 || '').split(',')[1] || '';
+        const certBuffer = base64Data ? Buffer.from(base64Data, 'base64') : null;
+
+        // Replace {name} placeholder in body
+        const personalBody = (emailBody || '').replace(/\{name\}/gi, r.name);
+
+        return transporter.sendMail({
+          from: `"Foundation of Luv" <${SMTP_USER}>`,
+          to: r.email,
+          subject,
+          html: `
+            <div style="max-width:620px;margin:0 auto;background:#fff;border:1px solid #e1e1e1;border-radius:12px;overflow:hidden;">
+              ${defaultHeader}
+              <div style="padding:40px 32px;font-family:Arial,sans-serif;line-height:1.7;color:#333;font-size:15px;">
+                ${personalBody.replace(/\n/g, '<br />')}
+                ${certBuffer ? `
+                <div style="margin-top:28px;padding:18px 20px;background:#fcfaf6;border-left:4px solid #eeb053;border-radius:4px;font-family:Arial,sans-serif;font-size:13px;color:#555;">
+                  <strong style="color:#9c1c22;">🎓 Your Certificate is Attached</strong><br/>
+                  <span style="color:#777;">Please find your personalized certificate of participation attached to this email as <em>Certificate – ${r.name}.png</em>.</span>
+                </div>` : ''}
+              </div>
+              ${defaultFooter}
+            </div>
+          `,
+          attachments: certBuffer ? [{
+            filename: `Certificate - ${r.name}.png`,
+            content: certBuffer,
+            contentType: 'image/png',
+          }] : [],
+        });
+      }));
+
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ success: true, message: `Sent ${recipients.length} certificate(s)` }));
+      return;
+    }
+
     res.writeHead(400, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify({ error: 'Unsupported type' }));
 

@@ -7,8 +7,9 @@ import AdminEmail from './AdminEmail';
 import AdminCMS from './AdminCMS';
 import AdminEvents from './AdminEvents';
 import AdminAttachments from './AdminAttachments';
+import AdminCertificates from './AdminCertificates';
 
-type AdminPage = 'dashboard' | 'registrations' | 'email' | 'cms' | 'events' | 'attachments';
+type AdminPage = 'dashboard' | 'registrations' | 'email' | 'cms' | 'events' | 'attachments' | 'certificates';
 
 const useWindowWidth = () => {
   const [width, setWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1024);
@@ -82,6 +83,7 @@ const AdminApp: React.FC = () => {
     { id: 'events', icon: '📅', label: 'Events' },
     { id: 'cms', icon: '✏️', label: 'Content (CMS)' },
     { id: 'attachments', icon: '📎', label: 'Attachments' },
+    { id: 'certificates', icon: '🎓', label: 'Certificates' },
   ];
 
   const pageTitle: Record<AdminPage, string> = {
@@ -91,6 +93,7 @@ const AdminApp: React.FC = () => {
     events: 'Events & Scheduling',
     cms: 'Content Management',
     attachments: 'Attachments & Media Library',
+    certificates: 'Certificate Manager',
   };
 
   const currentNav = navItems.find(n => n.id === page);
@@ -307,6 +310,7 @@ const AdminApp: React.FC = () => {
           {page === 'events' && <AdminEvents />}
           {page === 'cms' && <AdminCMS />}
           {page === 'attachments' && <AdminAttachments />}
+          {page === 'certificates' && <AdminCertificates />}
         </div>
       </div>
     </div>
