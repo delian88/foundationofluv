@@ -6,8 +6,9 @@ import AdminRegistrations from './AdminRegistrations';
 import AdminEmail from './AdminEmail';
 import AdminCMS from './AdminCMS';
 import AdminEvents from './AdminEvents';
+import AdminAttachments from './AdminAttachments';
 
-type AdminPage = 'dashboard' | 'registrations' | 'email' | 'cms' | 'events';
+type AdminPage = 'dashboard' | 'registrations' | 'email' | 'cms' | 'events' | 'attachments';
 
 const useWindowWidth = () => {
   const [width, setWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1024);
@@ -80,6 +81,7 @@ const AdminApp: React.FC = () => {
     { id: 'email', icon: '✉️', label: 'Email Center' },
     { id: 'events', icon: '📅', label: 'Events' },
     { id: 'cms', icon: '✏️', label: 'Content (CMS)' },
+    { id: 'attachments', icon: '📎', label: 'Attachments' },
   ];
 
   const pageTitle: Record<AdminPage, string> = {
@@ -88,6 +90,7 @@ const AdminApp: React.FC = () => {
     email: 'Email Center',
     events: 'Events & Scheduling',
     cms: 'Content Management',
+    attachments: 'Attachments & Media Library',
   };
 
   const currentNav = navItems.find(n => n.id === page);
@@ -303,6 +306,7 @@ const AdminApp: React.FC = () => {
           {page === 'email' && <AdminEmail />}
           {page === 'events' && <AdminEvents />}
           {page === 'cms' && <AdminCMS />}
+          {page === 'attachments' && <AdminAttachments />}
         </div>
       </div>
     </div>

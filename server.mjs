@@ -181,12 +181,41 @@ const server = http.createServer(async (req, res) => {
     }
 
     if (type === 'admin_email') {
-      const { recipients, subject, body: emailBody } = payload;
+      const { recipients, subject, body: emailBody, attachmentUrls } = payload;
       if (!Array.isArray(recipients) || recipients.length === 0) {
         res.writeHead(400, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({ error: 'Recipients must be a non-empty array' }));
         return;
       }
+
+      // Fetch each attachment from its public URL and build nodemailer attachment objects
+      const nodemailerAttachments = [];
+      if (Array.isArray(attachmentUrls) && attachmentUrls.length > 0) {
+        const fetchMod = await import('node-fetch').catch(() => null);
+        const fetchFn = fetchMod ? (fetchMod.default || fetchMod) : fetch;
+        for (const att of attachmentUrls) {
+          try {
+            const r = await fetchFn(att.url);
+            if (r.ok) {
+              const buf = Buffer.from(await r.arrayBuffer());
+              nodemailerAttachments.push({ filename: att.name, content: buf });
+            }
+          } catch (e) {
+            console.warn('Could not fetch attachment:', att.url, e.message);
+          }
+        }
+      }
+
+      // Build attachment footer note for the email body
+      const attachNote = nodemailerAttachments.length > 0
+        ? `<div style="margin-top:28px;padding:16px 20px;background:#fcfaf6;border-left:4px solid #eeb053;border-radius:4px;font-family:Arial,sans-serif;font-size:13px;color:#555;">
+            <strong style="color:#9c1c22;">📎 Attachments (${nodemailerAttachments.length}):</strong>
+            <ul style="margin:8px 0 0 0;padding-left:18px;">
+              ${nodemailerAttachments.map(a => `<li>${a.filename}</li>`).join('')}
+            </ul>
+           </div>`
+        : '';
+
       await Promise.all(recipients.map(to =>
         transporter.sendMail({
           from: `"Foundation of Luv" <${SMTP_USER}>`,
@@ -197,14 +226,16 @@ const server = http.createServer(async (req, res) => {
               ${defaultHeader}
               <div style="padding:40px 32px;font-family:Arial,sans-serif;line-height:1.6;color:#333;font-size:15px;">
                 ${emailBody.replace(/\n/g, '<br />')}
+                ${attachNote}
               </div>
               ${defaultFooter}
             </div>
           `,
+          attachments: nodemailerAttachments,
         })
       ));
       res.writeHead(200, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify({ success: true, message: `Sent ${recipients.length} email(s)` }));
+      res.end(JSON.stringify({ success: true, message: `Sent ${recipients.length} email(s) with ${nodemailerAttachments.length} attachment(s)` }));
       return;
     }
 

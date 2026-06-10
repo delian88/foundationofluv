@@ -1,5 +1,25 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { supabaseAdmin } from '../supabase';
+
+const ATTACH_BUCKET = 'attachments';
+
+function extIcon(name: string): string {
+  const ext = name.split('.').pop()?.toLowerCase() ?? '';
+  if (['jpg','jpeg','png','gif','webp','svg'].includes(ext)) return '🖼️';
+  if (ext === 'pdf') return '📄';
+  if (['mp4','webm','mov'].includes(ext)) return '🎬';
+  if (['mp3','wav','ogg'].includes(ext)) return '🎵';
+  if (['doc','docx'].includes(ext)) return '📝';
+  if (['xls','xlsx','csv'].includes(ext)) return '📊';
+  if (['zip','rar','7z'].includes(ext)) return '🗜️';
+  return '📎';
+}
+
+function formatBytes(b: number): string {
+  if (!b) return '';
+  const k = 1024, s = ['B','KB','MB','GB'], i = Math.floor(Math.log(b)/Math.log(k));
+  return `${parseFloat((b/Math.pow(k,i)).toFixed(1))} ${s[i]}`;
+}
 
 const AdminEmail: React.FC = () => {
   const [registrations, setRegistrations] = useState<any[]>([]);
@@ -13,7 +33,30 @@ const AdminEmail: React.FC = () => {
   const [sending, setSending] = useState(false);
   const [toast, setToast] = useState('');
   const [logs, setLogs] = useState<any[]>([]);
+
+  // Attachment states
+  const [attachBucket, setAttachBucket] = useState<{ name: string; url: string; size: number }[]>([]);
+  const [attachLoading, setAttachLoading] = useState(false);
+  const [showAttachPicker, setShowAttachPicker] = useState(false);
+  const [selectedAttachments, setSelectedAttachments] = useState<{ name: string; url: string; size: number }[]>([]);
+  const [attachSearch, setAttachSearch] = useState('');
   const [copied, setCopied] = useState(false);
+
+  const loadAttachments = useCallback(async () => {
+    setAttachLoading(true);
+    try {
+      await supabaseAdmin.storage.createBucket(ATTACH_BUCKET, { public: true }).catch(() => {});
+      const { data } = await supabaseAdmin.storage.from(ATTACH_BUCKET).list('', { sortBy: { column: 'name', order: 'asc' } });
+      const list = (data ?? [])
+        .filter(f => f.name !== '.emptyFolderPlaceholder')
+        .map(f => {
+          const { data: { publicUrl } } = supabaseAdmin.storage.from(ATTACH_BUCKET).getPublicUrl(f.name);
+          return { name: f.name, url: publicUrl, size: f.metadata?.size ?? 0 };
+        });
+      setAttachBucket(list);
+    } catch {}
+    setAttachLoading(false);
+  }, []);
 
   useEffect(() => {
     Promise.all([
@@ -63,6 +106,7 @@ const AdminEmail: React.FC = () => {
               recipients: recipientEmails,
               subject,
               body,
+              attachmentUrls: selectedAttachments.map(a => ({ url: a.url, name: a.name.replace(/^\d+_/, '') })),
             }
           })
         });
@@ -91,6 +135,7 @@ const AdminEmail: React.FC = () => {
       setBody('');
       setSelectedSingle(null);
       setSingleSearch('');
+      setSelectedAttachments([]);
     } else {
       showToast('Error saving email log. Please try again.');
     }
@@ -237,6 +282,110 @@ const AdminEmail: React.FC = () => {
             onFocus={e => (e.target.style.borderColor = '#9c1c22')}
             onBlur={e => (e.target.style.borderColor = '#2a2a2a')}
           />
+
+          {/* Attachments */}
+          <div style={{ marginBottom: 16 }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
+              <label style={S.label}>ATTACHMENTS</label>
+              <button
+                type="button"
+                style={{ fontSize: 12, color: '#eeb053', background: 'none', border: 'none', cursor: 'pointer', fontWeight: 600, padding: '3px 8px', borderRadius: 6 }}
+                onClick={() => { setShowAttachPicker(v => !v); if (!showAttachPicker) loadAttachments(); }}
+              >
+                {showAttachPicker ? '▲ Hide Library' : '📎 Browse & Attach'}
+              </button>
+            </div>
+
+            {/* Selected chips */}
+            {selectedAttachments.length > 0 && (
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 10 }}>
+                {selectedAttachments.map(a => (
+                  <div key={a.url} style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: 'rgba(156,28,34,0.12)', border: '1px solid rgba(156,28,34,0.25)', borderRadius: 20, padding: '4px 10px', fontSize: 12, color: '#fca5a5', maxWidth: 220 }}>
+                    <span>{extIcon(a.name)}</span>
+                    <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{a.name.replace(/^\d+_/, '')}</span>
+                    <button
+                      onClick={() => setSelectedAttachments(s => s.filter(x => x.url !== a.url))}
+                      style={{ background: 'none', border: 'none', color: '#9ca3af', cursor: 'pointer', fontSize: 14, lineHeight: 1, padding: 0, marginLeft: 2 }}
+                    >✕</button>
+                  </div>
+                ))}
+              </div>
+            )}
+            {selectedAttachments.length === 0 && !showAttachPicker && (
+              <div style={{ fontSize: 12, color: '#4b5563', padding: '8px 0' }}>No attachments. Click "Browse & Attach" to add files from your media library.</div>
+            )}
+
+            {/* File picker panel */}
+            {showAttachPicker && (
+              <div style={{ background: '#0f0f0f', border: '1px solid #1e1e1e', borderRadius: 12, padding: 16, marginTop: 4 }}>
+                <input
+                  style={{ ...S.input, marginBottom: 12 }}
+                  placeholder="🔍 Search files..."
+                  value={attachSearch}
+                  onChange={e => setAttachSearch(e.target.value)}
+                  onFocus={e => (e.target.style.borderColor = '#9c1c22')}
+                  onBlur={e => (e.target.style.borderColor = '#2a2a2a')}
+                />
+                {attachLoading ? (
+                  <div style={{ color: '#6b7280', fontSize: 13, textAlign: 'center', padding: '12px 0' }}>⏳ Loading files...</div>
+                ) : attachBucket.length === 0 ? (
+                  <div style={{ color: '#4b5563', fontSize: 13, textAlign: 'center', padding: '12px 0' }}>
+                    No files in library. Upload files in the <strong style={{ color: '#9ca3af' }}>Attachments</strong> section first.
+                  </div>
+                ) : (
+                  <div style={{ maxHeight: 260, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: 4 }}>
+                    {attachBucket
+                      .filter(f => !attachSearch || f.name.toLowerCase().includes(attachSearch.toLowerCase()))
+                      .map(f => {
+                        const isSelected = selectedAttachments.some(s => s.url === f.url);
+                        return (
+                          <div
+                            key={f.url}
+                            onClick={() => {
+                              if (isSelected) {
+                                setSelectedAttachments(s => s.filter(x => x.url !== f.url));
+                              } else {
+                                setSelectedAttachments(s => [...s, f]);
+                              }
+                            }}
+                            style={{
+                              display: 'flex', alignItems: 'center', gap: 10,
+                              padding: '9px 12px', borderRadius: 8, cursor: 'pointer',
+                              background: isSelected ? 'rgba(156,28,34,0.15)' : 'transparent',
+                              border: `1px solid ${isSelected ? 'rgba(156,28,34,0.3)' : 'transparent'}`,
+                              transition: 'all 0.15s',
+                            }}
+                          >
+                            <span style={{ fontSize: 20, flexShrink: 0 }}>{extIcon(f.name)}</span>
+                            <div style={{ flex: 1, minWidth: 0 }}>
+                              <div style={{ fontSize: 13, color: isSelected ? '#fca5a5' : '#d1d5db', fontWeight: isSelected ? 600 : 400, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                                {f.name.replace(/^\d+_/, '')}
+                              </div>
+                              {f.size > 0 && <div style={{ fontSize: 11, color: '#4b5563' }}>{formatBytes(f.size)}</div>}
+                            </div>
+                            <div style={{
+                              width: 20, height: 20, borderRadius: '50%', flexShrink: 0,
+                              background: isSelected ? '#9c1c22' : '#1e1e1e',
+                              border: `2px solid ${isSelected ? '#9c1c22' : '#2a2a2a'}`,
+                              display: 'flex', alignItems: 'center', justifyContent: 'center',
+                              fontSize: 11, color: '#fff', fontWeight: 700, transition: 'all 0.15s',
+                            }}>
+                              {isSelected ? '✓' : ''}
+                            </div>
+                          </div>
+                        );
+                      })
+                    }
+                  </div>
+                )}
+                {selectedAttachments.length > 0 && (
+                  <div style={{ marginTop: 10, paddingTop: 10, borderTop: '1px solid #1e1e1e', fontSize: 12, color: '#eeb053', fontWeight: 600 }}>
+                    ✅ {selectedAttachments.length} file{selectedAttachments.length !== 1 ? 's' : ''} selected
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
 
           <button
             style={{ ...S.sendBtn, opacity: (sending || recipientEmails.length === 0) ? 0.6 : 1 }}
