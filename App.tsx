@@ -1593,7 +1593,7 @@ const ResourcesView = () => (
 
 // --- Workshop View ---
 interface WorkshopViewProps {
-  onNavigate: (pageId: string) => void;
+  onNavigate: (pageId: string, ticketType?: 'free' | 'donation') => void;
   cms: Record<string, string>;
 }
 
@@ -1645,7 +1645,7 @@ const WorkshopView: React.FC<WorkshopViewProps> = ({ onNavigate, cms }) => {
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            onClick={() => onNavigate('register-workshop')}
+            onClick={() => onNavigate('register-workshop', 'free')}
             className="px-10 py-5 bg-[#9c1c22] hover:bg-[#332d2b] text-white rounded-full font-cinzel font-black text-sm uppercase tracking-widest transition-all shadow-xl border border-[#eeb053]/30"
           >
             Register Now
@@ -1686,7 +1686,7 @@ const WorkshopView: React.FC<WorkshopViewProps> = ({ onNavigate, cms }) => {
                   <FileText size={14} /> Download Flyer
                 </a>
                 <button
-                  onClick={() => onNavigate('register-workshop')}
+                  onClick={() => onNavigate('register-workshop', 'free')}
                   className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 bg-[#eeb053] hover:bg-[#d49a3a] text-[#332d2b] rounded-full font-cinzel font-black text-[10px] uppercase tracking-widest transition-all shadow-xl"
                 >
                   Register Now →
@@ -1800,26 +1800,26 @@ const WorkshopView: React.FC<WorkshopViewProps> = ({ onNavigate, cms }) => {
                 <p className="text-base font-serif text-[#332d2b]/60 uppercase leading-relaxed mb-6">{WORKSHOP_DETAILS.pricing.free.description}</p>
               </div>
               <button 
-                onClick={() => onNavigate('register-workshop')}
+                onClick={() => onNavigate('register-workshop', 'free')}
                 className="w-full py-4 border border-[#9c1c22] hover:bg-[#9c1c22] text-[#9c1c22] hover:text-white rounded-full font-cinzel font-black text-[10px] uppercase tracking-widest transition-all"
               >
-                Get General Ticket
+                Get Free Ticket
               </button>
             </div>
 
             {/* Paid */}
             <div className="bg-[#1a1a1a] text-white p-8 rounded-[3rem] border-2 border-[#eeb053] flex flex-col justify-between shadow-2xl relative overflow-hidden text-left">
-              <div className="absolute top-4 right-4 bg-[#eeb053] text-[#1a1a1a] px-3 py-1 rounded-full text-[8px] font-cinzel font-black uppercase tracking-wider">Recommended</div>
+              <div className="absolute top-4 right-4 bg-[#eeb053] text-[#1a1a1a] px-3 py-1 rounded-full text-[8px] font-cinzel font-black uppercase tracking-wider">Support Us</div>
               <div>
                 <span className="text-[9px] font-cinzel font-black tracking-widest text-[#eeb053] uppercase block mb-2">{WORKSHOP_DETAILS.pricing.paid.name}</span>
                 <div className="text-5xl font-serif font-black text-[#eeb053] mb-4">{WORKSHOP_DETAILS.pricing.paid.price}</div>
                 <p className="text-base font-serif text-white/60 uppercase leading-relaxed mb-6">{WORKSHOP_DETAILS.pricing.paid.description}</p>
               </div>
               <button 
-                onClick={() => onNavigate('register-workshop')}
+                onClick={() => onNavigate('register-workshop', 'donation')}
                 className="w-full py-4 bg-[#eeb053] hover:bg-[#df8c3d] text-[#1a1a1a] rounded-full font-cinzel font-black text-[10px] uppercase tracking-widest transition-all text-center"
               >
-                Get VIP Certificate Ticket
+                Register & Donate
               </button>
             </div>
           </div>
@@ -1847,17 +1847,19 @@ interface RegistrationForm {
   consentMarketing: boolean;
   consentData: boolean;
   consentPhotos: boolean;
-  ticketType: 'free' | 'paid';
+  ticketType: 'free' | 'donation';
+  donationAmount: string;
   paymentMethod: string;
   paymentReference: string;
   proofName: string;
 }
 
 interface WorkshopRegisterViewProps {
+  defaultTicketType?: 'free' | 'donation';
   onSubmitSuccess: () => void;
 }
 
-const WorkshopRegisterView: React.FC<WorkshopRegisterViewProps> = ({ onSubmitSuccess }) => {
+const WorkshopRegisterView: React.FC<WorkshopRegisterViewProps> = ({ defaultTicketType = 'free', onSubmitSuccess }) => {
   const [formData, setFormData] = useState<RegistrationForm>({
     fullName: '',
     email: '',
@@ -1875,8 +1877,9 @@ const WorkshopRegisterView: React.FC<WorkshopRegisterViewProps> = ({ onSubmitSuc
     consentMarketing: false,
     consentData: false,
     consentPhotos: false,
-    ticketType: 'free',
-    paymentMethod: 'Bank Transfer',
+    ticketType: defaultTicketType,
+    donationAmount: defaultTicketType === 'donation' ? '25' : '',
+    paymentMethod: defaultTicketType === 'donation' ? 'PayPal (Online)' : 'Bank Transfer',
     paymentReference: '',
     proofName: ''
   });
@@ -1885,9 +1888,113 @@ const WorkshopRegisterView: React.FC<WorkshopRegisterViewProps> = ({ onSubmitSuc
   const [isSubmitted, setIsSubmitted] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  const [isPaypalSdkLoaded, setIsPaypalSdkLoaded] = useState(!!(window as any).paypal);
+  const [paypalError, setPaypalError] = useState<string | null>(null);
+  const [paypalPaymentVerified, setPaypalPaymentVerified] = useState(false);
+  const registerPaypalRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setFormData(prev => ({
+      ...prev,
+      ticketType: defaultTicketType,
+      donationAmount: defaultTicketType === 'donation' ? '25' : '',
+      paymentMethod: defaultTicketType === 'donation' ? 'PayPal (Online)' : 'Bank Transfer'
+    }));
+    setPaypalPaymentVerified(false);
+    setPaypalError(null);
+  }, [defaultTicketType]);
+
+  useEffect(() => {
+    if (formData.ticketType !== 'donation' || formData.paymentMethod !== 'PayPal (Online)') return;
+
+    if ((window as any).paypal) {
+      setIsPaypalSdkLoaded(true);
+      return;
+    }
+
+    const scriptId = 'paypal-sdk-script';
+    if (document.getElementById(scriptId)) {
+      const checkInterval = setInterval(() => {
+        if ((window as any).paypal) {
+          setIsPaypalSdkLoaded(true);
+          clearInterval(checkInterval);
+        }
+      }, 100);
+      return () => clearInterval(checkInterval);
+    }
+
+    const script = document.createElement('script');
+    script.id = scriptId;
+    script.src = `https://www.paypal.com/sdk/js?client-id=${PAYPAL_CLIENT_ID}&currency=USD&components=buttons&enable-funding=venmo,paylater`;
+    script.async = true;
+    script.onload = () => setIsPaypalSdkLoaded(true);
+    script.onerror = () => setPaypalError("Could not load PayPal secure gateway. Please use manual payment.");
+    document.body.appendChild(script);
+  }, [formData.ticketType, formData.paymentMethod]);
+
+  useEffect(() => {
+    if (
+      isPaypalSdkLoaded && 
+      formData.ticketType === 'donation' && 
+      formData.paymentMethod === 'PayPal (Online)' && 
+      registerPaypalRef.current && 
+      !paypalPaymentVerified &&
+      !paypalError
+    ) {
+      const renderButtons = async () => {
+        try {
+          if (registerPaypalRef.current) {
+            registerPaypalRef.current.innerHTML = '';
+            
+            await (window as any).paypal.Buttons({
+              style: {
+                layout: 'vertical',
+                color:  'gold',
+                shape:  'pill',
+                label:  'donate',
+                height: 44
+              },
+              createOrder: (data: any, actions: any) => {
+                const amt = formData.donationAmount || '25';
+                return actions.order.create({
+                  purchase_units: [{
+                    amount: { value: amt, currency_code: 'USD' },
+                    description: 'Workshop Donation - Foundation of Luv'
+                  }]
+                });
+              },
+              onApprove: async (data: any, actions: any) => {
+                const order = await actions.order.capture();
+                const txId = order.id;
+                setFormData(p => ({
+                  ...p,
+                  paymentReference: `PayPal Order: ${txId}`
+                }));
+                setPaypalPaymentVerified(true);
+              },
+              onError: (err: any) => {
+                console.error("PayPal Register Error:", err);
+                setPaypalError("Interactive payment failed. Please use manual payment.");
+              }
+            }).render(registerPaypalRef.current);
+          }
+        } catch (e) {
+          console.error("PayPal Register Render Exception:", e);
+          setPaypalError("Interactive payment failed. Please use manual payment.");
+        }
+      };
+
+      renderButtons();
+    }
+  }, [isPaypalSdkLoaded, formData.ticketType, formData.paymentMethod, formData.donationAmount, paypalPaymentVerified, paypalError]);
+
   const handleTextChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
+    if (name === 'paymentMethod') {
+      setPaypalPaymentVerified(false);
+      setPaypalError(null);
+    }
   };
 
   const handleCheckboxChange = (name: keyof RegistrationForm) => {
@@ -1911,8 +2018,22 @@ const WorkshopRegisterView: React.FC<WorkshopRegisterViewProps> = ({ onSubmitSuc
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (formData.ticketType === 'donation') {
+      if (!formData.donationAmount || parseFloat(formData.donationAmount) <= 0) {
+        alert('Please specify a valid donation amount.');
+        return;
+      }
+      if (formData.paymentMethod === 'PayPal (Online)' && !paypalPaymentVerified) {
+        alert('Please complete the PayPal payment before submitting.');
+        return;
+      }
+    }
     setIsSubmitting(true);
     try {
+      const ticketTypeDb = formData.ticketType === 'donation' ? 'donation' : 'free';
+      const paymentMethodDb = formData.ticketType === 'donation' ? formData.paymentMethod : null;
+      const paymentRefDb = formData.ticketType === 'donation' ? `Donation: $${formData.donationAmount} - Ref: ${formData.paymentReference}` : null;
+      
       const { error } = await supabase.from('workshop_registrations').insert({
         full_name: formData.fullName,
         email: formData.email,
@@ -1930,9 +2051,9 @@ const WorkshopRegisterView: React.FC<WorkshopRegisterViewProps> = ({ onSubmitSuc
         consent_marketing: formData.consentMarketing,
         consent_data: formData.consentData,
         consent_photos: formData.consentPhotos,
-        ticket_type: formData.ticketType === 'paid' ? 'vip' : 'free',
-        payment_method: formData.paymentMethod,
-        payment_reference: formData.paymentReference,
+        ticket_type: ticketTypeDb,
+        payment_method: paymentMethodDb,
+        payment_reference: paymentRefDb,
       });
       if (error) {
         console.error('Supabase error:', error);
@@ -1957,9 +2078,9 @@ const WorkshopRegisterView: React.FC<WorkshopRegisterViewProps> = ({ onSubmitSuc
               referral: formData.referral,
               special_requirements: formData.specialRequirements,
               questions: formData.questions,
-              ticket_type: formData.ticketType === 'paid' ? 'vip' : 'free',
-              payment_method: formData.paymentMethod,
-              payment_reference: formData.paymentReference,
+              ticket_type: ticketTypeDb,
+              payment_method: paymentMethodDb || '',
+              payment_reference: paymentRefDb || '',
             }
           })
         }).catch(err => console.error('Email trigger failure:', err));
@@ -2025,15 +2146,59 @@ const WorkshopRegisterView: React.FC<WorkshopRegisterViewProps> = ({ onSubmitSuc
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <label className={`cursor-pointer p-6 rounded-2xl border-2 flex flex-col transition-all ${formData.ticketType === 'free' ? 'border-[#9c1c22] bg-white shadow-md' : 'border-transparent bg-white/20 hover:bg-white/40'}`}>
                 <input type="radio" name="ticketType" checked={formData.ticketType === 'free'} onChange={() => setFormData(p => ({ ...p, ticketType: 'free' }))} className="sr-only" />
-                <span className="text-[10px] font-cinzel font-black uppercase tracking-wider text-[#332d2b]">General Admission</span>
+                <span className="text-[10px] font-cinzel font-black uppercase tracking-wider text-[#332d2b]">General Admission & Certificate</span>
                 <span className="text-2xl font-serif font-black text-[#9c1c22] mt-1">$0</span>
               </label>
-              <label className={`cursor-pointer p-6 rounded-2xl border-2 flex flex-col transition-all ${formData.ticketType === 'paid' ? 'border-[#eeb053] bg-white shadow-lg' : 'border-transparent bg-white/20 hover:bg-white/40'}`}>
-                <input type="radio" name="ticketType" checked={formData.ticketType === 'paid'} onChange={() => setFormData(p => ({ ...p, ticketType: 'paid' }))} className="sr-only" />
-                <span className="text-[10px] font-cinzel font-black uppercase tracking-wider text-[#332d2b]">VIP Certification</span>
-                <span className="text-2xl font-serif font-black text-[#eeb053] mt-1">$49</span>
+              <label className={`cursor-pointer p-6 rounded-2xl border-2 flex flex-col transition-all ${formData.ticketType === 'donation' ? 'border-[#eeb053] bg-white shadow-lg' : 'border-transparent bg-white/20 hover:bg-white/40'}`}>
+                <input type="radio" name="ticketType" checked={formData.ticketType === 'donation'} onChange={() => setFormData(p => ({ ...p, ticketType: 'donation' }))} className="sr-only" />
+                <span className="text-[10px] font-cinzel font-black uppercase tracking-wider text-[#332d2b]">Donate for next batch</span>
+                <span className="text-2xl font-serif font-black text-[#eeb053] mt-1">Donation</span>
               </label>
             </div>
+
+            {formData.ticketType === 'donation' && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                className="mt-6 p-6 bg-white/60 rounded-2xl border border-[#eeb053]/30"
+              >
+                <label className="block text-[9px] font-cinzel font-black tracking-widest text-[#332d2b] uppercase mb-3">
+                  Donation Amount ($) *
+                </label>
+                <div className="flex flex-wrap gap-3">
+                  {['10', '25', '50', '100'].map((amount) => (
+                    <button
+                      key={amount}
+                      type="button"
+                      disabled={paypalPaymentVerified}
+                      onClick={() => setFormData(p => ({ ...p, donationAmount: amount }))}
+                      className={`px-5 py-2.5 rounded-xl text-xs font-serif uppercase transition-all ${
+                        formData.donationAmount === amount
+                          ? 'bg-[#eeb053] text-[#1a1a1a] font-black'
+                          : 'bg-white border border-[#332d2b]/10 hover:bg-white/80 text-[#332d2b]'
+                      } ${paypalPaymentVerified ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    >
+                      ${amount}
+                    </button>
+                  ))}
+                  <div className="relative flex-grow min-w-[150px]">
+                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-sm text-[#332d2b]/50">$</span>
+                    <input
+                      type="number"
+                      min="1"
+                      disabled={paypalPaymentVerified}
+                      placeholder="Other Amount"
+                      value={['10', '25', '50', '100'].includes(formData.donationAmount) ? '' : formData.donationAmount}
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        setFormData(p => ({ ...p, donationAmount: val }));
+                      }}
+                      className={`w-full pl-8 pr-4 py-2.5 rounded-xl border border-[#332d2b]/10 bg-white focus:outline-none focus:ring-1 focus:ring-[#eeb053] text-sm text-[#332d2b] ${paypalPaymentVerified ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    />
+                  </div>
+                </div>
+              </motion.div>
+            )}
           </div>
 
           {/* Personal Information */}
@@ -2193,40 +2358,67 @@ const WorkshopRegisterView: React.FC<WorkshopRegisterViewProps> = ({ onSubmitSuc
             </div>
           </div>
 
-          {/* Paid Options Upload Zone */}
-          {formData.ticketType === 'paid' && (
+          {/* Donation Options Upload Zone */}
+          {formData.ticketType === 'donation' && (
             <motion.div 
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
               className="space-y-6 bg-[#1a1a1a]/5 p-6 md:p-8 rounded-[2rem] border border-[#eeb053]/30 overflow-hidden"
             >
-              <h3 className="text-lg font-cinzel font-black tracking-widest text-[#eeb053] uppercase border-b border-black/10 pb-2">6. Paid Workshop Verification</h3>
+              <h3 className="text-lg font-cinzel font-black tracking-widest text-[#eeb053] uppercase border-b border-black/10 pb-2">6. Donation Verification</h3>
               <div className="grid md:grid-cols-2 gap-6">
-                <div>
+                <div className="col-span-2 sm:col-span-1">
                   <label className="block text-[9px] font-cinzel font-black tracking-widest text-[#332d2b] uppercase mb-2">Payment Method</label>
                   <select name="paymentMethod" value={formData.paymentMethod} onChange={handleTextChange} className="w-full px-5 py-4 rounded-xl border border-[#332d2b]/10 bg-white focus:outline-none focus:ring-1 focus:ring-[#eeb053] text-[#332d2b] font-serif uppercase">
+                    <option value="PayPal (Online)">PayPal (Instant Online)</option>
                     <option value="Bank Transfer">Bank Transfer</option>
-                    <option value="PayPal">PayPal</option>
-                    <option value="Venmo">Venmo</option>
+                    <option value="PayPal">PayPal (Manual Transfer)</option>
+                    <option value="Venmo">Venmo (Manual Transfer)</option>
                   </select>
                 </div>
-                <div>
-                  <label className="block text-[9px] font-cinzel font-black tracking-widest text-[#332d2b] uppercase mb-2">Payment Reference Number *</label>
-                  <input required={formData.ticketType === 'paid'} type="text" name="paymentReference" value={formData.paymentReference} onChange={handleTextChange} className="w-full px-5 py-4 rounded-xl border border-[#332d2b]/10 bg-white focus:outline-none focus:ring-1 focus:ring-[#eeb053] text-[#332d2b]" placeholder="Transaction Hash, ID, or Reference Name" />
-                </div>
-              </div>
-              <div>
-                <label className="block text-[9px] font-cinzel font-black tracking-widest text-[#332d2b] uppercase mb-2">Upload Proof of Payment (Required) *</label>
-                <div 
-                  onClick={() => fileInputRef.current?.click()}
-                  className="cursor-pointer border-2 border-dashed border-[#eeb053]/40 hover:border-[#eeb053] rounded-2xl p-8 text-center bg-white/60 hover:bg-white transition-all flex flex-col items-center justify-center gap-3"
-                >
-                  <UploadCloud size={36} className="text-[#eeb053]" />
-                  <span className="text-xs font-serif uppercase text-[#332d2b]/80">
-                    {formData.proofName ? `Selected: ${formData.proofName}` : "Click to select or drag your receipt/screenshot here"}
-                  </span>
-                  <input ref={fileInputRef} required={formData.ticketType === 'paid'} type="file" onChange={handleFileChange} className="hidden" accept="image/*,.pdf" />
-                </div>
+                
+                {formData.paymentMethod === 'PayPal (Online)' ? (
+                  <div className="col-span-2">
+                    <label className="block text-[9px] font-cinzel font-black tracking-widest text-[#332d2b] uppercase mb-4">Complete Payment via PayPal Below</label>
+                    {paypalError ? (
+                      <div className="p-4 bg-red-500/10 border border-red-500/30 rounded-xl text-red-700 text-xs font-serif uppercase">
+                        {paypalError}
+                      </div>
+                    ) : !isPaypalSdkLoaded ? (
+                      <div className="flex flex-col items-center justify-center py-8 bg-[#fdfaf6] rounded-[2rem] border-2 border-dashed border-[#eeb053]/30">
+                        <Loader2 className="animate-spin text-[#eeb053] mb-3" size={24} />
+                        <p className="text-[9px] font-cinzel font-black uppercase text-[#332d2b]/40 tracking-widest">Loading secure payment portal...</p>
+                      </div>
+                    ) : !paypalPaymentVerified ? (
+                      <div ref={registerPaypalRef} className="relative z-10 max-w-md mx-auto" />
+                    ) : (
+                      <div className="flex items-center gap-3 p-5 bg-green-500/10 border border-green-500/30 rounded-2xl text-green-700 text-sm font-serif uppercase">
+                        <CheckCircle2 size={18} />
+                        <span>Payment Verified! Transaction ID: {formData.paymentReference}</span>
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <>
+                    <div className="col-span-2 sm:col-span-1">
+                      <label className="block text-[9px] font-cinzel font-black tracking-widest text-[#332d2b] uppercase mb-2">Payment Reference Number *</label>
+                      <input required={formData.ticketType === 'donation'} type="text" name="paymentReference" value={formData.paymentReference} onChange={handleTextChange} className="w-full px-5 py-4 rounded-xl border border-[#332d2b]/10 bg-white focus:outline-none focus:ring-1 focus:ring-[#eeb053] text-[#332d2b]" placeholder="Transaction Hash, ID, or Reference Name" />
+                    </div>
+                    <div className="col-span-2">
+                      <label className="block text-[9px] font-cinzel font-black tracking-widest text-[#332d2b] uppercase mb-2">Upload Proof of Payment (Required) *</label>
+                      <div 
+                        onClick={() => fileInputRef.current?.click()}
+                        className="cursor-pointer border-2 border-dashed border-[#eeb053]/40 hover:border-[#eeb053] rounded-2xl p-8 text-center bg-white/60 hover:bg-white transition-all flex flex-col items-center justify-center gap-3"
+                      >
+                        <UploadCloud size={36} className="text-[#eeb053]" />
+                        <span className="text-xs font-serif uppercase text-[#332d2b]/80">
+                          {formData.proofName ? `Selected: ${formData.proofName}` : "Click to select or drag your receipt/screenshot here"}
+                        </span>
+                        <input ref={fileInputRef} required={formData.ticketType === 'donation'} type="file" onChange={handleFileChange} className="hidden" accept="image/*,.pdf" />
+                      </div>
+                    </div>
+                  </>
+                )}
               </div>
             </motion.div>
           )}
@@ -2340,8 +2532,13 @@ const App: React.FC = () => {
     return () => window.removeEventListener('popstate', handlePopState);
   }, []);
 
-  const handleNavigate = (pageId: string) => {
+  const [selectedTicketType, setSelectedTicketType] = useState<'free' | 'donation'>('free');
+
+  const handleNavigate = (pageId: string, ticketType?: 'free' | 'donation') => {
     setCurrentPage(pageId);
+    if (ticketType) {
+      setSelectedTicketType(ticketType);
+    }
     const targetPath = pageId === 'home' ? '/' : `/${pageId}`;
     window.history.pushState(null, '', targetPath);
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -2365,7 +2562,7 @@ const App: React.FC = () => {
       case 'blog': return <BlogView />;
       case 'resources': return <ResourcesView />;
       case 'workshop': return <WorkshopView onNavigate={handleNavigate} cms={cms} />;
-      case 'register-workshop': return <WorkshopRegisterView onSubmitSuccess={() => showToast("Registration Submitted Successfully!")} />;
+      case 'register-workshop': return <WorkshopRegisterView defaultTicketType={selectedTicketType} onSubmitSuccess={() => showToast("Registration Submitted Successfully!")} />;
       case 'donation': return <DonorView onInitiate={() => setIsPaymentModalOpen(true)} />;
       case 'contact': return <ContactView onSubmitSuccess={() => showToast("Message Sent Successfully!")} cms={cms} />;
       default: return <HomeView onNavigate={handleNavigate} cms={cms} />;

@@ -109,7 +109,7 @@ const server = http.createServer(async (req, res) => {
                 <table style="width:100%;font-size:14px;">
                   <tr><td style="padding:6px 0;font-weight:bold;width:100px;">Date:</td><td>Saturday, July 18, 2026</td></tr>
                   <tr><td style="padding:6px 0;font-weight:bold;">Time:</td><td>10:00 AM - 3:00 PM EST</td></tr>
-                  <tr><td style="padding:6px 0;font-weight:bold;">Ticket:</td><td style="color:#9c1c22;font-weight:bold;">${ticket_type === 'vip' ? 'VIP Ticket (with Certification)' : 'General Admission (Free)'}</td></tr>
+                  <tr><td style="padding:6px 0;font-weight:bold;">Ticket:</td><td style="color:#9c1c22;font-weight:bold;">${ticket_type === 'donation' ? 'Donation' : ticket_type === 'vip' ? 'VIP Ticket (with Certification)' : 'General Admission (Free)'}</td></tr>
                 </table>
               </div>
               <p>If you have any questions, contact us at <a href="mailto:${ADMIN_EMAIL}" style="color:#9c1c22;">${ADMIN_EMAIL}</a>.</p>
@@ -136,7 +136,7 @@ const server = http.createServer(async (req, res) => {
                 <tr style="background:#f9f9f9;"><td style="padding:10px;font-weight:bold;">Phone</td><td style="padding:10px;">${phone}</td></tr>
                 <tr><td style="padding:10px;font-weight:bold;">City</td><td style="padding:10px;">${city || 'N/A'}</td></tr>
                 <tr style="background:#f9f9f9;"><td style="padding:10px;font-weight:bold;">Ticket</td><td style="padding:10px;color:#9c1c22;font-weight:bold;">${ticket_type}</td></tr>
-                ${ticket_type === 'vip' ? `<tr><td style="padding:10px;font-weight:bold;">Payment Ref</td><td style="padding:10px;font-family:monospace;">${payment_reference}</td></tr>` : ''}
+                ${ticket_type === 'vip' || ticket_type === 'donation' ? `<tr><td style="padding:10px;font-weight:bold;">Payment Ref</td><td style="padding:10px;font-family:monospace;">${payment_reference}</td></tr>` : ''}
               </table>
             </div>
             ${defaultFooter}

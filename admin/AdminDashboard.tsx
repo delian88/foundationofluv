@@ -32,7 +32,7 @@ const AdminDashboard: React.FC<Props> = ({ onNavigate }) => {
       setStats({
         total: regs.length,
         free: regs.filter((r: any) => r.ticket_type === 'free' || !r.ticket_type).length,
-        vip: regs.filter((r: any) => r.ticket_type === 'vip').length,
+        vip: regs.filter((r: any) => r.ticket_type === 'vip' || r.ticket_type === 'donation').length,
         today: regs.filter((r: any) => new Date(r.created_at) >= today).length,
         emailsSent: emailsResult.count ?? 0,
         recent: regs.slice(0, 5),
@@ -57,12 +57,15 @@ const AdminDashboard: React.FC<Props> = ({ onNavigate }) => {
     table: { width: '100%', borderCollapse: 'collapse' as const, background: '#141414', borderRadius: 12, overflow: 'hidden' },
     th: { textAlign: 'left' as const, padding: '12px 16px', fontSize: 11, fontWeight: 700, color: '#6b7280', letterSpacing: 1, textTransform: 'uppercase' as const, borderBottom: '1px solid #1e1e1e', background: '#111' },
     td: { padding: '14px 16px', fontSize: 14, color: '#d1d5db', borderBottom: '1px solid #1a1a1a' },
-    badge: (type: string): React.CSSProperties => ({
-      display: 'inline-block', padding: '3px 10px', borderRadius: 20, fontSize: 11, fontWeight: 700,
-      background: type === 'vip' ? 'rgba(238,176,83,0.15)' : 'rgba(34,197,94,0.1)',
-      color: type === 'vip' ? '#eeb053' : '#4ade80',
-      border: `1px solid ${type === 'vip' ? 'rgba(238,176,83,0.25)' : 'rgba(34,197,94,0.2)'}`,
-    }),
+    badge: (type: string): React.CSSProperties => {
+      const isDonationOrVip = type === 'donation' || type === 'vip';
+      return {
+        display: 'inline-block', padding: '3px 10px', borderRadius: 20, fontSize: 11, fontWeight: 700,
+        background: isDonationOrVip ? 'rgba(238,176,83,0.15)' : 'rgba(34,197,94,0.1)',
+        color: isDonationOrVip ? '#eeb053' : '#4ade80',
+        border: `1px solid ${isDonationOrVip ? 'rgba(238,176,83,0.25)' : 'rgba(34,197,94,0.2)'}`,
+      };
+    },
     quickActions: { display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 12, marginBottom: 32 },
     qBtn: {
       padding: '20px 16px', borderRadius: 14, border: '1px solid #2a2a2a',
@@ -99,7 +102,7 @@ const AdminDashboard: React.FC<Props> = ({ onNavigate }) => {
         {[
           { icon: '👥', value: stats.total, label: 'Total Registrations', delta: `+${stats.today} today` },
           { icon: '🎟️', value: stats.free, label: 'Free Tickets', color: '#4ade80' },
-          { icon: '⭐', value: stats.vip, label: 'VIP Tickets', color: '#eeb053' },
+          { icon: '⭐', value: stats.vip, label: 'Donations & VIP', color: '#eeb053' },
           { icon: '✉️', value: stats.emailsSent, label: 'Emails Sent', color: '#60a5fa' },
         ].map((s, i) => (
           <div key={i} style={{ ...S.statCard, borderColor: i === 0 ? 'rgba(156,28,34,0.25)' : '#1e1e1e' }}>

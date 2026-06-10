@@ -138,7 +138,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
                   </tr>
                   <tr>
                     <td style="padding: 6px 0; font-weight: bold;">Ticket Type:</td>
-                    <td style="padding: 6px 0; text-transform: uppercase; color: #9c1c22; font-weight: bold;">${ticket_type === 'vip' ? 'VIP Ticket (with Certification)' : 'General Admission (Free)'}</td>
+                    <td style="padding: 6px 0; text-transform: uppercase; color: #9c1c22; font-weight: bold;">${ticket_type === 'donation' ? 'Donation' : ticket_type === 'vip' ? 'VIP Ticket (with Certification)' : 'General Admission (Free)'}</td>
                   </tr>
                 </table>
               </div>
@@ -147,6 +147,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
                 <div style="background-color: #f4e8e9; border: 1px solid #d4a3a6; padding: 20px; border-radius: 8px; margin-bottom: 28px;">
                   <h4 style="margin-top: 0; font-family: 'Georgia', serif; color: #9c1c22; text-transform: uppercase;">VIP Registration Note</h4>
                   <p style="margin: 0; font-size: 14px; color: #555555;">Since you selected a VIP Ticket, we will verify your payment details shortly. Your VIP package includes an official Certificate of Completion, 1-on-1 coaching session, and permanent access to recorded video sessions.</p>
+                </div>
+              ` : ''}
+
+              ${ticket_type === 'donation' ? `
+                <div style="background-color: #fcfaf6; border: 1px solid #eeb053; padding: 20px; border-radius: 8px; margin-bottom: 28px;">
+                  <h4 style="margin-top: 0; font-family: 'Georgia', serif; color: #9c1c22; text-transform: uppercase;">Thank you for your donation!</h4>
+                  <p style="margin: 0; font-size: 14px; color: #555555;">Your kind donation (${payment_reference}) helps keep our workshops and certification free of charge for future batches. We will verify your transaction shortly.</p>
                 </div>
               ` : ''}
 
@@ -232,13 +239,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
                   <td style="padding: 10px; font-weight: bold;">Ticket Type</td>
                   <td style="padding: 10px; text-transform: uppercase; font-weight: bold; color: #9c1c22;">${ticket_type}</td>
                 </tr>
-                ${ticket_type === 'vip' ? `
+                 ${ticket_type === 'vip' || ticket_type === 'donation' ? `
                   <tr style="background-color: #f9f9f9; border-bottom: 1px solid #eeeeee;">
                     <td style="padding: 10px; font-weight: bold;">Payment Method</td>
                     <td style="padding: 10px;">${payment_method}</td>
                   </tr>
                   <tr style="border-bottom: 1px solid #eeeeee;">
-                    <td style="padding: 10px; font-weight: bold;">Payment Ref #</td>
+                    <td style="padding: 10px; font-weight: bold;">Payment Ref # / Amount</td>
                     <td style="padding: 10px; font-family: monospace;">${payment_reference}</td>
                   </tr>
                 ` : ''}

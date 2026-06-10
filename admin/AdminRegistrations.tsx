@@ -87,12 +87,16 @@ const AdminRegistrations: React.FC = () => {
     }),
     tr: (i: number): React.CSSProperties => ({ background: i % 2 === 0 ? '#141414' : '#111', cursor: 'pointer', transition: 'background 0.1s' }),
     td: { padding: '14px 16px', borderBottom: '1px solid #1a1a1a', color: '#d1d5db', whiteSpace: 'nowrap' as const },
-    badge: (type: string): React.CSSProperties => ({
-      display: 'inline-block', padding: '3px 10px', borderRadius: 20, fontSize: 11, fontWeight: 700,
-      background: type === 'vip' ? 'rgba(238,176,83,0.15)' : 'rgba(34,197,94,0.1)',
-      color: type === 'vip' ? '#eeb053' : '#4ade80',
-      border: `1px solid ${type === 'vip' ? 'rgba(238,176,83,0.25)' : 'rgba(34,197,94,0.2)'}`,
-    }),
+    badge: (type: string): React.CSSProperties => {
+      const isDonation = type === 'donation';
+      const isVip = type === 'vip';
+      return {
+        display: 'inline-block', padding: '3px 10px', borderRadius: 20, fontSize: 11, fontWeight: 700,
+        background: isDonation || isVip ? 'rgba(238,176,83,0.15)' : 'rgba(34,197,94,0.1)',
+        color: isDonation || isVip ? '#eeb053' : '#4ade80',
+        border: `1px solid ${isDonation || isVip ? 'rgba(238,176,83,0.25)' : 'rgba(34,197,94,0.2)'}`,
+      };
+    },
     empty: { textAlign: 'center' as const, padding: '60px 20px', color: '#4b5563' },
     modal: {
       position: 'fixed' as const, inset: 0, background: 'rgba(0,0,0,0.8)',
@@ -141,7 +145,8 @@ const AdminRegistrations: React.FC = () => {
         <select style={S.select} value={ticketFilter} onChange={e => setTicketFilter(e.target.value)}>
           <option value="all">All Tickets</option>
           <option value="free">Free Only</option>
-          <option value="vip">VIP Only</option>
+          <option value="donation">Donation Only</option>
+          <option value="vip">VIP Only (Legacy)</option>
         </select>
         <span style={S.countBadge}>{filtered.length} registrant{filtered.length !== 1 ? 's' : ''}</span>
         <button style={S.btn('success')} onClick={exportCSV}>⬇️ Export CSV</button>

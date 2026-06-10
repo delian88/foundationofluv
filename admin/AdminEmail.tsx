@@ -5,7 +5,7 @@ const AdminEmail: React.FC = () => {
   const [registrations, setRegistrations] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [mode, setMode] = useState<'single' | 'bulk'>('bulk');
-  const [recipientFilter, setRecipientFilter] = useState<'all' | 'free' | 'vip'>('all');
+  const [recipientFilter, setRecipientFilter] = useState<'all' | 'free' | 'donation' | 'vip'>('all');
   const [singleSearch, setSingleSearch] = useState('');
   const [selectedSingle, setSelectedSingle] = useState<any | null>(null);
   const [subject, setSubject] = useState('');
@@ -163,6 +163,7 @@ const AdminEmail: React.FC = () => {
               <select style={S.select} value={recipientFilter} onChange={e => setRecipientFilter(e.target.value as any)}>
                 <option value="all">All Registrants ({registrations.length})</option>
                 <option value="free">Free Ticket Holders ({registrations.filter(r => (r.ticket_type ?? 'free') === 'free').length})</option>
+                <option value="donation">Donation Ticket Holders ({registrations.filter(r => r.ticket_type === 'donation').length})</option>
                 <option value="vip">VIP Ticket Holders ({registrations.filter(r => r.ticket_type === 'vip').length})</option>
               </select>
             </div>

@@ -414,14 +414,14 @@ export const WORKSHOP_DETAILS = {
   ],
   pricing: {
     free: {
-      name: "General Admission",
+      name: "General Admission & Certificate",
       price: "$0",
-      description: "Access to all live workshop sessions, Q&A, and basic digital resource materials."
+      description: "Includes access to all live workshop sessions, Q&A, digital resource materials, and official Certificate of Completion."
     },
     paid: {
-      name: "VIP Ticket with Certification",
-      price: "$49",
-      description: "Includes official Certificate of Completion, 1-on-1 post-workshop coaching session, and permanent access to recorded video sessions."
+      name: "Donate for next batch",
+      price: "Donation",
+      description: "Support our mission. Your contribution helps us keep these workshops and certificates free of charge for future batches."
     }
   }
 };
