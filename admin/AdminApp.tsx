@@ -8,8 +8,10 @@ import AdminCMS from './AdminCMS';
 import AdminEvents from './AdminEvents';
 import AdminAttachments from './AdminAttachments';
 import AdminCertificates from './AdminCertificates';
+import AdminSettings from './AdminSettings';
+import AdminDonations from './AdminDonations';
 
-type AdminPage = 'dashboard' | 'registrations' | 'email' | 'cms' | 'events' | 'attachments' | 'certificates';
+type AdminPage = 'dashboard' | 'registrations' | 'email' | 'cms' | 'events' | 'attachments' | 'certificates' | 'settings' | 'donations';
 
 const useWindowWidth = () => {
   const [width, setWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1024);
@@ -79,21 +81,25 @@ const AdminApp: React.FC = () => {
   const navItems: { id: AdminPage; icon: string; label: string }[] = [
     { id: 'dashboard', icon: '📊', label: 'Dashboard' },
     { id: 'registrations', icon: '📋', label: 'Registrations' },
+    { id: 'donations', icon: '💰', label: 'Donations' },
     { id: 'email', icon: '✉️', label: 'Email Center' },
     { id: 'events', icon: '📅', label: 'Events' },
     { id: 'cms', icon: '✏️', label: 'Content (CMS)' },
     { id: 'attachments', icon: '📎', label: 'Attachments' },
     { id: 'certificates', icon: '🎓', label: 'Certificates' },
+    { id: 'settings', icon: '⚙️', label: 'Settings' },
   ];
 
   const pageTitle: Record<AdminPage, string> = {
     dashboard: 'Dashboard',
     registrations: 'Workshop Registrations',
+    donations: 'Donation Reports',
     email: 'Email Center',
     events: 'Events & Scheduling',
     cms: 'Content Management',
     attachments: 'Attachments & Media Library',
     certificates: 'Certificate Manager',
+    settings: 'Gateway Settings',
   };
 
   const currentNav = navItems.find(n => n.id === page);
@@ -306,11 +312,13 @@ const AdminApp: React.FC = () => {
         <div style={{ flex: 1, padding: isMobile ? '20px 16px' : 32, overflow: 'auto' }}>
           {page === 'dashboard' && <AdminDashboard onNavigate={setPage} />}
           {page === 'registrations' && <AdminRegistrations />}
+          {page === 'donations' && <AdminDonations />}
           {page === 'email' && <AdminEmail />}
           {page === 'events' && <AdminEvents />}
           {page === 'cms' && <AdminCMS />}
           {page === 'attachments' && <AdminAttachments />}
           {page === 'certificates' && <AdminCertificates />}
+          {page === 'settings' && <AdminSettings />}
         </div>
       </div>
     </div>

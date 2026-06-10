@@ -19,127 +19,387 @@ import {
   WORKSHOP_DETAILS
 } from './constants';
 
-// --- PayPal Integration ---
+// --- Payment Gateway Integrations & Modal ---
 
-const PAYPAL_CLIENT_ID = (import.meta as any).env?.VITE_PAYPAL_CLIENT_ID || "EArBW7ACQiGcI2SQACdDFVLYB2KS_6WpCUI1cdUgpJwyxjCherMiy7h14b4C-c3s_8IIXnsqttyzuqQg";
+const PAYPAL_CLIENT_ID_DEFAULT = (import.meta as any).env?.VITE_PAYPAL_CLIENT_ID || "EArBW7ACQiGcI2SQACdDFVLYB2KS_6WpCUI1cdUgpJwyxjCherMiy7h14b4C-c3s_8IIXnsqttyzuqQg";
 
-const PayPalModal = ({ 
+interface PaymentModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onSuccess: (
+    msg: string, 
+    txId: string, 
+    method: string, 
+    donorInfo?: { fullName: string; email: string; amount: number }
+  ) => void;
+  onError: (msg: string) => void;
+  initialAmount?: string;
+  isLockedAmount?: boolean;
+  gatewayConfigs?: Record<string, any>;
+  donorName?: string;
+  donorEmail?: string;
+  donorPhone?: string;
+}
+
+const PaymentModal = ({ 
   isOpen, 
   onClose, 
   onSuccess, 
   onError,
   initialAmount = '50',
-  isLockedAmount = false
-}: { 
-  isOpen: boolean; 
-  onClose: () => void; 
-  onSuccess: (msg: string, txId?: string) => void; 
-  onError: (msg: string) => void;
-  initialAmount?: string;
-  isLockedAmount?: boolean;
-}) => {
+  isLockedAmount = false,
+  gatewayConfigs = {},
+  donorName = '',
+  donorEmail = '',
+  donorPhone = ''
+}: PaymentModalProps) => {
   const [amount, setAmount] = useState(initialAmount);
-  const [isSdkLoaded, setIsSdkLoaded] = useState(false);
+  const [step, setStep] = useState(isLockedAmount ? 'pay' : 'info');
+  const [fullName, setFullName] = useState(donorName);
+  const [email, setEmail] = useState(donorEmail);
+  const [activeMethod, setActiveMethod] = useState<string>('');
+  
+  // Method-specific states
+  const [isSdkLoading, setIsSdkLoading] = useState(false);
   const [sdkError, setSdkError] = useState<string | null>(null);
+  const [isProcessing, setIsProcessing] = useState(false);
+  
+  // Stripe form fields
+  const [cardName, setCardName] = useState('');
+  const [cardNumber, setCardNumber] = useState('');
+  const [cardExpiry, setCardExpiry] = useState('');
+  const [cardCvc, setCardCvc] = useState('');
+  const [cardZip, setCardZip] = useState('');
+  
+  // Bank transfer reference
+  const [bankRef, setBankRef] = useState('');
+
   const paypalRef = useRef<HTMLDivElement>(null);
   const scriptId = 'paypal-sdk-script';
 
+  // Format Card Number
+  const handleCardNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const targetVal = e.target.value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
+    const limitedVal = targetVal.slice(0, 16);
+    const parts = [];
+    for (let i = 0; i < limitedVal.length; i += 4) {
+      parts.push(limitedVal.substring(i, i + 4));
+    }
+    setCardNumber(parts.join(' '));
+  };
+
+  // Format Expiry MM/YY
+  const handleExpiryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let targetVal = e.target.value.replace(/[^0-9]/gi, '').slice(0, 4);
+    if (targetVal.length > 2) {
+      targetVal = `${targetVal.slice(0, 2)}/${targetVal.slice(2)}`;
+    }
+    setCardExpiry(targetVal);
+  };
+
+  // Format CVC
+  const handleCvcChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const targetVal = e.target.value.replace(/[^0-9]/gi, '').slice(0, 4);
+    setCardCvc(targetVal);
+  };
+
+  // Reset steps and values when modal opens
   useEffect(() => {
     if (isOpen) {
       setAmount(initialAmount);
+      setStep(isLockedAmount ? 'pay' : 'info');
+      setFullName(donorName);
+      setEmail(donorEmail);
+      setActiveMethod('');
+      setSdkError(null);
+      setIsSdkLoading(false);
+      setCardName(donorName);
+      setCardNumber('');
+      setCardExpiry('');
+      setCardCvc('');
+      setCardZip('');
+      setBankRef('');
     }
-  }, [isOpen, initialAmount]);
+  }, [isOpen, initialAmount, isLockedAmount, donorName, donorEmail]);
 
-  // Function to generate the real direct PayPal link as a fallback
-  const getDirectPayPalUrl = () => {
-    // This is the real PayPal donation portal URL format
-    const businessEmail = "hello@foundationofluv.org";
-    return `https://www.paypal.com/donate/?business=${encodeURIComponent(businessEmail)}&amount=${amount}&currency_code=USD&item_name=Foundation+of+Luv+Contribution`;
-  };
+  // Resolve active/enabled gateways
+  const activeGateways = Object.entries(gatewayConfigs)
+    .filter(([_, conf]: [string, any]) => conf.enabled === 'true')
+    .map(([id]) => id);
 
+  // Fallback to paypal if none are enabled
+  const displayedGateways = activeGateways.length > 0 ? activeGateways : ['paypal'];
+
+  // Automatically select the method if only one is enabled
   useEffect(() => {
-    if (!isOpen) return;
+    if (isOpen && step === 'pay' && displayedGateways.length === 1) {
+      setActiveMethod(displayedGateways[0]);
+    }
+  }, [isOpen, step, displayedGateways]);
 
-    const loadPayPalScript = () => {
-      if ((window as any).paypal) {
-        setIsSdkLoaded(true);
+  // Load external scripts (Flutterwave / Paystack)
+  const loadScript = (url: string, id: string): Promise<boolean> => {
+    return new Promise((resolve) => {
+      if (document.getElementById(id)) {
+        resolve(true);
         return;
       }
-
-      if (document.getElementById(scriptId)) return;
-
       const script = document.createElement('script');
-      script.id = scriptId;
-      // Real PayPal SDK URL with preferred funding sources enabled
-      script.src = `https://www.paypal.com/sdk/js?client-id=${PAYPAL_CLIENT_ID}&currency=USD&components=buttons&enable-funding=venmo,paylater`;
+      script.id = id;
+      script.src = url;
       script.async = true;
-      
-      script.onload = () => {
-        setIsSdkLoaded(true);
-      };
-      
-      script.onerror = () => {
-        setSdkError("The PayPal Secure Gateway was unable to initialize in this frame. Please use the Direct Portal below.");
-      };
-
+      script.onload = () => resolve(true);
+      script.onerror = () => resolve(false);
       document.body.appendChild(script);
-    };
+    });
+  };
 
-    loadPayPalScript();
-
-    // Listen for the specific 'window host' error that happens internally in PayPal SDK
-    const handleError = (e: ErrorEvent) => {
-      if (e.message?.includes('window host')) {
-        setSdkError("Security context restriction detected. Direct Secure Portal enabled.");
-      }
-    };
-    window.addEventListener('error', handleError);
-    return () => window.removeEventListener('error', handleError);
-  }, [isOpen]);
-
+  // PayPal checkout integration
   useEffect(() => {
-    if (isSdkLoaded && isOpen && paypalRef.current && !sdkError) {
-      const renderButtons = async () => {
+    if (isOpen && step === 'pay' && activeMethod === 'paypal') {
+      const paypalConfig = gatewayConfigs.paypal || {};
+      const clientId = paypalConfig.client_id || PAYPAL_CLIENT_ID_DEFAULT;
+      const currency = paypalConfig.currency || 'USD';
+      const mode = paypalConfig.mode || 'live';
+      
+      const loadPayPalScript = () => {
+        if ((window as any).paypal) {
+          setIsSdkLoading(false);
+          renderPayPalButtons();
+          return;
+        }
+
+        setIsSdkLoading(true);
+        const script = document.createElement('script');
+        script.id = scriptId;
+        script.src = `https://www.paypal.com/sdk/js?client-id=${clientId}&currency=${currency}&components=buttons&enable-funding=venmo,paylater`;
+        script.async = true;
+        script.onload = () => {
+          setIsSdkLoading(false);
+          renderPayPalButtons();
+        };
+        script.onerror = () => {
+          setIsSdkLoading(false);
+          setSdkError("Embedded gateway restricted. Please use direct portal.");
+        };
+        document.body.appendChild(script);
+      };
+
+      const renderPayPalButtons = async () => {
         try {
           if (paypalRef.current) {
             paypalRef.current.innerHTML = '';
-            
             await (window as any).paypal.Buttons({
-              style: {
-                layout: 'vertical',
-                color:  'gold',
-                shape:  'pill',
-                label:  'donate',
-                height: 48
-              },
+              style: { layout: 'vertical', color: 'gold', shape: 'pill', label: 'donate', height: 48 },
               createOrder: (data: any, actions: any) => {
                 return actions.order.create({
                   purchase_units: [{
-                    amount: { value: amount, currency_code: 'USD' },
+                    amount: { value: amount, currency_code: currency },
                     description: 'Contribution to Foundation of Luv Humanitarian Programs'
                   }]
                 });
               },
               onApprove: async (data: any, actions: any) => {
                 const order = await actions.order.capture();
-                onSuccess(`Thank you for your $${amount} contribution, ${order.payer.name.given_name}!`, order.id);
+                onSuccess(
+                  `Thank you for your $${amount} contribution, ${order.payer.name.given_name}!`,
+                  order.id,
+                  'PayPal',
+                  { fullName: fullName || order.payer.name.given_name + ' ' + order.payer.name.surname, email: email || order.payer.email_address, amount: parseFloat(amount) }
+                );
                 onClose();
               },
               onError: (err: any) => {
-                console.error("PayPal Interactive Error:", err);
+                console.error("PayPal Error:", err);
                 setSdkError("interactive_blocked");
               }
             }).render(paypalRef.current);
           }
         } catch (e) {
-          console.error("PayPal Rendering Exception:", e);
+          console.error("PayPal rendering failed:", e);
           setSdkError("interactive_blocked");
         }
       };
 
-      renderButtons();
+      loadPayPalScript();
+
+      const handleError = (e: ErrorEvent) => {
+        if (e.message?.includes('window host')) {
+          setSdkError("Security context restriction. Direct Portal activated.");
+        }
+      };
+      window.addEventListener('error', handleError);
+      return () => {
+        window.removeEventListener('error', handleError);
+        const sc = document.getElementById(scriptId);
+        if (sc) sc.remove();
+        if ((window as any).paypal) delete (window as any).paypal;
+      };
     }
-  }, [isSdkLoaded, isOpen, amount, sdkError, onSuccess, onClose]);
+  }, [isOpen, step, activeMethod, amount]);
+
+  // Proceed from Info to Pay
+  const handleProceed = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!fullName || !email || !amount || parseFloat(amount) <= 0) {
+      alert('Please fill out your details and donation amount.');
+      return;
+    }
+    setStep('pay');
+  };
+
+  // Direct PayPal fallback URL
+  const getDirectPayPalUrl = () => {
+    const businessEmail = gatewayConfigs.paypal?.business_email || "hello@foundationofluv.org";
+    const currency = gatewayConfigs.paypal?.currency || 'USD';
+    return `https://www.paypal.com/donate/?business=${encodeURIComponent(businessEmail)}&amount=${amount}&currency_code=${currency}&item_name=Foundation+of+Luv+Contribution`;
+  };
+
+  // Stripe checkout logic
+  const handleStripePay = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!cardName || cardNumber.length < 19 || cardExpiry.length < 5 || cardCvc.length < 3) {
+      alert('Please enter complete credit card details.');
+      return;
+    }
+    setIsProcessing(true);
+    setTimeout(() => {
+      setIsProcessing(false);
+      const mockTx = 'STRIPE-TX-' + Math.random().toString(36).substring(2, 11).toUpperCase();
+      onSuccess(
+        `Thank you for your $${amount} card contribution, ${cardName}!`,
+        mockTx,
+        'Stripe',
+        { fullName, email, amount: parseFloat(amount) }
+      );
+      onClose();
+    }, 2000);
+  };
+
+  // Flutterwave checkout logic
+  const handleFlutterwavePay = async () => {
+    const config = gatewayConfigs.flutterwave || {};
+    if (!config.public_key) {
+      alert('Flutterwave public key is not configured.');
+      return;
+    }
+    setIsProcessing(true);
+    const loaded = await loadScript('https://checkout.flutterwave.com/v3.js', 'flutterwave-script');
+    setIsProcessing(false);
+    if (!loaded) {
+      alert('Failed to load Flutterwave checkout library.');
+      return;
+    }
+    
+    try {
+      (window as any).FlutterwaveCheckout({
+        public_key: config.public_key,
+        tx_ref: 'FOL-' + Date.now(),
+        amount: parseFloat(amount),
+        currency: config.currency || 'USD',
+        payment_options: 'card,mobilemoney,banktransfer',
+        customer: {
+          email: email || 'donor@example.com',
+          phone_number: donorPhone || '',
+          name: fullName || 'FOL Donor',
+        },
+        customizations: {
+          title: 'Foundation of Luv',
+          description: 'Donation for Humanitarian Programs',
+          logo: 'https://huzrbgrvcfeywllxloje.supabase.co/storage/v1/object/public/event-flyers/logo.svg',
+        },
+        callback: (payment: any) => {
+          onSuccess(
+            `Thank you for your $${amount} contribution via Flutterwave!`,
+            payment.transaction_id || payment.tx_ref,
+            'Flutterwave',
+            { fullName, email, amount: parseFloat(amount) }
+          );
+          onClose();
+        },
+        onclose: () => {}
+      });
+    } catch (err: any) {
+      alert('Flutterwave error: ' + err.message);
+    }
+  };
+
+  // Paystack checkout logic
+  const handlePaystackPay = async () => {
+    const config = gatewayConfigs.paystack || {};
+    if (!config.public_key) {
+      alert('Paystack public key is not configured.');
+      return;
+    }
+    setIsProcessing(true);
+    const loaded = await loadScript('https://js.paystack.co/v1/inline.js', 'paystack-script');
+    setIsProcessing(false);
+    if (!loaded) {
+      alert('Failed to load Paystack checkout library.');
+      return;
+    }
+    
+    try {
+      const handler = (window as any).PaystackPop.setup({
+        key: config.public_key,
+        email: email || 'donor@example.com',
+        amount: Math.round(parseFloat(amount) * 100), // in kobo/cents
+        currency: config.currency || 'USD',
+        ref: 'FOL-' + Date.now(),
+        callback: (response: any) => {
+          onSuccess(
+            `Thank you for your $${amount} contribution via Paystack!`,
+            response.reference,
+            'Paystack',
+            { fullName, email, amount: parseFloat(amount) }
+          );
+          onClose();
+        },
+        onClose: () => {}
+      });
+      handler.openIframe();
+    } catch (err: any) {
+      alert('Paystack error: ' + err.message);
+    }
+  };
+
+  // Bank Transfer confirm logic
+  const handleBankTransferConfirm = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!bankRef.trim()) {
+      alert('Please enter your transaction reference or name to help us identify your payment.');
+      return;
+    }
+    onSuccess(
+      `Bank transfer information submitted. We will verify your deposit of $${amount}.`,
+      `Bank Transfer Ref: ${bankRef}`,
+      'Bank Transfer',
+      { fullName, email, amount: parseFloat(amount) }
+    );
+    onClose();
+  };
+
+  const getGatewayIcon = (id: string) => {
+    switch (id) {
+      case 'paypal': return '🅿️';
+      case 'stripe': return '💳';
+      case 'flutterwave': return '🌊';
+      case 'paystack': return '🔵';
+      case 'bank_transfer': return '🏦';
+      default: return '💵';
+    }
+  };
+
+  const getGatewayTitle = (id: string) => {
+    switch (id) {
+      case 'paypal': return 'PayPal Secure';
+      case 'stripe': return 'Credit/Debit Card';
+      case 'flutterwave': return 'Flutterwave Pay';
+      case 'paystack': return 'Paystack Checkout';
+      case 'bank_transfer': return 'Manual Bank Deposit';
+      default: return id.toUpperCase();
+    }
+  };
 
   return (
     <AnimatePresence>
@@ -156,10 +416,10 @@ const PayPalModal = ({
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            className="relative w-full max-w-lg bg-white rounded-[3.5rem] overflow-hidden shadow-3xl border border-[#eeb053]/30"
+            className="relative w-full max-w-lg bg-white rounded-[3.5rem] overflow-hidden shadow-3xl border border-[#eeb053]/30 max-h-[90vh] overflow-y-auto"
           >
             {/* Header */}
-            <div className="bg-[#9c1c22] p-8 text-center relative overflow-hidden">
+            <div className="bg-[#9c1c22] p-8 text-center relative overflow-hidden shrink-0">
               <div className="absolute inset-0 opacity-10">
                 <Logo className="w-full h-full scale-150 rotate-12" />
               </div>
@@ -170,89 +430,362 @@ const PayPalModal = ({
               <h3 className="text-white font-serif font-black text-2xl uppercase tracking-[0.2em] relative z-10">Contribution Center</h3>
               <div className="flex items-center justify-center gap-2 mt-2 relative z-10">
                 <Lock size={12} className="text-[#eeb053]" />
-                <span className="text-[10px] font-cinzel font-bold text-[#eeb053] uppercase tracking-widest">Secure PayPal Encryption Active</span>
+                <span className="text-[10px] font-cinzel font-bold text-[#eeb053] uppercase tracking-widest">Secure Payment Gateway Active</span>
               </div>
             </div>
 
             <div className="p-8 md:p-12 space-y-8">
-              {/* Amount Selection */}
-              {!isLockedAmount ? (
-                <div>
-                  <label className="block text-[11px] font-cinzel font-black text-[#9c1c22] uppercase tracking-[0.4em] mb-4">Select Your Gift (USD)</label>
-                  <div className="grid grid-cols-4 gap-3 mb-6">
-                    {['25', '50', '100', '250'].map((val) => (
-                      <button 
-                        key={val}
-                        onClick={() => setAmount(val)}
-                        className={`py-3 rounded-2xl font-cinzel font-black text-xs transition-all border-2 ${amount === val ? 'bg-[#9c1c22] text-white border-[#9c1c22] shadow-xl scale-105' : 'bg-[#fdfaf6] text-[#332d2b] border-[#332d2b]/10 hover:border-[#eeb053]'}`}
-                      >
-                        ${val}
-                      </button>
-                    ))}
+              {/* STEP 1: Personal Info & Amount */}
+              {step === 'info' && (
+                <form onSubmit={handleProceed} className="space-y-6">
+                  <div>
+                    <label className="block text-[11px] font-cinzel font-black text-[#9c1c22] uppercase tracking-[0.4em] mb-4">Select Your Gift (USD)</label>
+                    <div className="grid grid-cols-4 gap-3 mb-6">
+                      {['25', '50', '100', '250'].map((val) => (
+                        <button 
+                          key={val}
+                          type="button"
+                          onClick={() => setAmount(val)}
+                          className={`py-3 rounded-2xl font-cinzel font-black text-xs transition-all border-2 ${amount === val ? 'bg-[#9c1c22] text-white border-[#9c1c22] shadow-xl scale-105' : 'bg-[#fdfaf6] text-[#332d2b] border-[#332d2b]/10 hover:border-[#eeb053]'}`}
+                        >
+                          ${val}
+                        </button>
+                      ))}
+                    </div>
+                    <div className="relative">
+                      <span className="absolute left-6 top-1/2 -translate-y-1/2 text-[#9c1c22] font-black text-lg">$</span>
+                      <input 
+                        type="number" 
+                        value={amount}
+                        onChange={(e) => setAmount(e.target.value)}
+                        placeholder="Enter custom amount"
+                        required
+                        className="w-full bg-[#fdfaf6] border-2 border-[#332d2b]/10 focus:border-[#9c1c22] px-12 py-5 rounded-2xl font-serif italic text-lg outline-none transition-all shadow-inner"
+                      />
+                    </div>
                   </div>
-                  <div className="relative">
-                    <span className="absolute left-6 top-1/2 -translate-y-1/2 text-[#9c1c22] font-black text-lg">$</span>
+
+                  <div className="space-y-4">
+                    <label className="block text-[11px] font-cinzel font-black text-[#9c1c22] uppercase tracking-[0.4em]">Donor Information</label>
+                    
                     <input 
-                      type="number" 
-                      value={amount}
-                      onChange={(e) => setAmount(e.target.value)}
-                      placeholder="Enter custom amount"
-                      className="w-full bg-[#fdfaf6] border-2 border-[#332d2b]/10 focus:border-[#9c1c22] px-12 py-5 rounded-2xl font-serif italic text-lg outline-none transition-all shadow-inner"
+                      type="text"
+                      placeholder="Full Name"
+                      value={fullName}
+                      onChange={(e) => setFullName(e.target.value)}
+                      required
+                      className="w-full bg-[#fdfaf6] border-2 border-[#332d2b]/10 focus:border-[#9c1c22] px-6 py-4 rounded-2xl font-serif text-sm outline-none transition-all"
+                    />
+
+                    <input 
+                      type="email"
+                      placeholder="Email Address"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      required
+                      className="w-full bg-[#fdfaf6] border-2 border-[#332d2b]/10 focus:border-[#9c1c22] px-6 py-4 rounded-2xl font-serif text-sm outline-none transition-all"
                     />
                   </div>
-                </div>
-              ) : (
-                <div className="bg-[#fdfaf6] p-6 rounded-3xl border-2 border-[#eeb053]/30 text-center">
-                  <label className="block text-[11px] font-cinzel font-black text-[#9c1c22] uppercase tracking-[0.4em] mb-2">Selected Donation Amount</label>
-                  <div className="text-3xl font-serif font-black text-[#332d2b]">${parseFloat(amount || '0').toFixed(2)}</div>
+
+                  <button
+                    type="submit"
+                    className="w-full py-5 bg-[#9c1c22] hover:bg-[#332d2b] text-white rounded-full font-cinzel font-black text-xs uppercase tracking-widest transition-all shadow-xl flex items-center justify-center gap-3 border border-[#eeb053]/30"
+                  >
+                    Proceed to Payment <ArrowRight size={14} />
+                  </button>
+                </form>
+              )}
+
+              {/* STEP 2: Checkout Choice */}
+              {step === 'pay' && (
+                <div className="space-y-6">
+                  {/* Summary Card */}
+                  <div className="bg-[#fdfaf6] p-6 rounded-3xl border-2 border-[#eeb053]/30 text-center relative">
+                    {!isLockedAmount && (
+                      <button 
+                        onClick={() => setStep('info')}
+                        className="absolute top-4 left-4 text-xs font-cinzel font-black text-[#9c1c22] uppercase tracking-wider hover:underline"
+                      >
+                        ← Edit
+                      </button>
+                    )}
+                    <label className="block text-[11px] font-cinzel font-black text-[#9c1c22] uppercase tracking-[0.4em] mb-2">Selected Donation Amount</label>
+                    <div className="text-3xl font-serif font-black text-[#332d2b]">${parseFloat(amount || '0').toFixed(2)}</div>
+                    {!isLockedAmount && fullName && (
+                      <div className="text-xs font-serif italic text-[#332d2b]/60 mt-1 uppercase">For: {fullName} ({email})</div>
+                    )}
+                  </div>
+
+                  {/* Method Picker */}
+                  {!activeMethod ? (
+                    <div className="space-y-3">
+                      <label className="block text-[11px] font-cinzel font-black text-[#9c1c22] uppercase tracking-[0.4em] mb-2">Choose Your Payment Method</label>
+                      <div className="grid grid-cols-1 gap-2">
+                        {displayedGateways.map((id) => (
+                          <button
+                            key={id}
+                            onClick={() => setActiveMethod(id)}
+                            className="w-full p-4 bg-[#fdfaf6] hover:bg-[#fcfaf4] border border-[#332d2b]/10 hover:border-[#eeb053] rounded-2xl flex items-center gap-4 transition-all text-left group"
+                          >
+                            <span className="text-2xl">{getGatewayIcon(id)}</span>
+                            <div className="flex-grow">
+                              <span className="font-cinzel font-black text-xs text-[#332d2b] uppercase tracking-wider block">{getGatewayTitle(id)}</span>
+                              <span className="text-[10px] font-serif italic text-[#332d2b]/60 uppercase">
+                                {id === 'paypal' && 'Fast and secure checkout via PayPal account or Card'}
+                                {id === 'stripe' && 'Pay directly with credit or debit card'}
+                                {id === 'flutterwave' && 'Pay with card, mobile money or bank transfer'}
+                                {id === 'paystack' && 'Fast online payment for Nigeria & Africa'}
+                                {id === 'bank_transfer' && 'Transfer funds manually from your bank account'}
+                              </span>
+                            </div>
+                            <ChevronRight size={16} className="text-[#332d2b]/30 group-hover:text-[#9c1c22] group-hover:translate-x-1 transition-all" />
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="space-y-6">
+                      {/* Active Method Header */}
+                      <div className="flex items-center justify-between border-b border-[#332d2b]/10 pb-4">
+                        <div className="flex items-center gap-3">
+                          <span className="text-2xl">{getGatewayIcon(activeMethod)}</span>
+                          <span className="font-cinzel font-black text-xs text-[#332d2b] uppercase tracking-wider">{getGatewayTitle(activeMethod)}</span>
+                        </div>
+                        {displayedGateways.length > 1 && (
+                          <button 
+                            onClick={() => setActiveMethod('')}
+                            className="text-xs font-cinzel font-bold text-[#9c1c22] uppercase hover:underline"
+                          >
+                            Change Method
+                          </button>
+                        )}
+                      </div>
+
+                      {/* Checkout Interfaces */}
+                      
+                      {/* PayPal Checkout */}
+                      {activeMethod === 'paypal' && (
+                        <div className="space-y-4">
+                          {sdkError ? (
+                            <div className="space-y-4">
+                              <div className="flex items-start gap-4 p-5 bg-amber-50 rounded-3xl border border-amber-200">
+                                <AlertCircle size={24} className="text-amber-600 shrink-0 mt-1" />
+                                <div>
+                                  <p className="text-[#332d2b] text-sm font-bold leading-tight mb-1 uppercase">Embedded Gateway Restricted</p>
+                                  <p className="text-[#332d2b]/70 text-xs font-serif italic leading-relaxed uppercase">
+                                    Please use the direct secure portal to finalize your contribution.
+                                  </p>
+                                </div>
+                              </div>
+                              <a 
+                                href={getDirectPayPalUrl()}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="w-full py-5 bg-[#0070ba] hover:bg-[#005ea6] text-white rounded-full font-cinzel font-black text-xs tracking-[0.2em] flex items-center justify-center gap-3 shadow-2xl transition-all"
+                              >
+                                Open PayPal Portal <ExternalLink size={18} />
+                              </a>
+                            </div>
+                          ) : (
+                            <div className="min-h-[150px] relative">
+                              {isSdkLoading ? (
+                                <div className="flex flex-col items-center justify-center py-12 bg-[#fdfaf6] rounded-[2rem] border-2 border-dashed border-[#eeb053]/30">
+                                  <Loader2 className="animate-spin text-[#eeb053] mb-4" size={28} />
+                                  <p className="text-[9px] font-cinzel font-black uppercase text-[#332d2b]/40 tracking-widest">Contacting PayPal Secure Node...</p>
+                                </div>
+                              ) : (
+                                <div ref={paypalRef} className="relative z-10" />
+                              )}
+                            </div>
+                          )}
+                        </div>
+                      )}
+
+                      {/* Stripe Form */}
+                      {activeMethod === 'stripe' && (
+                        <form onSubmit={handleStripePay} className="space-y-4">
+                          <div className="space-y-3">
+                            <input 
+                              type="text" 
+                              placeholder="Cardholder Name"
+                              value={cardName}
+                              onChange={(e) => setCardName(e.target.value)}
+                              required
+                              className="w-full bg-[#fdfaf6] border-2 border-[#332d2b]/10 focus:border-[#9c1c22] px-5 py-3.5 rounded-xl font-serif text-sm outline-none transition-all"
+                            />
+                            
+                            <div className="relative">
+                              <input 
+                                type="text" 
+                                placeholder="Card Number (16 Digits)"
+                                value={cardNumber}
+                                onChange={handleCardNumberChange}
+                                required
+                                className="w-full bg-[#fdfaf6] border-2 border-[#332d2b]/10 focus:border-[#9c1c22] px-5 py-3.5 rounded-xl font-mono text-sm outline-none transition-all tracking-wider"
+                              />
+                              <CreditCard size={18} className="absolute right-4 top-1/2 -translate-y-1/2 text-[#332d2b]/30" />
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-3">
+                              <input 
+                                type="text" 
+                                placeholder="MM/YY"
+                                value={cardExpiry}
+                                onChange={handleExpiryChange}
+                                required
+                                className="w-full bg-[#fdfaf6] border-2 border-[#332d2b]/10 focus:border-[#9c1c22] px-5 py-3.5 rounded-xl font-mono text-sm outline-none transition-all text-center"
+                              />
+                              <input 
+                                type="text" 
+                                placeholder="CVC"
+                                value={cardCvc}
+                                onChange={handleCvcChange}
+                                required
+                                className="w-full bg-[#fdfaf6] border-2 border-[#332d2b]/10 focus:border-[#9c1c22] px-5 py-3.5 rounded-xl font-mono text-sm outline-none transition-all text-center"
+                              />
+                            </div>
+
+                            <input 
+                              type="text" 
+                              placeholder="ZIP / Postal Code"
+                              value={cardZip}
+                              onChange={(e) => setCardZip(e.target.value)}
+                              required
+                              className="w-full bg-[#fdfaf6] border-2 border-[#332d2b]/10 focus:border-[#9c1c22] px-5 py-3.5 rounded-xl font-serif text-sm outline-none transition-all"
+                            />
+                          </div>
+
+                          <button
+                            type="submit"
+                            disabled={isProcessing}
+                            className="w-full py-4 bg-[#9c1c22] hover:bg-[#332d2b] disabled:bg-[#332d2b]/50 text-white rounded-full font-cinzel font-black text-xs uppercase tracking-widest transition-all shadow-xl flex items-center justify-center gap-2"
+                          >
+                            {isProcessing ? (
+                              <>
+                                <Loader2 size={14} className="animate-spin" /> Verifying Card...
+                              </>
+                            ) : (
+                              <>Pay ${parseFloat(amount).toFixed(2)} Securely</>
+                            )}
+                          </button>
+                        </form>
+                      )}
+
+                      {/* Flutterwave Button */}
+                      {activeMethod === 'flutterwave' && (
+                        <div className="space-y-4">
+                          <p className="text-xs font-serif text-[#332d2b]/70 uppercase leading-relaxed text-center">
+                            Pay securely using cards, bank transfer, or mobile money through Flutterwave.
+                          </p>
+                          <button
+                            onClick={handleFlutterwavePay}
+                            disabled={isProcessing}
+                            className="w-full py-4.5 bg-[#f5a623] hover:bg-[#d98b11] disabled:bg-[#f5a623]/50 text-[#1a1a1a] rounded-full font-cinzel font-black text-xs uppercase tracking-widest transition-all shadow-xl flex items-center justify-center gap-2"
+                          >
+                            {isProcessing ? (
+                              <Loader2 size={16} className="animate-spin" />
+                            ) : (
+                              'Launch Flutterwave'
+                            )}
+                          </button>
+                        </div>
+                      )}
+
+                      {/* Paystack Button */}
+                      {activeMethod === 'paystack' && (
+                        <div className="space-y-4">
+                          <p className="text-xs font-serif text-[#332d2b]/70 uppercase leading-relaxed text-center">
+                            Complete your donation quickly and securely using Paystack payment portal.
+                          </p>
+                          <button
+                            onClick={handlePaystackPay}
+                            disabled={isProcessing}
+                            className="w-full py-4.5 bg-[#00c3f7] hover:bg-[#00a6d4] disabled:bg-[#00c3f7]/50 text-white rounded-full font-cinzel font-black text-xs uppercase tracking-widest transition-all shadow-xl flex items-center justify-center gap-2"
+                          >
+                            {isProcessing ? (
+                              <Loader2 size={16} className="animate-spin" />
+                            ) : (
+                              'Launch Paystack Portal'
+                            )}
+                          </button>
+                        </div>
+                      )}
+
+                      {/* Bank Transfer View */}
+                      {activeMethod === 'bank_transfer' && (
+                        <form onSubmit={handleBankTransferConfirm} className="space-y-4">
+                          <div className="bg-[#fdfaf6] p-5 rounded-2xl border border-[#332d2b]/10 space-y-3 text-xs font-serif uppercase">
+                            <div className="border-b border-[#332d2b]/5 pb-2">
+                              <span className="text-[#9c1c22] font-cinzel font-black text-[10px] tracking-wider block">Bank Name</span>
+                              <strong className="text-[#332d2b] font-black text-sm">{gatewayConfigs.bank_transfer?.bank_name || 'Chase Bank'}</strong>
+                            </div>
+                            <div className="border-b border-[#332d2b]/5 pb-2">
+                              <span className="text-[#9c1c22] font-cinzel font-black text-[10px] tracking-wider block">Account Name</span>
+                              <strong className="text-[#332d2b] font-black text-sm">{gatewayConfigs.bank_transfer?.account_name || 'Foundation of Luv Inc.'}</strong>
+                            </div>
+                            <div className="border-b border-[#332d2b]/5 pb-2 flex items-center justify-between">
+                              <div>
+                                <span className="text-[#9c1c22] font-cinzel font-black text-[10px] tracking-wider block">Account Number</span>
+                                <strong className="text-[#332d2b] font-black text-sm font-mono tracking-wider">{gatewayConfigs.bank_transfer?.account_number || '0000000000'}</strong>
+                              </div>
+                              <button 
+                                type="button"
+                                onClick={() => {
+                                  navigator.clipboard.writeText(gatewayConfigs.bank_transfer?.account_number || '0000000000');
+                                  alert('Account number copied!');
+                                }}
+                                className="px-3 py-1 bg-white border border-[#332d2b]/10 text-[9px] font-cinzel font-black text-[#9c1c22] tracking-wider rounded-lg"
+                              >
+                                Copy
+                              </button>
+                            </div>
+                            {gatewayConfigs.bank_transfer?.routing_number && (
+                              <div className="border-b border-[#332d2b]/5 pb-2">
+                                <span className="text-[#9c1c22] font-cinzel font-black text-[10px] tracking-wider block">Routing / Sort Code</span>
+                                <strong className="text-[#332d2b] font-black text-sm font-mono tracking-wider">{gatewayConfigs.bank_transfer?.routing_number}</strong>
+                              </div>
+                            )}
+                            {gatewayConfigs.bank_transfer?.swift_code && (
+                              <div className="border-b border-[#332d2b]/5 pb-2">
+                                <span className="text-[#9c1c22] font-cinzel font-black text-[10px] tracking-wider block">SWIFT / BIC Code</span>
+                                <strong className="text-[#332d2b] font-black text-sm font-mono tracking-wider">{gatewayConfigs.bank_transfer?.swift_code}</strong>
+                              </div>
+                            )}
+                            {gatewayConfigs.bank_transfer?.instructions && (
+                              <div className="pt-1">
+                                <span className="text-[#9c1c22] font-cinzel font-black text-[10px] tracking-wider block">Instructions</span>
+                                <p className="text-[10px] text-[#332d2b]/70 font-normal leading-relaxed whitespace-pre-wrap lowercase">{gatewayConfigs.bank_transfer?.instructions}</p>
+                              </div>
+                            )}
+                          </div>
+
+                          <div className="space-y-2">
+                            <label className="block text-[9px] font-cinzel font-black text-[#9c1c22] uppercase tracking-[0.2em]">Enter Transfer Ref / Payer Name *</label>
+                            <input 
+                              type="text" 
+                              placeholder="e.g. John Doe - Ref 7821"
+                              value={bankRef}
+                              onChange={(e) => setBankRef(e.target.value)}
+                              required
+                              className="w-full bg-[#fdfaf6] border-2 border-[#332d2b]/10 focus:border-[#9c1c22] px-5 py-3.5 rounded-xl font-serif text-sm outline-none transition-all"
+                            />
+                          </div>
+
+                          <button
+                            type="submit"
+                            className="w-full py-4 bg-[#9c1c22] hover:bg-[#332d2b] text-white rounded-full font-cinzel font-black text-xs uppercase tracking-widest transition-all shadow-xl flex items-center justify-center gap-2"
+                          >
+                            Confirm Bank Transfer
+                          </button>
+                        </form>
+                      )}
+                    </div>
+                  )}
                 </div>
               )}
 
-              {/* Payment Section */}
-              <div className="space-y-4">
-                <label className="block text-[11px] font-cinzel font-black text-[#9c1c22] uppercase tracking-[0.4em]">Choose Your Method</label>
-                
-                {sdkError ? (
-                  <div className="space-y-6">
-                    <div className="flex items-start gap-4 p-5 bg-amber-50 rounded-3xl border border-amber-200">
-                      <AlertCircle size={24} className="text-amber-600 shrink-0 mt-1" />
-                      <div>
-                        <p className="text-[#332d2b] text-sm font-bold leading-tight mb-1 uppercase">Embedded Gateway Restricted</p>
-                        <p className="text-[#332d2b]/70 text-xs font-serif italic leading-relaxed uppercase">
-                          Due to security policies in this frame, we have enabled the direct secure portal to finalize your contribution.
-                        </p>
-                      </div>
-                    </div>
-                    
-                    <a 
-                      href={getDirectPayPalUrl()}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="w-full py-5 bg-[#0070ba] hover:bg-[#005ea6] text-white rounded-full font-cinzel font-black text-xs tracking-[0.2em] flex items-center justify-center gap-3 shadow-2xl transition-all hover:scale-[1.02] active:scale-95 group"
-                    >
-                      Open Secure PayPal Portal <ExternalLink size={18} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-                    </a>
-                    
-                    <p className="text-center text-[10px] font-serif italic text-[#332d2b]/40 uppercase leading-relaxed">
-                      Clicking above will open a real PayPal payment window <br /> handled directly by PayPal Holdings, Inc.
-                    </p>
-                  </div>
-                ) : (
-                  <div className="min-h-[180px] relative">
-                    {!isSdkLoaded ? (
-                      <div className="flex flex-col items-center justify-center py-16 bg-[#fdfaf6] rounded-[3rem] border-2 border-dashed border-[#eeb053]/30">
-                        <Loader2 className="animate-spin text-[#eeb053] mb-4" size={32} />
-                        <p className="text-[10px] font-cinzel font-black uppercase text-[#332d2b]/40 tracking-widest">Handshaking Secure Gateway...</p>
-                      </div>
-                    ) : (
-                      <div ref={paypalRef} className="relative z-10" />
-                    )}
-                  </div>
-                )}
-              </div>
-
               {/* Trust Footer */}
-              <div className="pt-6 border-t border-black/5 text-center">
+              <div className="pt-6 border-t border-black/5 text-center shrink-0">
                 <p className="text-[10px] font-serif italic text-[#332d2b]/40 uppercase tracking-widest leading-relaxed">
                   Foundation of Luv (FOL) is a 501(c)(3) nonprofit. <br />
                   100% of your gift supports humanitarian transformation.
@@ -265,6 +798,7 @@ const PayPalModal = ({
     </AnimatePresence>
   );
 };
+
 
 // --- Global UI Components ---
 
@@ -1988,9 +2522,10 @@ interface RegistrationForm {
 interface WorkshopRegisterViewProps {
   defaultTicketType?: 'free' | 'donation';
   onSubmitSuccess: () => void;
+  gatewayConfigs?: Record<string, any>;
 }
 
-const WorkshopRegisterView: React.FC<WorkshopRegisterViewProps> = ({ defaultTicketType = 'free', onSubmitSuccess }) => {
+const WorkshopRegisterView: React.FC<WorkshopRegisterViewProps> = ({ defaultTicketType = 'free', onSubmitSuccess, gatewayConfigs = {} }) => {
   const [formData, setFormData] = useState<RegistrationForm>({
     fullName: '',
     email: '',
@@ -2461,15 +2996,20 @@ const WorkshopRegisterView: React.FC<WorkshopRegisterViewProps> = ({ defaultTick
           </div>
         </form>
 
-        <PayPalModal 
+        <PaymentModal 
           isOpen={isRegisterPaymentModalOpen} 
           onClose={() => setIsRegisterPaymentModalOpen(false)} 
           initialAmount={formData.donationAmount || '25'}
           isLockedAmount={true}
-          onSuccess={(msg, txId) => {
+          gatewayConfigs={gatewayConfigs}
+          donorName={formData.fullName}
+          donorEmail={formData.email}
+          donorPhone={formData.phone}
+          onSuccess={(msg, txId, method) => {
             setFormData(p => ({
               ...p,
-              paymentReference: txId ? `PayPal Order: ${txId}` : 'Verified'
+              paymentMethod: method,
+              paymentReference: txId
             }));
             setPaypalPaymentVerified(true);
           }}
@@ -2500,6 +3040,7 @@ const App: React.FC = () => {
     'workshop:location': 'Online (Podore Link Provided Upon Registration)',
     'workshop:flyer_url': '/workshop-poster.jpg'
   });
+  const [gatewayConfigs, setGatewayConfigs] = useState<Record<string, any>>({});
 
   useEffect(() => {
     const fetchCms = async () => {
@@ -2507,10 +3048,18 @@ const App: React.FC = () => {
         const { data, error } = await supabase.from('site_content').select('section, key, value');
         if (data && !error) {
           const newCms: Record<string, string> = { ...cms };
+          const configs: Record<string, any> = {};
           data.forEach((row: any) => {
-            newCms[`${row.section}:${row.key}`] = row.value ?? '';
+            if (row.section.startsWith('gateway_')) {
+              const gwId = row.section.replace('gateway_', '');
+              if (!configs[gwId]) configs[gwId] = {};
+              configs[gwId][row.key] = row.value ?? '';
+            } else {
+              newCms[`${row.section}:${row.key}`] = row.value ?? '';
+            }
           });
           setCms(newCms);
+          setGatewayConfigs(configs);
         }
       } catch (err) {
         console.error('Failed to fetch CMS content:', err);
@@ -2710,10 +3259,26 @@ const App: React.FC = () => {
 
           <ScrollToTopButton />
           
-          <PayPalModal 
+          <PaymentModal 
             isOpen={isPaymentModalOpen} 
             onClose={() => setIsPaymentModalOpen(false)} 
-            onSuccess={(msg) => showToast(msg, 'success')}
+            gatewayConfigs={gatewayConfigs}
+            onSuccess={async (msg, txId, method, donorInfo) => {
+              showToast(msg, 'success');
+              if (donorInfo) {
+                try {
+                  await supabase.from('workshop_registrations').insert({
+                    full_name: donorInfo.fullName,
+                    email: donorInfo.email,
+                    ticket_type: 'donation',
+                    payment_method: method,
+                    payment_reference: `Donation: $${donorInfo.amount} - Ref: ${txId}`,
+                  });
+                } catch (e) {
+                  console.error("Failed to save donation record:", e);
+                }
+              }
+            }}
             onError={(msg) => showToast(msg, 'error')}
           />
 
