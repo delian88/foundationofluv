@@ -170,7 +170,7 @@ export const GLOBAL_SERVICES_DATA = [
     features: ["Substance Abuse Support", "Mental Health Resources", "Trauma-Informed Care"]
   },
   {
-    title: "Housing & Shelter",
+    title: "Housing",
     description: "Providing affordable housing solutions and safe havens for displaced and vulnerable individuals.",
     icon: <Building2 size={32} />,
     features: ["Affordable Housing", "Transitional Shelters", "Safe Havens"]

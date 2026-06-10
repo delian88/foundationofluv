@@ -547,7 +547,7 @@ const AnimatedNumber = ({ value }: { value: string }) => {
 // --- Rich Content Components ---
 
 const PartnersMarquee = () => {
-  const partners = ["Microsoft", "Amazon", "OpenAI", "Anthropic", "Google", "Meta", "Harvard", "MIT", "Stanford", "UNICEF", "WHO", "USAID", "FOL TV", "Family First"];
+  const partners = ["Podore", "Azariah Management Group", "News Africa Times", "Creaitube", "Creaite", "Creaitwood", "Creaitmail", "Food Planet"];
   return (
     <div className="py-20 bg-white border-y border-black/5 overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 mb-10 text-center">
@@ -1848,14 +1848,14 @@ const WorkshopView: React.FC<WorkshopViewProps> = ({ onNavigate, cms }) => {
                     onClick={() => setSelectedFacilitator(speaker)}
                     className="mt-auto px-6 py-2.5 rounded-full border border-black/10 hover:border-[#9c1c22] hover:bg-[#9c1c22] text-[#332d2b] hover:text-white font-serif text-xs uppercase font-bold tracking-wider transition-all duration-200"
                   >
-                    Read Biography
+                    Read Profile
                   </button>
                 )}
               </div>
             ))}
           </div>
 
-          {/* Biography Modal */}
+          {/* Profile Modal */}
           <AnimatePresence>
             {selectedFacilitator && (
               <motion.div 
@@ -1907,7 +1907,7 @@ const WorkshopView: React.FC<WorkshopViewProps> = ({ onNavigate, cms }) => {
                       onClick={() => setSelectedFacilitator(null)}
                       className="px-8 py-3 rounded-full bg-[#9c1c22] hover:bg-[#7a1219] text-white font-serif text-sm uppercase font-bold tracking-wider transition-colors shadow-lg"
                     >
-                      Close Bio
+                      Close Profile
                     </button>
                   </div>
                 </motion.div>
