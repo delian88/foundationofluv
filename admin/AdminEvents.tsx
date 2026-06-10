@@ -31,7 +31,7 @@ const EMPTY_EVENT: Omit<Event, 'id' | 'created_at' | 'updated_at'> = {
   description: '',
   date: '',
   time: '',
-  location: 'Online (Zoom Link Provided Upon Registration)',
+  location: 'Online (Podore Link Provided Upon Registration)',
   type: 'Workshop',
   status: 'draft',
   registration_link: '',

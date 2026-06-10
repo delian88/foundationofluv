@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS events (
   description text DEFAULT '',
   date text NOT NULL,
   time text DEFAULT '',
-  location text DEFAULT 'Online (Zoom Link Provided Upon Registration)',
+  location text DEFAULT 'Online (Podore Link Provided Upon Registration)',
   type text DEFAULT 'Workshop',
   status text DEFAULT 'draft' CHECK (status IN ('draft', 'published', 'cancelled')),
   registration_link text DEFAULT '',

@@ -24,7 +24,7 @@ INSERT INTO events (
   'Learn practical skills to protect yourself online and make smarter financial decisions in a digital age. Facilitated by FOL leadership and industry experts. Includes live Q&A, digital resource materials, and an official Certificate of Completion.',
   '2026-07-18',
   '10:00 AM - 3:00 PM EST',
-  'Online (Zoom Link Provided Upon Registration)',
+  'Online (Podore Link Provided Upon Registration)',
   'Workshop',
   'published',
   '/register-workshop',

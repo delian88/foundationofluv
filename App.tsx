@@ -2423,7 +2423,7 @@ const App: React.FC = () => {
     'contact:email': 'hello@foundationofluv.org',
     'workshop:date': 'Saturday, July 18, 2026',
     'workshop:time': '10:00 AM - 3:00 PM EST',
-    'workshop:location': 'Online (Zoom Link Provided Upon Registration)',
+    'workshop:location': 'Online (Podore Link Provided Upon Registration)',
     'workshop:flyer_url': '/workshop-poster.jpg'
   });
 

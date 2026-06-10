@@ -406,7 +406,7 @@ export const WORKSHOP_DETAILS = {
   description: "Learn practical skills to protect yourself online and make smarter financial decisions.",
   date: "Saturday, July 18, 2026",
   time: "10:00 AM - 3:00 PM EST",
-  location: "Online (Zoom Link Provided Upon Registration)",
+  location: "Online (Podore Link Provided Upon Registration)",
   facilitators: [
     { name: "Kevin Watkins", role: "Founder & Chief Visionary", image: "kevin_watkins.jpg" },
     { name: "Antoinette Watkins", role: "Executive Director", image: "antoinette_watkins.jpg" },
