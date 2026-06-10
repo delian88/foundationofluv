@@ -1,6 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { supabaseAdmin } from '../supabase';
 
+const useWindowWidth = () => {
+  const [width, setWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1024);
+  useEffect(() => {
+    const handler = () => setWidth(window.innerWidth);
+    window.addEventListener('resize', handler);
+    return () => window.removeEventListener('resize', handler);
+  }, []);
+  return width;
+};
+
 interface Event {
   id: string;
   title: string;
@@ -31,6 +41,8 @@ const EMPTY_EVENT: Omit<Event, 'id' | 'created_at' | 'updated_at'> = {
 const EVENT_TYPES = ['Workshop', 'Seminar', 'Webinar', 'Community Event', 'Fundraiser', 'Training', 'Conference', 'Other'];
 
 const AdminEvents: React.FC = () => {
+  const windowWidth = useWindowWidth();
+  const isMobile = windowWidth < 640;
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
@@ -41,16 +53,73 @@ const AdminEvents: React.FC = () => {
   const [search, setSearch] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
+  const [dbError, setDbError] = useState<string | null>(null);
+
+  // Storage upload states
+  const [uploading, setUploading] = useState(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
+  const fileInputRef = React.useRef<HTMLInputElement>(null);
 
   const showToast = (msg: string) => { setToast(msg); setTimeout(() => setToast(''), 3500); };
 
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+      setUploadError('Please upload an image file (JPG, PNG, WebP, etc.)');
+      return;
+    }
+    if (file.size > 10 * 1024 * 1024) {
+      setUploadError('File must be smaller than 10 MB');
+      return;
+    }
+
+    setUploading(true);
+    setUploadError(null);
+
+    try {
+      const ext = file.name.split('.').pop() || 'jpg';
+      const fileName = `event_${Date.now()}.${ext}`;
+      const bucket = 'event-flyers';
+
+      // Ensure bucket exists
+      await supabaseAdmin.storage.createBucket(bucket, { public: true }).catch(() => {});
+
+      // Upload file
+      const { error: uploadError } = await supabaseAdmin.storage
+        .from(bucket)
+        .upload(fileName, file, { cacheControl: '3600', upsert: false });
+
+      if (uploadError) throw new Error(uploadError.message);
+
+      // Get public URL
+      const { data: { publicUrl } } = supabaseAdmin.storage.from(bucket).getPublicUrl(fileName);
+
+      // Update form image_url
+      setForm(f => ({ ...f, image_url: publicUrl }));
+      showToast('✅ Flyer uploaded successfully!');
+    } catch (err: any) {
+      setUploadError(err.message || 'Upload failed. Check Supabase Storage settings.');
+    } finally {
+      setUploading(false);
+    }
+  };
+
   const load = async () => {
     setLoading(true);
+    setDbError(null);
     const { data, error } = await supabaseAdmin
       .from('events')
       .select('*')
       .order('date', { ascending: true });
-    if (!error) setEvents(data ?? []);
+    if (error) {
+      console.error('Events load error:', error);
+      setDbError(error.message);
+      setEvents([]);
+    } else {
+      setEvents(data ?? []);
+    }
     setLoading(false);
   };
 
@@ -156,7 +225,7 @@ const AdminEvents: React.FC = () => {
   const drafts = events.filter(e => e.status === 'draft').length;
 
   const S: Record<string, any> = {
-    statsGrid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', gap: 14, marginBottom: 28 },
+    statsGrid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(130px, 1fr))', gap: 12, marginBottom: 28 },
     statCard: { background: '#141414', border: '1px solid #1e1e1e', borderRadius: 14, padding: '18px 16px' },
     statVal: { fontSize: 30, fontWeight: 800, color: '#fff', lineHeight: 1 },
     statLabel: { fontSize: 12, color: '#6b7280', marginTop: 4, fontWeight: 500 },
@@ -166,7 +235,7 @@ const AdminEvents: React.FC = () => {
     addBtn: { padding: '10px 20px', borderRadius: 10, border: 'none', background: 'linear-gradient(135deg, #9c1c22, #7a1219)', color: '#fff', fontSize: 14, fontWeight: 700, cursor: 'pointer', whiteSpace: 'nowrap' as const, flexShrink: 0 },
     formCard: { background: '#141414', border: '1px solid #2a2a2a', borderRadius: 16, padding: 28, marginBottom: 28 },
     formTitle: { fontSize: 18, fontWeight: 800, color: '#fff', marginBottom: 24 },
-    formGrid: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 16 },
+    formGrid: { display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: 16, marginBottom: 16 },
     formField: { marginBottom: 16 },
     label: { display: 'block', fontSize: 11, fontWeight: 700, color: '#6b7280', letterSpacing: 1, textTransform: 'uppercase' as const, marginBottom: 8 },
     formInput: { width: '100%', boxSizing: 'border-box' as const, background: '#1a1a1a', border: '1px solid #2a2a2a', borderRadius: 10, color: '#fff', fontSize: 14, padding: '11px 14px', outline: 'none', transition: 'border-color 0.2s' },
@@ -175,7 +244,7 @@ const AdminEvents: React.FC = () => {
     formActions: { display: 'flex', gap: 12, marginTop: 8, flexWrap: 'wrap' as const },
     saveBtn: { padding: '12px 28px', borderRadius: 10, border: 'none', background: 'linear-gradient(135deg, #9c1c22, #7a1219)', color: '#fff', fontSize: 14, fontWeight: 700, cursor: 'pointer' },
     cancelBtn: { padding: '12px 20px', borderRadius: 10, border: '1px solid #2a2a2a', background: 'transparent', color: '#9ca3af', fontSize: 14, cursor: 'pointer' },
-    eventsGrid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 16 },
+    eventsGrid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 16 },
     eventCard: { background: '#141414', border: '1px solid #1e1e1e', borderRadius: 16, overflow: 'hidden' as const, position: 'relative' as const },
     eventHeader: { padding: '20px 20px 12px', borderBottom: '1px solid #1a1a1a' },
     eventTitle: { fontSize: 16, fontWeight: 700, color: '#fff', marginBottom: 8, lineHeight: 1.3 },
@@ -318,15 +387,83 @@ const AdminEvents: React.FC = () => {
             </div>
             <div>
               <label style={S.label}>Flyer / Image URL (optional)</label>
-              <input
-                className="events-input"
-                style={S.formInput}
-                placeholder="https://... or /image.jpg"
-                value={form.image_url}
-                onChange={e => setForm(f => ({ ...f, image_url: e.target.value }))}
-                onFocus={e => (e.target.style.borderColor = '#9c1c22')}
-                onBlur={e => (e.target.style.borderColor = '#2a2a2a')}
-              />
+              <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
+                <input
+                  className="events-input"
+                  style={{ ...S.formInput, flex: 1 }}
+                  placeholder="https://... or /image.jpg"
+                  value={form.image_url}
+                  onChange={e => setForm(f => ({ ...f, image_url: e.target.value }))}
+                  onFocus={e => (e.target.style.borderColor = '#9c1c22')}
+                  onBlur={e => (e.target.style.borderColor = '#2a2a2a')}
+                />
+                <button
+                  type="button"
+                  style={{
+                    padding: '11px 16px',
+                    borderRadius: 10,
+                    border: '1px solid #2a2a2a',
+                    background: '#1a1a1a',
+                    color: '#fff',
+                    fontSize: 13,
+                    fontWeight: 600,
+                    cursor: 'pointer',
+                    whiteSpace: 'nowrap',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 6,
+                    transition: 'all 0.2s'
+                  }}
+                  onClick={() => fileInputRef.current?.click()}
+                  disabled={uploading}
+                >
+                  {uploading ? '⏳ Uploading...' : '📁 Upload from PC'}
+                </button>
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  style={{ display: 'none' }}
+                  accept="image/*"
+                  onChange={handleFileUpload}
+                />
+              </div>
+              {uploadError && (
+                <div style={{ color: '#ef4444', fontSize: 12, marginTop: 4 }}>
+                  {uploadError}
+                </div>
+              )}
+              {form.image_url && (
+                <div style={{ marginTop: 10, position: 'relative', display: 'inline-block' }}>
+                  <img
+                    src={form.image_url}
+                    alt="Preview"
+                    style={{ maxHeight: 80, borderRadius: 8, border: '1px solid #2a2a2a' }}
+                  />
+                  <button
+                    type="button"
+                    style={{
+                      position: 'absolute',
+                      top: -6,
+                      right: -6,
+                      background: '#ef4444',
+                      color: '#fff',
+                      border: 'none',
+                      borderRadius: '50%',
+                      width: 18,
+                      height: 18,
+                      fontSize: 10,
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontWeight: 'bold'
+                    }}
+                    onClick={() => setForm(f => ({ ...f, image_url: '' }))}
+                  >
+                    ×
+                  </button>
+                </div>
+              )}
             </div>
           </div>
 
@@ -354,6 +491,26 @@ const AdminEvents: React.FC = () => {
               {saving ? '⏳ Saving...' : editingId ? '💾 Update Event' : '➕ Create Event'}
             </button>
             <button style={S.cancelBtn} onClick={handleCancel}>Cancel</button>
+          </div>
+        </div>
+      )}
+
+      {/* DB Error Banner */}
+      {dbError && (
+        <div style={{ background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.2)', borderRadius: 12, padding: '16px 20px', marginBottom: 20, display: 'flex', gap: 12, alignItems: 'flex-start' }}>
+          <div style={{ fontSize: 20 }}>⚠️</div>
+          <div style={{ flex: 1 }}>
+            <div style={{ fontSize: 14, fontWeight: 700, color: '#fca5a5', marginBottom: 4 }}>Database Error</div>
+            <div style={{ fontSize: 13, color: '#6b7280', marginBottom: 10, fontFamily: 'monospace', wordBreak: 'break-all' as const }}>{dbError}</div>
+            <div style={{ fontSize: 13, color: '#9ca3af', marginBottom: 10 }}>
+              {dbError.includes('does not exist') || dbError.includes('relation') ?
+                '👉 The events table has not been created yet. Please run the SQL migration in the Supabase SQL Editor.' :
+                '👉 Check your Supabase connection and RLS policies.'}
+            </div>
+            <button
+              onClick={load}
+              style={{ padding: '7px 16px', borderRadius: 8, border: 'none', background: 'rgba(239,68,68,0.15)', color: '#fca5a5', fontSize: 13, fontWeight: 600, cursor: 'pointer' }}
+            >🔄 Retry</button>
           </div>
         </div>
       )}

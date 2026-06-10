@@ -64,21 +64,26 @@ ALTER TABLE site_content           ENABLE ROW LEVEL SECURITY;
 ALTER TABLE email_logs             ENABLE ROW LEVEL SECURITY;
 
 -- Service role: full access to all tables
-CREATE POLICY IF NOT EXISTS "service_role_all_registrations"
+DROP POLICY IF EXISTS "service_role_all_registrations" ON workshop_registrations;
+CREATE POLICY "service_role_all_registrations"
   ON workshop_registrations FOR ALL TO service_role USING (true);
 
-CREATE POLICY IF NOT EXISTS "service_role_all_site_content"
+DROP POLICY IF EXISTS "service_role_all_site_content" ON site_content;
+CREATE POLICY "service_role_all_site_content"
   ON site_content FOR ALL TO service_role USING (true);
 
-CREATE POLICY IF NOT EXISTS "service_role_all_email_logs"
+DROP POLICY IF EXISTS "service_role_all_email_logs" ON email_logs;
+CREATE POLICY "service_role_all_email_logs"
   ON email_logs FOR ALL TO service_role USING (true);
 
 -- Anonymous users: can INSERT new registrations (public form)
-CREATE POLICY IF NOT EXISTS "anon_insert_registrations"
+DROP POLICY IF EXISTS "anon_insert_registrations" ON workshop_registrations;
+CREATE POLICY "anon_insert_registrations"
   ON workshop_registrations FOR INSERT TO anon WITH CHECK (true);
 
 -- Anonymous users: can READ site_content (powers the public CMS)
-CREATE POLICY IF NOT EXISTS "anon_read_site_content"
+DROP POLICY IF EXISTS "anon_read_site_content" ON site_content;
+CREATE POLICY "anon_read_site_content"
   ON site_content FOR SELECT TO anon USING (true);
 
 -- ─────────────────────────────────────────

@@ -1625,6 +1625,36 @@ interface WorkshopViewProps {
 }
 
 const WorkshopView: React.FC<WorkshopViewProps> = ({ onNavigate, cms }) => {
+  const [workshopEvent, setWorkshopEvent] = useState<any>(null);
+
+  useEffect(() => {
+    // Fetch the featured workshop event from the events table
+    supabase
+      .from('events')
+      .select('*')
+      .eq('type', 'Workshop')
+      .eq('status', 'published')
+      .order('date', { ascending: true })
+      .limit(1)
+      .single()
+      .then(({ data }) => { if (data) setWorkshopEvent(data); });
+  }, []);
+
+  // Merge: events table takes priority over legacy CMS values
+  const wDate     = workshopEvent?.date     || cms['workshop:date'];
+  const wTime     = workshopEvent?.time     || cms['workshop:time'];
+  const wLocation = workshopEvent?.location || cms['workshop:location'];
+  const wFlyer    = workshopEvent?.image_url || cms['workshop:flyer_url'];
+  const wRegLink  = workshopEvent?.registration_link;
+
+  const handleRegister = (type: 'free' | 'donation') => {
+    if (wRegLink && wRegLink.startsWith('http')) {
+      window.open(wRegLink, '_blank');
+    } else {
+      onNavigate('register-workshop', type);
+    }
+  };
+
   return (
     <section className="pt-24 pb-16 md:pt-48 md:pb-32 bg-[#fdfaf6] relative overflow-hidden animate-fadeIn">
       {/* Background gradients */}
@@ -1655,24 +1685,24 @@ const WorkshopView: React.FC<WorkshopViewProps> = ({ onNavigate, cms }) => {
             <div className="flex flex-col items-center">
               <Calendar className="text-[#9c1c22] mb-3 w-8 h-8" />
               <span className="text-[10px] font-cinzel font-black tracking-widest text-[#332d2b]/40 uppercase mb-1">Date</span>
-              <span className="text-sm font-serif font-bold text-[#332d2b] uppercase">{cms['workshop:date']}</span>
+              <span className="text-sm font-serif font-bold text-[#332d2b] uppercase">{wDate}</span>
             </div>
             <div className="flex flex-col items-center border-y md:border-y-0 md:border-x border-[#332d2b]/10 py-6 md:py-0">
               <Clock className="text-[#eeb053] mb-3 w-8 h-8" />
               <span className="text-[10px] font-cinzel font-black tracking-widest text-[#332d2b]/40 uppercase mb-1">Time</span>
-              <span className="text-sm font-serif font-bold text-[#332d2b] uppercase">{cms['workshop:time']}</span>
+              <span className="text-sm font-serif font-bold text-[#332d2b] uppercase">{wTime}</span>
             </div>
             <div className="flex flex-col items-center">
               <MapPin className="text-[#9c1c22] mb-3 w-8 h-8" />
               <span className="text-[10px] font-cinzel font-black tracking-widest text-[#332d2b]/40 uppercase mb-1">Location</span>
-              <span className="text-sm font-serif font-bold text-[#332d2b] uppercase">{cms['workshop:location']}</span>
+              <span className="text-sm font-serif font-bold text-[#332d2b] uppercase">{wLocation}</span>
             </div>
           </div>
 
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            onClick={() => onNavigate('register-workshop', 'free')}
+            onClick={() => handleRegister('free')}
             className="px-10 py-5 bg-[#9c1c22] hover:bg-[#332d2b] text-white rounded-full font-cinzel font-black text-sm uppercase tracking-widest transition-all shadow-xl border border-[#eeb053]/30"
           >
             Register Now
@@ -1680,7 +1710,7 @@ const WorkshopView: React.FC<WorkshopViewProps> = ({ onNavigate, cms }) => {
         </header>
 
         {/* Workshop Poster / Flyer */}
-        {cms['workshop:flyer_url'] && (
+        {wFlyer && (
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
@@ -1694,7 +1724,7 @@ const WorkshopView: React.FC<WorkshopViewProps> = ({ onNavigate, cms }) => {
               {/* Poster card */}
               <div className="relative bg-white rounded-[2.5rem] border-4 border-[#eeb053]/40 shadow-[0_30px_80px_rgba(156,28,34,0.2)] overflow-hidden">
                 <img
-                  src={cms['workshop:flyer_url']}
+                  src={wFlyer}
                   alt="LuvWorks Workshop Flyer"
                   className="w-full h-auto block"
                   style={{ objectFit: 'contain' }}
@@ -1704,7 +1734,7 @@ const WorkshopView: React.FC<WorkshopViewProps> = ({ onNavigate, cms }) => {
               {/* Actions */}
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-8 w-full max-w-md mx-auto">
                 <a
-                  href={cms['workshop:flyer_url']}
+                  href={wFlyer}
                   download="LuvWorks-Workshop-Flyer.jpg"
                   target="_blank"
                   rel="noopener noreferrer"
@@ -1713,7 +1743,7 @@ const WorkshopView: React.FC<WorkshopViewProps> = ({ onNavigate, cms }) => {
                   <FileText size={14} /> Download Flyer
                 </a>
                 <button
-                  onClick={() => onNavigate('register-workshop', 'free')}
+                  onClick={() => handleRegister('free')}
                   className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 bg-[#eeb053] hover:bg-[#d49a3a] text-[#332d2b] rounded-full font-cinzel font-black text-[10px] uppercase tracking-widest transition-all shadow-xl"
                 >
                   Register Now →

@@ -28,12 +28,14 @@ CREATE TABLE IF NOT EXISTS events (
 ALTER TABLE events ENABLE ROW LEVEL SECURITY;
 
 -- Anonymous / public users can READ published events only
-CREATE POLICY IF NOT EXISTS "anon_read_published_events"
+DROP POLICY IF EXISTS "anon_read_published_events" ON events;
+CREATE POLICY "anon_read_published_events"
   ON events FOR SELECT TO anon
   USING (status = 'published');
 
 -- Service role has full access (admin panel operations)
-CREATE POLICY IF NOT EXISTS "service_role_all_events"
+DROP POLICY IF EXISTS "service_role_all_events" ON events;
+CREATE POLICY "service_role_all_events"
   ON events FOR ALL TO service_role
   USING (true);
 
