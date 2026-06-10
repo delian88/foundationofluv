@@ -3100,6 +3100,12 @@ const App: React.FC = () => {
   const [selectedTicketType, setSelectedTicketType] = useState<'free' | 'donation'>('free');
 
   const handleNavigate = (pageId: string, ticketType?: 'free' | 'donation') => {
+    const navItem = NAVIGATION.find(item => item.id === pageId);
+    if (navItem?.url) {
+      window.open(navItem.url, '_blank', 'noopener,noreferrer');
+      setIsMenuOpen(false);
+      return;
+    }
     setCurrentPage(pageId);
     if (ticketType) {
       setSelectedTicketType(ticketType);

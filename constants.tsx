@@ -24,6 +24,7 @@ export const NAVIGATION = [
   { name: 'Global Services', id: 'globalservices' },
   { name: 'Roadmap', id: 'roadmap' },
   { name: 'LUVWATTS', id: 'luvwatts' },
+  { name: 'Shop', id: 'shop', url: 'https://luvwatts0.myspreadshop.com/' },
   { name: 'Team', id: 'team' },
   { name: 'Gallery', id: 'gallery' },
   { name: 'Programs', id: 'programs' },
