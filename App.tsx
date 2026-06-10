@@ -1390,7 +1390,7 @@ const HomeView = ({ onNavigate, cms }: { onNavigate: (id: string) => void; cms: 
               viewport={{ once: true }}
               className="text-3xl md:text-5xl font-serif font-black uppercase text-[#332d2b] tracking-tight leading-tight"
             >
-              Luv in action <span className="text-[#9c1c22] italic">creates change</span> in 5 years (5 Years in Target)
+              Luv in action <span className="text-[#9c1c22] italic">creates change</span> in 5 years (Our 5 Year Target)
             </motion.h2>
             <div className="h-1 w-20 bg-[#eeb053] mx-auto mt-6" />
           </div>
