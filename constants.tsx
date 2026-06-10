@@ -408,9 +408,40 @@ export const WORKSHOP_DETAILS = {
   time: "10:00 AM - 3:00 PM EST",
   location: "Online (Podore Link Provided Upon Registration)",
   facilitators: [
-    { name: "Kevin Watkins", role: "Founder & Chief Visionary", image: "kevin_watkins.jpg" },
-    { name: "Antoinette Watkins", role: "Executive Director", image: "antoinette_watkins.jpg" },
-    { name: "Chiffon W.", role: "Program Director", image: "chiffon_w.jpg" }
+    {
+      name: "Mr. Kevin Watkins",
+      role: "Second-Chance Advocate | Addiction Recovery Mentor | Community Reentry & Recovery Support Leader",
+      image: "kevin_watkins.jpg",
+      shortBio: "Second-Chance Advocate and recovery support leader dedicated to helping individuals rebuild after addiction, hardship, and broken life circumstances.",
+      bio: [
+        "Mr. Kevin Watkins is a passionate second-chance advocate and recovery support leader whose life and work are deeply rooted in helping individuals rebuild after addiction, hardship, and broken life circumstances. Known for his compassionate approach and strong belief in restoration, Mr. Watkins has dedicated himself to supporting people in recovery, particularly those who need structure, mentorship, accountability, housing support, and a pathway back into productive community life.",
+        "With hands-on experience in drug addiction recovery services, Mr. Watkins has been involved in recovery-centered programming that provided housing support, Intensive Outpatient Program connections, mentorship, and training opportunities for individuals seeking freedom from substance abuse. His work reflects a practical understanding that recovery is not only about stopping destructive habits, but also about rebuilding confidence, restoring dignity, developing discipline, reconnecting with purpose, and creating a safe environment where people can heal.",
+        "Mr. Watkins brings a unique blend of lived wisdom, community insight, and service-driven leadership. His approach recognizes that many individuals struggling with addiction also face homelessness, unemployment, family breakdown, rejection, trauma, and limited access to positive guidance. Through mentorship and recovery support, he helps individuals understand that their past does not have to define their future.",
+        "As a leading voice behind the second-chance mission of Foundation of Luv, Mr. Watkins is committed to reaching underserved communities, supporting recovering addicts, encouraging families, and helping people find real pathways to restoration. His passion is simple but powerful: to meet people where they are, help them believe again, and walk with them toward a healthier, more stable, and purpose-filled life."
+      ]
+    },
+    {
+      name: "Antoinette Watkins",
+      role: "Healthcare Administrator | Programme Direction Specialist | Financial & Healthcare Operations Leader",
+      image: "antoinette_watkins.jpg",
+      shortBio: "Healthcare administrator with over 30 years of experience in operations, programme direction, administrative leadership, and financial management.",
+      bio: [
+        "Antoinette Watkins is an accomplished healthcare administrator with more than 30 years of experience in healthcare operations, programme coordination, administrative leadership, and organizational execution. With a strong professional foundation in Health Care Administration and Accounting, she brings a rare combination of healthcare insight, financial discipline, operational structure, and people-centered programme leadership.",
+        "Over the course of her career, Mrs. Watkins has developed a deep understanding of how healthcare programmes are planned, managed, organized, and executed. Her background gives her the ability to support overall programme direction, ensure operational clarity, strengthen administrative systems, and help initiatives move from vision to implementation. She understands the importance of compliance, documentation, service coordination, participant support, budgeting awareness, and sustainable programme delivery.",
+        "Currently pursuing a Master’s degree in Health Care Administration, Mrs. Watkins continues to expand her expertise in healthcare leadership, programme management, and strategic administration. Her academic and professional journey reflects her commitment to excellence, lifelong learning, and service to communities that need structured support.",
+        "Within Foundation of Luv, Mrs. Watkins provides a strong administrative and strategic voice. Her experience positions her to support programmes focused on family stability, healthcare awareness, financial literacy, recovery support, community outreach, and sustainable empowerment. She brings balance, compassion, structure, and execution strength to the mission.",
+        "Mrs. Watkins believes that love must be supported by planning, wisdom, and practical systems. Her leadership helps ensure that Foundation of Luv is not only compassionate in vision, but also organized, credible, and capable of delivering meaningful impact to individuals, families, and underserved communities."
+      ]
+    },
+    {
+      name: "Chiffon W.",
+      role: "Program Director",
+      image: "chiffon_w.jpg",
+      shortBio: "Expert in program design, execution, and measurable social empowerment impact.",
+      bio: [
+        "Dedicated to the strategic implementation and oversight of our core humanitarian programs, ensuring measurable impact across all chapters."
+      ]
+    }
   ],
   pricing: {
     free: {

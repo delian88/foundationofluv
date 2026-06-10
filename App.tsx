@@ -1626,6 +1626,7 @@ interface WorkshopViewProps {
 
 const WorkshopView: React.FC<WorkshopViewProps> = ({ onNavigate, cms }) => {
   const [workshopEvent, setWorkshopEvent] = useState<any>(null);
+  const [selectedFacilitator, setSelectedFacilitator] = useState<any>(null);
 
   useEffect(() => {
     // Fetch the featured workshop event from the events table
@@ -1828,18 +1829,91 @@ const WorkshopView: React.FC<WorkshopViewProps> = ({ onNavigate, cms }) => {
           </div>
           <div className="grid md:grid-cols-3 gap-8">
             {WORKSHOP_DETAILS.facilitators.map((speaker, index) => (
-              <div key={index} className="bg-white rounded-[3rem] p-8 shadow-lg text-center border border-black/5 hover:border-[#9c1c22] transition-colors flex flex-col items-center">
-                <img src={speaker.image} alt={speaker.name} className="w-32 h-32 md:w-40 md:h-40 object-cover rounded-full border-4 border-[#eeb053]/30 shadow-md mb-6" />
+              <div 
+                key={index} 
+                className="bg-white rounded-[3rem] p-8 shadow-lg text-center border border-black/5 hover:border-[#9c1c22] transition-all duration-300 flex flex-col items-center group relative overflow-hidden"
+              >
+                <img 
+                  src={speaker.image} 
+                  alt={speaker.name} 
+                  className="w-32 h-32 md:w-40 md:h-40 object-cover rounded-full border-4 border-[#eeb053]/30 shadow-md mb-6 transform group-hover:scale-105 transition-transform duration-300" 
+                />
                 <h4 className="text-2xl font-serif font-black text-[#332d2b] uppercase mb-2">{speaker.name}</h4>
-                <p className="text-[#9c1c22] font-cinzel font-black tracking-widest text-[10px] uppercase mb-4">{speaker.role}</p>
-                <p className="text-sm font-serif text-[#332d2b]/60 uppercase leading-relaxed">
-                  {speaker.name === "Kevin Watkins" && "Pioneer in structured compassion and digital equity."}
-                  {speaker.name === "Antoinette Watkins" && "Strategic operations and community-first growth specialist."}
-                  {speaker.name === "Chiffon W." && "Expert in program design and measurable social empowerment impact."}
+                <p className="text-[#9c1c22] font-cinzel font-black tracking-widest text-[9px] uppercase mb-4 leading-relaxed px-4">{speaker.role}</p>
+                <p className="text-sm font-serif text-[#332d2b]/60 leading-relaxed mb-6 flex-grow">
+                  {speaker.shortBio}
                 </p>
+                {speaker.bio && (
+                  <button 
+                    onClick={() => setSelectedFacilitator(speaker)}
+                    className="mt-auto px-6 py-2.5 rounded-full border border-black/10 hover:border-[#9c1c22] hover:bg-[#9c1c22] text-[#332d2b] hover:text-white font-serif text-xs uppercase font-bold tracking-wider transition-all duration-200"
+                  >
+                    Read Biography
+                  </button>
+                )}
               </div>
             ))}
           </div>
+
+          {/* Biography Modal */}
+          <AnimatePresence>
+            {selectedFacilitator && (
+              <motion.div 
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                onClick={() => setSelectedFacilitator(null)}
+                className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+              >
+                <motion.div 
+                  initial={{ scale: 0.95, y: 20 }}
+                  animate={{ scale: 1, y: 0 }}
+                  exit={{ scale: 0.95, y: 20 }}
+                  onClick={(e) => e.stopPropagation()}
+                  className="bg-[#fdfaf6] border border-[#eeb053]/20 w-full max-w-2xl max-h-[85vh] overflow-y-auto rounded-[3rem] p-8 md:p-12 shadow-2xl relative"
+                >
+                  <button 
+                    onClick={() => setSelectedFacilitator(null)}
+                    className="absolute top-6 right-6 p-2 rounded-full hover:bg-black/5 text-[#332d2b] transition-colors"
+                    aria-label="Close modal"
+                  >
+                    <X size={24} />
+                  </button>
+
+                  <div className="flex flex-col items-center text-center md:text-left md:flex-row md:items-start gap-8 mb-8">
+                    <img 
+                      src={selectedFacilitator.image} 
+                      alt={selectedFacilitator.name} 
+                      className="w-28 h-28 md:w-36 md:h-36 object-cover rounded-full border-4 border-[#eeb053]/30 shadow-md" 
+                    />
+                    <div className="flex-1">
+                      <h4 className="text-2xl md:text-3xl font-serif font-black text-[#332d2b] uppercase mb-2">
+                        {selectedFacilitator.name}
+                      </h4>
+                      <p className="text-[#9c1c22] font-cinzel font-black tracking-widest text-[10px] uppercase leading-relaxed">
+                        {selectedFacilitator.role}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="space-y-6 text-[#332d2b]/80 font-serif leading-relaxed text-base">
+                    {selectedFacilitator.bio.map((paragraph: string, idx: number) => (
+                      <p key={idx}>{paragraph}</p>
+                    ))}
+                  </div>
+
+                  <div className="mt-10 flex justify-end">
+                    <button 
+                      onClick={() => setSelectedFacilitator(null)}
+                      className="px-8 py-3 rounded-full bg-[#9c1c22] hover:bg-[#7a1219] text-white font-serif text-sm uppercase font-bold tracking-wider transition-colors shadow-lg"
+                    >
+                      Close Bio
+                    </button>
+                  </div>
+                </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </section>
 
         {/* Pricing / Admission Section */}
