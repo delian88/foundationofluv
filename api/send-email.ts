@@ -53,7 +53,6 @@ const defaultHeader = `
 const defaultFooter = `
 <div style="background-color: #1a1a1a; padding: 24px; text-align: center; margin-top: 40px; border-top: 1px solid #2a2a2a; color: #888888; font-family: 'Arial', sans-serif; font-size: 11px;">
   <p style="margin: 0; text-transform: uppercase; letter-spacing: 1px;">&copy; 2026 Foundation of Luv. All Rights Reserved.</p>
-  <p style="margin: 4px 0 0 0; color: #eeb053;">#9960 Raven Hurst Road, Middle River MD 21221</p>
   <p style="margin: 8px 0 0 0; font-style: italic; color: #555555;">This email was sent dynamically via the FOL Secure SMTP Portal.</p>
 </div>
 `;
@@ -134,7 +133,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
                   </tr>
                   <tr>
                     <td style="padding: 6px 0; font-weight: bold;">Location:</td>
-                    <td style="padding: 6px 0;">Online (Zoom Link Sent Prior to Event) & Hybrid at Middle River MD</td>
+                    <td style="padding: 6px 0;">Online (Zoom Link Sent Prior to Event)</td>
                   </tr>
                   <tr>
                     <td style="padding: 6px 0; font-weight: bold;">Ticket Type:</td>

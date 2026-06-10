@@ -5,8 +5,9 @@ import AdminDashboard from './AdminDashboard';
 import AdminRegistrations from './AdminRegistrations';
 import AdminEmail from './AdminEmail';
 import AdminCMS from './AdminCMS';
+import AdminEvents from './AdminEvents';
 
-type AdminPage = 'dashboard' | 'registrations' | 'email' | 'cms';
+type AdminPage = 'dashboard' | 'registrations' | 'email' | 'cms' | 'events';
 
 const AdminApp: React.FC = () => {
   const [user, setUser] = useState<any>(null);
@@ -48,6 +49,7 @@ const AdminApp: React.FC = () => {
     { id: 'dashboard', icon: '📊', label: 'Dashboard' },
     { id: 'registrations', icon: '📋', label: 'Registrations' },
     { id: 'email', icon: '✉️', label: 'Email Center' },
+    { id: 'events', icon: '📅', label: 'Events' },
     { id: 'cms', icon: '✏️', label: 'Content (CMS)' },
   ];
 
@@ -117,6 +119,7 @@ const AdminApp: React.FC = () => {
     dashboard: 'Dashboard',
     registrations: 'Workshop Registrations',
     email: 'Email Center',
+    events: 'Events & Scheduling',
     cms: 'Content Management',
   };
 
@@ -194,6 +197,7 @@ const AdminApp: React.FC = () => {
           {page === 'dashboard' && <AdminDashboard onNavigate={setPage} />}
           {page === 'registrations' && <AdminRegistrations />}
           {page === 'email' && <AdminEmail />}
+          {page === 'events' && <AdminEvents />}
           {page === 'cms' && <AdminCMS />}
         </div>
       </div>

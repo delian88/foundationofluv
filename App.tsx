@@ -21,14 +21,34 @@ import {
 
 // --- PayPal Integration ---
 
-const PAYPAL_CLIENT_ID = "test"; // Demo Client ID for Sandbox environment
+const PAYPAL_CLIENT_ID = (import.meta as any).env?.VITE_PAYPAL_CLIENT_ID || "EArBW7ACQiGcI2SQACdDFVLYB2KS_6WpCUI1cdUgpJwyxjCherMiy7h14b4C-c3s_8IIXnsqttyzuqQg";
 
-const PayPalModal = ({ isOpen, onClose, onSuccess, onError }: { isOpen: boolean; onClose: () => void; onSuccess: (msg: string) => void; onError: (msg: string) => void }) => {
-  const [amount, setAmount] = useState('50');
+const PayPalModal = ({ 
+  isOpen, 
+  onClose, 
+  onSuccess, 
+  onError,
+  initialAmount = '50',
+  isLockedAmount = false
+}: { 
+  isOpen: boolean; 
+  onClose: () => void; 
+  onSuccess: (msg: string, txId?: string) => void; 
+  onError: (msg: string) => void;
+  initialAmount?: string;
+  isLockedAmount?: boolean;
+}) => {
+  const [amount, setAmount] = useState(initialAmount);
   const [isSdkLoaded, setIsSdkLoaded] = useState(false);
   const [sdkError, setSdkError] = useState<string | null>(null);
   const paypalRef = useRef<HTMLDivElement>(null);
   const scriptId = 'paypal-sdk-script';
+
+  useEffect(() => {
+    if (isOpen) {
+      setAmount(initialAmount);
+    }
+  }, [isOpen, initialAmount]);
 
   // Function to generate the real direct PayPal link as a fallback
   const getDirectPayPalUrl = () => {
@@ -102,7 +122,7 @@ const PayPalModal = ({ isOpen, onClose, onSuccess, onError }: { isOpen: boolean;
               },
               onApprove: async (data: any, actions: any) => {
                 const order = await actions.order.capture();
-                onSuccess(`Thank you for your $${amount} contribution, ${order.payer.name.given_name}!`);
+                onSuccess(`Thank you for your $${amount} contribution, ${order.payer.name.given_name}!`, order.id);
                 onClose();
               },
               onError: (err: any) => {
@@ -156,30 +176,37 @@ const PayPalModal = ({ isOpen, onClose, onSuccess, onError }: { isOpen: boolean;
 
             <div className="p-8 md:p-12 space-y-8">
               {/* Amount Selection */}
-              <div>
-                <label className="block text-[11px] font-cinzel font-black text-[#9c1c22] uppercase tracking-[0.4em] mb-4">Select Your Gift (USD)</label>
-                <div className="grid grid-cols-4 gap-3 mb-6">
-                  {['25', '50', '100', '250'].map((val) => (
-                    <button 
-                      key={val}
-                      onClick={() => setAmount(val)}
-                      className={`py-3 rounded-2xl font-cinzel font-black text-xs transition-all border-2 ${amount === val ? 'bg-[#9c1c22] text-white border-[#9c1c22] shadow-xl scale-105' : 'bg-[#fdfaf6] text-[#332d2b] border-[#332d2b]/10 hover:border-[#eeb053]'}`}
-                    >
-                      ${val}
-                    </button>
-                  ))}
+              {!isLockedAmount ? (
+                <div>
+                  <label className="block text-[11px] font-cinzel font-black text-[#9c1c22] uppercase tracking-[0.4em] mb-4">Select Your Gift (USD)</label>
+                  <div className="grid grid-cols-4 gap-3 mb-6">
+                    {['25', '50', '100', '250'].map((val) => (
+                      <button 
+                        key={val}
+                        onClick={() => setAmount(val)}
+                        className={`py-3 rounded-2xl font-cinzel font-black text-xs transition-all border-2 ${amount === val ? 'bg-[#9c1c22] text-white border-[#9c1c22] shadow-xl scale-105' : 'bg-[#fdfaf6] text-[#332d2b] border-[#332d2b]/10 hover:border-[#eeb053]'}`}
+                      >
+                        ${val}
+                      </button>
+                    ))}
+                  </div>
+                  <div className="relative">
+                    <span className="absolute left-6 top-1/2 -translate-y-1/2 text-[#9c1c22] font-black text-lg">$</span>
+                    <input 
+                      type="number" 
+                      value={amount}
+                      onChange={(e) => setAmount(e.target.value)}
+                      placeholder="Enter custom amount"
+                      className="w-full bg-[#fdfaf6] border-2 border-[#332d2b]/10 focus:border-[#9c1c22] px-12 py-5 rounded-2xl font-serif italic text-lg outline-none transition-all shadow-inner"
+                    />
+                  </div>
                 </div>
-                <div className="relative">
-                  <span className="absolute left-6 top-1/2 -translate-y-1/2 text-[#9c1c22] font-black text-lg">$</span>
-                  <input 
-                    type="number" 
-                    value={amount}
-                    onChange={(e) => setAmount(e.target.value)}
-                    placeholder="Enter custom amount"
-                    className="w-full bg-[#fdfaf6] border-2 border-[#332d2b]/10 focus:border-[#9c1c22] px-12 py-5 rounded-2xl font-serif italic text-lg outline-none transition-all shadow-inner"
-                  />
+              ) : (
+                <div className="bg-[#fdfaf6] p-6 rounded-3xl border-2 border-[#eeb053]/30 text-center">
+                  <label className="block text-[11px] font-cinzel font-black text-[#9c1c22] uppercase tracking-[0.4em] mb-2">Selected Donation Amount</label>
+                  <div className="text-3xl font-serif font-black text-[#332d2b]">${parseFloat(amount || '0').toFixed(2)}</div>
                 </div>
-              </div>
+              )}
 
               {/* Payment Section */}
               <div className="space-y-4">
@@ -1886,12 +1913,8 @@ const WorkshopRegisterView: React.FC<WorkshopRegisterViewProps> = ({ defaultTick
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
-  const [isPaypalSdkLoaded, setIsPaypalSdkLoaded] = useState(!!(window as any).paypal);
-  const [paypalError, setPaypalError] = useState<string | null>(null);
   const [paypalPaymentVerified, setPaypalPaymentVerified] = useState(false);
-  const registerPaypalRef = useRef<HTMLDivElement>(null);
+  const [isRegisterPaymentModalOpen, setIsRegisterPaymentModalOpen] = useState(false);
 
   useEffect(() => {
     setFormData(prev => ({
@@ -1901,100 +1924,19 @@ const WorkshopRegisterView: React.FC<WorkshopRegisterViewProps> = ({ defaultTick
       paymentMethod: defaultTicketType === 'donation' ? 'PayPal (Online)' : 'Bank Transfer'
     }));
     setPaypalPaymentVerified(false);
-    setPaypalError(null);
   }, [defaultTicketType]);
 
-  useEffect(() => {
-    if (formData.ticketType !== 'donation' || formData.paymentMethod !== 'PayPal (Online)') return;
-
-    if ((window as any).paypal) {
-      setIsPaypalSdkLoaded(true);
+  const handleOpenPaymentModal = () => {
+    if (!formData.donationAmount || parseFloat(formData.donationAmount) <= 0) {
+      alert('Please specify a valid donation amount.');
       return;
     }
-
-    const scriptId = 'paypal-sdk-script';
-    if (document.getElementById(scriptId)) {
-      const checkInterval = setInterval(() => {
-        if ((window as any).paypal) {
-          setIsPaypalSdkLoaded(true);
-          clearInterval(checkInterval);
-        }
-      }, 100);
-      return () => clearInterval(checkInterval);
-    }
-
-    const script = document.createElement('script');
-    script.id = scriptId;
-    script.src = `https://www.paypal.com/sdk/js?client-id=${PAYPAL_CLIENT_ID}&currency=USD&components=buttons&enable-funding=venmo,paylater`;
-    script.async = true;
-    script.onload = () => setIsPaypalSdkLoaded(true);
-    script.onerror = () => setPaypalError("Could not load PayPal secure gateway. Please use manual payment.");
-    document.body.appendChild(script);
-  }, [formData.ticketType, formData.paymentMethod]);
-
-  useEffect(() => {
-    if (
-      isPaypalSdkLoaded && 
-      formData.ticketType === 'donation' && 
-      formData.paymentMethod === 'PayPal (Online)' && 
-      registerPaypalRef.current && 
-      !paypalPaymentVerified &&
-      !paypalError
-    ) {
-      const renderButtons = async () => {
-        try {
-          if (registerPaypalRef.current) {
-            registerPaypalRef.current.innerHTML = '';
-            
-            await (window as any).paypal.Buttons({
-              style: {
-                layout: 'vertical',
-                color:  'gold',
-                shape:  'pill',
-                label:  'donate',
-                height: 44
-              },
-              createOrder: (data: any, actions: any) => {
-                const amt = formData.donationAmount || '25';
-                return actions.order.create({
-                  purchase_units: [{
-                    amount: { value: amt, currency_code: 'USD' },
-                    description: 'Workshop Donation - Foundation of Luv'
-                  }]
-                });
-              },
-              onApprove: async (data: any, actions: any) => {
-                const order = await actions.order.capture();
-                const txId = order.id;
-                setFormData(p => ({
-                  ...p,
-                  paymentReference: `PayPal Order: ${txId}`
-                }));
-                setPaypalPaymentVerified(true);
-              },
-              onError: (err: any) => {
-                console.error("PayPal Register Error:", err);
-                setPaypalError("Interactive payment failed. Please use manual payment.");
-              }
-            }).render(registerPaypalRef.current);
-          }
-        } catch (e) {
-          console.error("PayPal Register Render Exception:", e);
-          setPaypalError("Interactive payment failed. Please use manual payment.");
-        }
-      };
-
-      renderButtons();
-    }
-  }, [isPaypalSdkLoaded, formData.ticketType, formData.paymentMethod, formData.donationAmount, paypalPaymentVerified, paypalError]);
+    setIsRegisterPaymentModalOpen(true);
+  };
 
   const handleTextChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
-    if (name === 'paymentMethod') {
-      setPaypalPaymentVerified(false);
-      setPaypalError(null);
-    }
   };
 
   const handleCheckboxChange = (name: keyof RegistrationForm) => {
@@ -2010,12 +1952,6 @@ const WorkshopRegisterView: React.FC<WorkshopRegisterViewProps> = ({ defaultTick
     });
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      setFormData(prev => ({ ...prev, proofName: e.target.files![0].name }));
-    }
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (formData.ticketType === 'donation') {
@@ -2023,16 +1959,14 @@ const WorkshopRegisterView: React.FC<WorkshopRegisterViewProps> = ({ defaultTick
         alert('Please specify a valid donation amount.');
         return;
       }
-      if (formData.paymentMethod === 'PayPal (Online)' && !paypalPaymentVerified) {
-        alert('Please complete the PayPal payment before submitting.');
-        return;
-      }
     }
     setIsSubmitting(true);
     try {
       const ticketTypeDb = formData.ticketType === 'donation' ? 'donation' : 'free';
-      const paymentMethodDb = formData.ticketType === 'donation' ? formData.paymentMethod : null;
-      const paymentRefDb = formData.ticketType === 'donation' ? `Donation: $${formData.donationAmount} - Ref: ${formData.paymentReference}` : null;
+      const paymentMethodDb = formData.ticketType === 'donation' && paypalPaymentVerified ? 'PayPal (Online)' : null;
+      const paymentRefDb = formData.ticketType === 'donation' 
+        ? `Donation: $${formData.donationAmount || '0'} - Ref: ${formData.paymentReference || 'Unpaid (Voluntary)'}` 
+        : null;
       
       const { error } = await supabase.from('workshop_registrations').insert({
         full_name: formData.fullName,
@@ -2197,6 +2131,34 @@ const WorkshopRegisterView: React.FC<WorkshopRegisterViewProps> = ({ defaultTick
                     />
                   </div>
                 </div>
+
+                <div className="mt-6 pt-6 border-t border-[#332d2b]/10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                  <div>
+                    <h4 className="text-xs font-cinzel font-black uppercase text-[#9c1c22] tracking-wider mb-1">
+                      {paypalPaymentVerified ? 'Payment Confirmed' : 'Support Voluntary'}
+                    </h4>
+                    <p className="text-xs font-serif italic text-[#332d2b]/60 uppercase">
+                      {paypalPaymentVerified 
+                        ? `Transaction Reference: ${formData.paymentReference}`
+                        : 'Your support is voluntary but highly appreciated.'
+                      }
+                    </p>
+                  </div>
+                  
+                  {!paypalPaymentVerified ? (
+                    <button
+                      type="button"
+                      onClick={handleOpenPaymentModal}
+                      className="px-6 py-3 bg-[#eeb053] hover:bg-[#9c1c22] hover:text-white text-[#1a1a1a] rounded-xl font-cinzel font-bold text-xs uppercase tracking-widest transition-all shadow-md flex items-center justify-center gap-2 border border-[#eeb053]/50 shrink-0"
+                    >
+                      <CreditCard size={14} /> Pay via PayPal
+                    </button>
+                  ) : (
+                    <div className="px-6 py-3 bg-green-500/10 text-green-700 rounded-xl font-cinzel font-bold text-xs uppercase tracking-widest flex items-center justify-center gap-2 border border-green-500/30 shrink-0">
+                      <Check size={14} /> Paid (${parseFloat(formData.donationAmount || '0').toFixed(2)})
+                    </div>
+                  )}
+                </div>
               </motion.div>
             )}
           </div>
@@ -2358,78 +2320,6 @@ const WorkshopRegisterView: React.FC<WorkshopRegisterViewProps> = ({ defaultTick
             </div>
           </div>
 
-          {/* Donation Options Upload Zone */}
-          {formData.ticketType === 'donation' && (
-            <motion.div 
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              className="space-y-6 bg-[#1a1a1a]/5 p-6 md:p-8 rounded-[2rem] border border-[#eeb053]/30 overflow-hidden"
-            >
-              <h3 className="text-lg font-cinzel font-black tracking-widest text-[#eeb053] uppercase border-b border-black/10 pb-2">6. Donation Verification</h3>
-              <div className="grid md:grid-cols-2 gap-6">
-                <div className="col-span-2 sm:col-span-1">
-                  <label className="block text-[9px] font-cinzel font-black tracking-widest text-[#332d2b] uppercase mb-2">Payment Method</label>
-                  <select name="paymentMethod" value={formData.paymentMethod} onChange={handleTextChange} className="w-full px-5 py-4 rounded-xl border border-[#332d2b]/10 bg-white focus:outline-none focus:ring-1 focus:ring-[#eeb053] text-[#332d2b] font-serif uppercase">
-                    <option value="PayPal (Online)">PayPal (Instant Online)</option>
-                    <option value="Bank Transfer">Bank Transfer</option>
-                    <option value="PayPal">PayPal (Manual Transfer)</option>
-                    <option value="Venmo">Venmo (Manual Transfer)</option>
-                  </select>
-                </div>
-                
-                {formData.paymentMethod === 'PayPal (Online)' ? (
-                  <div className="col-span-2">
-                    <label className="block text-[9px] font-cinzel font-black tracking-widest text-[#332d2b] uppercase mb-4">Complete Payment via PayPal Below</label>
-                    {paypalError && (
-                      <div className="p-4 bg-red-500/10 border border-red-500/30 rounded-xl text-red-700 text-xs font-serif uppercase mb-4">
-                        {paypalError}
-                      </div>
-                    )}
-                    
-                    {!isPaypalSdkLoaded && !paypalError && (
-                      <div className="flex flex-col items-center justify-center py-8 bg-[#fdfaf6] rounded-[2rem] border-2 border-dashed border-[#eeb053]/30">
-                        <Loader2 className="animate-spin text-[#eeb053] mb-3" size={24} />
-                        <p className="text-[9px] font-cinzel font-black uppercase text-[#332d2b]/40 tracking-widest">Loading secure payment portal...</p>
-                      </div>
-                    )}
-
-                    <div 
-                      ref={registerPaypalRef} 
-                      className={`relative z-10 max-w-md mx-auto ${(!isPaypalSdkLoaded || paypalPaymentVerified || paypalError) ? 'hidden' : ''}`} 
-                    />
-
-                    {paypalPaymentVerified && (
-                      <div className="flex items-center gap-3 p-5 bg-green-500/10 border border-green-500/30 rounded-2xl text-green-700 text-sm font-serif uppercase">
-                        <CheckCircle2 size={18} />
-                        <span>Payment Verified! Transaction ID: {formData.paymentReference}</span>
-                      </div>
-                    )}
-                  </div>
-                ) : (
-                  <>
-                    <div className="col-span-2 sm:col-span-1">
-                      <label className="block text-[9px] font-cinzel font-black tracking-widest text-[#332d2b] uppercase mb-2">Payment Reference Number *</label>
-                      <input required={formData.ticketType === 'donation'} type="text" name="paymentReference" value={formData.paymentReference} onChange={handleTextChange} className="w-full px-5 py-4 rounded-xl border border-[#332d2b]/10 bg-white focus:outline-none focus:ring-1 focus:ring-[#eeb053] text-[#332d2b]" placeholder="Transaction Hash, ID, or Reference Name" />
-                    </div>
-                    <div className="col-span-2">
-                      <label className="block text-[9px] font-cinzel font-black tracking-widest text-[#332d2b] uppercase mb-2">Upload Proof of Payment (Required) *</label>
-                      <div 
-                        onClick={() => fileInputRef.current?.click()}
-                        className="cursor-pointer border-2 border-dashed border-[#eeb053]/40 hover:border-[#eeb053] rounded-2xl p-8 text-center bg-white/60 hover:bg-white transition-all flex flex-col items-center justify-center gap-3"
-                      >
-                        <UploadCloud size={36} className="text-[#eeb053]" />
-                        <span className="text-xs font-serif uppercase text-[#332d2b]/80">
-                          {formData.proofName ? `Selected: ${formData.proofName}` : "Click to select or drag your receipt/screenshot here"}
-                        </span>
-                        <input ref={fileInputRef} required={formData.ticketType === 'donation'} type="file" onChange={handleFileChange} className="hidden" accept="image/*,.pdf" />
-                      </div>
-                    </div>
-                  </>
-                )}
-              </div>
-            </motion.div>
-          )}
-
           {/* Consent Checkboxes */}
           <div className="space-y-4">
             <h3 className="text-lg font-cinzel font-black tracking-widest text-[#9c1c22] uppercase border-b border-[#332d2b]/10 pb-2">Consent & Agreement</h3>
@@ -2466,6 +2356,21 @@ const WorkshopRegisterView: React.FC<WorkshopRegisterViewProps> = ({ defaultTick
             </button>
           </div>
         </form>
+
+        <PayPalModal 
+          isOpen={isRegisterPaymentModalOpen} 
+          onClose={() => setIsRegisterPaymentModalOpen(false)} 
+          initialAmount={formData.donationAmount || '25'}
+          isLockedAmount={true}
+          onSuccess={(msg, txId) => {
+            setFormData(p => ({
+              ...p,
+              paymentReference: txId ? `PayPal Order: ${txId}` : 'Verified'
+            }));
+            setPaypalPaymentVerified(true);
+          }}
+          onError={(msg) => alert(msg)}
+        />
       </div>
     </section>
   );
@@ -2488,7 +2393,7 @@ const App: React.FC = () => {
     'contact:email': 'hello@foundationofluv.org',
     'workshop:date': 'Saturday, July 18, 2026',
     'workshop:time': '10:00 AM - 3:00 PM EST',
-    'workshop:location': 'Online & Middle River MD',
+    'workshop:location': 'Online (Zoom Link Provided Upon Registration)',
     'workshop:flyer_url': '/workshop-poster.jpg'
   });
 

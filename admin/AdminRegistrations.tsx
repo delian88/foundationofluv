@@ -65,6 +65,48 @@ const AdminRegistrations: React.FC = () => {
 
   const showToast = (msg: string) => { setToast(msg); setTimeout(() => setToast(''), 3000); };
 
+  const resendConfirmationEmail = async (r: any, e: React.MouseEvent) => {
+    e.stopPropagation();
+    const confirmResend = window.confirm(`Resend confirmation email to ${r.full_name}?`);
+    if (!confirmResend) return;
+
+    try {
+      const response = await fetch('/api/send-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type: 'registration',
+          payload: {
+            full_name: r.full_name,
+            email: r.email,
+            phone: r.phone,
+            city: r.city,
+            organization: r.organization,
+            job_title: r.job_title,
+            profile: r.profile,
+            interests: r.interests || [],
+            cybersecurity_level: r.cybersecurity_level,
+            financial_level: r.financial_level,
+            referral: r.referral,
+            special_requirements: r.special_requirements,
+            questions: r.questions,
+            ticket_type: r.ticket_type,
+            payment_method: r.payment_method || '',
+            payment_reference: r.payment_reference || '',
+          }
+        })
+      });
+      if (response.ok) {
+        showToast('Confirmation email resent successfully!');
+      } else {
+        alert('Failed to resend confirmation email.');
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Error resending email.');
+    }
+  };
+
   const S: Record<string, any> = {
     toolbar: { display: 'flex', gap: 12, marginBottom: 20, flexWrap: 'wrap' as const, alignItems: 'center' },
     input: { flex: '1 1 200px', background: '#141414', border: '1px solid #2a2a2a', borderRadius: 10, color: '#fff', fontSize: 14, padding: '10px 16px', outline: 'none' },
@@ -173,11 +215,12 @@ const AdminRegistrations: React.FC = () => {
                     {col.label}<SortIcon field={col.field} />
                   </th>
                 ))}
+                <th style={{ ...S.th(''), cursor: 'default' }}>Actions</th>
               </tr>
             </thead>
             <tbody>
               {filtered.length === 0 ? (
-                <tr><td colSpan={6} style={{ ...S.empty, border: 'none' }}>No registrations found. {search && 'Try clearing your search.'}</td></tr>
+                <tr><td colSpan={7} style={{ ...S.empty, border: 'none' }}>No registrations found. {search && 'Try clearing your search.'}</td></tr>
               ) : filtered.map((r, i) => (
                 <tr
                   key={r.id} style={S.tr(i)}
@@ -191,6 +234,26 @@ const AdminRegistrations: React.FC = () => {
                   <td style={S.td}>{r.city || '—'}</td>
                   <td style={S.td}><span style={S.badge(r.ticket_type ?? 'free')}>{(r.ticket_type ?? 'free').toUpperCase()}</span></td>
                   <td style={{ ...S.td, color: '#6b7280', fontSize: 12 }}>{new Date(r.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</td>
+                  <td style={S.td}>
+                    <button 
+                      onClick={(e) => resendConfirmationEmail(r, e)}
+                      style={{
+                        padding: '4px 10px',
+                        background: 'rgba(156,28,34,0.1)',
+                        color: '#fca5a5',
+                        border: '1px solid rgba(156,28,34,0.2)',
+                        borderRadius: 6,
+                        cursor: 'pointer',
+                        fontSize: 12,
+                        fontWeight: 600,
+                        transition: 'all 0.15s'
+                      }}
+                      onMouseEnter={e => { e.currentTarget.style.background = '#9c1c22'; e.currentTarget.style.color = '#fff'; }}
+                      onMouseLeave={e => { e.currentTarget.style.background = 'rgba(156,28,34,0.1)'; e.currentTarget.style.color = '#fca5a5'; }}
+                    >
+                      Resend ✉️
+                    </button>
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -233,10 +296,16 @@ const AdminRegistrations: React.FC = () => {
             <DetailField label="Questions / Comments" value={selected.questions} />
             <DetailField label="How they heard about us" value={selected.referral} />
             <DetailField label="Registered On" value={new Date(selected.created_at).toLocaleString('en-US', { dateStyle: 'full', timeStyle: 'short' })} />
-            <div style={{ display: 'flex', gap: 12, marginTop: 8 }}>
-              <a href={`mailto:${selected.email}`} style={{ flex: 1 }}>
+            <div style={{ display: 'flex', gap: 12, marginTop: 8, flexWrap: 'wrap' }}>
+              <a href={`mailto:${selected.email}`} style={{ flex: 1, minWidth: 120 }}>
                 <button style={{ ...S.btn('success'), width: '100%', textAlign: 'center' as const }}>✉️ Email this Person</button>
               </a>
+              <button 
+                style={{ ...S.btn('default'), flex: 1, minWidth: 120 }} 
+                onClick={(e) => { resendConfirmationEmail(selected, e); }}
+              >
+                🔄 Resend Confirmation
+              </button>
               <button style={{ ...S.btn('danger') }} onClick={() => handleDelete(selected.id)}>🗑️ Delete</button>
             </div>
           </div>
