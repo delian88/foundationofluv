@@ -2188,7 +2188,7 @@ const WorkshopRegisterView: React.FC<WorkshopRegisterViewProps> = ({ defaultTick
                       min="1"
                       disabled={paypalPaymentVerified}
                       placeholder="Other Amount"
-                      value={['10', '25', '50', '100'].includes(formData.donationAmount) ? '' : formData.donationAmount}
+                      value={formData.donationAmount}
                       onChange={(e) => {
                         const val = e.target.value;
                         setFormData(p => ({ ...p, donationAmount: val }));
@@ -2380,18 +2380,25 @@ const WorkshopRegisterView: React.FC<WorkshopRegisterViewProps> = ({ defaultTick
                 {formData.paymentMethod === 'PayPal (Online)' ? (
                   <div className="col-span-2">
                     <label className="block text-[9px] font-cinzel font-black tracking-widest text-[#332d2b] uppercase mb-4">Complete Payment via PayPal Below</label>
-                    {paypalError ? (
-                      <div className="p-4 bg-red-500/10 border border-red-500/30 rounded-xl text-red-700 text-xs font-serif uppercase">
+                    {paypalError && (
+                      <div className="p-4 bg-red-500/10 border border-red-500/30 rounded-xl text-red-700 text-xs font-serif uppercase mb-4">
                         {paypalError}
                       </div>
-                    ) : !isPaypalSdkLoaded ? (
+                    )}
+                    
+                    {!isPaypalSdkLoaded && !paypalError && (
                       <div className="flex flex-col items-center justify-center py-8 bg-[#fdfaf6] rounded-[2rem] border-2 border-dashed border-[#eeb053]/30">
                         <Loader2 className="animate-spin text-[#eeb053] mb-3" size={24} />
                         <p className="text-[9px] font-cinzel font-black uppercase text-[#332d2b]/40 tracking-widest">Loading secure payment portal...</p>
                       </div>
-                    ) : !paypalPaymentVerified ? (
-                      <div ref={registerPaypalRef} className="relative z-10 max-w-md mx-auto" />
-                    ) : (
+                    )}
+
+                    <div 
+                      ref={registerPaypalRef} 
+                      className={`relative z-10 max-w-md mx-auto ${(!isPaypalSdkLoaded || paypalPaymentVerified || paypalError) ? 'hidden' : ''}`} 
+                    />
+
+                    {paypalPaymentVerified && (
                       <div className="flex items-center gap-3 p-5 bg-green-500/10 border border-green-500/30 rounded-2xl text-green-700 text-sm font-serif uppercase">
                         <CheckCircle2 size={18} />
                         <span>Payment Verified! Transaction ID: {formData.paymentReference}</span>
