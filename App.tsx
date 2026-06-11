@@ -3170,7 +3170,7 @@ const App: React.FC = () => {
             </div>
             <AnimatePresence>
               {isMenuOpen && (
-                <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="md:hidden glass border-b border-[#332d2b]/10 overflow-hidden shadow-2xl">
+                <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="md:hidden glass border-b border-[#332d2b]/10 max-h-[calc(100vh-4rem)] overflow-y-auto shadow-2xl">
                   <div className="px-8 py-10 space-y-6 bg-white">
                     {NAVIGATION.map((item) => (
                       <button 
