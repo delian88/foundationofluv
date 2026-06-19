@@ -2502,6 +2502,8 @@ interface RegistrationForm {
   city: string;
   organization: string;
   jobTitle: string;
+  sex: string;
+  ageGroup: string;
   profile: string;
   interests: string[];
   cybersecurityLevel: string;
@@ -2533,6 +2535,8 @@ const WorkshopRegisterView: React.FC<WorkshopRegisterViewProps> = ({ defaultTick
     city: '',
     organization: '',
     jobTitle: '',
+    sex: '',
+    ageGroup: '',
     profile: '',
     interests: [],
     cybersecurityLevel: 'Beginner',
@@ -2614,6 +2618,8 @@ const WorkshopRegisterView: React.FC<WorkshopRegisterViewProps> = ({ defaultTick
         city: formData.city,
         organization: formData.organization,
         job_title: formData.jobTitle,
+        sex: formData.sex,
+        age_group: formData.ageGroup,
         profile: formData.profile,
         interests: formData.interests,
         cybersecurity_level: formData.cybersecurityLevel,
@@ -2829,6 +2835,28 @@ const WorkshopRegisterView: React.FC<WorkshopRegisterViewProps> = ({ defaultTick
               <div>
                 <label className="block text-[9px] font-cinzel font-black tracking-widest text-[#332d2b] uppercase mb-2">Job Title/Profession (Optional)</label>
                 <input type="text" name="jobTitle" value={formData.jobTitle} onChange={handleTextChange} className="w-full px-5 py-4 rounded-xl border border-[#332d2b]/10 bg-white/60 focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#9c1c22] text-[#332d2b]" />
+              </div>
+              <div>
+                <label className="block text-[9px] font-cinzel font-black tracking-widest text-[#332d2b] uppercase mb-2">Sex *</label>
+                <select required name="sex" value={formData.sex} onChange={handleTextChange} className="w-full px-5 py-4 rounded-xl border border-[#332d2b]/10 bg-white/60 focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#9c1c22] text-[#332d2b] font-serif uppercase">
+                  <option value="">Select</option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-[9px] font-cinzel font-black tracking-widest text-[#332d2b] uppercase mb-2">Age Group *</label>
+                <select required name="ageGroup" value={formData.ageGroup} onChange={handleTextChange} className="w-full px-5 py-4 rounded-xl border border-[#332d2b]/10 bg-white/60 focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#9c1c22] text-[#332d2b] font-serif uppercase">
+                  <option value="">Select your age range</option>
+                  <option value="16 - 25">16 – 25</option>
+                  <option value="26 - 30">26 – 30</option>
+                  <option value="31 - 35">31 – 35</option>
+                  <option value="36 - 40">36 – 40</option>
+                  <option value="41 - 45">41 – 45</option>
+                  <option value="46 - 51">46 – 51</option>
+                  <option value="52 and above">52 and above</option>
+                </select>
               </div>
             </div>
           </div>
@@ -3083,6 +3111,17 @@ const App: React.FC = () => {
   const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const { scrollYProgress } = useScroll();
+  const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(false);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setIsAdminLoggedIn(!!session?.user);
+    });
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setIsAdminLoggedIn(!!session?.user);
+    });
+    return () => subscription.unsubscribe();
+  }, []);
 
   useEffect(() => {
     const timer = setTimeout(() => setIsLoading(false), 3000);
@@ -3165,6 +3204,14 @@ const App: React.FC = () => {
                     {item.name}
                   </button>
                 ))}
+                {isAdminLoggedIn && (
+                  <a 
+                    href="/admin" 
+                    className="text-[10px] font-cinzel font-bold uppercase tracking-[0.2em] transition-all relative group bg-[#eeb053] text-black px-5 py-2 rounded-full border border-[#9c1c22]/50 hover:bg-[#1a1a1a]"
+                  >
+                    Admin Panel
+                  </a>
+                )}
               </div>
               <button className="md:hidden p-2 text-[#332d2b]" onClick={() => setIsMenuOpen(!isMenuOpen)}>{isMenuOpen ? <X size={28} /> : <Menu size={28} />}</button>
             </div>
@@ -3181,6 +3228,14 @@ const App: React.FC = () => {
                         {item.name}
                       </button>
                     ))}
+                    {isAdminLoggedIn && (
+                      <a 
+                        href="/admin" 
+                        className="block w-full text-left text-lg font-cinzel font-bold tracking-[0.2em] uppercase text-[#9c1c22] border-t border-black/10 pt-6 mt-6"
+                      >
+                        Admin Panel
+                      </a>
+                    )}
                   </div>
                 </motion.div>
               )}

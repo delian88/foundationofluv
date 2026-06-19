@@ -51,8 +51,14 @@ CREATE TABLE IF NOT EXISTS workshop_registrations (
   consent_photos boolean DEFAULT false,
   ticket_type text DEFAULT 'free',
   payment_method text,
-  payment_reference text
+  payment_reference text,
+  sex text,
+  age_group text
 );
+
+-- Ensure sex and age_group columns exist on workshop_registrations
+ALTER TABLE workshop_registrations ADD COLUMN IF NOT EXISTS sex text;
+ALTER TABLE workshop_registrations ADD COLUMN IF NOT EXISTS age_group text;
 
 -- Site Content CMS Table
 CREATE TABLE IF NOT EXISTS site_content (
