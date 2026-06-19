@@ -90,6 +90,22 @@ function send_native_mail($to, $subject, $html_body, $from_email, $from_name) {
     return mail($to, "=?utf-8?B?" . base64_encode($subject) . "?=", $html_body, implode("\r\n", $headers));
 }
 
+// Read SMTP server response
+function read_smtp_response($socket, $expected) {
+    $response = "";
+    while ($str = fgets($socket, 515)) {
+        $response .= $str;
+        if (substr($str, 3, 1) == " ") {
+            break;
+        }
+    }
+    $code = intval(substr($response, 0, 3));
+    if ($code !== $expected) {
+        throw new Exception("SMTP Expected code $expected, received response: $response");
+    }
+    return $response;
+}
+
 // Direct Socket SMTP connection
 function send_smtp_mail($host, $port, $secure, $user, $pass, $to, $subject, $html_body, $from_name) {
     $socket_host = $secure ? "ssl://" . $host : $host;
@@ -99,44 +115,29 @@ function send_smtp_mail($host, $port, $secure, $user, $pass, $to, $subject, $htm
         throw new Exception("Socket connection to $socket_host:$port failed: $errstr ($errno)");
     }
     
-    function read_response($socket, $expected) {
-        $response = "";
-        while ($str = fgets($socket, 515)) {
-            $response .= $str;
-            if (substr($str, 3, 1) == " ") {
-                break;
-            }
-        }
-        $code = intval(substr($response, 0, 3));
-        if ($code !== $expected) {
-            throw new Exception("SMTP Expected code $expected, received response: $response");
-        }
-        return $response;
-    }
-    
-    read_response($socket, 220);
+    read_smtp_response($socket, 220);
     
     $server_name = isset($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : 'localhost';
     fwrite($socket, "EHLO " . $server_name . "\r\n");
-    read_response($socket, 250);
+    read_smtp_response($socket, 250);
     
     fwrite($socket, "AUTH LOGIN\r\n");
-    read_response($socket, 334);
+    read_smtp_response($socket, 334);
     
     fwrite($socket, base64_encode($user) . "\r\n");
-    read_response($socket, 334);
+    read_smtp_response($socket, 334);
     
     fwrite($socket, base64_encode($pass) . "\r\n");
-    read_response($socket, 235);
+    read_smtp_response($socket, 235);
     
     fwrite($socket, "MAIL FROM:<" . $user . ">\r\n");
-    read_response($socket, 250);
+    read_smtp_response($socket, 250);
     
     fwrite($socket, "RCPT TO:<" . $to . ">\r\n");
-    read_response($socket, 250);
+    read_smtp_response($socket, 250);
     
     fwrite($socket, "DATA\r\n");
-    read_response($socket, 354);
+    read_smtp_response($socket, 354);
     
     $headers = [
         "MIME-Version: 1.0",
@@ -151,7 +152,7 @@ function send_smtp_mail($host, $port, $secure, $user, $pass, $to, $subject, $htm
     
     $data = implode("\r\n", $headers) . "\r\n\r\n" . $html_body . "\r\n.\r\n";
     fwrite($socket, $data);
-    read_response($socket, 250);
+    read_smtp_response($socket, 250);
     
     fwrite($socket, "QUIT\r\n");
     fclose($socket);
