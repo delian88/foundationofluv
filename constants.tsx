@@ -442,6 +442,17 @@ export const WORKSHOP_DETAILS = {
       bio: [
         "Dedicated to the strategic implementation and oversight of our core humanitarian programs, ensuring measurable impact across all chapters."
       ]
+    },
+    {
+      name: "Taiwo Oladele",
+      role: "Cyber Security Expert & Software Engineer",
+      image: "taiwo_oladele.png",
+      shortBio: "Expert software engineer and cybersecurity specialist with a focus on web security, secure software development, and identity verification systems.",
+      bio: [
+        "Taiwo Oladele is a seasoned Cyber Security Expert and Software Engineer with extensive experience in building secure web applications, implementing robust identity management systems, and advocating for online safety and digital security best practices.",
+        "With a deep background in full-stack software development and systems engineering, Taiwo specializes in securing applications against modern threats, establishing secure protocols, and protecting digital assets. His expertise spans vulnerability assessment, secure API design, and encryption.",
+        "As a facilitator for Foundation of Luv, Taiwo is dedicated to empowering individuals with practical digital literacy skills, helping them secure their online identity, recognize social engineering tactics, and navigate the internet safely and confidently."
+      ]
     }
   ],
   pricing: {

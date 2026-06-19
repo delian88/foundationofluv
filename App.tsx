@@ -2361,7 +2361,7 @@ const WorkshopView: React.FC<WorkshopViewProps> = ({ onNavigate, cms }) => {
             <h3 className="text-3xl md:text-5xl font-serif font-black uppercase text-[#332d2b] tracking-tight">Workshop Facilitators</h3>
             <div className="h-1 w-20 bg-[#eeb053] mx-auto mt-4" />
           </div>
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             {WORKSHOP_DETAILS.facilitators.map((speaker, index) => (
               <div 
                 key={index} 
