@@ -101,7 +101,9 @@ const AdminRegistrations: React.FC = () => {
       if (response.ok) {
         showToast('Confirmation email resent successfully!');
       } else {
-        alert('Failed to resend confirmation email.');
+        const errData = await response.json().catch(() => ({}));
+        const errMsg = errData.error || errData.details || 'Unknown server error';
+        alert(`Failed to resend confirmation email: ${errMsg}`);
       }
     } catch (err) {
       console.error(err);

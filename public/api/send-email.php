@@ -199,6 +199,8 @@ try {
         $city = htmlspecialchars($payload['city'] ?? 'Not specified');
         $organization = htmlspecialchars($payload['organization'] ?? 'None');
         $jobTitle = htmlspecialchars($payload['job_title'] ?? 'None');
+        $sex = htmlspecialchars($payload['sex'] ?? 'Not specified');
+        $ageGroup = htmlspecialchars($payload['age_group'] ?? 'Not specified');
         $profile = htmlspecialchars($payload['profile'] ?? '');
         
         $interestsArr = $payload['interests'] ?? [];
@@ -311,6 +313,14 @@ try {
                 <tr style="border-bottom: 1px solid #eeeeee;">
                   <td style="padding: 10px; font-weight: bold;">Job Title</td>
                   <td style="padding: 10px;">' . $jobTitle . '</td>
+                </tr>
+                <tr style="background-color: #f9f9f9; border-bottom: 1px solid #eeeeee;">
+                  <td style="padding: 10px; font-weight: bold;">Sex</td>
+                  <td style="padding: 10px;">' . $sex . '</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #eeeeee;">
+                  <td style="padding: 10px; font-weight: bold;">Age Group</td>
+                  <td style="padding: 10px;">' . $ageGroup . '</td>
                 </tr>
                 <tr style="background-color: #f9f9f9; border-bottom: 1px solid #eeeeee;">
                   <td style="padding: 10px; font-weight: bold;">Profile</td>
