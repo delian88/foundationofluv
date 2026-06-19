@@ -96,6 +96,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         city,
         organization,
         job_title,
+        sex,
+        age_group,
         profile,
         interests,
         cybersecurity_level,
@@ -205,6 +207,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
                 <tr style="border-bottom: 1px solid #eeeeee;">
                   <td style="padding: 10px; font-weight: bold;">Job Title</td>
                   <td style="padding: 10px;">${job_title || 'None'}</td>
+                </tr>
+                <tr style="background-color: #f9f9f9; border-bottom: 1px solid #eeeeee;">
+                  <td style="padding: 10px; font-weight: bold;">Sex</td>
+                  <td style="padding: 10px;">${sex || 'Not specified'}</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #eeeeee;">
+                  <td style="padding: 10px; font-weight: bold;">Age Group</td>
+                  <td style="padding: 10px;">${age_group || 'Not specified'}</td>
                 </tr>
                 <tr style="background-color: #f9f9f9; border-bottom: 1px solid #eeeeee;">
                   <td style="padding: 10px; font-weight: bold;">Profile</td>

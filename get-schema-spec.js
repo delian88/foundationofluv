@@ -2,7 +2,6 @@ import https from 'https';
 import fs from 'fs';
 import path from 'path';
 
-// Parse .env file
 const env = {};
 const envPath = path.resolve('.env');
 if (fs.existsSync(envPath)) {
@@ -16,23 +15,16 @@ if (fs.existsSync(envPath)) {
 }
 
 const url = env.VITE_SUPABASE_URL;
-const key = env.VITE_SUPABASE_SERVICE_KEY || env.VITE_SUPABASE_ANON_KEY;
-
-if (!url || !key) {
-  console.error('Missing Supabase config in .env file');
-  process.exit(1);
-}
-
+const key = env.VITE_SUPABASE_SERVICE_KEY;
 const hostname = url.replace('https://', '');
 
 const options = {
   hostname,
-  path: '/rest/v1/workshop_registrations?limit=1',
+  path: '/rest/v1/',
   method: 'GET',
   headers: {
     'apikey': key,
-    'Authorization': `Bearer ${key}`,
-    'Accept': 'application/json'
+    'Authorization': `Bearer ${key}`
   }
 };
 
@@ -40,13 +32,15 @@ const req = https.request(options, (res) => {
   let data = '';
   res.on('data', chunk => data += chunk);
   res.on('end', () => {
-    console.log('Status:', res.statusCode);
     try {
       const parsed = JSON.parse(data);
-      console.log('Sample record keys:', parsed.length > 0 ? Object.keys(parsed[0]) : 'No records found');
-      console.log('Full sample record:', parsed[0] || 'Empty');
+      console.log('RPC Functions found in paths:');
+      const paths = Object.keys(parsed.paths);
+      const rpcPaths = paths.filter(p => p.startsWith('/rpc/'));
+      console.log(rpcPaths);
     } catch (e) {
-      console.log('Response body:', data);
+      console.log('Error parsing response:', e.message);
+      console.log('Response excerpt:', data.substring(0, 1000));
     }
   });
 });

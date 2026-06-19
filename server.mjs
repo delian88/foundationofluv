@@ -87,7 +87,7 @@ const server = http.createServer(async (req, res) => {
 
     if (type === 'registration') {
       const {
-        full_name, email, phone, city, organization, job_title, profile,
+        full_name, email, phone, city, organization, job_title, sex, age_group, profile,
         interests, cybersecurity_level, financial_level, referral,
         special_requirements, questions, ticket_type, payment_method, payment_reference
       } = payload;
@@ -134,6 +134,8 @@ const server = http.createServer(async (req, res) => {
                 <tr><td style="padding:10px;font-weight:bold;">Email</td><td style="padding:10px;"><a href="mailto:${email}" style="color:#9c1c22;">${email}</a></td></tr>
                 <tr style="background:#f9f9f9;"><td style="padding:10px;font-weight:bold;">Phone</td><td style="padding:10px;">${phone}</td></tr>
                 <tr><td style="padding:10px;font-weight:bold;">City</td><td style="padding:10px;">${city || 'N/A'}</td></tr>
+                <tr style="background:#f9f9f9;"><td style="padding:10px;font-weight:bold;">Sex</td><td style="padding:10px;">${sex || 'N/A'}</td></tr>
+                <tr><td style="padding:10px;font-weight:bold;">Age Group</td><td style="padding:10px;">${age_group || 'N/A'}</td></tr>
                 <tr style="background:#f9f9f9;"><td style="padding:10px;font-weight:bold;">Ticket</td><td style="padding:10px;color:#9c1c22;font-weight:bold;">${ticket_type}</td></tr>
                 ${ticket_type === 'vip' || ticket_type === 'donation' ? `<tr><td style="padding:10px;font-weight:bold;">Payment Ref</td><td style="padding:10px;font-family:monospace;">${payment_reference}</td></tr>` : ''}
               </table>

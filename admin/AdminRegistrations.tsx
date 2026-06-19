@@ -55,7 +55,7 @@ const AdminRegistrations: React.FC = () => {
   };
 
   const exportCSV = () => {
-    const cols = ['full_name', 'email', 'phone', 'city', 'organization', 'job_title', 'profile', 'ticket_type', 'payment_method', 'created_at'];
+    const cols = ['full_name', 'email', 'phone', 'city', 'organization', 'job_title', 'sex', 'age_group', 'profile', 'ticket_type', 'payment_method', 'created_at'];
     const rows = [cols.join(','), ...filtered.map(r => cols.map(c => `"${(r[c] ?? '').toString().replace(/"/g, '""')}"`).join(','))];
     const blob = new Blob([rows.join('\n')], { type: 'text/csv' });
     const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
@@ -83,6 +83,8 @@ const AdminRegistrations: React.FC = () => {
             city: r.city,
             organization: r.organization,
             job_title: r.job_title,
+            sex: r.sex,
+            age_group: r.age_group,
             profile: r.profile,
             interests: r.interests || [],
             cybersecurity_level: r.cybersecurity_level,
@@ -280,6 +282,10 @@ const AdminRegistrations: React.FC = () => {
             <div style={S.row2}>
               <DetailField label="Organization" value={selected.organization} />
               <DetailField label="Job Title" value={selected.job_title} />
+            </div>
+            <div style={S.row2}>
+              <DetailField label="Sex" value={selected.sex} />
+              <DetailField label="Age Group" value={selected.age_group} />
             </div>
             <DetailField label="Participant Profile" value={selected.profile} />
             <DetailField label="Workshop Interests" value={selected.interests} />

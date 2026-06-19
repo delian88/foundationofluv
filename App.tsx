@@ -2650,6 +2650,8 @@ const WorkshopRegisterView: React.FC<WorkshopRegisterViewProps> = ({ defaultTick
               city: formData.city,
               organization: formData.organization,
               job_title: formData.jobTitle,
+              sex: formData.sex,
+              age_group: formData.ageGroup,
               profile: formData.profile,
               interests: formData.interests,
               cybersecurity_level: formData.cybersecurityLevel,
